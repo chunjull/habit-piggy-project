@@ -6,11 +6,12 @@ function Login() {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <input type="text" name="" id="" placeholder="email" className="border p-3" />
-      <input type="password" name="" id="" placeholder="password" className="border p-3" />
-      <button className="border p-3" onClick={handleAddUser}>
+    <div className="flex flex-col">
+      <label htmlFor="email">Email</label>
+      <input type="text" name="email" id="email" placeholder="email" className="border p-3" />
+      <label htmlFor="password">Password</label>
+      <input type="password" name="password" id="password" placeholder="password" className="border p-3" />
+      <button className="border p-3 mt-4" onClick={handleAddUser}>
         Login
       </button>
     </div>

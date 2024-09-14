@@ -4,9 +4,8 @@ import { collection, addDoc } from "firebase/firestore";
 async function addUser() {
   try {
     const docRef = await addDoc(collection(db, "users"), {
-      first: "Ada",
-      last: "Lovelace",
-      born: 1815,
+      account: "",
+      email: "",
     });
     console.log("Document written with ID: ", docRef.id);
   } catch (e) {

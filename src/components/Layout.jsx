@@ -27,7 +27,7 @@ function Layout({ children }) {
           </li>
         </ul>
       </nav>
-      <div className="flex-1 mt-16 md:mt-0 p-4">{children}</div>
+      <div className="flex-1 mt-0">{children}</div>
     </div>
   );
 }

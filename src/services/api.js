@@ -94,4 +94,26 @@ async function getHabits(uid) {
   }
 }
 
-export { registerUser, logout, updateUserProfile, getUserProfile, addHabit, getHabits };
+async function updateHabit(uid, habitId, habitData) {
+  try {
+    const userDocRef = doc(db, "users", uid);
+    const habitDocRef = doc(userDocRef, "habits", habitId);
+    await setDoc(habitDocRef, habitData, { merge: true });
+    console.log("Habit updated with ID: ", habitId);
+  } catch (error) {
+    console.error("Error updating habit: ", error.code, error.message);
+  }
+}
+
+async function deleteHabit(uid, habitId) {
+  try {
+    const userDocRef = doc(db, "users", uid);
+    const habitDocRef = doc(userDocRef, "habits", habitId);
+    await habitDocRef.delete();
+    console.log("Habit deleted with ID: ", habitId);
+  } catch (error) {
+    console.error("Error deleting habit: ", error.code, error.message);
+  }
+}
+
+export { registerUser, logout, updateUserProfile, getUserProfile, addHabit, getHabits, updateHabit, deleteHabit };

@@ -96,9 +96,11 @@ async function getHabits(uid) {
 
 async function updateHabit(uid, habitId, habitData) {
   try {
-    const userDocRef = doc(db, "users", uid);
-    const habitDocRef = doc(userDocRef, "habits", habitId);
-    await setDoc(habitDocRef, habitData, { merge: true });
+    const habitDocRef = doc(db, "users", uid, "habits", habitId);
+    await updateDoc(habitDocRef, {
+      ...habitData,
+      updatedTime: Timestamp.now(),
+    });
     console.log("Habit updated with ID: ", habitId);
   } catch (error) {
     console.error("Error updating habit: ", error.code, error.message);
@@ -107,9 +109,8 @@ async function updateHabit(uid, habitId, habitData) {
 
 async function deleteHabit(uid, habitId) {
   try {
-    const userDocRef = doc(db, "users", uid);
-    const habitDocRef = doc(userDocRef, "habits", habitId);
-    await habitDocRef.delete();
+    const habitDocRef = doc(db, "users", uid, "habits", habitId);
+    await deleteDoc(habitDocRef);
     console.log("Habit deleted with ID: ", habitId);
   } catch (error) {
     console.error("Error deleting habit: ", error.code, error.message);

@@ -5,6 +5,7 @@ import { AuthContext } from "../utils/AuthContext";
 function Member() {
   const { user } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isActiveTab, setIsActiveTab] = useState(true);
   const [profileData, setProfileData] = useState({
     uid: "",
     email: "",
@@ -67,48 +68,67 @@ function Member() {
     <>
       <div className="p-4 space-y-4 mb-16 md:mb-0">
         <ul className="grid grid-cols-2 w-full">
-          <li className="border p-2 text-center">會員管理</li>
-          <li className="border p-2 text-center">歷史習慣</li>
+          <li className={`border p-2 text-center ${isActiveTab ? "bg-gray-200" : ""}`} onClick={() => setIsActiveTab(true)}>
+            會員管理
+          </li>
+          <li className={`border p-2 text-center ${!isActiveTab ? "bg-gray-200" : ""}`} onClick={() => setIsActiveTab(false)}>
+            歷史習慣
+          </li>
         </ul>
-        <div className="flex justify-between items-center">
-          <h2>會員管理</h2>
-          <button className="border" onClick={handleModal}>
-            設定
-          </button>
-        </div>
-        <div className="p-4 border space-y-2">
-          <div className="flex justify-between items-start">
-            <div className="flex gap-3">
-              <div className="w-10 h-10 bg-slate-300">{profileData.avatar}</div>
-              <div className="flex flex-col">
-                <h3>{profileData.name}</h3>
-                <p className="text-slate-500">Lv.{profileData.levelPoints}</p>
+        {isActiveTab ? (
+          <div className="flex justify-between items-center">
+            <h2>會員管理</h2>
+            <button className="border" onClick={handleModal}>
+              設定
+            </button>
+          </div>
+        ) : (
+          <div className="flex justify-between items-center">
+            <h2>歷史習慣</h2>
+            <button className="border" onClick={handleModal}>
+              全部
+            </button>
+          </div>
+        )}
+        {isActiveTab ? (
+          <div>
+            <div className="p-4 border space-y-2">
+              <div className="flex justify-between items-start">
+                <div className="flex gap-3">
+                  <div className="w-10 h-10 bg-slate-300">{profileData.avatar}</div>
+                  <div className="flex flex-col">
+                    <h3>{profileData.name}</h3>
+                    <p className="text-slate-500">Lv.{profileData.levelPoints}</p>
+                  </div>
+                </div>
               </div>
+              <p>{profileData.introduction}</p>
+              <div className="w-full bg-slate-300 text-center">{profileData.levelPoints}%</div>
+            </div>
+            <div className="pt-8 pb-4 px-4 border space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                {profileData.achievements.map((achievement, index) => (
+                  <button key={index} className="border">
+                    {achievement}
+                  </button>
+                ))}
+              </div>
+              <button className="text-center w-full bg-slate-300">更多成就</button>
+            </div>
+            <div className="pt-8 pb-4 px-4 border space-y-4">
+              <div className="grid grid-cols-3 gap-4">
+                {profileData.badges.map((badge, index) => (
+                  <div key={index} className="w-20 h-20 bg-slate-100">
+                    {badge}
+                  </div>
+                ))}
+              </div>
+              <button className="text-center w-full bg-slate-300">更多獎勵徽章</button>
             </div>
           </div>
-          <p>{profileData.introduction}</p>
-          <div className="w-full bg-slate-300 text-center">{profileData.levelPoints}%</div>
-        </div>
-        <div className="pt-8 pb-4 px-4 border space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            {profileData.achievements.map((achievement, index) => (
-              <button key={index} className="border">
-                {achievement}
-              </button>
-            ))}
-          </div>
-          <button className="text-center w-full bg-slate-300">更多成就</button>
-        </div>
-        <div className="pt-8 pb-4 px-4 border space-y-4">
-          <div className="grid grid-cols-3 gap-4">
-            {profileData.badges.map((badge, index) => (
-              <div key={index} className="w-20 h-20 bg-slate-100">
-                {badge}
-              </div>
-            ))}
-          </div>
-          <button className="text-center w-full bg-slate-300">更多獎勵徽章</button>
-        </div>
+        ) : (
+          <div>History</div>
+        )}
       </div>
       {isModalOpen && (
         <div className="bg-slate-100 w-2/3 h-fit absolute inset-0 p-4 space-y-4">

@@ -1,10 +1,20 @@
+import { useState } from "react";
+
 function Rank() {
+  const [isActiveTab, setIsActiveTab] = useState(true);
+
   return (
     <div className="p-4 space-y-4 mb-16 md:mb-0">
       <ul className="grid grid-cols-3 w-full">
-        <li className="border p-2 text-center">習慣排行</li>
-        <li className="border p-2 text-center">存款排行</li>
-        <li className="border p-2 text-center">挑戰排行</li>
+        <li className={`border p-2 text-center ${isActiveTab ? "bg-gray-200" : ""}`} onClick={() => setIsActiveTab(true)}>
+          習慣排行
+        </li>
+        <li className={`border p-2 text-center ${isActiveTab ? "bg-gray-200" : ""}`} onClick={() => setIsActiveTab(false)}>
+          存款排行
+        </li>
+        <li className={`border p-2 text-center ${isActiveTab ? "bg-gray-200" : ""}`} onClick={() => setIsActiveTab(false)}>
+          挑戰排行
+        </li>
       </ul>
       <div className="p-4 mt-4 bg-slate-300">
         <p className="text-center">

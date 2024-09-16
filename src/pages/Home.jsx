@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../utils/AuthContext";
 import { addHabit, getHabits } from "../services/api";
+import Calendar from "../components/Calendar";
 
 function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,6 +14,7 @@ function Home() {
     endDate: "",
   });
   const [habits, setHabits] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const { user } = useContext(AuthContext);
 
@@ -49,23 +51,19 @@ function Home() {
     }
   };
 
+  const handleSelectDate = (date) => {
+    setSelectedDate(date);
+  };
+
   return (
     <>
       <div className="p-4 bg-slate-300 mb-6">
-        <div className="flex justify-between mb-3">
-          <button>prev</button>
-          <h1>September</h1>
-          <button>next</button>
-        </div>
-        <div className="flex justify-between">
-          <div className="w-1/7">Sun</div>
-          <div className="w-1/7">Mon</div>
-          <div className="w-1/7">Tue</div>
-          <div className="w-1/7">Wed</div>
-          <div className="w-1/7">Thu</div>
-          <div className="w-1/7">Fri</div>
-          <div className="w-1/7">Sat</div>
-        </div>
+        <Calendar date={selectedDate} onSelect={handleSelectDate} />
+        {selectedDate && (
+          <div className="mt-4">
+            <p>Selected Date: {`${selectedDate.year}-${selectedDate.month + 1}-${selectedDate.day}`}</p>
+          </div>
+        )}
       </div>
       <ul className="space-y-4 p-4">
         {habits.map((habit) => (

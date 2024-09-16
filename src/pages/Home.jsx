@@ -1,6 +1,6 @@
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../utils/AuthContext";
-import { addHabit } from "../services/api";
+import { addHabit, getHabits } from "../services/api";
 
 function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,8 +12,20 @@ function Home() {
     startDate: "",
     endDate: "",
   });
+  const [habits, setHabits] = useState([]);
 
   const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (user) {
+      fetchHabits();
+    }
+  }, [user]);
+
+  const fetchHabits = async () => {
+    const habitsList = await getHabits(user.uid);
+    setHabits(habitsList);
+  };
 
   const handleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -30,6 +42,7 @@ function Home() {
   const handleAddHabit = async () => {
     if (user) {
       await addHabit(user.uid, habitData);
+      fetchHabits(); // Refresh the habits list after adding a new habit
       handleModal(); // Close the modal after adding the habit
     } else {
       console.error("User not authenticated");
@@ -55,27 +68,29 @@ function Home() {
         </div>
       </div>
       <ul className="space-y-4 p-4">
-        <li className="px-2 py-4 bg-slate-100">
-          <div className="flex justify-between items-center">
-            <div className="flex gap-2">
-              <div className="w-10 h-10 bg-yellow-400"></div>
-              <div className="flex flex-col">
-                <h3>規劃當日工作</h3>
-                <p>每天</p>
+        {habits.map((habit) => (
+          <li key={habit.id} className="px-2 py-4 bg-slate-100">
+            <div className="flex justify-between items-center">
+              <div className="flex gap-2">
+                <div className="w-10 h-10 bg-yellow-400"></div>
+                <div className="flex flex-col">
+                  <h3>{habit.title}</h3>
+                  <p>{habit.frequency}</p>
+                </div>
               </div>
+              <button className="bg-white">Detail</button>
             </div>
-            <button className="w-6 h-6">C</button>
-          </div>
-          <div className="flex justify-between">
-            <div className="w-1/7">Sun</div>
-            <div className="w-1/7">Mon</div>
-            <div className="w-1/7">Tue</div>
-            <div className="w-1/7">Wed</div>
-            <div className="w-1/7">Thu</div>
-            <div className="w-1/7">Fri</div>
-            <div className="w-1/7">Sat</div>
-          </div>
-        </li>
+            <div className="flex justify-between">
+              <div className="w-1/7">Sun</div>
+              <div className="w-1/7">Mon</div>
+              <div className="w-1/7">Tue</div>
+              <div className="w-1/7">Wed</div>
+              <div className="w-1/7">Thu</div>
+              <div className="w-1/7">Fri</div>
+              <div className="w-1/7">Sat</div>
+            </div>
+          </li>
+        ))}
       </ul>
       <button className="fixed right-4 bottom-20 bg-slate-300" onClick={handleModal}>
         add habit

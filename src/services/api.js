@@ -1,6 +1,6 @@
 import db from "../utils/firebaseConfig";
 import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, setDoc, getDoc, collection, addDoc, Timestamp } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection, addDoc, getDocs, Timestamp } from "firebase/firestore";
 
 const auth = getAuth();
 
@@ -81,4 +81,17 @@ async function addHabit(uid, habitData) {
   }
 }
 
-export { registerUser, logout, updateUserProfile, getUserProfile, addHabit };
+async function getHabits(uid) {
+  try {
+    const userDocRef = doc(db, "users", uid);
+    const habitsCollectionRef = collection(userDocRef, "habits");
+    const habitsSnapshot = await getDocs(habitsCollectionRef);
+    const habitsList = habitsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    return habitsList;
+  } catch (error) {
+    console.error("Error getting habits: ", error.code, error.message);
+    return [];
+  }
+}
+
+export { registerUser, logout, updateUserProfile, getUserProfile, addHabit, getHabits };

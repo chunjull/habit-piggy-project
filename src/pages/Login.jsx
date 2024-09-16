@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { registerUser } from "../services/api";
+import { registerUser, logout } from "../services/api";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -12,6 +12,10 @@ function Login() {
 
   const handleLogin = async () => {
     console.log("Login with", email, password);
+  };
+
+  const handleLogout = async () => {
+    await logout();
   };
 
   return (
@@ -43,6 +47,9 @@ function Login() {
           <input type="password" name="password" id="password" placeholder="password" className="border p-3" value={password} onChange={(e) => setPassword(e.target.value)} />
           <button className="border p-3 mt-4" onClick={handleLogin}>
             Login
+          </button>
+          <button className="border bg-slate-300 p-3 mt-4" onClick={handleLogout}>
+            Logout
           </button>
         </div>
       )}

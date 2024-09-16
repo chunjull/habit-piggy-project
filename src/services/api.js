@@ -1,5 +1,5 @@
 import db from "../utils/firebaseConfig";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
 
 const auth = getAuth();
@@ -19,4 +19,13 @@ async function registerUser(email, password) {
   }
 }
 
-export { registerUser };
+async function logout() {
+  try {
+    await signOut(auth);
+    console.log("User signed out");
+  } catch (error) {
+    console.error("Error signing out: ", error.code, error.message);
+  }
+}
+
+export { registerUser, logout };

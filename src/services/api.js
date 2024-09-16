@@ -1,6 +1,6 @@
 import db from "../utils/firebaseConfig";
 import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, setDoc, getDoc, Timestamp } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection, addDoc, Timestamp } from "firebase/firestore";
 
 const auth = getAuth();
 
@@ -22,9 +22,11 @@ async function registerUser(email, password) {
       isAcceptReminder: false,
       achievements: [],
       badges: [],
-      habits: [],
     });
     console.log("User data created with ID: ", user.uid);
+
+    collection(userDocRef, "habits");
+    console.log("Empty habits sub-collection created for user ID: ", user.uid);
   } catch (error) {
     console.error("Error creating user: ", error.code, error.message);
   }
@@ -65,4 +67,18 @@ async function getUserProfile(uid) {
   }
 }
 
-export { registerUser, logout, updateUserProfile, getUserProfile };
+async function addHabit(uid, habitData) {
+  try {
+    const userDocRef = doc(db, "users", uid);
+    const habitsCollectionRef = collection(userDocRef, "habits");
+    await addDoc(habitsCollectionRef, {
+      ...habitData,
+      createdTime: Timestamp.now(),
+    });
+    console.log("Habit added for user ID: ", uid);
+  } catch (error) {
+    console.error("Error adding habit: ", error.code, error.message);
+  }
+}
+
+export { registerUser, logout, updateUserProfile, getUserProfile, addHabit };

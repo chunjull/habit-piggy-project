@@ -1,6 +1,6 @@
 import db from "../utils/firebaseConfig";
 import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, setDoc, Timestamp } from "firebase/firestore";
+import { doc, setDoc, getDoc, Timestamp } from "firebase/firestore";
 
 const auth = getAuth();
 
@@ -22,7 +22,7 @@ async function registerUser(email, password) {
       isAcceptReminder: false,
       achievements: [],
       badges: [],
-      habit: [],
+      habits: [],
     });
     console.log("User data created with ID: ", user.uid);
   } catch (error) {
@@ -49,4 +49,20 @@ async function updateUserProfile(uid, profileData) {
   }
 }
 
-export { registerUser, logout, updateUserProfile };
+async function getUserProfile(uid) {
+  try {
+    const userDocRef = doc(db, "users", uid);
+    const userSnapshot = await getDoc(userDocRef);
+    if (userSnapshot.exists()) {
+      return userSnapshot.data();
+    } else {
+      console.log("No such document!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting user profile: ", error.code, error.message);
+    return null;
+  }
+}
+
+export { registerUser, logout, updateUserProfile, getUserProfile };

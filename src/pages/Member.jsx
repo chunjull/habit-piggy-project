@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { updateUserProfile } from "../services/api";
+import { updateUserProfile, getUserProfile } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 
 function Member() {
@@ -19,13 +19,16 @@ function Member() {
   });
 
   useEffect(() => {
-    if (user) {
-      setProfileData((prev) => ({
-        ...prev,
-        uid: user.uid,
-        email: user.email,
-      }));
-    }
+    const fetchUserProfile = async () => {
+      if (user) {
+        const userProfile = await getUserProfile(user.uid);
+        if (userProfile) {
+          setProfileData(userProfile);
+        }
+      }
+    };
+
+    fetchUserProfile();
   }, [user]);
 
   const handleModal = () => {
@@ -41,6 +44,11 @@ function Member() {
         console.error("Error updating profile: ", error);
       }
     }
+  };
+
+  const handleSaveAndClose = async () => {
+    await handleUpdateProfile();
+    handleModal();
   };
 
   const handleChange = (e) => {
@@ -71,31 +79,33 @@ function Member() {
         <div className="p-4 border space-y-2">
           <div className="flex justify-between items-start">
             <div className="flex gap-3">
-              <div className="w-10 h-10 bg-slate-300"></div>
+              <div className="w-10 h-10 bg-slate-300">{profileData.avatar}</div>
               <div className="flex flex-col">
-                <h3>米香的可愛兒子</h3>
-                <p className="text-slate-500">Lv.01</p>
+                <h3>{profileData.name}</h3>
+                <p className="text-slate-500">Lv.{profileData.levelPoints}</p>
               </div>
             </div>
           </div>
-          <p>媽咪最乖最聽話的鵝子</p>
-          <div className="w-full bg-slate-300 text-center">30%</div>
+          <p>{profileData.introduction}</p>
+          <div className="w-full bg-slate-300 text-center">{profileData.levelPoints}%</div>
         </div>
         <div className="pt-8 pb-4 px-4 border space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <button className="border">習以為常</button>
-            <button className="border">金豬玉葉</button>
-            <button className="border">休養生習</button>
-            <button className="border">第一桶金</button>
+            {profileData.achievements.map((achievement, index) => (
+              <button key={index} className="border">
+                {achievement}
+              </button>
+            ))}
           </div>
           <button className="text-center w-full bg-slate-300">更多成就</button>
         </div>
         <div className="pt-8 pb-4 px-4 border space-y-4">
           <div className="grid grid-cols-3 gap-4">
-            <div className="w-20 h-20 bg-slate-100"></div>
-            <div className="w-20 h-20 bg-slate-100"></div>
-            <div className="w-20 h-20 bg-slate-100"></div>
-            <div className="w-20 h-20 bg-slate-100"></div>
+            {profileData.badges.map((badge, index) => (
+              <div key={index} className="w-20 h-20 bg-slate-100">
+                {badge}
+              </div>
+            ))}
           </div>
           <button className="text-center w-full bg-slate-300">更多獎勵徽章</button>
         </div>
@@ -116,11 +126,11 @@ function Member() {
           </div>
           <div className="flex flex-col gap-1">
             <label htmlFor="name">會員名稱</label>
-            <input type="text" name="name" id="name" placeholder="會員名稱" className="border py-1 px-4" onChange={handleChange} />
+            <input type="text" name="name" id="name" placeholder="會員名稱" className="border py-1 px-4" value={profileData.name || ""} onChange={handleChange} />
           </div>
           <div className="flex flex-col gap-1">
             <label htmlFor="introduction">自我介紹</label>
-            <input type="text" name="introduction" id="introduction" placeholder="自我介紹" className="border py-1 px-4" onChange={handleChange} />
+            <input type="text" name="introduction" id="introduction" placeholder="自我介紹" className="border py-1 px-4" value={profileData.introduction || ""} onChange={handleChange} />
           </div>
           <div className="border"></div>
           <div className="flex justify-between items-center">
@@ -129,9 +139,9 @@ function Member() {
           </div>
           <div className="flex justify-between items-center">
             <p>接收 Email 提醒</p>
-            <button className="border">否</button>
+            <button className="border">{profileData.isAcceptReminder ? "是" : "否"}</button>
           </div>
-          <button className="border w-full" onClick={handleUpdateProfile}>
+          <button className="border w-full" onClick={handleSaveAndClose}>
             儲存
           </button>
         </div>

@@ -1,6 +1,6 @@
 import db from "../utils/firebaseConfig";
 import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
 
 const auth = getAuth();
 async function registerUser(email, password) {
@@ -16,7 +16,7 @@ async function registerUser(email, password) {
       name: "",
       introduction: "",
       avatar: "",
-      createdTime: Date.now(),
+      createdTime: Timestamp.now(),
       levelPoints: 0,
       isAcceptReminder: false,
       achievements: [],

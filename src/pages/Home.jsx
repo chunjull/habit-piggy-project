@@ -42,8 +42,8 @@ function Home() {
   const handleAddHabit = async () => {
     if (user) {
       await addHabit(user.uid, habitData);
-      fetchHabits(); // Refresh the habits list after adding a new habit
-      handleModal(); // Close the modal after adding the habit
+      fetchHabits();
+      handleModal();
     } else {
       console.error("User not authenticated");
     }

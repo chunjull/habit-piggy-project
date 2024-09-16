@@ -32,7 +32,7 @@ async function registerUser(email, password) {
   }
 }
 
-async function logout() {
+async function logoutUser() {
   try {
     await signOut(auth);
     console.log("User signed out");
@@ -116,4 +116,4 @@ async function deleteHabit(uid, habitId) {
   }
 }
 
-export { registerUser, logout, updateUserProfile, getUserProfile, addHabit, getHabits, updateHabit, deleteHabit };
+export { registerUser, logoutUser, updateUserProfile, getUserProfile, addHabit, getHabits, updateHabit, deleteHabit };

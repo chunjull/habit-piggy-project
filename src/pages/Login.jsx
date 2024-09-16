@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { registerUser, logout } from "../services/api";
+import { registerUser, logoutUser } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 
 function Login() {
@@ -25,7 +25,7 @@ function Login() {
   };
 
   const handleLogout = async () => {
-    await logout();
+    await logoutUser();
     setUser(null);
   };
 

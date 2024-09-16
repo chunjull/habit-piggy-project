@@ -1,21 +1,32 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { registerUser, logout } from "../services/api";
+import { AuthContext } from "../utils/AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isRegister, setIsRegister] = useState(true);
+  const { setUser } = useContext(AuthContext);
 
   const handleRegister = async () => {
     await registerUser(email, password);
   };
 
   const handleLogin = async () => {
-    console.log("Login with", email, password);
+    const auth = getAuth();
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      setUser(userCredential.user);
+      console.log("Login with", email, password);
+    } catch (error) {
+      console.error("Error logging in: ", error.code, error.message);
+    }
   };
 
   const handleLogout = async () => {
     await logout();
+    setUser(null);
   };
 
   return (

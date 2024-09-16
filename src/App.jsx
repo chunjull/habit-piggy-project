@@ -7,22 +7,25 @@ import Posts from "./pages/Posts";
 import Member from "./pages/Member";
 import Error from "./pages/Error";
 import Layout from "./components/Layout";
+import { AuthProvider } from "./utils/AuthContext";
 
 function App() {
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/savings" element={<Savings />} />
-          <Route path="/rank" element={<Rank />} />
-          <Route path="/posts" element={<Posts />} />
-          <Route path="/member" element={<Member />} />
-          <Route path="*" element={<Error />} />
-        </Routes>
-      </Layout>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/savings" element={<Savings />} />
+            <Route path="/rank" element={<Rank />} />
+            <Route path="/posts" element={<Posts />} />
+            <Route path="/member" element={<Member />} />
+            <Route path="*" element={<Error />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </AuthProvider>
   );
 }
 

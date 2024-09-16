@@ -3,6 +3,7 @@ import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth"
 import { doc, setDoc, Timestamp } from "firebase/firestore";
 
 const auth = getAuth();
+
 async function registerUser(email, password) {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -38,4 +39,14 @@ async function logout() {
   }
 }
 
-export { registerUser, logout };
+async function updateUserProfile(uid, profileData) {
+  try {
+    const userDocRef = doc(db, "users", uid);
+    await setDoc(userDocRef, profileData, { merge: true });
+    console.log("User profile updated with ID: ", uid);
+  } catch (error) {
+    console.error("Error updating user profile: ", error.code, error.message);
+  }
+}
+
+export { registerUser, logout, updateUserProfile };

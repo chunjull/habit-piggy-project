@@ -1,11 +1,59 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { updateUserProfile } from "../services/api";
+import { AuthContext } from "../utils/AuthContext";
 
 function Member() {
+  const { user } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [profileData, setProfileData] = useState({
+    uid: "",
+    email: "",
+    name: "",
+    introduction: "",
+    avatar: "",
+    levelPoints: 0,
+    isAcceptReminder: false,
+    achievements: [],
+    badges: [],
+    habits: [],
+  });
+
+  useEffect(() => {
+    if (user) {
+      setProfileData((prev) => ({
+        ...prev,
+        uid: user.uid,
+        email: user.email,
+      }));
+    }
+  }, [user]);
 
   const handleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+
+  const handleUpdateProfile = async () => {
+    if (user && user.uid) {
+      try {
+        await updateUserProfile(user.uid, profileData);
+        console.log("Profile updated successfully");
+      } catch (error) {
+        console.error("Error updating profile: ", error);
+      }
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProfileData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -62,17 +110,17 @@ function Member() {
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-slate-300"></div>
             <div>
-              <input type="file" name="profile" id="profile" />
+              <input type="file" name="avatar" id="profile" onChange={handleChange} />
               <p>您的頭像將會被公開。</p>
             </div>
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="username">會員名稱</label>
-            <input type="text" name="username" id="username" placeholder="會員名稱" className="border py-1 px-4" />
+            <label htmlFor="name">會員名稱</label>
+            <input type="text" name="name" id="name" placeholder="會員名稱" className="border py-1 px-4" onChange={handleChange} />
           </div>
           <div className="flex flex-col gap-1">
             <label htmlFor="introduction">自我介紹</label>
-            <input type="text" name="introduction" id="introduction" placeholder="自我介紹" className="border py-1 px-4" />
+            <input type="text" name="introduction" id="introduction" placeholder="自我介紹" className="border py-1 px-4" onChange={handleChange} />
           </div>
           <div className="border"></div>
           <div className="flex justify-between items-center">
@@ -83,9 +131,13 @@ function Member() {
             <p>接收 Email 提醒</p>
             <button className="border">否</button>
           </div>
+          <button className="border w-full" onClick={handleUpdateProfile}>
+            儲存
+          </button>
         </div>
       )}
     </>
   );
 }
+
 export default Member;

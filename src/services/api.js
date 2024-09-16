@@ -1,6 +1,6 @@
 import db from "../utils/firebaseConfig";
 import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, setDoc, getDoc, collection, addDoc, getDocs, Timestamp } from "firebase/firestore";
+import { doc, collection, setDoc, getDoc, addDoc, getDocs, updateDoc, deleteDoc, Timestamp } from "firebase/firestore";
 
 const auth = getAuth();
 
@@ -116,4 +116,59 @@ async function deleteHabit(uid, habitId) {
   }
 }
 
-export { registerUser, logoutUser, updateUserProfile, getUserProfile, addHabit, getHabits, updateHabit, deleteHabit };
+async function addPost(userID, postData) {
+  try {
+    const postsCollectionRef = collection(db, "posts");
+    const newPostRef = await addDoc(postsCollectionRef, {
+      ...postData,
+      userID: userID,
+      createdTime: Timestamp.now(),
+      updatedTime: Timestamp.now(),
+    });
+    console.log("Post added with ID: ", newPostRef.id);
+    return newPostRef.id;
+  } catch (error) {
+    console.error("Error adding post: ", error.code, error.message);
+  }
+}
+
+async function getPost(postID) {
+  try {
+    const postDocRef = doc(db, "posts", postID);
+    const postSnapshot = await getDoc(postDocRef);
+    if (postSnapshot.exists()) {
+      return { id: postSnapshot.id, ...postSnapshot.data() };
+    } else {
+      console.log("No such document!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting post: ", error.code, error.message);
+    return null;
+  }
+}
+
+async function updatePost(postID, postData) {
+  try {
+    const postDocRef = doc(db, "posts", postID);
+    await updateDoc(postDocRef, {
+      ...postData,
+      updatedTime: Timestamp.now(),
+    });
+    console.log("Post updated with ID: ", postID);
+  } catch (error) {
+    console.error("Error updating post: ", error.code, error.message);
+  }
+}
+
+async function deletePost(postID) {
+  try {
+    const postDocRef = doc(db, "posts", postID);
+    await deleteDoc(postDocRef);
+    console.log("Post deleted with ID: ", postID);
+  } catch (error) {
+    console.error("Error deleting post: ", error.code, error.message);
+  }
+}
+
+export { registerUser, logoutUser, updateUserProfile, getUserProfile, addHabit, getHabits, updateHabit, deleteHabit, addPost, getPost, updatePost, deletePost };

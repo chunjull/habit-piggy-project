@@ -174,11 +174,11 @@ function Home() {
                   Detail
                 </button>
               </div>
-              <div className="grid grid-cols-7">
+              <div className="grid grid-cols-7 gap-4">
                 {habit.status.map((status) => (
                   <div key={status.date} className="text-center">
                     <div>{new Date(status.date).toLocaleDateString("en-US", { weekday: "short" })}</div>
-                    <button className={`border ${status.completed ? "bg-yellow-400" : ""}`} onClick={() => handleCheck(habit.id, status.date)}>
+                    <button className={`border w-full ${status.completed ? "bg-yellow-400" : ""}`} onClick={() => handleCheck(habit.id, status.date)}>
                       Check
                     </button>
                   </div>

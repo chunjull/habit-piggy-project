@@ -156,10 +156,10 @@ function Home() {
                   Detail
                 </button>
               </div>
-              <div className="flex justify-between">
+              <div className="grid grid-cols-7">
                 {habit.status.map((status) => (
                   <div key={status.date} className="text-center">
-                    <div className="w-1/7">{new Date(status.date).toLocaleDateString("en-US", { weekday: "short" })}</div>
+                    <div>{new Date(status.date).toLocaleDateString("en-US", { weekday: "short" })}</div>
                     <button className={`border ${status.completed ? "bg-yellow-400" : ""}`} onClick={() => handleCheck(habit.id, status.date)}>
                       Check
                     </button>
@@ -299,7 +299,8 @@ function Home() {
             </div>
             <div className="flex justify-between">
               <p>累積存款：</p>
-              <p>NT$ {selectedHabit.status.filter((status) => status.completed).length * 50}</p>
+              <p>NT$ Not sure how to do</p>
+              {/* {selectedHabit.status.filter((status) => status.completed).length * 50} */}
             </div>
             <button className="py-1 w-full bg-yellow-400">發佈貼文</button>
           </div>

@@ -59,11 +59,11 @@ async function getUserProfile(uid) {
       return userSnapshot.data();
     } else {
       console.log("No such document!");
-      return null;
+      return { name: "Unknown", levelPoints: 0, avatar: "" }; // 返回預設值
     }
   } catch (error) {
     console.error("Error getting user profile: ", error.code, error.message);
-    return null;
+    return { name: "Unknown", levelPoints: 0, avatar: "" }; // 返回預設值
   }
 }
 
@@ -172,4 +172,16 @@ async function deletePost(postID) {
   }
 }
 
-export { registerUser, logoutUser, updateUserProfile, getUserProfile, addHabit, getHabits, updateHabit, deleteHabit, addPost, getPost, updatePost, deletePost };
+async function getAllPosts() {
+  try {
+    const postsCollectionRef = collection(db, "posts");
+    const postsSnapshot = await getDocs(postsCollectionRef);
+    const postsList = postsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    return postsList;
+  } catch (error) {
+    console.error("Error getting posts: ", error.code, error.message);
+    return [];
+  }
+}
+
+export { registerUser, logoutUser, updateUserProfile, getUserProfile, addHabit, getHabits, updateHabit, deleteHabit, addPost, getPost, updatePost, deletePost, getAllPosts };

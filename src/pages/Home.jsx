@@ -150,14 +150,12 @@ function Home() {
 
   return (
     <>
-      <div className="p-4 bg-slate-300 mb-6">
-        <WeekCalendar date={selectedDate} onSelect={handleSelectDate} />
-        {selectedDate && (
-          <div className="mt-4">
-            <p>Selected Date: {`${selectedDate.year}-${selectedDate.month + 1}-${selectedDate.day}`}</p>
-          </div>
-        )}
-      </div>
+      <WeekCalendar date={selectedDate} onSelect={handleSelectDate} />
+      {selectedDate && (
+        <div className="mt-4">
+          <p>Selected Date: {`${selectedDate.year}-${selectedDate.month + 1}-${selectedDate.day}`}</p>
+        </div>
+      )}
       <ul className="space-y-4 p-4">
         {Array.isArray(habits) &&
           habits.map((habit) => (

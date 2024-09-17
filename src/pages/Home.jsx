@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext, useRef } from "react";
 import { AuthContext } from "../utils/AuthContext";
-import { addHabit, getHabits, updateHabit } from "../services/api";
+import { addHabit, getHabits, updateHabit, addPost } from "../services/api";
 import WeekCalendar from "../components/WeekCalendar";
 import MonthCalendar from "../components/MonthCalendar";
 
@@ -22,6 +22,7 @@ function Home() {
   const [showMonthCalendar, setShowMonthCalendar] = useState(false);
   const [calendarTarget, setCalendarTarget] = useState("");
   const [selectedHabit, setSelectedHabit] = useState(null);
+  const [postContent, setPostContent] = useState("");
   const calendarRef = useRef(null);
 
   const { user } = useContext(AuthContext);
@@ -133,6 +134,18 @@ function Home() {
   const handleDetailClick = (habit) => {
     setSelectedHabit(habit);
     setIsDetailModalOpen(true);
+  };
+
+  const handleAddPost = async () => {
+    if (user && selectedHabit) {
+      const postData = {
+        content: postContent,
+        habitId: selectedHabit.id,
+      };
+      await addPost(user.uid, postData);
+      handlePostModal();
+      setPostContent("");
+    }
   };
 
   return (
@@ -320,8 +333,10 @@ function Home() {
               <h3>發佈貼文</h3>
               <button onClick={handlePostModal}>close</button>
             </div>
-            <textarea className="w-full h-40 border p-2" placeholder="輸入貼文內容..." required></textarea>
-            <button className="py-1 w-full bg-slate-300">發佈</button>
+            <textarea className="w-full h-40 border p-2" placeholder="輸入貼文內容..." required value={postContent} onChange={(e) => setPostContent(e.target.value)}></textarea>
+            <button className="py-1 w-full bg-slate-300" onClick={handleAddPost}>
+              發佈
+            </button>
           </div>
         </div>
       )}

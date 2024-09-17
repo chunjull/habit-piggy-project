@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext, useRef } from "react";
 import { AuthContext } from "../utils/AuthContext";
-import { addHabit, getHabits } from "../services/api";
+import { addHabit, getHabits, updateHabit } from "../services/api";
 import WeekCalendar from "../components/WeekCalendar";
 import MonthCalendar from "../components/MonthCalendar";
 
@@ -13,6 +13,7 @@ function Home() {
     amount: 0,
     startDate: "",
     endDate: "",
+    status: [],
   });
   const [habits, setHabits] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -42,7 +43,7 @@ function Home() {
 
   const fetchHabits = async () => {
     const habitsList = await getHabits(user.uid);
-    setHabits(habitsList);
+    setHabits(habitsList || []);
   };
 
   const handleModal = () => {
@@ -57,9 +58,29 @@ function Home() {
     }));
   };
 
+  const generateStatusArray = (startDate, endDate, frequency) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const statusArray = [];
+
+    if (frequency === "daily") {
+      for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+        statusArray.push({ date: new Date(d).getTime(), completed: false });
+      }
+    } else if (frequency === "weekly") {
+      for (let d = start; d <= end; d.setDate(d.getDate() + 7)) {
+        statusArray.push({ date: new Date(d).getTime(), completed: false });
+      }
+    }
+
+    return statusArray;
+  };
+
   const handleAddHabit = async () => {
     if (user) {
-      await addHabit(user.uid, habitData);
+      const statusArray = generateStatusArray(habitData.startDate, habitData.endDate, habitData.frequency);
+      const newHabitData = { ...habitData, status: statusArray };
+      await addHabit(user.uid, newHabitData);
       fetchHabits();
       handleModal();
     } else {
@@ -84,6 +105,20 @@ function Home() {
     setShowMonthCalendar(true);
   };
 
+  const handleCheck = async (habitId, date) => {
+    const updatedHabits = habits.map((habit) => {
+      if (habit.id === habitId) {
+        const updatedStatus = habit.status.map((status) => (status.date === date ? { ...status, completed: !status.completed } : status));
+        return { ...habit, status: updatedStatus };
+      }
+      return habit;
+    });
+    setHabits(updatedHabits);
+
+    const habitToUpdate = updatedHabits.find((habit) => habit.id === habitId);
+    await updateHabit(user.uid, habitId, habitToUpdate);
+  };
+
   return (
     <>
       <div className="p-4 bg-slate-300 mb-6">
@@ -95,29 +130,31 @@ function Home() {
         )}
       </div>
       <ul className="space-y-4 p-4">
-        {habits.map((habit) => (
-          <li key={habit.id} className="px-2 py-4 bg-slate-100">
-            <div className="flex justify-between items-center">
-              <div className="flex gap-2">
-                <div className="w-10 h-10 bg-yellow-400"></div>
-                <div className="flex flex-col">
-                  <h3>{habit.title}</h3>
-                  <p>{habit.frequency}</p>
+        {Array.isArray(habits) &&
+          habits.map((habit) => (
+            <li key={habit.id} className="px-2 py-4 bg-slate-100">
+              <div className="flex justify-between items-center">
+                <div className="flex gap-2">
+                  <div className="w-10 h-10 bg-yellow-400"></div>
+                  <div className="flex flex-col">
+                    <h3>{habit.title}</h3>
+                    <p>{habit.frequency}</p>
+                  </div>
                 </div>
+                <button className="bg-white">Detail</button>
               </div>
-              <button className="bg-white">Detail</button>
-            </div>
-            <div className="flex justify-between">
-              <div className="w-1/7">Sun</div>
-              <div className="w-1/7">Mon</div>
-              <div className="w-1/7">Tue</div>
-              <div className="w-1/7">Wed</div>
-              <div className="w-1/7">Thu</div>
-              <div className="w-1/7">Fri</div>
-              <div className="w-1/7">Sat</div>
-            </div>
-          </li>
-        ))}
+              <div className="flex justify-between">
+                {habit.status.map((status) => (
+                  <div key={status.date} className="text-center">
+                    <div className="w-1/7">{new Date(status.date).toLocaleDateString("en-US", { weekday: "short" })}</div>
+                    <button className={`border ${status.completed ? "bg-yellow-400" : ""}`} onClick={() => handleCheck(habit.id, status.date)}>
+                      Check
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </li>
+          ))}
       </ul>
       <button className="fixed right-4 bottom-20 bg-slate-300" onClick={handleModal}>
         add habit

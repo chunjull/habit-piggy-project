@@ -7,6 +7,7 @@ import MonthCalendar from "../components/MonthCalendar";
 function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [habitData, setHabitData] = useState({
     category: 0,
     title: "",
@@ -54,6 +55,10 @@ function Home() {
 
   const handleDetailModal = () => {
     setIsDetailModalOpen(!isDetailModalOpen);
+  };
+
+  const handlePostModal = () => {
+    setIsPostModalOpen(!isPostModalOpen);
   };
 
   const handleChange = (e) => {
@@ -302,7 +307,21 @@ function Home() {
               <p>NT$ Not sure how to do</p>
               {/* {selectedHabit.status.filter((status) => status.completed).length * 50} */}
             </div>
-            <button className="py-1 w-full bg-yellow-400">發佈貼文</button>
+            <button className="py-1 w-full bg-yellow-400" onClick={handlePostModal}>
+              發佈貼文
+            </button>
+          </div>
+        </div>
+      )}
+      {isPostModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="p-4 bg-white w-2/3 h-fit space-y-4">
+            <div className="flex justify-between items-center">
+              <h3>發佈貼文</h3>
+              <button onClick={handlePostModal}>close</button>
+            </div>
+            <textarea className="w-full h-40 border p-2" placeholder="輸入貼文內容..." required></textarea>
+            <button className="py-1 w-full bg-slate-300">發佈</button>
           </div>
         </div>
       )}

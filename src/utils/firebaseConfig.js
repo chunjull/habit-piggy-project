@@ -7,7 +7,7 @@ import { getAnalytics } from "firebase/analytics";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyAoA9vGq5gsjRVqngQcfX9wDHv03MFX8Mo",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "habit-piggy-project.firebaseapp.com",
   projectId: "habit-piggy-project",
   storageBucket: "habit-piggy-project.appspot.com",

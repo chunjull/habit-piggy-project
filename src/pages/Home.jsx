@@ -165,7 +165,12 @@ function Home() {
                   <div className="w-10 h-10 bg-yellow-400"></div>
                   <div className="flex flex-col">
                     <h3>{habit.title}</h3>
-                    <p>{habit.frequency}</p>
+                    <div className="flex">
+                      <p>
+                        {habit.frequency}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
+                      </p>
+                      <p className="text-gray-500">/{habit.status.length}</p>
+                    </div>
                   </div>
                 </div>
                 <button className="bg-white" onClick={() => handleDetailClick(habit)}>

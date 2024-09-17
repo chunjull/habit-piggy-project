@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-const Calendar = ({ date, onSelect }) => {
+const WeekCalendar = ({ date, onSelect }) => {
   const [weekNames] = useState(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
   const [monthNames] = useState(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]);
   const [displayDate, setDisplayDate] = useState(null);
@@ -70,29 +70,31 @@ const Calendar = ({ date, onSelect }) => {
   const headerText = `${monthNames[firstDayOfWeek.getMonth()]} ${firstDayOfWeek.getFullYear()}`;
 
   return (
-    <div className="p-4 bg-slate-300">
+    <div className="p-4 bg-slate-300 mb-6">
       <div className="flex justify-between mb-3">
         <button onClick={() => changePeriod(false)}>prev</button>
         <h1>{headerText}</h1>
         <button onClick={() => changePeriod(true)}>next</button>
       </div>
       <div className="grid grid-cols-7 text-center">
+        {weekNames.map((name, index) => (
+          <div key={index} className="font-bold">
+            {name}
+          </div>
+        ))}
         {daysInWeek().map((day, index) => (
           <div key={index} className={`border-t border-r flex items-center justify-center bg-white ${checkCurrentDate(day) ? "bg-yellow-500" : ""}`} onClick={() => selectDate(day)}>
             {day.value}
           </div>
-        ))}
-        {weekNames.map((name, index) => (
-          <div key={index}>{name}</div>
         ))}
       </div>
     </div>
   );
 };
 
-export default Calendar;
+export default WeekCalendar;
 
-Calendar.propTypes = {
+WeekCalendar.propTypes = {
   date: PropTypes.object,
   onSelect: PropTypes.func,
 };

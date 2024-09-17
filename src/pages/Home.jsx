@@ -1,7 +1,8 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { AuthContext } from "../utils/AuthContext";
 import { addHabit, getHabits } from "../services/api";
-import Calendar from "../components/Calendar";
+import WeekCalendar from "../components/WeekCalendar";
+import MonthCalendar from "../components/MonthCalendar";
 
 function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,6 +16,9 @@ function Home() {
   });
   const [habits, setHabits] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [showMonthCalendar, setShowMonthCalendar] = useState(false);
+  const [calendarTarget, setCalendarTarget] = useState("");
+  const calendarRef = useRef(null);
 
   const { user } = useContext(AuthContext);
 
@@ -23,6 +27,18 @@ function Home() {
       fetchHabits();
     }
   }, [user]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+        setShowMonthCalendar(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const fetchHabits = async () => {
     const habitsList = await getHabits(user.uid);
@@ -53,12 +69,25 @@ function Home() {
 
   const handleSelectDate = (date) => {
     setSelectedDate(date);
+    if (calendarTarget) {
+      setHabitData((prev) => ({
+        ...prev,
+        [calendarTarget]: `${date.year}-${String(date.month + 1).padStart(2, "0")}-${String(date.day).padStart(2, "0")}`,
+      }));
+      setShowMonthCalendar(false);
+      setCalendarTarget("");
+    }
+  };
+
+  const handleFocus = (target) => {
+    setCalendarTarget(target);
+    setShowMonthCalendar(true);
   };
 
   return (
     <>
       <div className="p-4 bg-slate-300 mb-6">
-        <Calendar date={selectedDate} onSelect={handleSelectDate} />
+        <WeekCalendar date={selectedDate} onSelect={handleSelectDate} />
         {selectedDate && (
           <div className="mt-4">
             <p>Selected Date: {`${selectedDate.year}-${selectedDate.month + 1}-${selectedDate.day}`}</p>
@@ -150,11 +179,36 @@ function Home() {
               <input type="number" name="amount" id="amount" className="px-4" value={habitData.amount} onChange={handleChange} />
             </div>
           </div>
-          <div className="flex justify-between gap-4">
-            <label htmlFor="range">養成期間</label>
-            <input type="date" name="startDate" id="startDate" value={habitData.startDate} onChange={handleChange} />
+          <div className="flex justify-between gap-4 w-full">
+            <label htmlFor="range" className="text-nowrap">
+              養成期間
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                name="startDate"
+                id="startDate"
+                className="text-center"
+                placeholder="開始日期"
+                value={habitData.startDate}
+                onFocus={() => handleFocus("startDate")}
+                onChange={handleChange}
+              />
+              {showMonthCalendar && calendarTarget === "startDate" && (
+                <div ref={calendarRef} className="absolute z-10 bg-white shadow-lg w-[300px]">
+                  <MonthCalendar date={selectedDate} onSelect={handleSelectDate} />
+                </div>
+              )}
+            </div>
             <p>~</p>
-            <input type="date" name="endDate" id="endDate" value={habitData.endDate} onChange={handleChange} />
+            <div className="relative">
+              <input type="text" name="endDate" id="endDate" className="text-center" placeholder="結束日期" value={habitData.endDate} onFocus={() => handleFocus("endDate")} onChange={handleChange} />
+              {showMonthCalendar && calendarTarget === "endDate" && (
+                <div ref={calendarRef} className="absolute z-10 bg-white shadow-lg w-[300px]">
+                  <MonthCalendar date={selectedDate} onSelect={handleSelectDate} />
+                </div>
+              )}
+            </div>
           </div>
           <button className="w-full border" onClick={handleAddHabit}>
             養成習慣

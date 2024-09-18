@@ -101,7 +101,7 @@ async function updateHabit(uid, habitId, habitData) {
       ...habitData,
       updatedTime: Timestamp.now(),
     });
-    console.log("Habit updated with ID: ", habitId);
+    // console.log("Habit updated with ID: ", habitId);
   } catch (error) {
     console.error("Error updating habit: ", error.code, error.message);
   }

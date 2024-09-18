@@ -24,6 +24,7 @@ function Home() {
   const [calendarTarget, setCalendarTarget] = useState("");
   const [selectedHabit, setSelectedHabit] = useState(null);
   const [postContent, setPostContent] = useState("");
+  const [weekDates, setWeekDates] = useState([]);
   const calendarRef = useRef(null);
 
   const { user } = useContext(AuthContext);
@@ -88,11 +89,11 @@ function Home() {
 
     if (frequency === "daily") {
       for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
-        statusArray.push({ date: new Date(d).getTime(), completed: false });
+        statusArray.push({ date: new Date(d).toDateString(), completed: false });
       }
     } else if (frequency === "weekly") {
       for (let d = start; d <= end; d.setDate(d.getDate() + 7)) {
-        statusArray.push({ date: new Date(d).getTime(), completed: false });
+        statusArray.push({ date: new Date(d).toDateString(), completed: false });
       }
     }
 
@@ -151,15 +152,26 @@ function Home() {
   const handleCheck = async (habitId, date) => {
     const updatedHabits = habits.map((habit) => {
       if (habit.id === habitId) {
-        const updatedStatus = habit.status.map((status) => (status.date === date ? { ...status, completed: !status.completed } : status));
+        const updatedStatus = habit.status.map((status) => {
+          if (new Date(status.date).toDateString() === new Date(date).toDateString()) {
+            return { ...status, completed: !status.completed };
+          }
+          return status;
+        });
         return { ...habit, status: updatedStatus };
       }
       return habit;
     });
+
     setHabits(updatedHabits);
 
     const habitToUpdate = updatedHabits.find((habit) => habit.id === habitId);
-    await updateHabit(user.uid, habitId, habitToUpdate);
+    try {
+      await updateHabit(user.uid, habitId, habitToUpdate);
+      // console.log("Habit updated successfully in Firestore");
+    } catch (error) {
+      console.error("Error updating habit in Firestore: ", error);
+    }
   };
 
   const handleDetailClick = (habit) => {
@@ -179,40 +191,12 @@ function Home() {
     }
   };
 
-  const getWeekRange = (date) => {
-    const startOfWeek = new Date(date.year, date.month, date.day - new Date(date.year, date.month, date.day).getDay());
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6);
-    return { startOfWeek, endOfWeek };
-  };
-
-  const renderWeekDays = (habit, weekRange) => {
-    const days = [];
-    for (let d = new Date(weekRange.startOfWeek); d <= weekRange.endOfWeek; d.setDate(d.getDate() + 1)) {
-      const status = habit.status.find((s) => new Date(s.date).toDateString() === d.toDateString());
-      const isOutsideHabitPeriod = d < new Date(habitData.startDate) || d > new Date(habitData.endDate);
-      days.push(
-        <div key={d.getTime()} className="text-center">
-          <div>{d.toLocaleDateString("en-US", { weekday: "short" })}</div>
-          <button
-            className={`border w-full ${status && status.completed ? "bg-yellow-400" : ""} ${isOutsideHabitPeriod ? "bg-blue-500" : ""}`}
-            onClick={() => !isOutsideHabitPeriod && handleCheck(habit.id, d.getTime())}
-          >
-            Check
-          </button>
-        </div>
-      );
-    }
-    return days;
-  };
-
   return (
     <>
-      <WeekCalendar date={selectedDate} onSelect={handleSelectDate} />
+      <WeekCalendar date={selectedDate} onSelect={handleSelectDate} onWeekChange={setWeekDates} />
       <ul className="space-y-4 p-4 mb-11">
         {Array.isArray(habits) &&
           habits.map((habit) => {
-            const weekRange = getWeekRange(selectedDate || new Date());
             return (
               <li key={habit.id} className="px-2 py-4 bg-slate-100">
                 <div className="flex justify-between items-center">
@@ -232,7 +216,26 @@ function Home() {
                     Detail
                   </button>
                 </div>
-                <div className="grid grid-cols-7 gap-4">{renderWeekDays(habit, weekRange)}</div>
+                <div className="grid grid-cols-7 gap-2">
+                  {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
+                    <div key={index} className="text-center">
+                      {day}
+                    </div>
+                  ))}
+                  {weekDates.map((date, index) => {
+                    const status = habit.status.find((s) => new Date(s.date).toDateString() === new Date(date.year, date.month, date.day).toDateString());
+                    return (
+                      <button
+                        key={index}
+                        className={`border w-full ${status && status.completed ? "bg-yellow-400" : "bg-gray-200"}`}
+                        onClick={() => status && handleCheck(habit.id, status.date)}
+                        disabled={!status}
+                      >
+                        {status ? "CHECK" : ""}
+                      </button>
+                    );
+                  })}
+                </div>
               </li>
             );
           })}

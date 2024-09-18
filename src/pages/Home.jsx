@@ -225,7 +225,7 @@ function Home() {
       </button>
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-slate-100 w-2/3 h-fit p-4 space-y-4">
+          <div className="p-4 bg-slate-100 w-2/3 h-fit space-y-4 md:w-1/2 md:ml-40">
             <div className="flex justify-between gap-4">
               <div className="flex gap-4 w-full">
                 <label htmlFor="category">

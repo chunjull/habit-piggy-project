@@ -45,6 +45,16 @@ function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    // 設置 selectedDate 為今天的日期
+    const today = new Date();
+    setSelectedDate({
+      year: today.getFullYear(),
+      month: today.getMonth(),
+      day: today.getDate(),
+    });
+  }, []);
+
   const fetchHabits = async () => {
     const habitsList = await getHabits(user.uid);
     setHabits(habitsList || []);
@@ -148,47 +158,68 @@ function Home() {
     }
   };
 
+  const getWeekRange = (date) => {
+    const startOfWeek = new Date(date.year, date.month, date.day - new Date(date.year, date.month, date.day).getDay());
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    return { startOfWeek, endOfWeek };
+  };
+
+  const renderWeekDays = (habit, weekRange) => {
+    const days = [];
+    for (let d = new Date(weekRange.startOfWeek); d <= weekRange.endOfWeek; d.setDate(d.getDate() + 1)) {
+      const status = habit.status.find((s) => new Date(s.date).toDateString() === d.toDateString());
+      const isOutsideHabitPeriod = d < new Date(habitData.startDate) || d > new Date(habitData.endDate);
+      days.push(
+        <div key={d.getTime()} className="text-center">
+          <div>{d.toLocaleDateString("en-US", { weekday: "short" })}</div>
+          <button
+            className={`border w-full ${status && status.completed ? "bg-yellow-400" : ""} ${isOutsideHabitPeriod ? "bg-blue-500" : ""}`}
+            onClick={() => !isOutsideHabitPeriod && handleCheck(habit.id, d.getTime())}
+          >
+            Check
+          </button>
+        </div>
+      );
+    }
+    return days;
+  };
+
   return (
     <>
       <WeekCalendar date={selectedDate} onSelect={handleSelectDate} />
-      {selectedDate && (
+      {/* {selectedDate && (
         <div className="mt-4">
           <p>Selected Date: {`${selectedDate.year}-${selectedDate.month + 1}-${selectedDate.day}`}</p>
         </div>
-      )}
+      )} */}
       <ul className="space-y-4 p-4">
         {Array.isArray(habits) &&
-          habits.map((habit) => (
-            <li key={habit.id} className="px-2 py-4 bg-slate-100">
-              <div className="flex justify-between items-center">
-                <div className="flex gap-2">
-                  <div className="w-10 h-10 bg-yellow-400"></div>
-                  <div className="flex flex-col">
-                    <h3>{habit.title}</h3>
-                    <div className="flex">
-                      <p>
-                        {habit.frequency}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
-                      </p>
-                      <p className="text-gray-500">/{habit.status.length}</p>
+          habits.map((habit) => {
+            const weekRange = getWeekRange(selectedDate || new Date());
+            return (
+              <li key={habit.id} className="px-2 py-4 bg-slate-100">
+                <div className="flex justify-between items-center">
+                  <div className="flex gap-2">
+                    <div className="w-10 h-10 bg-yellow-400"></div>
+                    <div className="flex flex-col">
+                      <h3>{habit.title}</h3>
+                      <div className="flex">
+                        <p>
+                          {habit.frequency}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
+                        </p>
+                        <p className="text-gray-500">/{habit.status.length}</p>
+                      </div>
                     </div>
                   </div>
+                  <button className="bg-white" onClick={() => handleDetailClick(habit)}>
+                    Detail
+                  </button>
                 </div>
-                <button className="bg-white" onClick={() => handleDetailClick(habit)}>
-                  Detail
-                </button>
-              </div>
-              <div className="grid grid-cols-7 gap-4">
-                {habit.status.map((status) => (
-                  <div key={status.date} className="text-center">
-                    <div>{new Date(status.date).toLocaleDateString("en-US", { weekday: "short" })}</div>
-                    <button className={`border w-full ${status.completed ? "bg-yellow-400" : ""}`} onClick={() => handleCheck(habit.id, status.date)}>
-                      Check
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </li>
-          ))}
+                <div className="grid grid-cols-7 gap-4">{renderWeekDays(habit, weekRange)}</div>
+              </li>
+            );
+          })}
       </ul>
       <button className="fixed right-4 bottom-20 bg-slate-300" onClick={handleModal}>
         add habit

@@ -2,10 +2,13 @@ import { useState, useEffect, useContext, useRef } from "react";
 import { AuthContext } from "../utils/AuthContext";
 import { addHabit, getHabits, updateHabit, addPost } from "../services/api";
 import WeekCalendar from "../components/WeekCalendar";
-import MonthCalendar from "../components/MonthCalendar";
+import Modal from "../components/Modal";
+import HabitModal from "../components/HabitModal";
+import DetailModal from "../components/DetailModal";
+import PostModal from "../components/PostModal";
 
 function Home() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [habitData, setHabitData] = useState({
@@ -74,8 +77,8 @@ function Home() {
     setOriginalHabits(habitsList || []);
   };
 
-  const handleModal = () => {
-    setIsModalOpen(!isModalOpen);
+  const handleHabitModal = () => {
+    setIsHabitModalOpen(!isHabitModalOpen);
   };
 
   const handleDetailModal = () => {
@@ -118,7 +121,7 @@ function Home() {
       const newHabitData = { ...habitData, status: statusArray };
       await addHabit(user.uid, newHabitData);
       fetchHabits();
-      handleModal();
+      handleHabitModal();
     } else {
       console.error("User not authenticated");
     }
@@ -252,165 +255,28 @@ function Home() {
             );
           })}
       </ul>
-      <button className="fixed right-4 bottom-20 bg-slate-300" onClick={handleModal}>
+      <button className="fixed right-4 bottom-20 bg-slate-300" onClick={handleHabitModal}>
         add habit
       </button>
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="p-4 bg-slate-100 w-2/3 h-fit space-y-4 md:w-1/2 md:ml-40">
-            <div className="flex justify-between gap-4">
-              <div className="flex gap-4 w-full">
-                <label htmlFor="category">
-                  <input type="number" name="category" id="category" className="w-10 h-10" value={habitData.category} onChange={handleChange} />
-                </label>
-                <input type="text" name="title" placeholder="輸入習慣名稱" className="px-4" value={habitData.title} onChange={handleChange} />
-              </div>
-              <button onClick={handleModal}>Close</button>
-            </div>
-            <div className="flex justify-between gap-4">
-              <label htmlFor="frequency">習慣頻率</label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="frequency"
-                  id="daily"
-                  value="daily"
-                  className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-slate-500 checked:border-transparent focus:outline-none"
-                  checked={habitData.frequency === "daily"}
-                  onChange={handleChange}
-                />
-                <label htmlFor="daily">每日</label>
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="frequency"
-                  id="weekly"
-                  value="weekly"
-                  className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-slate-500 checked:border-transparent focus:outline-none"
-                  checked={habitData.frequency === "weekly"}
-                  onChange={handleChange}
-                />
-                <label htmlFor="weekly">每週</label>
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="frequency"
-                  id="specificDay"
-                  value="specificDays"
-                  className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-slate-500 checked:border-transparent focus:outline-none"
-                  checked={habitData.frequency === "specificDays"}
-                  onChange={handleChange}
-                />
-                <label htmlFor="specificDay">特定日期</label>
-              </div>
-            </div>
-            <div className="flex justify-between gap-4">
-              <label htmlFor="amount">習慣罰款</label>
-              <div className="flex gap-2">
-                <p>NT$</p>
-                <input type="number" name="amount" id="amount" className="px-4" value={habitData.amount} onChange={handleChange} />
-              </div>
-            </div>
-            <div className="flex justify-between gap-4 w-full">
-              <label htmlFor="range" className="text-nowrap">
-                養成期間
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  name="startDate"
-                  id="startDate"
-                  className="text-center"
-                  placeholder="開始日期"
-                  value={habitData.startDate}
-                  onFocus={() => handleFocus("startDate")}
-                  onChange={handleChange}
-                />
-                {showMonthCalendar && calendarTarget === "startDate" && (
-                  <div ref={calendarRef} className="absolute z-10 bg-white shadow-lg w-[300px]">
-                    <MonthCalendar date={selectedDate} onSelect={handleSelectDate} />
-                  </div>
-                )}
-              </div>
-              <p>~</p>
-              <div className="relative">
-                <input
-                  type="text"
-                  name="endDate"
-                  id="endDate"
-                  className="text-center"
-                  placeholder="結束日期"
-                  value={habitData.endDate}
-                  onFocus={() => handleFocus("endDate")}
-                  onChange={handleChange}
-                />
-                {showMonthCalendar && calendarTarget === "endDate" && (
-                  <div ref={calendarRef} className="absolute z-10 bg-white shadow-lg w-[300px]">
-                    <MonthCalendar date={selectedDate} onSelect={handleSelectDate} />
-                  </div>
-                )}
-              </div>
-            </div>
-            <button className="w-full border" onClick={handleAddHabit}>
-              養成習慣
-            </button>
-          </div>
-        </div>
-      )}
-      {isDetailModalOpen && selectedHabit && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="p-4 bg-yellow-50 w-2/3 h-fit space-y-4 md:w-1/2 md:ml-40">
-            <div className="flex justify-between items-center">
-              <div className="flex gap-4">
-                <div className="w-10 h-10 bg-yellow-400"></div>
-                <div className="flex flex-col">
-                  <div className="flex gap-2">
-                    <h3>{selectedHabit.title}</h3>
-                    <button>edit</button>
-                  </div>
-                  <p>{selectedHabit.frequency}</p>
-                </div>
-              </div>
-              <button onClick={handleDetailModal}>close</button>
-            </div>
-            <div className="flex justify-between">
-              <h3>養成期間：</h3>
-              <p>
-                {selectedHabit.startDate}～{selectedHabit.endDate}
-              </p>
-            </div>
-            <div className="grid grid-cols-10 gap-3">
-              {selectedHabit.status.map((status, index) => (
-                <div key={index} className={`border h-9 md:h-12 ${index < selectedHabit.status.filter((s) => s.completed).length ? "bg-yellow-400" : ""}`}></div>
-              ))}
-            </div>
-            <div className="flex justify-between">
-              <p>累積存款：</p>
-              <p>NT$ Not sure how to do</p>
-              {/* {selectedHabit.status.filter((status) => status.completed).length * 50} */}
-            </div>
-            <button className="py-1 w-full bg-yellow-400" onClick={handlePostModal}>
-              發佈貼文
-            </button>
-          </div>
-        </div>
-      )}
-      {isPostModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="p-4 bg-white w-2/3 h-fit space-y-4 md:w-1/2 md:ml-40">
-            <div className="flex justify-between items-center">
-              <h3>發佈貼文</h3>
-              <button onClick={handlePostModal}>close</button>
-            </div>
-            <textarea className="w-full h-40 border p-2" placeholder="輸入貼文內容..." required value={postContent} onChange={(e) => setPostContent(e.target.value)}></textarea>
-            <button className="py-1 w-full bg-slate-300" onClick={handleAddPost}>
-              發佈
-            </button>
-          </div>
-        </div>
-      )}
+      <Modal isOpen={isHabitModalOpen} onClose={handleHabitModal}>
+        <HabitModal
+          habitData={habitData}
+          handleChange={handleChange}
+          handleAddHabit={handleAddHabit}
+          handleFocus={handleFocus}
+          showMonthCalendar={showMonthCalendar}
+          calendarTarget={calendarTarget}
+          selectedDate={selectedDate}
+          handleSelectDate={handleSelectDate}
+          calendarRef={calendarRef}
+        />
+      </Modal>
+      <Modal isOpen={isDetailModalOpen} onClose={handleDetailModal}>
+        <DetailModal selectedHabit={selectedHabit} handleDetailModal={handleDetailModal} handlePostModal={handlePostModal} />
+      </Modal>
+      <Modal isOpen={isPostModalOpen} onClose={handlePostModal}>
+        <PostModal postContent={postContent} setPostContent={setPostContent} handleAddPost={handleAddPost} />
+      </Modal>
     </>
   );
 }

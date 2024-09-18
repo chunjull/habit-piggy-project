@@ -46,7 +46,6 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    // 設置 selectedDate 為今天的日期
     const today = new Date();
     setSelectedDate({
       year: today.getFullYear(),
@@ -193,7 +192,7 @@ function Home() {
           <p>Selected Date: {`${selectedDate.year}-${selectedDate.month + 1}-${selectedDate.day}`}</p>
         </div>
       )} */}
-      <ul className="space-y-4 p-4">
+      <ul className="space-y-4 p-4 mb-11">
         {Array.isArray(habits) &&
           habits.map((habit) => {
             const weekRange = getWeekRange(selectedDate || new Date());

@@ -329,7 +329,7 @@ function Home() {
       )}
       {isDetailModalOpen && selectedHabit && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="p-4 bg-yellow-50 w-2/3 h-fit space-y-4">
+          <div className="p-4 bg-yellow-50 w-2/3 h-fit space-y-4 md:w-1/2 md:ml-40">
             <div className="flex justify-between items-center">
               <div className="flex gap-4">
                 <div className="w-10 h-10 bg-yellow-400"></div>
@@ -361,7 +361,7 @@ function Home() {
       )}
       {isPostModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="p-4 bg-white w-2/3 h-fit space-y-4">
+          <div className="p-4 bg-white w-2/3 h-fit space-y-4 md:w-1/2 md:ml-40">
             <div className="flex justify-between items-center">
               <h3>發佈貼文</h3>
               <button onClick={handlePostModal}>close</button>

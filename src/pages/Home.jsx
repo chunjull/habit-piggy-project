@@ -375,9 +375,15 @@ function Home() {
               </div>
               <button onClick={handleDetailModal}>close</button>
             </div>
-            <div className="grid grid-cols-7 gap-3">
+            <div className="flex justify-between">
+              <h3>養成期間：</h3>
+              <p>
+                {selectedHabit.startDate}～{selectedHabit.endDate}
+              </p>
+            </div>
+            <div className="grid grid-cols-10 gap-3">
               {selectedHabit.status.map((status, index) => (
-                <div key={index} className={`border w-1/7 h-10 ${index < selectedHabit.status.filter((s) => s.completed).length ? "bg-yellow-400" : ""}`}></div>
+                <div key={index} className={`border h-9 md:h-12 ${index < selectedHabit.status.filter((s) => s.completed).length ? "bg-yellow-400" : ""}`}></div>
               ))}
             </div>
             <div className="flex justify-between">

@@ -6,6 +6,7 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
   const [monthNames] = useState(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]);
   const [displayDate, setDisplayDate] = useState(null);
   const [currentDate, setCurrentDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   useEffect(() => {
     const now = new Date();
@@ -68,17 +69,30 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
   const changeWeek = (dir) => {
     setDisplayDate((prev) => {
       const newDate = new Date(prev.year, prev.month, prev.day + (dir ? 7 : -7));
+      const firstDayOfWeek = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate() - newDate.getDay());
+      const newSelectedDate = {
+        year: firstDayOfWeek.getFullYear(),
+        month: firstDayOfWeek.getMonth(),
+        day: firstDayOfWeek.getDate(),
+      };
+      setSelectedDate(newSelectedDate);
+      onSelect(newSelectedDate);
       return { year: newDate.getFullYear(), month: newDate.getMonth(), day: newDate.getDate() };
     });
   };
 
   const selectDate = (date) => {
     const newDate = { ...displayDate, day: date.value, month: date.month, year: date.year };
+    setSelectedDate(newDate);
     onSelect(newDate);
   };
 
   const checkCurrentDate = (date) => {
     return date.value === currentDate.day && currentDate.year === date.year && currentDate.month === date.month;
+  };
+
+  const checkSelectedDate = (date) => {
+    return selectedDate && date.value === selectedDate.day && selectedDate.year === date.year && selectedDate.month === date.month;
   };
 
   if (!displayDate) return null;
@@ -93,14 +107,18 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
         <h1>{headerText}</h1>
         <button onClick={() => changePeriod(true)}>next</button>
       </div>
-      <div className="grid grid-cols-7 text-center">
+      <div className="grid grid-cols-7 gap-x-4 text-center">
         {weekNames.map((name, index) => (
           <div key={index} className="font-bold">
             {name}
           </div>
         ))}
         {daysInWeek().map((day, index) => (
-          <div key={index} className={`border-t border-r flex items-center justify-center bg-white ${checkCurrentDate(day) ? "bg-yellow-500" : ""}`} onClick={() => selectDate(day)}>
+          <div
+            key={index}
+            className={`border-t border-r flex items-center justify-center bg-white ${checkCurrentDate(day) ? "bg-yellow-400" : checkSelectedDate(day) ? "bg-yellow-200" : ""}`}
+            onClick={() => selectDate(day)}
+          >
             {day.value}
           </div>
         ))}

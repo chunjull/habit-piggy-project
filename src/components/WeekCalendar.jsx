@@ -87,7 +87,7 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
   const headerText = `${monthNames[firstDayOfWeek.getMonth()]} ${firstDayOfWeek.getFullYear()}`;
 
   return (
-    <div className="p-4 bg-slate-300 mb-6">
+    <div className="p-4 bg-slate-300">
       <div className="flex justify-between mb-3">
         <button onClick={() => changePeriod(false)}>prev</button>
         <h1>{headerText}</h1>

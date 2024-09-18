@@ -258,7 +258,7 @@ function Home() {
       <button className="fixed right-4 bottom-20 bg-slate-300" onClick={handleHabitModal}>
         add habit
       </button>
-      <Modal isOpen={isHabitModalOpen} onClose={handleHabitModal}>
+      <Modal isOpen={isHabitModalOpen}>
         <HabitModal
           habitData={habitData}
           handleChange={handleChange}
@@ -269,6 +269,7 @@ function Home() {
           selectedDate={selectedDate}
           handleSelectDate={handleSelectDate}
           calendarRef={calendarRef}
+          handleHabitModal={handleHabitModal}
         />
       </Modal>
       <Modal isOpen={isDetailModalOpen} onClose={handleDetailModal}>

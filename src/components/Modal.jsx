@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const Modal = ({ isOpen, onClose, children }) => {
+const Modal = ({ isOpen, children }) => {
   if (!isOpen) return null;
 
   return (
@@ -8,7 +8,6 @@ const Modal = ({ isOpen, onClose, children }) => {
       <div className="p-4 bg-slate-100 w-2/3 h-fit space-y-4 md:w-1/2 md:ml-40">
         <div className="flex justify-between items-center">
           <div>{children}</div>
-          <button onClick={onClose}>Close</button>
         </div>
       </div>
     </div>
@@ -17,7 +16,6 @@ const Modal = ({ isOpen, onClose, children }) => {
 
 Modal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
 };
 

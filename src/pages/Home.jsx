@@ -56,9 +56,21 @@ function Home() {
     });
   }, []);
 
+  const isDateInRange = (date, startDate, endDate) => {
+    const targetDate = new Date(date);
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    targetDate.setHours(0, 0, 0, 0);
+    start.setHours(0, 0, 0, 0);
+    end.setHours(23, 59, 59, 999);
+    return targetDate >= start && targetDate <= end;
+  };
+
   const fetchHabits = async () => {
     const habitsList = await getHabits(user.uid);
-    setHabits(habitsList || []);
+    const today = new Date();
+    const filteredHabits = habitsList.filter((habit) => isDateInRange(today, habit.startDate, habit.endDate));
+    setHabits(filteredHabits || []);
     setOriginalHabits(habitsList || []);
   };
 

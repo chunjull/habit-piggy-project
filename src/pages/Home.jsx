@@ -18,6 +18,7 @@ function Home() {
     status: [],
   });
   const [habits, setHabits] = useState([]);
+  const [originalHabits, setOriginalHabits] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [showMonthCalendar, setShowMonthCalendar] = useState(false);
   const [calendarTarget, setCalendarTarget] = useState("");
@@ -57,6 +58,7 @@ function Home() {
   const fetchHabits = async () => {
     const habitsList = await getHabits(user.uid);
     setHabits(habitsList || []);
+    setOriginalHabits(habitsList || []);
   };
 
   const handleModal = () => {
@@ -111,6 +113,26 @@ function Home() {
 
   const handleSelectDate = (date) => {
     setSelectedDate(date);
+    const filteredHabits = originalHabits.filter((habit) => {
+      const startDate = new Date(habit.startDate);
+      const endDate = new Date(habit.endDate);
+      const selectedDateObj = new Date(date.year, date.month, date.day);
+
+      startDate.setHours(0, 0, 0, 0);
+      endDate.setHours(23, 59, 59, 999);
+      selectedDateObj.setHours(0, 0, 0, 0);
+
+      if (habit.frequency === "weekly") {
+        const startOfWeek = new Date(selectedDateObj);
+        startOfWeek.setDate(selectedDateObj.getDate() - selectedDateObj.getDay());
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        return (startOfWeek >= startDate && startOfWeek <= endDate) || (endOfWeek >= startDate && endOfWeek <= endDate) || (startDate >= startOfWeek && startDate <= endOfWeek);
+      }
+
+      return selectedDateObj >= startDate && selectedDateObj <= endDate;
+    });
+    setHabits(filteredHabits);
     if (calendarTarget) {
       setHabitData((prev) => ({
         ...prev,
@@ -187,11 +209,6 @@ function Home() {
   return (
     <>
       <WeekCalendar date={selectedDate} onSelect={handleSelectDate} />
-      {/* {selectedDate && (
-        <div className="mt-4">
-          <p>Selected Date: {`${selectedDate.year}-${selectedDate.month + 1}-${selectedDate.day}`}</p>
-        </div>
-      )} */}
       <ul className="space-y-4 p-4 mb-11">
         {Array.isArray(habits) &&
           habits.map((habit) => {

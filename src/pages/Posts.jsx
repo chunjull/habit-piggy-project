@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { getAllPosts, getUserProfile } from "../services/api";
+import { AuthContext } from "../utils/AuthContext";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
+  const [filter, setFilter] = useState("all");
+  const { user } = useContext(AuthContext);
 
   const backgroundColors = [
     "bg-red-100",
@@ -34,14 +37,19 @@ function Posts() {
     fetchPosts();
   }, []);
 
+  const filteredPosts = filter === "personal" ? posts.filter((post) => post.userID === user.uid) : posts;
+
   return (
     <div className="p-4 space-y-4 mb-16 md:mb-0">
       <div className="flex justify-between items-center">
-        <h2>存款總覽</h2>
-        <button className="border">本週</button>
+        <h2>貼文總覽</h2>
+        <select className="border" value={filter} onChange={(e) => setFilter(e.target.value)}>
+          <option value="all">全部</option>
+          <option value="personal">僅限自己</option>
+        </select>
       </div>
       <ul className="space-y-4">
-        {posts.map((post) => {
+        {filteredPosts.map((post) => {
           const randomColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
           return (
             <li key={post.id} className="p-4 border space-y-2">

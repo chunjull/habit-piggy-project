@@ -1,7 +1,109 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { AuthContext } from "../utils/AuthContext";
+import { getHabits } from "../services/api";
+
+const calculateUncompletedFine = (habit) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const uncompletedCount = habit.status.filter((status) => {
+    const statusDate = new Date(status.date);
+    statusDate.setHours(0, 0, 0, 0);
+    return statusDate < today && !status.completed;
+  }).length;
+  return uncompletedCount * habit.amount;
+};
 
 function Savings() {
   const [isOverview, setIsOverview] = useState(true);
+  const [weeklyHabits, setWeeklyHabits] = useState([]);
+  const [completedCount, setCompletedCount] = useState(0);
+  const [savingsCount, setSavingsCount] = useState(0);
+  const [totalSavings, setTotalSavings] = useState(0);
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (user) {
+      fetchWeeklyHabits();
+    }
+  }, [user]);
+
+  const fetchWeeklyHabits = async () => {
+    try {
+      const habitsList = await getHabits(user.uid);
+      const today = new Date();
+      const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+      const endOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+      startOfWeek.setHours(0, 0, 0, 0);
+      endOfWeek.setHours(23, 59, 59, 999);
+
+      const weeklyHabits = habitsList.filter((habit) => {
+        return habit.status.some((status) => {
+          const statusDate = new Date(status.date);
+          return statusDate >= startOfWeek && statusDate <= endOfWeek;
+        });
+      });
+
+      setWeeklyHabits(weeklyHabits);
+      calculateStatistics(weeklyHabits);
+    } catch (error) {
+      console.error("Error fetching habits: ", error.code, error.message);
+    }
+  };
+
+  const calculateStatistics = (habits) => {
+    let completed = 0;
+    let savings = 0;
+    let total = 0;
+
+    habits.forEach((habit) => {
+      const uncompletedFine = calculateUncompletedFine(habit);
+      if (uncompletedFine > 0) {
+        savings++;
+        total += uncompletedFine;
+      }
+      habit.status.forEach((status) => {
+        if (status.completed) {
+          completed++;
+        }
+      });
+    });
+
+    setCompletedCount(completed);
+    setSavingsCount(savings);
+    setTotalSavings(total);
+  };
+
+  const renderUncompletedHabits = () => {
+    const uncompletedHabits = [];
+
+    weeklyHabits.forEach((habit) => {
+      habit.status.forEach((status) => {
+        const statusDate = new Date(status.date);
+        statusDate.setHours(0, 0, 0, 0);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (statusDate < today && !status.completed) {
+          uncompletedHabits.push({
+            id: habit.id,
+            title: habit.title,
+            date: status.date,
+            amount: habit.amount,
+          });
+        }
+      });
+    });
+
+    uncompletedHabits.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    return uncompletedHabits.slice(0, 50).map((habit, index) => (
+      <li key={habit.id + habit.date} className="py-2 px-4 grid grid-cols-4 bg-slate-300">
+        <p>{String(index + 1).padStart(2, "0")}</p>
+        <p className="text-center">{new Date(habit.date).toLocaleDateString()}</p>
+        <p className="text-center">{habit.title}</p>
+        <p className="text-center">NT${habit.amount}</p>
+      </li>
+    ));
+  };
 
   return (
     <div className="p-4 space-y-4 mb-16 md:mb-0">
@@ -22,15 +124,15 @@ function Savings() {
             </div>
             <div className="flex justify-between items-center">
               <div className="text-end">
-                <p>5 次</p>
+                <p>{completedCount} 次</p>
                 <p>完成習慣次數</p>
               </div>
               <div className="text-end">
-                <p>3 次</p>
+                <p>{savingsCount} 次</p>
                 <p>存款次數</p>
               </div>
               <div className="text-end">
-                <p>NT$20</p>
+                <p>NT${totalSavings}</p>
                 <p>存款金額</p>
               </div>
             </div>
@@ -43,13 +145,9 @@ function Savings() {
               <p className="text-center">習慣名稱</p>
               <p className="text-center">習慣存款</p>
             </li>
-            <li className="py-2 px-4 grid grid-cols-4 bg-slate-300">
-              <p>01</p>
-              <p className="text-center">2024/09/10</p>
-              <p className="text-center">規劃當日工作</p>
-              <p className="text-center">NT$10</p>
-            </li>
+            {renderUncompletedHabits()}
           </ul>
+          <p className="text-center mt-2">僅顯示最新的 50 筆存款記錄</p>
         </div>
       ) : (
         <div>Category</div>
@@ -57,4 +155,5 @@ function Savings() {
     </div>
   );
 }
+
 export default Savings;

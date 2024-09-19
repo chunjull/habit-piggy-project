@@ -34,6 +34,17 @@ function Home() {
 
   const { user } = useContext(AuthContext);
 
+  const habitCategories = {
+    0: "生產力",
+    1: "個人成長",
+    2: "運動健身",
+    3: "飲食健康",
+    4: "心靈成長",
+    5: "手作興趣",
+    6: "財務管理",
+    7: "環境生活",
+  };
+
   useEffect(() => {
     if (user) {
       fetchHabits();
@@ -123,6 +134,15 @@ function Home() {
       await addHabit(user.uid, newHabitData);
       fetchHabits();
       handleHabitModal();
+      setHabitData({
+        category: 0,
+        title: "",
+        frequency: "daily",
+        amount: 0,
+        startDate: "",
+        endDate: "",
+        status: [],
+      });
     } else {
       console.error("User not authenticated");
     }
@@ -273,6 +293,7 @@ function Home() {
           handleSelectDate={handleSelectDate}
           calendarRef={calendarRef}
           handleHabitModal={handleHabitModal}
+          habitCategories={habitCategories}
         />
       </Modal>
       <Modal isOpen={isDetailModalOpen} onClose={handleDetailModal}>

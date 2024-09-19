@@ -1,11 +1,17 @@
 import MonthCalendar from "./MonthCalendar";
 import PropTypes from "prop-types";
 
-const HabitModal = ({ habitData, handleChange, handleAddHabit, handleFocus, showMonthCalendar, calendarTarget, selectedDate, handleSelectDate, calendarRef, handleHabitModal }) => (
+const HabitModal = ({ habitData, handleChange, handleAddHabit, handleFocus, showMonthCalendar, calendarTarget, selectedDate, handleSelectDate, calendarRef, handleHabitModal, habitCategories }) => (
   <div className="space-y-4">
     <div className="flex justify-between gap-4">
       <div className="flex gap-4 w-full">
-        <button className="border">category</button>
+        <select name="category" value={habitData.category} onChange={handleChange} className="border py-2 px-4">
+          {Object.entries(habitCategories).map(([key, value]) => (
+            <option key={key} value={key}>
+              {value}
+            </option>
+          ))}
+        </select>
         <input type="text" name="title" placeholder="輸入習慣名稱" className="py-2 px-4 w-full" value={habitData.title} onChange={handleChange} />
       </div>
       <button onClick={handleHabitModal}>close</button>
@@ -104,6 +110,7 @@ HabitModal.propTypes = {
   handleSelectDate: PropTypes.func.isRequired,
   calendarRef: PropTypes.object.isRequired,
   handleHabitModal: PropTypes.func.isRequired,
+  habitCategories: PropTypes.object.isRequired,
 };
 
 export default HabitModal;

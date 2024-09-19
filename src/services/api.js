@@ -57,14 +57,21 @@ async function getUserProfile(uid) {
     const userDocRef = doc(db, "users", uid);
     const userSnapshot = await getDoc(userDocRef);
     if (userSnapshot.exists()) {
-      return userSnapshot.data();
+      const userData = userSnapshot.data();
+      if (!userData.avatar) {
+        const defaultAvatarURL = await getDefaultAvatar("Piggy.png");
+        userData.avatar = defaultAvatarURL;
+      }
+      return userData;
     } else {
       console.log("No such document!");
-      return { name: "Unknown", levelPoints: 0, avatar: "" };
+      const defaultAvatarURL = await getDefaultAvatar("Piggy.png");
+      return { name: "Unknown", levelPoints: 0, avatar: defaultAvatarURL };
     }
   } catch (error) {
     console.error("Error getting user profile: ", error.code, error.message);
-    return { name: "Unknown", levelPoints: 0, avatar: "" };
+    const defaultAvatarURL = await getDefaultAvatar("Piggy.png");
+    return { name: "Unknown", levelPoints: 0, avatar: defaultAvatarURL };
   }
 }
 
@@ -207,7 +214,7 @@ async function getDefaultAvatar(fileName) {
     return downloadURL;
   } catch (error) {
     console.error("Error getting default avatar: ", error.code, error.message);
-    return null;
+    return "https://firebasestorage.googleapis.com/v0/b/habit-piggy-project.appspot.com/o/avatars%2FPiggy.png?alt=media&token=be62eb4e-44a3-46c5-ba6d-bba575da75a8";
   }
 }
 

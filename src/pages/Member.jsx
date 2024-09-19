@@ -151,7 +151,7 @@ function Member() {
             </div>
             <p className="mb-1">會員頭像</p>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-slate-300"></div>
+              <img src={profileData.avatar} alt="user's avatar" className="w-10 h-10" />
               <div>
                 <input type="file" name="avatar" id="profile" onChange={handleChange} />
                 <p>您的頭像將會被公開。</p>

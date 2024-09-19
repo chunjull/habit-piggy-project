@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 const PostModal = ({ postContent, setPostContent, handleAddPost }) => (
-  <>
+  <div className="space-y-4">
     <div className="flex justify-between items-center">
       <h3>發佈貼文</h3>
       <button onClick={handleAddPost}>close</button>
@@ -10,7 +10,7 @@ const PostModal = ({ postContent, setPostContent, handleAddPost }) => (
     <button className="py-1 w-full bg-slate-300" onClick={handleAddPost}>
       發佈
     </button>
-  </>
+  </div>
 );
 
 PostModal.propTypes = {

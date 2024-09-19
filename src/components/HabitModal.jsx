@@ -2,13 +2,11 @@ import MonthCalendar from "./MonthCalendar";
 import PropTypes from "prop-types";
 
 const HabitModal = ({ habitData, handleChange, handleAddHabit, handleFocus, showMonthCalendar, calendarTarget, selectedDate, handleSelectDate, calendarRef, handleHabitModal }) => (
-  <>
+  <div className="space-y-4">
     <div className="flex justify-between gap-4">
       <div className="flex gap-4 w-full">
-        <label htmlFor="category">
-          <input type="number" name="category" id="category" className="w-10 h-10" value={habitData.category} onChange={handleChange} />
-        </label>
-        <input type="text" name="title" placeholder="輸入習慣名稱" className="px-4" value={habitData.title} onChange={handleChange} />
+        <button className="border">category</button>
+        <input type="text" name="title" placeholder="輸入習慣名稱" className="py-2 px-4 w-full" value={habitData.title} onChange={handleChange} />
       </div>
       <button onClick={handleHabitModal}>close</button>
     </div>
@@ -92,7 +90,7 @@ const HabitModal = ({ habitData, handleChange, handleAddHabit, handleFocus, show
     <button className="w-full border" onClick={handleAddHabit}>
       養成習慣
     </button>
-  </>
+  </div>
 );
 
 HabitModal.propTypes = {

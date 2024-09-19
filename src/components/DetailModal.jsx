@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncompletedFine }) => (
-  <>
+  <div className="space-y-4">
     <div className="flex justify-between items-center">
       <div className="flex gap-4">
         <div className="w-10 h-10 bg-yellow-400"></div>
@@ -33,14 +33,14 @@ const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncomp
     <button className="py-1 w-full bg-yellow-400" onClick={handlePostModal}>
       發佈貼文
     </button>
-  </>
+  </div>
 );
 
 DetailModal.propTypes = {
   selectedHabit: PropTypes.object.isRequired,
   handleDetailModal: PropTypes.func.isRequired,
   handlePostModal: PropTypes.func.isRequired,
-  uncompletedFine: PropTypes.number.isRequired, // 新增 propTypes 驗證
+  uncompletedFine: PropTypes.number.isRequired,
 };
 
 export default DetailModal;

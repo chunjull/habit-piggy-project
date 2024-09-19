@@ -43,8 +43,18 @@ function Savings() {
         });
       });
 
-      setWeeklyHabits(weeklyHabits);
-      calculateStatistics(weeklyHabits);
+      const filteredHabits = weeklyHabits.map((habit) => {
+        const filteredStatus = habit.status.filter((status) => {
+          const statusDate = new Date(status.date);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          return statusDate >= startOfWeek && statusDate <= today && !status.completed;
+        });
+        return { ...habit, status: filteredStatus };
+      });
+
+      setWeeklyHabits(filteredHabits);
+      calculateStatistics(filteredHabits);
     } catch (error) {
       console.error("Error fetching habits: ", error.code, error.message);
     }

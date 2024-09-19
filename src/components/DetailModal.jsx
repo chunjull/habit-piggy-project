@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncompletedFine }) => (
+const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncompletedFine, handleEditModal }) => (
   <div className="space-y-4">
     <div className="flex justify-between items-center">
       <div className="flex gap-4">
@@ -8,7 +8,7 @@ const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncomp
         <div className="flex flex-col">
           <div className="flex gap-2">
             <h3>{selectedHabit.title}</h3>
-            <button>edit</button>
+            <button onClick={() => handleEditModal(selectedHabit)}>edit</button>
           </div>
           <p>{selectedHabit.frequency}</p>
         </div>
@@ -41,6 +41,7 @@ DetailModal.propTypes = {
   handleDetailModal: PropTypes.func.isRequired,
   handlePostModal: PropTypes.func.isRequired,
   uncompletedFine: PropTypes.number.isRequired,
+  handleEditModal: PropTypes.func.isRequired,
 };
 
 export default DetailModal;

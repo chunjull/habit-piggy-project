@@ -1,17 +1,19 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { AuthContext } from "../utils/AuthContext";
-import { getHabits, updateHabit, addHabit, addPost } from "../services/api";
+import { getHabits, updateHabit, addHabit, addPost, deleteHabit } from "../services/api";
 import WeekCalendar from "../components/WeekCalendar";
 import Modal from "../components/Modal";
 import HabitModal from "../components/HabitModal";
 import DetailModal from "../components/DetailModal";
 import PostModal from "../components/PostModal";
+import EditModal from "../components/EditModal";
 import { Navigate } from "react-router-dom";
 
 function Home() {
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [habitData, setHabitData] = useState({
     category: 0,
     title: "",
@@ -101,6 +103,19 @@ function Home() {
     setIsPostModalOpen(!isPostModalOpen);
   };
 
+  const handleEditModal = (habit) => {
+    setHabitData({
+      category: habit.category,
+      title: habit.title,
+      frequency: habit.frequency,
+      amount: habit.amount,
+      startDate: habit.startDate,
+      endDate: habit.endDate,
+      status: habit.status,
+    });
+    setIsEditModalOpen(!isEditModalOpen);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setHabitData((prev) => ({
@@ -145,6 +160,29 @@ function Home() {
       });
     } else {
       console.error("User not authenticated");
+    }
+  };
+
+  const handleUpdateHabit = async () => {
+    if (user && selectedHabit) {
+      const updatedHabitData = { ...habitData, id: selectedHabit.id };
+      await updateHabit(user.uid, selectedHabit.id, updatedHabitData);
+      fetchHabits();
+      setIsEditModalOpen(false);
+      setIsDetailModalOpen(false);
+    } else {
+      console.error("User not authenticated or habit not selected");
+    }
+  };
+
+  const handleDeleteHabit = async () => {
+    if (user && selectedHabit) {
+      await deleteHabit(user.uid, selectedHabit.id);
+      fetchHabits();
+      setIsEditModalOpen(false);
+      setIsDetailModalOpen(false);
+    } else {
+      console.error("User not authenticated or habit not selected");
     }
   };
 
@@ -297,10 +335,26 @@ function Home() {
         />
       </Modal>
       <Modal isOpen={isDetailModalOpen} onClose={handleDetailModal}>
-        <DetailModal selectedHabit={selectedHabit} handleDetailModal={handleDetailModal} handlePostModal={handlePostModal} uncompletedFine={uncompletedFine} />
+        <DetailModal selectedHabit={selectedHabit} handleDetailModal={handleDetailModal} handlePostModal={handlePostModal} uncompletedFine={uncompletedFine} handleEditModal={handleEditModal} />
       </Modal>
       <Modal isOpen={isPostModalOpen} onClose={handlePostModal}>
         <PostModal postContent={postContent} setPostContent={setPostContent} handleAddPost={handleAddPost} handlePostModal={handlePostModal} />
+      </Modal>
+      <Modal isOpen={isEditModalOpen} onClose={handleEditModal}>
+        <EditModal
+          habitData={habitData}
+          handleChange={handleChange}
+          handleUpdateHabit={handleUpdateHabit}
+          handleFocus={handleFocus}
+          showMonthCalendar={showMonthCalendar}
+          calendarTarget={calendarTarget}
+          selectedDate={selectedDate}
+          handleSelectDate={handleSelectDate}
+          calendarRef={calendarRef}
+          handleEditModal={handleEditModal}
+          handleDeleteHabit={handleDeleteHabit}
+          habitCategories={habitCategories}
+        />
       </Modal>
     </>
   );

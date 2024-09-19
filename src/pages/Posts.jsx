@@ -55,11 +55,11 @@ function Posts() {
             <li key={post.id} className="p-4 border space-y-2">
               <div className="flex justify-between items-start">
                 <div className="flex gap-3">
-                  <div className="w-10 h-10 bg-slate-300">{post.user && <img src={post.user.avatar} alt="avatar" className="w-full h-full object-cover" />}</div>
+                  <div className="w-10 h-10">{post.user && <img src={post.user.avatar} alt="avatar" className="w-full h-full object-cover" />}</div>
                   <div className="flex flex-col">
                     <div className="flex gap-2">
                       <h3>{post.user ? post.user.name : "Unknown"}</h3>
-                      <p>{new Date(post.createdTime.seconds * 1000).toLocaleString()}</p>
+                      <p>{new Date(post.createdTime.seconds * 1000).toLocaleString([], { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" })}</p>
                     </div>
                     {/* <p className="text-slate-500">Lv.{post.user ? post.user.levelPoints : 0}</p> */}
                   </div>

@@ -1,6 +1,6 @@
 import db from "../utils/firebaseConfig";
 import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, collection, setDoc, getDoc, addDoc, getDocs, updateDoc, deleteDoc, Timestamp } from "firebase/firestore";
+import { doc, collection, setDoc, getDoc, addDoc, getDocs, updateDoc, deleteDoc, Timestamp, query, orderBy } from "firebase/firestore";
 
 const auth = getAuth();
 
@@ -175,7 +175,8 @@ async function deletePost(postID) {
 async function getAllPosts() {
   try {
     const postsCollectionRef = collection(db, "posts");
-    const postsSnapshot = await getDocs(postsCollectionRef);
+    const q = query(postsCollectionRef, orderBy("createdTime", "desc"));
+    const postsSnapshot = await getDocs(q);
     const postsList = postsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     return postsList;
   } catch (error) {

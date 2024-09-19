@@ -4,6 +4,21 @@ import { getAllPosts, getUserProfile } from "../services/api";
 function Posts() {
   const [posts, setPosts] = useState([]);
 
+  const backgroundColors = [
+    "bg-red-100",
+    "bg-orange-100",
+    "bg-yellow-100",
+    "bg-green-100",
+    "bg-cyan-100",
+    "bg-blue-100",
+    "bg-indigo-100",
+    "bg-violet-100",
+    "bg-purple-100",
+    "bg-stone-100",
+    "bg-fuchsia-100",
+    "bg-rose-100",
+  ];
+
   useEffect(() => {
     const fetchPosts = async () => {
       const postsList = await getAllPosts();
@@ -26,27 +41,32 @@ function Posts() {
         <button className="border">本週</button>
       </div>
       <ul className="space-y-4">
-        {posts.map((post) => (
-          <li key={post.id} className="p-4 border space-y-2">
-            <div className="flex justify-between items-start">
-              <div className="flex gap-3">
-                <div className="w-10 h-10 bg-slate-300">{post.user && <img src={post.user.avatar} alt="avatar" className="w-full h-full object-cover" />}</div>
-                <div className="flex flex-col">
-                  <div className="flex gap-1">
-                    <h3>{post.user ? post.user.name : "Unknown"}</h3>
-                    <p>{new Date(post.createdTime.seconds * 1000).toLocaleString()}</p>
+        {posts.map((post) => {
+          const randomColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
+          return (
+            <li key={post.id} className="p-4 border space-y-2">
+              <div className="flex justify-between items-start">
+                <div className="flex gap-3">
+                  <div className="w-10 h-10 bg-slate-300">{post.user && <img src={post.user.avatar} alt="avatar" className="w-full h-full object-cover" />}</div>
+                  <div className="flex flex-col">
+                    <div className="flex gap-2">
+                      <h3>{post.user ? post.user.name : "Unknown"}</h3>
+                      <p>{new Date(post.createdTime.seconds * 1000).toLocaleString()}</p>
+                    </div>
+                    {/* <p className="text-slate-500">Lv.{post.user ? post.user.levelPoints : 0}</p> */}
                   </div>
-                  <p className="text-slate-500">Lv.{post.user ? post.user.levelPoints : 0}</p>
                 </div>
               </div>
-            </div>
-            <p className="w-full h-52 bg-slate-100 text-center">{post.content}</p>
-            <div className="flex gap-3">
-              <button className="border">Like</button>
-              <button className="border">Comment</button>
-            </div>
-          </li>
-        ))}
+              <div className={`w-full min-h-52 h-fit ${randomColor} flex justify-center items-center p-4`}>
+                <p>{post.content}</p>
+              </div>
+              <div className="flex gap-3">
+                <button className="border">Like</button>
+                <button className="border">Comment</button>
+              </div>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

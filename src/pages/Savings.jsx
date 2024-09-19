@@ -19,39 +19,51 @@ function Savings() {
   const [completedCount, setCompletedCount] = useState(0);
   const [savingsCount, setSavingsCount] = useState(0);
   const [totalSavings, setTotalSavings] = useState(0);
+  const [filter, setFilter] = useState("week");
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
     if (user) {
-      fetchWeeklyHabits();
+      fetchHabits();
     }
-  }, [user]);
+  }, [user, filter]);
 
-  const fetchWeeklyHabits = async () => {
+  const fetchHabits = async () => {
     try {
       const habitsList = await getHabits(user.uid);
       const today = new Date();
-      const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
-      const endOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6));
-      startOfWeek.setHours(0, 0, 0, 0);
-      endOfWeek.setHours(23, 59, 59, 999);
+      let startOfPeriod, endOfPeriod;
 
-      const weeklyHabits = habitsList.filter((habit) => {
-        return habit.status.some((status) => {
-          const statusDate = new Date(status.date);
-          return statusDate >= startOfWeek && statusDate <= endOfWeek;
-        });
-      });
+      if (filter === "week") {
+        startOfPeriod = new Date(today.setDate(today.getDate() - today.getDay()));
+        endOfPeriod = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+      } else if (filter === "month") {
+        startOfPeriod = new Date(today.getFullYear(), today.getMonth(), 1);
+        endOfPeriod = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      } else {
+        startOfPeriod = new Date(0);
+        endOfPeriod = new Date();
+      }
 
-      const filteredHabits = weeklyHabits.map((habit) => {
-        const filteredStatus = habit.status.filter((status) => {
-          const statusDate = new Date(status.date);
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          return statusDate >= startOfWeek && statusDate <= today && !status.completed;
+      startOfPeriod.setHours(0, 0, 0, 0);
+      endOfPeriod.setHours(23, 59, 59, 999);
+
+      const filteredHabits = habitsList
+        .filter((habit) => {
+          return habit.status.some((status) => {
+            const statusDate = new Date(status.date);
+            return statusDate >= startOfPeriod && statusDate <= endOfPeriod;
+          });
+        })
+        .map((habit) => {
+          const filteredStatus = habit.status.filter((status) => {
+            const statusDate = new Date(status.date);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            return statusDate >= startOfPeriod && statusDate <= today && !status.completed;
+          });
+          return { ...habit, status: filteredStatus };
         });
-        return { ...habit, status: filteredStatus };
-      });
 
       setWeeklyHabits(filteredHabits);
       calculateStatistics(filteredHabits);
@@ -138,7 +150,11 @@ function Savings() {
           <div className="p-4 border space-y-4">
             <div className="flex justify-between items-center">
               <h2>存款總覽</h2>
-              <button className="border">本週</button>
+              <select className="border" value={filter} onChange={(e) => setFilter(e.target.value)}>
+                <option value="week">本週</option>
+                <option value="month">本月</option>
+                <option value="all">全部</option>
+              </select>
             </div>
             <div className="flex justify-between items-center">
               <div className="text-end">

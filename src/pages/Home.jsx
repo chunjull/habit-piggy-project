@@ -188,6 +188,11 @@ function Home() {
   };
 
   const handleAddPost = async () => {
+    if (!postContent.trim()) {
+      alert("請輸入貼文內容");
+      return;
+    }
+
     if (user && selectedHabit) {
       const postData = {
         content: postContent,
@@ -274,7 +279,7 @@ function Home() {
         <DetailModal selectedHabit={selectedHabit} handleDetailModal={handleDetailModal} handlePostModal={handlePostModal} uncompletedFine={uncompletedFine} />
       </Modal>
       <Modal isOpen={isPostModalOpen} onClose={handlePostModal}>
-        <PostModal postContent={postContent} setPostContent={setPostContent} handleAddPost={handleAddPost} />
+        <PostModal postContent={postContent} setPostContent={setPostContent} handleAddPost={handleAddPost} handlePostModal={handlePostModal} />
       </Modal>
     </>
   );

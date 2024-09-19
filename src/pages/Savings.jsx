@@ -36,30 +36,18 @@ function Savings() {
             </div>
             <div className="w-full h-52 bg-slate-100">Chart...</div>
           </div>
-          <ul className="space-y-2">
-            <li className="py-2 px-4 flex justify-between border">
+          <ul className="space-y-2 mt-4">
+            <li className="py-2 px-4 grid grid-cols-4 border">
               <p>編號</p>
-              <p>日期</p>
-              <p>習慣名稱</p>
-              <p>習慣存款</p>
+              <p className="text-center">日期</p>
+              <p className="text-center">習慣名稱</p>
+              <p className="text-center">習慣存款</p>
             </li>
-            <li className="py-2 px-4 flex justify-between bg-slate-300">
+            <li className="py-2 px-4 grid grid-cols-4 bg-slate-300">
               <p>01</p>
-              <p>2024/09/10</p>
-              <p>規劃當日工作</p>
-              <p>NT$10</p>
-            </li>
-            <li className="py-2 px-4 flex justify-between bg-slate-300">
-              <p>02</p>
-              <p>2024/09/09</p>
-              <p>自己煮晚餐</p>
-              <p>NT$50</p>
-            </li>
-            <li className="py-2 px-4 flex justify-between bg-slate-300">
-              <p>03</p>
-              <p>2024/09/08</p>
-              <p>規劃當日工作</p>
-              <p>NT$10</p>
+              <p className="text-center">2024/09/10</p>
+              <p className="text-center">規劃當日工作</p>
+              <p className="text-center">NT$10</p>
             </li>
           </ul>
         </div>

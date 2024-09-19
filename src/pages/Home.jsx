@@ -28,6 +28,7 @@ function Home() {
   const [selectedHabit, setSelectedHabit] = useState(null);
   const [postContent, setPostContent] = useState("");
   const [weekDates, setWeekDates] = useState([]);
+  const [uncompletedFine, setUncompletedFine] = useState(0);
   const calendarRef = useRef(null);
 
   const { user } = useContext(AuthContext);
@@ -183,14 +184,25 @@ function Home() {
     const habitToUpdate = updatedHabits.find((habit) => habit.id === habitId);
     try {
       await updateHabit(user.uid, habitId, habitToUpdate);
-      // console.log("Habit updated successfully in Firestore");
     } catch (error) {
       console.error("Error updating habit in Firestore: ", error);
     }
   };
 
+  const calculateUncompletedFine = (habit) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const uncompletedCount = habit.status.filter((status) => {
+      const statusDate = new Date(status.date);
+      statusDate.setHours(0, 0, 0, 0);
+      return statusDate < today && !status.completed;
+    }).length;
+    return uncompletedCount * habit.amount;
+  };
+
   const handleDetailClick = (habit) => {
     setSelectedHabit(habit);
+    setUncompletedFine(calculateUncompletedFine(habit));
     setIsDetailModalOpen(true);
   };
 
@@ -273,7 +285,7 @@ function Home() {
         />
       </Modal>
       <Modal isOpen={isDetailModalOpen} onClose={handleDetailModal}>
-        <DetailModal selectedHabit={selectedHabit} handleDetailModal={handleDetailModal} handlePostModal={handlePostModal} />
+        <DetailModal selectedHabit={selectedHabit} handleDetailModal={handleDetailModal} handlePostModal={handlePostModal} uncompletedFine={uncompletedFine} />
       </Modal>
       <Modal isOpen={isPostModalOpen} onClose={handlePostModal}>
         <PostModal postContent={postContent} setPostContent={setPostContent} handleAddPost={handleAddPost} />

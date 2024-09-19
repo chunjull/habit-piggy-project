@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal }) => (
+const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncompletedFine }) => (
   <>
     <div className="flex justify-between items-center">
       <div className="flex gap-4">
@@ -28,8 +28,7 @@ const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal }) => (
     </div>
     <div className="flex justify-between">
       <p>累積存款：</p>
-      <p>NT$ Not sure how to do</p>
-      {/* {selectedHabit.status.filter((status) => status.completed).length * 50} */}
+      <p>NT$ {uncompletedFine}</p>
     </div>
     <button className="py-1 w-full bg-yellow-400" onClick={handlePostModal}>
       發佈貼文
@@ -41,6 +40,7 @@ DetailModal.propTypes = {
   selectedHabit: PropTypes.object.isRequired,
   handleDetailModal: PropTypes.func.isRequired,
   handlePostModal: PropTypes.func.isRequired,
+  uncompletedFine: PropTypes.number.isRequired, // 新增 propTypes 驗證
 };
 
 export default DetailModal;

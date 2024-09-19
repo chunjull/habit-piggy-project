@@ -1,6 +1,7 @@
-import db from "../utils/firebaseConfig";
+import { db, storage } from "../utils/firebaseConfig";
 import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { doc, collection, setDoc, getDoc, addDoc, getDocs, updateDoc, deleteDoc, Timestamp, query, orderBy } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const auth = getAuth();
 
@@ -59,11 +60,11 @@ async function getUserProfile(uid) {
       return userSnapshot.data();
     } else {
       console.log("No such document!");
-      return { name: "Unknown", levelPoints: 0, avatar: "" }; // 返回預設值
+      return { name: "Unknown", levelPoints: 0, avatar: "" };
     }
   } catch (error) {
     console.error("Error getting user profile: ", error.code, error.message);
-    return { name: "Unknown", levelPoints: 0, avatar: "" }; // 返回預設值
+    return { name: "Unknown", levelPoints: 0, avatar: "" };
   }
 }
 
@@ -185,4 +186,45 @@ async function getAllPosts() {
   }
 }
 
-export { registerUser, logoutUser, updateUserProfile, getUserProfile, addHabit, getHabits, updateHabit, deleteHabit, addPost, getPost, updatePost, deletePost, getAllPosts };
+async function uploadAvatar(uid, file) {
+  try {
+    const storageRef = ref(storage, `avatars/${uid}`);
+    const snapshot = await uploadBytes(storageRef, file);
+    const downloadURL = await getDownloadURL(snapshot.ref);
+    console.log("Avatar uploaded: ", downloadURL);
+    return downloadURL;
+  } catch (error) {
+    console.error("Error uploading avatar: ", error.code, error.message);
+    return null;
+  }
+}
+
+async function getDefaultAvatar(fileName) {
+  try {
+    const storageRef = ref(storage, `default_avatars/${fileName}`);
+    const downloadURL = await getDownloadURL(storageRef);
+    console.log("Default avatar URL: ", downloadURL);
+    return downloadURL;
+  } catch (error) {
+    console.error("Error getting default avatar: ", error.code, error.message);
+    return null;
+  }
+}
+
+export {
+  registerUser,
+  logoutUser,
+  updateUserProfile,
+  getUserProfile,
+  addHabit,
+  getHabits,
+  updateHabit,
+  deleteHabit,
+  addPost,
+  getPost,
+  updatePost,
+  deletePost,
+  getAllPosts,
+  uploadAvatar,
+  getDefaultAvatar,
+};

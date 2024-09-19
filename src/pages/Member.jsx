@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { updateUserProfile, getUserProfile } from "../services/api";
+import { updateUserProfile, getUserProfile, uploadAvatar } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 
 function Member() {
@@ -52,12 +52,24 @@ function Member() {
     handleModal();
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProfileData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleChange = async (e) => {
+    const { name, value, files } = e.target;
+    if (name === "avatar" && files && files[0]) {
+      try {
+        const downloadURL = await uploadAvatar(user.uid, files[0]);
+        setProfileData((prev) => ({
+          ...prev,
+          avatar: downloadURL,
+        }));
+      } catch (error) {
+        console.error("Error uploading avatar: ", error);
+      }
+    } else {
+      setProfileData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   if (!user) {
@@ -95,7 +107,7 @@ function Member() {
             <div className="p-4 border space-y-2">
               <div className="flex justify-between items-start">
                 <div className="flex gap-3">
-                  <div className="w-10 h-10 bg-slate-300">{profileData.avatar}</div>
+                  <img src={profileData.avatar} alt="user's avatar" className="w-10 h-10" />
                   <div className="flex flex-col">
                     <h3>{profileData.name}</h3>
                     <p className="text-slate-500">Lv.{profileData.levelPoints}</p>

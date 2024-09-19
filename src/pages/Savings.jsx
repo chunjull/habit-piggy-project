@@ -56,9 +56,17 @@ function Savings() {
     let total = 0;
 
     habits.forEach((habit) => {
+      const uncompletedCount = habit.status.filter((status) => {
+        const statusDate = new Date(status.date);
+        statusDate.setHours(0, 0, 0, 0);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return statusDate < today && !status.completed;
+      }).length;
+      savings += uncompletedCount;
+
       const uncompletedFine = calculateUncompletedFine(habit);
       if (uncompletedFine > 0) {
-        savings++;
         total += uncompletedFine;
       }
       habit.status.forEach((status) => {

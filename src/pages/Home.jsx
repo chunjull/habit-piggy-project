@@ -6,6 +6,7 @@ import Modal from "../components/Modal";
 import HabitModal from "../components/HabitModal";
 import DetailModal from "../components/DetailModal";
 import PostModal from "../components/PostModal";
+import { Navigate } from "react-router-dom";
 
 function Home() {
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
@@ -28,6 +29,7 @@ function Home() {
   const [postContent, setPostContent] = useState("");
   const [weekDates, setWeekDates] = useState([]);
   const [uncompletedFine, setUncompletedFine] = useState(0);
+  const [isPost, setIsPost] = useState(false);
   const calendarRef = useRef(null);
 
   const { user } = useContext(AuthContext);
@@ -192,10 +194,15 @@ function Home() {
         habitId: selectedHabit.id,
       };
       await addPost(user.uid, postData);
+      setIsPost(true);
       handlePostModal();
       setPostContent("");
     }
   };
+
+  if (isPost) {
+    return <Navigate to="/posts" />;
+  }
 
   return (
     <>

@@ -1,6 +1,6 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { AuthContext } from "../utils/AuthContext";
-import { addHabit, getHabits, updateHabit, addPost } from "../services/api";
+import { getHabits, updateHabit, addHabit, addPost } from "../services/api";
 import WeekCalendar from "../components/WeekCalendar";
 import Modal from "../components/Modal";
 import HabitModal from "../components/HabitModal";
@@ -21,7 +21,6 @@ function Home() {
     status: [],
   });
   const [habits, setHabits] = useState([]);
-  const [originalHabits, setOriginalHabits] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [showMonthCalendar, setShowMonthCalendar] = useState(false);
   const [calendarTarget, setCalendarTarget] = useState("");
@@ -70,12 +69,11 @@ function Home() {
     return targetDate >= start && targetDate <= end;
   };
 
-  const fetchHabits = async () => {
+  const fetchHabits = async (selectedDate = null) => {
     const habitsList = await getHabits(user.uid);
-    const today = new Date();
+    const today = selectedDate ? new Date(selectedDate.year, selectedDate.month, selectedDate.day) : new Date();
     const filteredHabits = habitsList.filter((habit) => isDateInRange(today, habit.startDate, habit.endDate));
     setHabits(filteredHabits || []);
-    setOriginalHabits(habitsList || []);
   };
 
   const handleHabitModal = () => {
@@ -128,28 +126,9 @@ function Home() {
     }
   };
 
-  const handleSelectDate = (date) => {
+  const handleSelectDate = async (date) => {
     setSelectedDate(date);
-    const filteredHabits = originalHabits.filter((habit) => {
-      const startDate = new Date(habit.startDate);
-      const endDate = new Date(habit.endDate);
-      const selectedDateObj = new Date(date.year, date.month, date.day);
-
-      startDate.setHours(0, 0, 0, 0);
-      endDate.setHours(23, 59, 59, 999);
-      selectedDateObj.setHours(0, 0, 0, 0);
-
-      if (habit.frequency === "weekly") {
-        const startOfWeek = new Date(selectedDateObj);
-        startOfWeek.setDate(selectedDateObj.getDate() - selectedDateObj.getDay());
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-        return (startOfWeek >= startDate && startOfWeek <= endDate) || (endOfWeek >= startDate && endOfWeek <= endDate) || (startDate >= startOfWeek && startDate <= endOfWeek);
-      }
-
-      return selectedDateObj >= startDate && selectedDateObj <= endDate;
-    });
-    setHabits(filteredHabits);
+    await fetchHabits(date);
     if (calendarTarget) {
       setHabitData((prev) => ({
         ...prev,

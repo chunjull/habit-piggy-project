@@ -13,24 +13,38 @@ function Savings() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const habitsList = await getHabits(user.uid);
-      setHabits(habitsList);
-      const { startOfWeek, endOfWeek } = getStartAndEndOfWeek();
-      const { completed, savings, total } = calculateStatistics(habitsList, startOfWeek, endOfWeek);
-      setCompletedCount(completed);
-      setSavingsCount(savings);
-      setTotalSavings(total);
+      if (user && user.uid) {
+        const habitsList = await getHabits(user.uid);
+        setHabits(habitsList);
+        const { startOfPeriod, endOfPeriod } = getStartAndEndOfPeriod(filter);
+        const { completed, savings, total } = calculateStatistics(habitsList, startOfPeriod, endOfPeriod);
+        setCompletedCount(completed);
+        setSavingsCount(savings);
+        setTotalSavings(total);
+      }
     };
     fetchData();
   }, [user, filter]);
 
-  const getStartAndEndOfWeek = () => {
+  const getStartAndEndOfPeriod = (filter) => {
     const today = new Date();
-    const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
-    const endOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6));
-    startOfWeek.setHours(0, 0, 0, 0);
-    endOfWeek.setHours(23, 59, 59, 999);
-    return { startOfWeek, endOfWeek };
+    let startOfPeriod, endOfPeriod;
+
+    if (filter === "week") {
+      startOfPeriod = new Date(today.setDate(today.getDate() - today.getDay()));
+      endOfPeriod = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+    } else if (filter === "month") {
+      startOfPeriod = new Date(today.getFullYear(), today.getMonth(), 1);
+      endOfPeriod = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    } else {
+      startOfPeriod = new Date(0);
+      endOfPeriod = new Date();
+    }
+
+    startOfPeriod.setHours(0, 0, 0, 0);
+    endOfPeriod.setHours(23, 59, 59, 999);
+
+    return { startOfPeriod, endOfPeriod };
   };
 
   const calculateStatistics = (habits, startOfPeriod, endOfPeriod) => {
@@ -44,7 +58,7 @@ function Savings() {
         statusDate.setHours(0, 0, 0, 0);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        return statusDate < today && !status.completed;
+        return statusDate < today && !status.completed && statusDate >= startOfPeriod && statusDate <= endOfPeriod;
       }).length;
       savings += uncompletedCount;
 
@@ -80,35 +94,7 @@ function Savings() {
     </div>
   );
 
-  const filterHabits = (habits, filter) => {
-    const today = new Date();
-    let startOfPeriod, endOfPeriod;
-
-    if (filter === "week") {
-      startOfPeriod = new Date(today.setDate(today.getDate() - today.getDay()));
-      endOfPeriod = new Date(today.setDate(today.getDate() - today.getDay() + 6));
-    } else if (filter === "month") {
-      startOfPeriod = new Date(today.getFullYear(), today.getMonth(), 1);
-      endOfPeriod = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-    } else {
-      startOfPeriod = new Date(0);
-      endOfPeriod = new Date();
-    }
-
-    startOfPeriod.setHours(0, 0, 0, 0);
-    endOfPeriod.setHours(23, 59, 59, 999);
-
-    const filteredHabits = habits.filter((habit) => {
-      return habit.status.some((status) => {
-        const statusDate = new Date(status.date);
-        return statusDate >= startOfPeriod && statusDate <= endOfPeriod;
-      });
-    });
-
-    return filteredHabits;
-  };
-
-  const renderUncompletedHabits = (habits) => {
+  const renderUncompletedHabits = (habits, startOfPeriod, endOfPeriod) => {
     const uncompletedHabits = [];
 
     habits.forEach((habit) => {
@@ -117,7 +103,7 @@ function Savings() {
         statusDate.setHours(0, 0, 0, 0);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        if (statusDate < today && !status.completed) {
+        if (statusDate < today && !status.completed && statusDate >= startOfPeriod && statusDate <= endOfPeriod) {
           uncompletedHabits.push({
             id: habit.id,
             title: habit.title,
@@ -171,7 +157,7 @@ function Savings() {
               <p className="text-center">習慣名稱</p>
               <p className="text-center">習慣存款</p>
             </li>
-            {renderUncompletedHabits(filterHabits(habits, filter))}
+            {renderUncompletedHabits(habits, getStartAndEndOfPeriod(filter).startOfPeriod, getStartAndEndOfPeriod(filter).endOfPeriod)}
           </ul>
           <p className="text-center mt-2">僅顯示最新的 50 筆存款記錄</p>
         </div>

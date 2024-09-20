@@ -1,12 +1,19 @@
-import { useState, useContext, useEffect } from "react";
-import { updateUserProfile, getUserProfile, uploadAvatar, getHabits } from "../services/api";
+import { useState, useContext, useEffect, useRef } from "react";
+import { updateUserProfile, getUserProfile, uploadAvatar, getHabits, addPost, updateHabit, deleteHabit } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import Modal from "../components/Modal";
 import SettingModal from "../components/SettingModal";
+import DetailModal from "../components/DetailModal";
+import PostModal from "../components/PostModal";
+import EditModal from "../components/EditModal";
+import { Navigate } from "react-router-dom";
 
 function Member() {
   const { user } = useContext(AuthContext);
   const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isActiveTab, setIsActiveTab] = useState(true);
   const [profileData, setProfileData] = useState({
     uid: "",
@@ -21,6 +28,34 @@ function Member() {
     habits: [],
   });
   const [habits, setHabits] = useState([]);
+  const [selectedHabit, setSelectedHabit] = useState(null);
+  const [postContent, setPostContent] = useState("");
+  const [habitData, setHabitData] = useState({
+    category: 0,
+    title: "",
+    frequency: "daily",
+    amount: 0,
+    startDate: "",
+    endDate: "",
+    status: [],
+  });
+  const [uncompletedFine, setUncompletedFine] = useState(0);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [showMonthCalendar, setShowMonthCalendar] = useState(false);
+  const [calendarTarget, setCalendarTarget] = useState("");
+  const calendarRef = useRef(null);
+  const [isPost, setIsPost] = useState(false);
+
+  const habitCategories = {
+    0: "生產力",
+    1: "個人成長",
+    2: "運動健身",
+    3: "飲食健康",
+    4: "心靈成長",
+    5: "手作興趣",
+    6: "財務管理",
+    7: "環境生活",
+  };
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -38,6 +73,27 @@ function Member() {
 
   const handleSettingModal = () => {
     setIsSettingModalOpen(!isSettingModalOpen);
+  };
+
+  const handleDetailModal = () => {
+    setIsDetailModalOpen(!isDetailModalOpen);
+  };
+
+  const handlePostModal = () => {
+    setIsPostModalOpen(!isPostModalOpen);
+  };
+
+  const handleEditModal = (habit) => {
+    setHabitData({
+      category: habit.category,
+      title: habit.title,
+      frequency: habit.frequency,
+      amount: habit.amount,
+      startDate: habit.startDate,
+      endDate: habit.endDate,
+      status: habit.status,
+    });
+    setIsEditModalOpen(!isEditModalOpen);
   };
 
   const handleUpdateProfile = async () => {
@@ -86,6 +142,85 @@ function Member() {
     const habitsList = await getHabits(user.uid);
     setHabits(habitsList);
   };
+
+  const handleAddPost = async () => {
+    if (!postContent.trim()) {
+      alert("請輸入貼文內容");
+      return;
+    }
+
+    if (user && selectedHabit) {
+      const postData = {
+        content: postContent,
+        habitId: selectedHabit.id,
+      };
+      await addPost(user.uid, postData);
+      setIsPost(true);
+      handlePostModal();
+      setPostContent("");
+    }
+  };
+
+  const handleSelectDate = async (date) => {
+    setSelectedDate(date);
+    if (calendarTarget) {
+      setHabitData((prev) => ({
+        ...prev,
+        [calendarTarget]: `${date.year}-${String(date.month + 1).padStart(2, "0")}-${String(date.day).padStart(2, "0")}`,
+      }));
+      setShowMonthCalendar(false);
+      setCalendarTarget("");
+    }
+  };
+
+  const handleFocus = (target) => {
+    setCalendarTarget(target);
+    setShowMonthCalendar(true);
+  };
+
+  const handleUpdateHabit = async () => {
+    if (user && selectedHabit) {
+      const updatedHabitData = { ...habitData, id: selectedHabit.id };
+      await updateHabit(user.uid, selectedHabit.id, updatedHabitData);
+      fetchHabits();
+      setIsEditModalOpen(false);
+      setIsDetailModalOpen(false);
+    } else {
+      console.error("User not authenticated or habit not selected");
+    }
+  };
+
+  const handleDeleteHabit = async () => {
+    if (user && selectedHabit) {
+      await deleteHabit(user.uid, selectedHabit.id);
+      fetchHabits();
+      setIsEditModalOpen(false);
+      setIsDetailModalOpen(false);
+    } else {
+      console.error("User not authenticated or habit not selected");
+    }
+  };
+
+  const calculateUncompletedFine = (habit) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const uncompletedCount = habit.status.filter((status) => {
+      const statusDate = new Date(status.date);
+      statusDate.setHours(0, 0, 0, 0);
+      return statusDate < today && !status.completed;
+    }).length;
+    return uncompletedCount * habit.amount;
+  };
+
+  const handleDetailClick = (habit) => {
+    setSelectedHabit(habit);
+    setUncompletedFine(calculateUncompletedFine(habit));
+    setIsDetailModalOpen(true);
+  };
+
+  if (isPost) {
+    return <Navigate to="/posts" />;
+  }
 
   return (
     <>
@@ -170,7 +305,9 @@ function Member() {
                           </div>
                         </div>
                       </div>
-                      <button className="bg-white">Detail</button>
+                      <button className="bg-white" onClick={() => handleDetailClick(habit)}>
+                        Detail
+                      </button>
                     </div>
                   </li>
                 );
@@ -180,6 +317,28 @@ function Member() {
       </div>
       <Modal isOpen={isSettingModalOpen} onClose={handleSettingModal}>
         <SettingModal profileData={profileData} handleChange={handleChange} handleSaveAndClose={handleSaveAndClose} handleSettingModal={handleSettingModal} />
+      </Modal>
+      <Modal isOpen={isDetailModalOpen} onClose={handleDetailModal}>
+        <DetailModal selectedHabit={selectedHabit} handleDetailModal={handleDetailModal} handlePostModal={handlePostModal} uncompletedFine={uncompletedFine} handleEditModal={handleEditModal} />
+      </Modal>
+      <Modal isOpen={isPostModalOpen} onClose={handlePostModal}>
+        <PostModal postContent={postContent} setPostContent={setPostContent} handleAddPost={handleAddPost} handlePostModal={handlePostModal} />
+      </Modal>
+      <Modal isOpen={isEditModalOpen} onClose={handleEditModal}>
+        <EditModal
+          habitData={habitData}
+          handleChange={handleChange}
+          handleUpdateHabit={handleUpdateHabit}
+          handleFocus={handleFocus}
+          showMonthCalendar={showMonthCalendar}
+          calendarTarget={calendarTarget}
+          selectedDate={selectedDate}
+          handleSelectDate={handleSelectDate}
+          calendarRef={calendarRef}
+          handleEditModal={handleEditModal}
+          handleDeleteHabit={handleDeleteHabit}
+          habitCategories={habitCategories}
+        />
       </Modal>
     </>
   );

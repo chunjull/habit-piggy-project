@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../utils/AuthContext";
 import { getHabits } from "../services/api";
+import SavingsChart from "../components/SavingsChart";
 
 function Savings() {
   const [isOverview, setIsOverview] = useState(true);
@@ -148,7 +149,9 @@ function Savings() {
               </select>
             </div>
             {renderStatistics({ completed: completedCount, savings: savingsCount, total: totalSavings })}
-            <div className="w-full h-52 bg-slate-100">Chart...</div>
+            <div className="w-full h-52">
+              <SavingsChart />
+            </div>
           </div>
           <ul className="space-y-2 mt-4">
             <li className="py-2 px-4 grid grid-cols-4 border">

@@ -75,6 +75,18 @@ async function getUserProfile(uid) {
   }
 }
 
+async function getAllUsers() {
+  try {
+    const usersCollectionRef = collection(db, "users");
+    const usersSnapshot = await getDocs(usersCollectionRef);
+    const usersList = usersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    return usersList;
+  } catch (error) {
+    console.error("Error getting users: ", error.code, error.message);
+    return [];
+  }
+}
+
 async function addHabit(uid, habitData) {
   try {
     const userDocRef = doc(db, "users", uid);
@@ -223,6 +235,7 @@ export {
   logoutUser,
   updateUserProfile,
   getUserProfile,
+  getAllUsers,
   addHabit,
   getHabits,
   updateHabit,

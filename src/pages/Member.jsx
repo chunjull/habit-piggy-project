@@ -55,6 +55,12 @@ function Member() {
   const handleChange = async (e) => {
     const { name, value, files } = e.target;
     if (name === "avatar" && files && files[0]) {
+      const file = event.target.files[0];
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
+      if (!file) return;
+      if (!allowedTypes.includes(file.type)) {
+        return;
+      }
       try {
         const downloadURL = await uploadAvatar(user.uid, files[0]);
         setProfileData((prev) => ({
@@ -153,7 +159,7 @@ function Member() {
             <div className="flex items-center gap-3">
               <img src={profileData.avatar} alt="user's avatar" className="w-10 h-10" />
               <div>
-                <input type="file" name="avatar" id="profile" onChange={handleChange} />
+                <input type="file" name="avatar" id="profile" onChange={handleChange} accept="image/jpg,image/jpeg,image/png,image/gif" />
                 <p>您的頭像將會被公開。</p>
               </div>
             </div>

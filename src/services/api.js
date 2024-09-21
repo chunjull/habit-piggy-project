@@ -230,6 +230,54 @@ async function getDefaultAvatar(fileName) {
   }
 }
 
+async function addComment(postID, commentData) {
+  try {
+    const commentsCollectionRef = collection(db, "posts", postID, "comments");
+    await addDoc(commentsCollectionRef, {
+      ...commentData,
+      createdTime: Timestamp.now(),
+    });
+    console.log("Comment added to post ID: ", postID);
+  } catch (error) {
+    console.error("Error adding comment: ", error.code, error.message);
+  }
+}
+
+async function getComments(postID) {
+  try {
+    const commentsCollectionRef = collection(db, "posts", postID, "comments");
+    const commentsSnapshot = await getDocs(commentsCollectionRef);
+    const commentsList = commentsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    return commentsList;
+  } catch (error) {
+    console.error("Error getting comments: ", error.code, error.message);
+    return [];
+  }
+}
+
+async function updateComment(postID, commentID, commentData) {
+  try {
+    const commentDocRef = doc(db, "posts", postID, "comments", commentID);
+    await updateDoc(commentDocRef, {
+      ...commentData,
+      updatedTime: Timestamp.now(),
+    });
+    console.log("Comment updated with ID: ", commentID);
+  } catch (error) {
+    console.error("Error updating comment: ", error.code, error.message);
+  }
+}
+
+async function deleteComment(postID, commentID) {
+  try {
+    const commentDocRef = doc(db, "posts", postID, "comments", commentID);
+    await deleteDoc(commentDocRef);
+    console.log("Comment deleted with ID: ", commentID);
+  } catch (error) {
+    console.error("Error deleting comment: ", error.code, error.message);
+  }
+}
+
 export {
   registerUser,
   logoutUser,
@@ -247,4 +295,8 @@ export {
   getAllPosts,
   uploadAvatar,
   getDefaultAvatar,
+  addComment,
+  getComments,
+  updateComment,
+  deleteComment,
 };

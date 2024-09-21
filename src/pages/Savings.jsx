@@ -11,6 +11,7 @@ function Savings() {
   const [savingsCount, setSavingsCount] = useState(0);
   const [totalSavings, setTotalSavings] = useState(0);
   const [chartData, setChartData] = useState([]);
+  const [categoryData, setCategoryData] = useState({});
   const [habits, setHabits] = useState([]);
   const { user } = useContext(AuthContext);
 
@@ -25,17 +26,20 @@ function Savings() {
     7: "環境生活",
   };
 
+  const COLORS = ["#FF6961", "#FFB480", "#FFE552", "#42D6A4", "#08CAD1", "#59ADF6", "#9D94FF", "#C780E8"];
+
   useEffect(() => {
     const fetchData = async () => {
       if (user && user.uid) {
         const habitsList = await getHabits(user.uid);
         setHabits(habitsList);
         const { startOfPeriod, endOfPeriod } = getStartAndEndOfPeriod(filter);
-        const { completed, savings, total, chartData } = calculateStatistics(habitsList, startOfPeriod, endOfPeriod, filter);
+        const { completed, savings, total, chartData, categoryData } = calculateStatistics(habitsList, startOfPeriod, endOfPeriod, filter);
         setCompletedCount(completed);
         setSavingsCount(savings);
         setTotalSavings(total);
         setChartData(chartData);
+        setCategoryData(categoryData);
       }
     };
     fetchData();
@@ -67,6 +71,7 @@ function Savings() {
     let savings = 0;
     let total = 0;
     let chartData = [];
+    let categoryData = {};
 
     const periodData = {};
 
@@ -89,6 +94,11 @@ function Savings() {
           } else {
             completed += 1;
           }
+
+          if (!categoryData[habit.category]) {
+            categoryData[habit.category] = 0;
+          }
+          categoryData[habit.category] += 1;
         }
       });
     });
@@ -113,7 +123,7 @@ function Savings() {
       }
     });
 
-    return { completed, savings, total, chartData };
+    return { completed, savings, total, chartData, categoryData };
   };
 
   const getPeriodKey = (date, filter) => {
@@ -216,17 +226,19 @@ function Savings() {
       ) : (
         <div className="p-4 border space-y-4">
           <div>習慣類別總類</div>
-          <div className="w-full h-[400px] border">
-            <CategoryChart />
+          <div className="w-full h-[400px]">
+            <CategoryChart categoryData={categoryData} />
           </div>
-          <ul className="gap-3">
-            <li className="flex justify-between items-center">
-              <div className="flex items-center gap-3">
-                <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-                <p>生產力</p>
-              </div>
-              <p>0%</p>
-            </li>
+          <ul className="space-y-3">
+            {Object.keys(habitCategories).map((key, index) => (
+              <li key={key} className="flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <div className={`w-4 h-4 rounded-full`} style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
+                  <p>{habitCategories[key]}</p>
+                </div>
+                <p>{(((categoryData[key] || 0) / Object.values(categoryData).reduce((a, b) => a + b, 0)) * 100).toFixed(2)} %</p>
+              </li>
+            ))}
           </ul>
         </div>
       )}

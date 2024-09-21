@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { getAllPosts, getUserProfile, addComment, getComments } from "../services/api";
+import { getAllPosts, getUserProfile, addComment, getComments, updateComment, deleteComment } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 
 function Posts() {
@@ -7,6 +7,7 @@ function Posts() {
   const [filter, setFilter] = useState("all");
   const [commentSection, setCommentSection] = useState({});
   const [commentContent, setCommentContent] = useState("");
+  const [showSelect, setShowSelect] = useState({});
   const { user } = useContext(AuthContext);
 
   const backgroundColors = [
@@ -60,9 +61,37 @@ function Posts() {
     };
     await addComment(postID, commentData);
     setCommentContent("");
-    // Refresh comments
-    const updatedComments = await getComments(postID);
-    setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: updatedComments } : post)));
+    const renderComments = await getComments(postID);
+    setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
+  };
+
+  const handleShowSelect = (commentID) => {
+    setShowSelect((prev) => ({ ...prev, [commentID]: !prev[commentID] }));
+  };
+
+  const handleUpdateComment = async (postID, commentID) => {
+    const updatedContent = prompt("請輸入新的留言內容");
+    if (!updatedContent.trim()) {
+      alert("請輸入留言內容");
+      return;
+    }
+    await updateComment(postID, commentID, { content: updatedContent });
+    const renderComments = await getComments(postID);
+    setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
+  };
+
+  const handleDeleteComment = async (postID, commentID) => {
+    await deleteComment(postID, commentID);
+    const renderComments = await getComments(postID);
+    setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
+  };
+
+  const handleSelectChange = (postID, commentID, value) => {
+    if (value === "edit") {
+      handleUpdateComment(postID, commentID);
+    } else if (value === "delete") {
+      handleDeleteComment(postID, commentID);
+    }
   };
 
   return (
@@ -96,16 +125,19 @@ function Posts() {
               </div>
               <div className="flex gap-3">
                 <button className="border">Like</button>
-                <button className="border" onClick={() => handleCommentSection(post.id)}>
-                  Comment
-                </button>
+                <div className="flex gap-1">
+                  <button className="border" onClick={() => handleCommentSection(post.id)}>
+                    Comment
+                  </button>
+                  <p>{post.comments ? post.comments.length : 0}</p>
+                </div>
               </div>
               <ul className={`space-y-2 ${commentSection[post.id] ? "block" : "hidden"}`}>
                 {post.comments &&
                   post.comments.map((comment) => (
                     <li key={comment.id} className="flex justify-between items-center gap-3">
                       <img src={comment.userAvatar} alt="user's avatar" className="w-10 h-10 bg-slate-100" />
-                      <div className="bg-slate-300 px-4 py-1 w-full flex justify-between">
+                      <div className="bg-slate-300 px-4 py-1 w-full flex justify-between items-center">
                         <div>
                           <div className="flex gap-2">
                             <h3>{comment.userName}</h3>
@@ -113,7 +145,18 @@ function Posts() {
                           </div>
                           <p>{comment.content}</p>
                         </div>
-                        <button className="border">setting</button>
+                        <div className="flex flex-col">
+                          <button className="border" onClick={() => handleShowSelect(comment.id)}>
+                            setting
+                          </button>
+                          {showSelect[comment.id] && (
+                            <select className="border" onChange={(e) => handleSelectChange(post.id, comment.id, e.target.value)}>
+                              <option value="">選擇操作</option>
+                              <option value="edit">Edit</option>
+                              <option value="delete">Delete</option>
+                            </select>
+                          )}
+                        </div>
                       </div>
                     </li>
                   ))}

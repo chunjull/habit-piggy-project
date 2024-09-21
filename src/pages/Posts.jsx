@@ -5,6 +5,7 @@ import { AuthContext } from "../utils/AuthContext";
 function Posts() {
   const [posts, setPosts] = useState([]);
   const [filter, setFilter] = useState("all");
+  const [commentSection, setCommentSection] = useState(false);
   const { user } = useContext(AuthContext);
 
   const backgroundColors = [
@@ -39,6 +40,10 @@ function Posts() {
 
   const filteredPosts = filter === "personal" ? posts.filter((post) => post.userID === user.uid) : posts;
 
+  const handleCommentSection = () => {
+    setCommentSection(!commentSection);
+  };
+
   return (
     <div className="p-4 space-y-4 mb-16 md:mb-0">
       <div className="flex justify-between items-center">
@@ -70,9 +75,11 @@ function Posts() {
               </div>
               <div className="flex gap-3">
                 <button className="border">Like</button>
-                <button className="border">Comment</button>
+                <button className="border" onClick={handleCommentSection}>
+                  Comment
+                </button>
               </div>
-              <div className="space-y-2">
+              <div className={`space-y-2 ${commentSection ? "block" : "hidden"}`}>
                 <div className="flex justify-between items-center gap-3">
                   <img src="" alt="user's avatar" className="w-10 h-10 bg-slate-100" />
                   <div className="bg-slate-300 px-4 py-1 w-full flex justify-between">

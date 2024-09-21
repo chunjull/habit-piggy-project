@@ -1,11 +1,11 @@
 import { useEffect, useState, useContext } from "react";
-import { getAllPosts, getUserProfile, addComment } from "../services/api";
+import { getAllPosts, getUserProfile, addComment, getComments } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
   const [filter, setFilter] = useState("all");
-  const [commentSection, setCommentSection] = useState(false);
+  const [commentSection, setCommentSection] = useState({});
   const [commentContent, setCommentContent] = useState("");
   const { user } = useContext(AuthContext);
 
@@ -30,7 +30,8 @@ function Posts() {
       const postsWithUserDetails = await Promise.all(
         postsList.map(async (post) => {
           const userProfile = await getUserProfile(post.userID);
-          return { ...post, user: userProfile };
+          const comments = await getComments(post.id);
+          return { ...post, user: userProfile, comments: comments };
         })
       );
       setPosts(postsWithUserDetails);
@@ -41,17 +42,27 @@ function Posts() {
 
   const filteredPosts = filter === "personal" ? posts.filter((post) => post.userID === user.uid) : posts;
 
-  const handleCommentSection = () => {
-    setCommentSection(!commentSection);
+  const handleCommentSection = (postID) => {
+    setCommentSection((prev) => ({ ...prev, [postID]: !prev[postID] }));
   };
 
-  const handleAddComment = async (postID, comment) => {
+  const handleAddComment = async (postID) => {
     if (!commentContent.trim()) {
       alert("請輸入留言內容");
       return;
     }
-    await addComment(postID, comment);
+    const userProfile = await getUserProfile(user.uid);
+    const commentData = {
+      content: commentContent,
+      userID: user.uid,
+      userName: userProfile.name,
+      userAvatar: userProfile.avatar,
+    };
+    await addComment(postID, commentData);
     setCommentContent("");
+    // Refresh comments
+    const updatedComments = await getComments(postID);
+    setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: updatedComments } : post)));
   };
 
   return (
@@ -85,31 +96,34 @@ function Posts() {
               </div>
               <div className="flex gap-3">
                 <button className="border">Like</button>
-                <button className="border" onClick={handleCommentSection}>
+                <button className="border" onClick={() => handleCommentSection(post.id)}>
                   Comment
                 </button>
               </div>
-              <div className={`space-y-2 ${commentSection ? "block" : "hidden"}`}>
-                <div className="flex justify-between items-center gap-3">
-                  <img src="" alt="user's avatar" className="w-10 h-10 bg-slate-100" />
-                  <div className="bg-slate-300 px-4 py-1 w-full flex justify-between">
-                    <div>
-                      <div className="flex gap-2">
-                        <h3>Username</h3>
-                        <p>2024-09-01 12:00</p>
+              <ul className={`space-y-2 ${commentSection[post.id] ? "block" : "hidden"}`}>
+                {post.comments &&
+                  post.comments.map((comment) => (
+                    <li key={comment.id} className="flex justify-between items-center gap-3">
+                      <img src={comment.userAvatar} alt="user's avatar" className="w-10 h-10 bg-slate-100" />
+                      <div className="bg-slate-300 px-4 py-1 w-full flex justify-between">
+                        <div>
+                          <div className="flex gap-2">
+                            <h3>{comment.userName}</h3>
+                            <p>{new Date(comment.createdTime.seconds * 1000).toLocaleString([], { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" })}</p>
+                          </div>
+                          <p>{comment.content}</p>
+                        </div>
+                        <button className="border">setting</button>
                       </div>
-                      <p>Comment</p>
-                    </div>
-                    <button className="border">setting</button>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center gap-2">
+                    </li>
+                  ))}
+                <li className="flex justify-between items-center gap-2">
                   <input type="text" placeholder="Add a comment" className="border p-2 w-full" value={commentContent} onChange={(e) => setCommentContent(e.target.value)} />
-                  <button className="border" onClick={handleAddComment}>
+                  <button className="border" onClick={() => handleAddComment(post.id)}>
                     Post
                   </button>
-                </div>
-              </div>
+                </li>
+              </ul>
             </li>
           );
         })}

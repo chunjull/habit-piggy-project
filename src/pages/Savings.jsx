@@ -13,6 +13,17 @@ function Savings() {
   const [habits, setHabits] = useState([]);
   const { user } = useContext(AuthContext);
 
+  const habitCategories = {
+    0: "生產力",
+    1: "個人成長",
+    2: "運動健身",
+    3: "飲食健康",
+    4: "心靈成長",
+    5: "手作興趣",
+    6: "財務管理",
+    7: "環境生活",
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       if (user && user.uid) {
@@ -202,7 +213,19 @@ function Savings() {
           <p className="text-center mt-2">僅顯示最新的 50 筆存款記錄</p>
         </div>
       ) : (
-        <div>Category</div>
+        <div className="p-4 border space-y-4">
+          <div>習慣類別總類</div>
+          <div className="w-full h-52 border"></div>
+          <ul className="gap-3">
+            <li className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+                <p>生產力</p>
+              </div>
+              <p>0%</p>
+            </li>
+          </ul>
+        </div>
       )}
     </div>
   );

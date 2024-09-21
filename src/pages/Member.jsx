@@ -45,6 +45,7 @@ function Member() {
   const [calendarTarget, setCalendarTarget] = useState("");
   const calendarRef = useRef(null);
   const [isPost, setIsPost] = useState(false);
+  const [filter, setFilter] = useState("all");
 
   const habitCategories = {
     0: "生產力",
@@ -218,6 +219,25 @@ function Member() {
     setIsDetailModalOpen(true);
   };
 
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+  };
+
+  const filteredHabits = habits.filter((habit) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const endDate = new Date(habit.endDate);
+    endDate.setHours(0, 0, 0, 0);
+
+    if (filter === "in-progress") {
+      return endDate >= today;
+    } else if (filter === "finished") {
+      return endDate < today;
+    } else {
+      return true;
+    }
+  });
+
   if (isPost) {
     return <Navigate to="/posts" />;
   }
@@ -243,7 +263,7 @@ function Member() {
         ) : (
           <div className="flex justify-between items-center">
             <h2>歷史習慣</h2>
-            <select className="border">
+            <select className="border" value={filter} onChange={handleFilterChange}>
               <option value="all">全部</option>
               <option value="in-progress">進行中</option>
               <option value="finished">已結束</option>
@@ -288,10 +308,16 @@ function Member() {
           </div>
         ) : (
           <ul className="space-y-4">
-            {Array.isArray(habits) &&
-              habits.map((habit) => {
+            {Array.isArray(filteredHabits) &&
+              filteredHabits.map((habit) => {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const endDate = new Date(habit.endDate);
+                endDate.setHours(0, 0, 0, 0);
+                const isFinished = endDate < today;
+
                 return (
-                  <li key={habit.id} className="px-2 py-4 bg-slate-100">
+                  <li key={habit.id} className={`px-2 py-4 ${isFinished ? "bg-slate-500" : "bg-slate-100"}`}>
                     <div className="flex justify-between items-center">
                       <div className="flex gap-2">
                         <div className="w-10 h-10 bg-yellow-400"></div>

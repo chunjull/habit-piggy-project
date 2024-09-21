@@ -86,6 +86,21 @@ function Savings() {
       存款金額: periodData[key],
     }));
 
+    chartData.sort((a, b) => {
+      if (filter === "week") {
+        const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        return daysOfWeek.indexOf(a.name) - daysOfWeek.indexOf(b.name);
+      } else if (filter === "month") {
+        const weekA = parseInt(a.name.split(" ")[1], 10);
+        const weekB = parseInt(b.name.split(" ")[1], 10);
+        return weekA - weekB;
+      } else {
+        const monthA = new Date(Date.parse(a.name + " 1, 2022")).getMonth();
+        const monthB = new Date(Date.parse(b.name + " 1, 2022")).getMonth();
+        return monthA - monthB;
+      }
+    });
+
     return { completed, savings, total, chartData };
   };
 

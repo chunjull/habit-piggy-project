@@ -1,16 +1,7 @@
 import { ResponsiveContainer, BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
+import PropTypes from "prop-types";
 
-const data = [
-  { name: "Page A", uv: 400 },
-  { name: "Page B", uv: 300 },
-  { name: "Page C", uv: 200 },
-  { name: "Page D", uv: 278 },
-  { name: "Page E", uv: 189 },
-  { name: "Page F", uv: 239 },
-  { name: "Page G", uv: 349 },
-];
-
-const SavingsChart = () => {
+const SavingsChart = ({ data }) => {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={data}>
@@ -18,10 +9,14 @@ const SavingsChart = () => {
         <XAxis dataKey="name" />
         <YAxis />
         <Tooltip cursor={{ fill: "#E7E7E7" }} />
-        <Bar type="monotone" dataKey="uv" fill="#FFC700" />
+        <Bar type="monotone" dataKey="存款金額" fill="#FFC700" />
       </BarChart>
     </ResponsiveContainer>
   );
+};
+
+SavingsChart.propTypes = {
+  data: PropTypes.array.isRequired,
 };
 
 export default SavingsChart;

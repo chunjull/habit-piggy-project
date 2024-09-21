@@ -9,6 +9,7 @@ function Savings() {
   const [completedCount, setCompletedCount] = useState(0);
   const [savingsCount, setSavingsCount] = useState(0);
   const [totalSavings, setTotalSavings] = useState(0);
+  const [chartData, setChartData] = useState([]);
   const [habits, setHabits] = useState([]);
   const { user } = useContext(AuthContext);
 
@@ -18,10 +19,11 @@ function Savings() {
         const habitsList = await getHabits(user.uid);
         setHabits(habitsList);
         const { startOfPeriod, endOfPeriod } = getStartAndEndOfPeriod(filter);
-        const { completed, savings, total } = calculateStatistics(habitsList, startOfPeriod, endOfPeriod);
+        const { completed, savings, total, chartData } = calculateStatistics(habitsList, startOfPeriod, endOfPeriod, filter);
         setCompletedCount(completed);
         setSavingsCount(savings);
         setTotalSavings(total);
+        setChartData(chartData);
       }
     };
     fetchData();
@@ -38,8 +40,8 @@ function Savings() {
       startOfPeriod = new Date(today.getFullYear(), today.getMonth(), 1);
       endOfPeriod = new Date(today.getFullYear(), today.getMonth() + 1, 0);
     } else {
-      startOfPeriod = new Date(0);
-      endOfPeriod = new Date();
+      startOfPeriod = new Date(today.getFullYear(), 0, 1);
+      endOfPeriod = new Date(today.getFullYear(), 11, 31);
     }
 
     startOfPeriod.setHours(0, 0, 0, 0);
@@ -48,34 +50,54 @@ function Savings() {
     return { startOfPeriod, endOfPeriod };
   };
 
-  const calculateStatistics = (habits, startOfPeriod, endOfPeriod) => {
+  const calculateStatistics = (habits, startOfPeriod, endOfPeriod, filter) => {
     let completed = 0;
     let savings = 0;
     let total = 0;
+    let chartData = [];
+
+    const periodData = {};
 
     habits.forEach((habit) => {
-      const uncompletedCount = habit.status.filter((status) => {
+      habit.status.forEach((status) => {
         const statusDate = new Date(status.date);
         statusDate.setHours(0, 0, 0, 0);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        return statusDate < today && !status.completed && statusDate >= startOfPeriod && statusDate <= endOfPeriod;
-      }).length;
-      savings += uncompletedCount;
 
-      const uncompletedFine = uncompletedCount * habit.amount;
-      if (uncompletedFine > 0) {
-        total += uncompletedFine;
-      }
-
-      const completedCount = habit.status.filter((status) => {
-        const statusDate = new Date(status.date);
-        return status.completed && statusDate >= startOfPeriod && statusDate <= endOfPeriod;
-      }).length;
-      completed += completedCount;
+        if (statusDate < today && statusDate >= startOfPeriod && statusDate <= endOfPeriod) {
+          const periodKey = getPeriodKey(statusDate, filter);
+          if (!periodData[periodKey]) {
+            periodData[periodKey] = 0;
+          }
+          if (!status.completed) {
+            periodData[periodKey] += Number(habit.amount);
+            savings += 1;
+            total += Number(habit.amount);
+          } else {
+            completed += 1;
+          }
+        }
+      });
     });
 
-    return { completed, savings, total };
+    chartData = Object.keys(periodData).map((key) => ({
+      name: key,
+      存款金額: periodData[key],
+    }));
+
+    return { completed, savings, total, chartData };
+  };
+
+  const getPeriodKey = (date, filter) => {
+    if (filter === "week") {
+      return date.toLocaleDateString("zh-TW", { weekday: "short" });
+    } else if (filter === "month") {
+      const weekNumber = Math.ceil(date.getDate() / 7);
+      return `Week ${weekNumber}`;
+    } else {
+      return date.toLocaleDateString("zh-TW", { month: "short" });
+    }
   };
 
   const renderStatistics = ({ completed, savings, total }) => (
@@ -150,7 +172,7 @@ function Savings() {
             </div>
             {renderStatistics({ completed: completedCount, savings: savingsCount, total: totalSavings })}
             <div className="w-full h-52">
-              <SavingsChart />
+              <SavingsChart data={chartData} />
             </div>
           </div>
           <ul className="space-y-2 mt-4">

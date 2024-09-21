@@ -1,11 +1,21 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { AuthContext } from "../utils/AuthContext";
-import { getAllUsers, getHabits } from "../services/api";
+import { getAllUsers, getHabits, updateUserAchievements } from "../services/api";
+
+const HabitAchievements = ["習以為常", "習蘭紅茶", "自強不習", "今非習比"];
+const SavingAchievements = ["金豬玉葉", "錙豬必較", "豬圓玉潤", "豬絲馬跡"];
+
+const getCurrentCycleIndex = () => {
+  const startOfYear = new Date(new Date().getFullYear(), 0, 1);
+  const currentWeekNumber = Math.ceil(((new Date() - startOfYear) / (24 * 60 * 60 * 1000) + startOfYear.getDay() + 1) / 7);
+  return (currentWeekNumber - 1) % HabitAchievements.length;
+};
 
 function Rank() {
   const [isActiveTab, setIsActiveTab] = useState("habit");
   const [userHabitCounts, setUserHabitCounts] = useState([]);
   const { user } = useContext(AuthContext);
+  const currentCycleIndexRef = useRef(getCurrentCycleIndex());
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,6 +25,25 @@ function Rank() {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const checkCycleChange = () => {
+      const newCycleIndex = getCurrentCycleIndex();
+      if (newCycleIndex !== currentCycleIndexRef.current) {
+        currentCycleIndexRef.current = newCycleIndex;
+        addAchievementToTopUser();
+      }
+    };
+
+    const now = new Date();
+    const nextCheckTime = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0) - now;
+    const initialTimeout = setTimeout(() => {
+      checkCycleChange();
+      setInterval(checkCycleChange, 1000 * 60 * 60 * 24); // 每天檢查一次
+    }, nextCheckTime);
+
+    return () => clearTimeout(initialTimeout);
+  }, [userHabitCounts]);
 
   const getStartAndEndOfWeek = () => {
     const today = new Date();
@@ -43,6 +72,17 @@ function Rank() {
       })
     );
     return userHabitCounts;
+  };
+
+  const addAchievementToTopUser = async () => {
+    if (userHabitCounts.length > 0) {
+      const topUser = userHabitCounts[0];
+      const newAchievement = HabitAchievements[currentCycleIndexRef.current];
+      if (!topUser.achievements.includes(newAchievement)) {
+        topUser.achievements.push(newAchievement);
+        await updateUserAchievements(topUser.uid, topUser.achievements);
+      }
+    }
   };
 
   const renderTopTenUsers = (userHabitCounts) => {
@@ -106,12 +146,10 @@ function Rank() {
         <div>
           <div className="p-4 mt-4 bg-slate-300">
             <p className="text-center">
-              在 {getStartAndEndOfWeek().startOfWeek.toLocaleDateString()} ～ {getStartAndEndOfWeek().endOfWeek.toLocaleDateString()} 期間
-              <br />
-              恭喜 {userHabitCounts[0]?.name || "No.1"} 成為累積最多次習慣的玩家
-              <br />
-              獲得習以為常成就！
+              在 {getStartAndEndOfWeek().startOfWeek.toLocaleDateString()}～{getStartAndEndOfWeek().endOfWeek.toLocaleDateString()} 期間
             </p>
+            <p className="text-center">恭喜 {userHabitCounts[0]?.name || "No.1"} 成為累積最多次習慣的玩家</p>
+            <p className="text-center">獲得{HabitAchievements[getCurrentCycleIndex()]}成就！</p>
           </div>
           <ul className="space-y-4">{renderTopTenUsers(userHabitCounts)}</ul>
           {renderCurrentUser(userHabitCounts, user)}

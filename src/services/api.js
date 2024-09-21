@@ -280,6 +280,19 @@ async function deleteComment(postID, commentID) {
   }
 }
 
+async function updateUserAchievements(uid, achievements) {
+  try {
+    const userDocRef = doc(db, "users", uid);
+    await updateDoc(userDocRef, {
+      achievements: achievements,
+      updatedTime: Timestamp.now(),
+    });
+    console.log("User achievements updated with ID: ", uid);
+  } catch (error) {
+    console.error("Error updating user achievements: ", error.code, error.message);
+  }
+}
+
 export {
   registerUser,
   logoutUser,
@@ -301,4 +314,5 @@ export {
   getComments,
   updateComment,
   deleteComment,
+  updateUserAchievements,
 };

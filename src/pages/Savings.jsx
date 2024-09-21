@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../utils/AuthContext";
 import { getHabits } from "../services/api";
 import SavingsChart from "../components/SavingsChart";
+import CategoryChart from "../components/CategoryChart";
 
 function Savings() {
   const [isOverview, setIsOverview] = useState(true);
@@ -215,7 +216,9 @@ function Savings() {
       ) : (
         <div className="p-4 border space-y-4">
           <div>習慣類別總類</div>
-          <div className="w-full h-52 border"></div>
+          <div className="w-full h-[400px] border">
+            <CategoryChart />
+          </div>
           <ul className="gap-3">
             <li className="flex justify-between items-center">
               <div className="flex items-center gap-3">

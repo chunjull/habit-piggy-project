@@ -1,9 +1,9 @@
 import { useState, useContext, useEffect, useRef } from "react";
 import { AuthContext } from "../utils/AuthContext";
-import { getAllUsers, getHabits, updateUserAchievements } from "../services/api";
+import { getAllUsers, getHabits, getSavings, updateUserAchievements } from "../services/api";
 
 const HabitAchievements = ["習以為常", "習蘭紅茶", "自強不習", "今非習比"];
-const SavingAchievements = ["金豬玉葉", "錙豬必較", "豬圓玉潤", "豬絲馬跡"];
+const SavingsAchievements = ["金豬玉葉", "錙豬必較", "豬圓玉潤", "豬絲馬跡"];
 
 const getCurrentCycleIndex = () => {
   const startOfYear = new Date(new Date().getFullYear(), 0, 1);
@@ -14,17 +14,23 @@ const getCurrentCycleIndex = () => {
 function Rank() {
   const [isActiveTab, setIsActiveTab] = useState("habit");
   const [userHabitCounts, setUserHabitCounts] = useState([]);
+  const [userSavingsCounts, setUserSavingsCounts] = useState([]);
   const { user } = useContext(AuthContext);
   const currentCycleIndexRef = useRef(getCurrentCycleIndex());
 
   useEffect(() => {
     const fetchData = async () => {
       const { startOfWeek, endOfWeek } = getStartAndEndOfWeek();
-      const userHabitCounts = await calculateUserHabitCounts(startOfWeek, endOfWeek);
-      setUserHabitCounts(userHabitCounts);
+      if (isActiveTab === "habit") {
+        const userHabitCounts = await calculateUserHabitCounts(startOfWeek, endOfWeek);
+        setUserHabitCounts(userHabitCounts);
+      } else if (isActiveTab === "savings") {
+        const userSavingsCounts = await calculateUserSavingsCounts(startOfWeek, endOfWeek);
+        setUserSavingsCounts(userSavingsCounts);
+      }
     };
     fetchData();
-  }, []);
+  }, [isActiveTab]);
 
   useEffect(() => {
     const checkCycleChange = () => {
@@ -43,7 +49,7 @@ function Rank() {
     }, nextCheckTime);
 
     return () => clearTimeout(initialTimeout);
-  }, [userHabitCounts]);
+  }, [userHabitCounts, userSavingsCounts]);
 
   const getStartAndEndOfWeek = () => {
     const today = new Date();
@@ -74,10 +80,32 @@ function Rank() {
     return userHabitCounts;
   };
 
+  const calculateUserSavingsCounts = async (startOfWeek, endOfWeek) => {
+    const users = await getAllUsers();
+    const userSavingsCounts = await Promise.all(
+      users.map(async (user) => {
+        const savings = await getSavings(user.uid);
+        const totalSavings = savings.reduce((total, saving) => {
+          const savingDate = new Date(saving.date);
+          return savingDate >= startOfWeek && savingDate <= endOfWeek ? total + saving.amount : total;
+        }, 0);
+        return { ...user, totalSavings };
+      })
+    );
+    return userSavingsCounts;
+  };
+
   const addAchievementToTopUser = async () => {
-    if (userHabitCounts.length > 0) {
+    if (isActiveTab === "habit" && userHabitCounts.length > 0) {
       const topUser = userHabitCounts[0];
       const newAchievement = HabitAchievements[currentCycleIndexRef.current];
+      if (!topUser.achievements.includes(newAchievement)) {
+        topUser.achievements.push(newAchievement);
+        await updateUserAchievements(topUser.uid, topUser.achievements);
+      }
+    } else if (isActiveTab === "savings" && userSavingsCounts.length > 0) {
+      const topUser = userSavingsCounts[0];
+      const newAchievement = SavingsAchievements[currentCycleIndexRef.current];
       if (!topUser.achievements.includes(newAchievement)) {
         topUser.achievements.push(newAchievement);
         await updateUserAchievements(topUser.uid, topUser.achievements);
@@ -85,8 +113,8 @@ function Rank() {
     }
   };
 
-  const renderTopTenUsers = (userHabitCounts) => {
-    const sortedUsers = userHabitCounts.sort((a, b) => b.completedCount - a.completedCount);
+  const renderTopTenUsers = (userCounts, type) => {
+    const sortedUsers = userCounts.sort((a, b) => (type === "habit" ? b.completedCount - a.completedCount : b.totalSavings - a.totalSavings));
     return sortedUsers.slice(0, 10).map((user, index) => (
       <li key={user.uid} className="flex justify-between py-2 px-4 bg-slate-100">
         <div className="flex items-center gap-3">
@@ -98,19 +126,19 @@ function Rank() {
           </div>
         </div>
         <div className="text-end">
-          <p>累積數量</p>
-          <p>{user.completedCount} 次</p>
+          <p>{type === "habit" ? "累積數量" : "累積存款"}</p>
+          <p>{type === "habit" ? `${user.completedCount} 次` : `${user.totalSavings} 元`}</p>
         </div>
       </li>
     ));
   };
 
-  const renderCurrentUser = (userHabitCounts, currentUser) => {
-    const currentUserData = userHabitCounts.find((user) => user.uid === currentUser.uid);
+  const renderCurrentUser = (userCounts, currentUser, type) => {
+    const currentUserData = userCounts.find((user) => user.uid === currentUser.uid);
     if (!currentUserData) {
       return null;
     }
-    const rank = userHabitCounts.findIndex((user) => user.uid === currentUser.uid) + 1;
+    const rank = userCounts.findIndex((user) => user.uid === currentUser.uid) + 1;
     return (
       <div className="flex justify-between py-2 px-4 bg-slate-900">
         <div className="flex items-center gap-3 text-white">
@@ -122,8 +150,8 @@ function Rank() {
           </div>
         </div>
         <div className="text-end text-white">
-          <p>累積數量</p>
-          <p>{currentUserData.completedCount} 次</p>
+          <p>{type === "habit" ? "累積數量" : "累積存款"}</p>
+          <p>{type === "habit" ? `${currentUserData.completedCount} 次` : `${currentUserData.totalSavings} 元`}</p>
         </div>
       </div>
     );
@@ -151,11 +179,23 @@ function Rank() {
             <p className="text-center">恭喜 {userHabitCounts[0]?.name || "No.1"} 成為累積最多次習慣的玩家</p>
             <p className="text-center">獲得{HabitAchievements[getCurrentCycleIndex()]}成就！</p>
           </div>
-          <ul className="space-y-4">{renderTopTenUsers(userHabitCounts)}</ul>
-          {renderCurrentUser(userHabitCounts, user)}
+          <ul className="space-y-4">{renderTopTenUsers(userHabitCounts, "habit")}</ul>
+          {renderCurrentUser(userHabitCounts, user, "habit")}
         </div>
       )}
-      {isActiveTab === "savings" && <div>存款排行</div>}
+      {isActiveTab === "savings" && (
+        <div>
+          <div className="p-4 mt-4 bg-slate-300">
+            <p className="text-center">
+              在 {getStartAndEndOfWeek().startOfWeek.toLocaleDateString()}～{getStartAndEndOfWeek().endOfWeek.toLocaleDateString()} 期間
+            </p>
+            <p className="text-center">恭喜 {userSavingsCounts[0]?.name || "No.1"} 成為累積最多存款的玩家</p>
+            <p className="text-center">獲得{SavingsAchievements[getCurrentCycleIndex()]}成就！</p>
+          </div>
+          <ul className="space-y-4">{renderTopTenUsers(userSavingsCounts, "savings")}</ul>
+          {renderCurrentUser(userSavingsCounts, user, "savings")}
+        </div>
+      )}
       {/* {isActiveTab === "challenge" && <div>挑戰排行</div>} */}
     </div>
   );

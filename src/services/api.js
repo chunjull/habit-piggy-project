@@ -293,6 +293,32 @@ async function updateUserAchievements(uid, achievements) {
   }
 }
 
+async function getSavings(uid) {
+  try {
+    const userDocRef = doc(db, "users", uid);
+    const habitsCollectionRef = collection(userDocRef, "habits");
+    const habitsSnapshot = await getDocs(habitsCollectionRef);
+    const habitsList = habitsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+    let savings = [];
+    habitsList.forEach((habit) => {
+      habit.status.forEach((status) => {
+        if (!status.completed) {
+          savings.push({
+            date: status.date,
+            amount: Number(habit.amount),
+          });
+        }
+      });
+    });
+
+    return savings;
+  } catch (error) {
+    console.error("Error getting savings: ", error.code, error.message);
+    return [];
+  }
+}
+
 export {
   registerUser,
   logoutUser,
@@ -315,4 +341,5 @@ export {
   updateComment,
   deleteComment,
   updateUserAchievements,
+  getSavings,
 };

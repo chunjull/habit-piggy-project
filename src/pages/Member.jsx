@@ -223,20 +223,22 @@ function Member() {
     setFilter(e.target.value);
   };
 
-  const filteredHabits = habits.filter((habit) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const endDate = new Date(habit.endDate);
-    endDate.setHours(0, 0, 0, 0);
+  const filteredHabits = habits
+    .filter((habit) => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const endDate = new Date(habit.endDate);
+      endDate.setHours(0, 0, 0, 0);
 
-    if (filter === "in-progress") {
-      return endDate >= today;
-    } else if (filter === "finished") {
-      return endDate < today;
-    } else {
-      return true;
-    }
-  });
+      if (filter === "in-progress") {
+        return endDate >= today;
+      } else if (filter === "finished") {
+        return endDate < today;
+      } else {
+        return true;
+      }
+    })
+    .sort((a, b) => new Date(b.endDate) - new Date(a.endDate));
 
   if (isPost) {
     return <Navigate to="/posts" />;

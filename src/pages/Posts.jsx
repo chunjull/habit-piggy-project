@@ -1,11 +1,12 @@
 import { useEffect, useState, useContext } from "react";
-import { getAllPosts, getUserProfile } from "../services/api";
+import { getAllPosts, getUserProfile, addComment } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
   const [filter, setFilter] = useState("all");
   const [commentSection, setCommentSection] = useState(false);
+  const [commentContent, setCommentContent] = useState("");
   const { user } = useContext(AuthContext);
 
   const backgroundColors = [
@@ -42,6 +43,15 @@ function Posts() {
 
   const handleCommentSection = () => {
     setCommentSection(!commentSection);
+  };
+
+  const handleAddComment = async (postID, comment) => {
+    if (!commentContent.trim()) {
+      alert("請輸入留言內容");
+      return;
+    }
+    await addComment(postID, comment);
+    setCommentContent("");
   };
 
   return (
@@ -94,8 +104,10 @@ function Posts() {
                   </div>
                 </div>
                 <div className="flex justify-between items-center gap-2">
-                  <input type="text" placeholder="Add a comment" className="border p-2 w-full" />
-                  <button className="border">Post</button>
+                  <input type="text" placeholder="Add a comment" className="border p-2 w-full" value={commentContent} onChange={(e) => setCommentContent(e.target.value)} />
+                  <button className="border" onClick={handleAddComment}>
+                    Post
+                  </button>
                 </div>
               </div>
             </li>

@@ -232,7 +232,8 @@ async function getDefaultAvatar(fileName) {
 
 async function addComment(postID, commentData) {
   try {
-    const commentsCollectionRef = collection(db, "posts", postID, "comments");
+    const postDocRef = doc(db, "posts", postID);
+    const commentsCollectionRef = collection(postDocRef, "comments");
     await addDoc(commentsCollectionRef, {
       ...commentData,
       createdTime: Timestamp.now(),
@@ -245,7 +246,8 @@ async function addComment(postID, commentData) {
 
 async function getComments(postID) {
   try {
-    const commentsCollectionRef = collection(db, "posts", postID, "comments");
+    const postDocRef = doc(db, "posts", postID);
+    const commentsCollectionRef = collection(postDocRef, "comments");
     const commentsSnapshot = await getDocs(commentsCollectionRef);
     const commentsList = commentsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     return commentsList;

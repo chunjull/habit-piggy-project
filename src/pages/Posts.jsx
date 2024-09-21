@@ -72,6 +72,25 @@ function Posts() {
                 <button className="border">Like</button>
                 <button className="border">Comment</button>
               </div>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center gap-3">
+                  <img src="" alt="user's avatar" className="w-10 h-10 bg-slate-100" />
+                  <div className="bg-slate-300 px-4 py-1 w-full flex justify-between">
+                    <div>
+                      <div className="flex gap-2">
+                        <h3>Username</h3>
+                        <p>2024-09-01 12:00</p>
+                      </div>
+                      <p>Comment</p>
+                    </div>
+                    <button className="border">setting</button>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center gap-2">
+                  <input type="text" placeholder="Add a comment" className="border p-2 w-full" />
+                  <button className="border">Post</button>
+                </div>
+              </div>
             </li>
           );
         })}

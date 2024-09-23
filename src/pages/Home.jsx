@@ -126,10 +126,10 @@ function Home() {
     setIsEditModalOpen(!isEditModalOpen);
   };
 
-  const handleChange = (e) => {
+  const handleHabitChange = (e) => {
     const { name, value } = e.target;
-    setHabitData((prev) => ({
-      ...prev,
+    setHabitData((prevData) => ({
+      ...prevData,
       [name]: value,
     }));
   };
@@ -283,11 +283,13 @@ function Home() {
       <ul className="space-y-4 p-4 mb-11">
         {Array.isArray(habits) &&
           habits.map((habit) => {
+            const habitCategory = habitCategories.find((category) => category.id === habit.category);
+            const HabitIcon = habitCategory ? habitCategory.icon : null;
             return (
               <li key={habit.id} className="px-2 py-4 bg-slate-100">
                 <div className="flex justify-between items-center">
                   <div className="flex gap-2">
-                    <div className="w-10 h-10 bg-yellow-400"></div>
+                    <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">{HabitIcon && <HabitIcon className="w-8 h-8" />}</div>
                     <div className="flex flex-col">
                       <h3>{habit.title}</h3>
                       <div className="flex">
@@ -332,7 +334,7 @@ function Home() {
       <Modal isOpen={isHabitModalOpen}>
         <HabitModal
           habitData={habitData}
-          handleChange={handleChange}
+          handleHabitChange={handleHabitChange}
           handleAddHabit={handleAddHabit}
           handleFocus={handleFocus}
           showMonthCalendar={showMonthCalendar}
@@ -353,7 +355,7 @@ function Home() {
       <Modal isOpen={isEditModalOpen} onClose={handleEditModal}>
         <EditModal
           habitData={habitData}
-          handleChange={handleChange}
+          handleHabitChange={handleHabitChange}
           handleUpdateHabit={handleUpdateHabit}
           handleFocus={handleFocus}
           showMonthCalendar={showMonthCalendar}

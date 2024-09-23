@@ -198,8 +198,8 @@ function Member() {
     if (user && selectedHabit) {
       try {
         await updateHabit(user.uid, selectedHabit.id, habitData);
-        await fetchHabits(); // 確保重新獲取習慣列表
-        setIsEditModalOpen(false); // 關閉編輯彈窗
+        await fetchHabits();
+        setIsEditModalOpen(false);
         console.log("Habit updated successfully");
       } catch (error) {
         console.error("Error updating habit: ", error);
@@ -261,8 +261,6 @@ function Member() {
   if (isPost) {
     return <Navigate to="/posts" />;
   }
-
-  console.log(habitData);
 
   return (
     <>
@@ -338,11 +336,14 @@ function Member() {
                 endDate.setHours(0, 0, 0, 0);
                 const isFinished = endDate < today;
 
+                const habitCategory = habitCategories.find((category) => category.id === habit.category);
+                const HabitIcon = habitCategory ? habitCategory.icon : null;
+
                 return (
                   <li key={habit.id} className={`px-2 py-4 ${isFinished ? "bg-slate-500" : "bg-slate-100"}`}>
                     <div className="flex justify-between items-center">
                       <div className="flex gap-2">
-                        <div className="w-10 h-10 bg-yellow-400"></div>
+                        <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">{HabitIcon && <HabitIcon className="w-8 h-8" />}</div>
                         <div className="flex flex-col">
                           <h3>{habit.title}</h3>
                           <div className="flex">

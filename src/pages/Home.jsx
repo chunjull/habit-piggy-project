@@ -423,6 +423,7 @@ function Home() {
           handleEditModal={handleEditModal}
           handleDeleteHabit={handleDeleteHabit}
           habitCategories={habitCategories}
+          setHabitData={setHabitData}
           monthCalendarDate={monthCalendarDate}
           handleMonthCalendarSelectDate={handleMonthCalendarSelectDate}
         />

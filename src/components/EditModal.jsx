@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import MonthCalendar from "./MonthCalendar";
+import CategorySelect from "./CategorySelect";
 
 const EditModal = ({
   habitData,
@@ -18,13 +19,7 @@ const EditModal = ({
   <div className="space-y-4">
     <div className="flex justify-between gap-4">
       <div className="flex gap-4 w-full">
-        <select name="category" value={habitData.category} onChange={handleChange} className="border py-2 px-4">
-          {Object.entries(habitCategories).map(([key, value]) => (
-            <option key={key} value={key}>
-              {value}
-            </option>
-          ))}
-        </select>
+        <CategorySelect options={habitCategories} value={habitData.category} onChange={(value) => handleChange({ target: { name: "category", value } })} />
         <input type="text" name="title" placeholder="輸入習慣名稱" className="py-2 px-4 w-full" value={habitData.title} onChange={handleChange} />
       </div>
       <button onClick={handleEditModal}>close</button>
@@ -127,7 +122,7 @@ EditModal.propTypes = {
   handleSelectDate: PropTypes.func.isRequired,
   calendarRef: PropTypes.object.isRequired,
   handleEditModal: PropTypes.func.isRequired,
-  habitCategories: PropTypes.object.isRequired,
+  habitCategories: PropTypes.array.isRequired,
 };
 
 export default EditModal;

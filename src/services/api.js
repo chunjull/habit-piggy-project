@@ -1,6 +1,6 @@
 import { db, storage } from "../utils/firebaseConfig";
 import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, collection, setDoc, getDoc, addDoc, getDocs, updateDoc, deleteDoc, Timestamp, query, orderBy } from "firebase/firestore";
+import { doc, collection, setDoc, getDoc, addDoc, getDocs, updateDoc, deleteDoc, Timestamp, query, orderBy, arrayUnion } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const auth = getAuth();
@@ -280,29 +280,42 @@ async function deleteComment(postID, commentID) {
   }
 }
 
-async function getSavings(uid) {
+async function getAchievements() {
+  try {
+    const querySnapshot = await getDocs(collection(db, "achievements"));
+    const achievementsData = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    return achievementsData;
+  } catch (error) {
+    console.error("Error getting achievements: ", error.code, error.message);
+    return [];
+  }
+}
+
+async function getUserAchievements(uid) {
   try {
     const userDocRef = doc(db, "users", uid);
-    const habitsCollectionRef = collection(userDocRef, "habits");
-    const habitsSnapshot = await getDocs(habitsCollectionRef);
-    const habitsList = habitsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-    let savings = [];
-    habitsList.forEach((habit) => {
-      habit.status.forEach((status) => {
-        if (!status.completed) {
-          savings.push({
-            date: status.date,
-            amount: Number(habit.amount),
-          });
-        }
-      });
-    });
-
-    return savings;
+    const userSnapshot = await getDoc(userDocRef);
+    if (userSnapshot.exists()) {
+      const userData = userSnapshot.data();
+      return userData.achievements || [];
+    } else {
+      console.log("No such document!");
+      return [];
+    }
   } catch (error) {
-    console.error("Error getting savings: ", error.code, error.message);
+    console.error("Error fetching user achievements: ", error.code, error.message);
     return [];
+  }
+}
+
+async function addUserAchievement(uid, achievement) {
+  try {
+    const userDocRef = doc(db, "users", uid);
+    await updateDoc(userDocRef, {
+      achievements: arrayUnion(achievement),
+    });
+  } catch (error) {
+    console.error("Error adding user achievement: ", error.code, error.message);
   }
 }
 
@@ -327,5 +340,7 @@ export {
   getComments,
   updateComment,
   deleteComment,
-  getSavings,
+  getAchievements,
+  getUserAchievements,
+  addUserAchievement,
 };

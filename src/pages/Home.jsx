@@ -18,7 +18,7 @@ function Home() {
   const [habitData, setHabitData] = useState({
     category: null,
     title: "",
-    frequency: "daily",
+    frequency: { type: "daily" },
     amount: 0,
     startDate: "",
     endDate: "",
@@ -128,10 +128,17 @@ function Home() {
 
   const handleHabitChange = (e) => {
     const { name, value } = e.target;
-    setHabitData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (name === "frequency") {
+      setHabitData((prevData) => ({
+        ...prevData,
+        frequency: { type: value },
+      }));
+    } else {
+      setHabitData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const generateStatusArray = (startDate, endDate, frequency) => {
@@ -139,13 +146,20 @@ function Home() {
     const end = new Date(endDate);
     const statusArray = [];
 
-    if (frequency === "daily") {
+    if (frequency.type === "daily") {
       for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
         statusArray.push({ date: new Date(d).toDateString(), completed: false });
       }
-    } else if (frequency === "weekly") {
+    } else if (frequency.type === "weekly") {
       for (let d = start; d <= end; d.setDate(d.getDate() + 7)) {
         statusArray.push({ date: new Date(d).toDateString(), completed: false });
+      }
+    } else if (frequency.type === "specificDays") {
+      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+        if (frequency.days.includes(daysOfWeek[d.getDay()])) {
+          statusArray.push({ date: new Date(d).toDateString(), completed: false });
+        }
       }
     }
 
@@ -160,9 +174,9 @@ function Home() {
       fetchHabits();
       handleHabitModal();
       setHabitData({
-        category: 0,
+        category: null,
         title: "",
-        frequency: "daily",
+        frequency: { type: "daily" },
         amount: 0,
         startDate: "",
         endDate: "",
@@ -294,7 +308,7 @@ function Home() {
                       <h3>{habit.title}</h3>
                       <div className="flex">
                         <p>
-                          {habit.frequency}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
+                          {habit.frequency.type}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
                         </p>
                         <p className="text-gray-500">/{habit.status.length}</p>
                       </div>
@@ -344,6 +358,7 @@ function Home() {
           calendarRef={calendarRef}
           handleHabitModal={handleHabitModal}
           habitCategories={habitCategories}
+          setHabitData={setHabitData}
         />
       </Modal>
       <Modal isOpen={isDetailModalOpen} onClose={handleDetailModal}>

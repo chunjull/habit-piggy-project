@@ -151,7 +151,11 @@ function Home() {
         statusArray.push({ date: new Date(d).toDateString(), completed: false });
       }
     } else if (frequency.type === "weekly") {
-      for (let d = start; d <= end; d.setDate(d.getDate() + 7)) {
+      // 計算 startDate 所在週的 Sunday
+      const startSunday = new Date(start);
+      startSunday.setDate(start.getDate() - start.getDay());
+
+      for (let d = startSunday; d <= end; d.setDate(d.getDate() + 7)) {
         statusArray.push({ date: new Date(d).toDateString(), completed: false });
       }
     } else if (frequency.type === "specificDays") {

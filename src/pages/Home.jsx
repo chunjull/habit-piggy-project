@@ -32,6 +32,7 @@ function Home() {
   const [postContent, setPostContent] = useState("");
   const [weekDates, setWeekDates] = useState([]);
   const [uncompletedFine, setUncompletedFine] = useState(0);
+  const [monthCalendarDate, setMonthCalendarDate] = useState(null);
   const [isPost, setIsPost] = useState(false);
   const calendarRef = useRef(null);
 
@@ -69,6 +70,11 @@ function Home() {
   useEffect(() => {
     const today = new Date();
     setSelectedDate({
+      year: today.getFullYear(),
+      month: today.getMonth(),
+      day: today.getDate(),
+    });
+    setMonthCalendarDate({
       year: today.getFullYear(),
       month: today.getMonth(),
       day: today.getDate(),
@@ -226,6 +232,18 @@ function Home() {
     }
   };
 
+  const handleMonthCalendarSelectDate = (date) => {
+    setMonthCalendarDate(date);
+    if (calendarTarget) {
+      setHabitData((prev) => ({
+        ...prev,
+        [calendarTarget]: `${date.year}-${String(date.month + 1).padStart(2, "0")}-${String(date.day).padStart(2, "0")}`,
+      }));
+      setShowMonthCalendar(false);
+      setCalendarTarget("");
+    }
+  };
+
   const handleFocus = (target) => {
     setCalendarTarget(target);
     setShowMonthCalendar(true);
@@ -356,12 +374,12 @@ function Home() {
           handleFocus={handleFocus}
           showMonthCalendar={showMonthCalendar}
           calendarTarget={calendarTarget}
-          selectedDate={selectedDate}
-          handleSelectDate={handleSelectDate}
           calendarRef={calendarRef}
           handleHabitModal={handleHabitModal}
           habitCategories={habitCategories}
           setHabitData={setHabitData}
+          monthCalendarDate={monthCalendarDate}
+          handleMonthCalendarSelectDate={handleMonthCalendarSelectDate}
         />
       </Modal>
       <Modal isOpen={isDetailModalOpen} onClose={handleDetailModal}>
@@ -385,12 +403,12 @@ function Home() {
           handleFocus={handleFocus}
           showMonthCalendar={showMonthCalendar}
           calendarTarget={calendarTarget}
-          selectedDate={selectedDate}
-          handleSelectDate={handleSelectDate}
           calendarRef={calendarRef}
           handleEditModal={handleEditModal}
           handleDeleteHabit={handleDeleteHabit}
           habitCategories={habitCategories}
+          monthCalendarDate={monthCalendarDate}
+          handleMonthCalendarSelectDate={handleMonthCalendarSelectDate}
         />
       </Modal>
     </>

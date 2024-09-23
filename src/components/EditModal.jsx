@@ -10,11 +10,11 @@ const EditModal = ({
   handleFocus,
   showMonthCalendar,
   calendarTarget,
-  selectedDate,
-  handleSelectDate,
   calendarRef,
   handleEditModal,
   habitCategories,
+  monthCalendarDate,
+  handleMonthCalendarSelectDate,
 }) => (
   <div className="space-y-4">
     <div className="flex justify-between gap-4">
@@ -87,7 +87,7 @@ const EditModal = ({
         />
         {showMonthCalendar && calendarTarget === "startDate" && (
           <div ref={calendarRef} className="absolute z-10 bg-white shadow-lg w-[300px]">
-            <MonthCalendar date={selectedDate} onSelect={handleSelectDate} />
+            <MonthCalendar date={monthCalendarDate} onSelect={handleMonthCalendarSelectDate} />
           </div>
         )}
       </div>
@@ -96,7 +96,7 @@ const EditModal = ({
         <input type="text" name="endDate" id="endDate" className="text-center" placeholder="結束日期" value={habitData.endDate} onFocus={() => handleFocus("endDate")} onChange={handleHabitChange} />
         {showMonthCalendar && calendarTarget === "endDate" && (
           <div ref={calendarRef} className="absolute z-10 bg-white shadow-lg w-[300px]">
-            <MonthCalendar date={selectedDate} onSelect={handleSelectDate} />
+            <MonthCalendar date={monthCalendarDate} onSelect={handleMonthCalendarSelectDate} />
           </div>
         )}
       </div>
@@ -123,6 +123,8 @@ EditModal.propTypes = {
   calendarRef: PropTypes.object.isRequired,
   handleEditModal: PropTypes.func.isRequired,
   habitCategories: PropTypes.array.isRequired,
+  monthCalendarDate: PropTypes.object.isRequired,
+  handleMonthCalendarSelectDate: PropTypes.func.isRequired,
 };
 
 export default EditModal;

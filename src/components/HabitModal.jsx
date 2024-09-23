@@ -10,12 +10,12 @@ const HabitModal = ({
   handleFocus,
   showMonthCalendar,
   calendarTarget,
-  selectedDate,
-  handleSelectDate,
   calendarRef,
   handleHabitModal,
   habitCategories,
   setHabitData,
+  monthCalendarDate,
+  handleMonthCalendarSelectDate,
 }) => {
   const [selectedDays, setSelectedDays] = useState(habitData.frequency.days || []);
 
@@ -116,7 +116,7 @@ const HabitModal = ({
           />
           {showMonthCalendar && calendarTarget === "startDate" && (
             <div ref={calendarRef} className="absolute z-10 bg-white shadow-lg w-[300px]">
-              <MonthCalendar date={selectedDate} onSelect={handleSelectDate} />
+              <MonthCalendar date={monthCalendarDate} onSelect={handleMonthCalendarSelectDate} />
             </div>
           )}
         </div>
@@ -134,7 +134,7 @@ const HabitModal = ({
           />
           {showMonthCalendar && calendarTarget === "endDate" && (
             <div ref={calendarRef} className="absolute z-10 bg-white shadow-lg w-[300px]">
-              <MonthCalendar date={selectedDate} onSelect={handleSelectDate} />
+              <MonthCalendar date={monthCalendarDate} onSelect={handleMonthCalendarSelectDate} />
             </div>
           )}
         </div>
@@ -159,6 +159,8 @@ HabitModal.propTypes = {
   handleHabitModal: PropTypes.func.isRequired,
   habitCategories: PropTypes.array.isRequired,
   setHabitData: PropTypes.func.isRequired,
+  monthCalendarDate: PropTypes.object.isRequired,
+  handleMonthCalendarSelectDate: PropTypes.func.isRequired,
 };
 
 export default HabitModal;

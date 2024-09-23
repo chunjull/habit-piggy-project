@@ -27,10 +27,41 @@ const EditModal = ({
   const handleDayButtonClick = (day) => {
     const newSelectedDays = selectedDays.includes(day) ? selectedDays.filter((d) => d !== day) : [...selectedDays, day];
     setSelectedDays(newSelectedDays);
-    setHabitData((prevData) => ({
-      ...prevData,
-      frequency: { ...prevData.frequency, days: newSelectedDays },
-    }));
+    setHabitData((prevData) => {
+      const newFrequency = { ...prevData.frequency, days: newSelectedDays };
+      const newStatus = generateStatusArray(prevData.startDate, prevData.endDate, newFrequency);
+      return {
+        ...prevData,
+        frequency: newFrequency,
+        status: newStatus,
+      };
+    });
+  };
+
+  const generateStatusArray = (startDate, endDate, frequency) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const statusArray = [];
+
+    if (frequency.type === "daily") {
+      for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+        statusArray.push({ date: new Date(d).toDateString(), completed: false });
+      }
+    } else if (frequency.type === "weekly") {
+      for (let d = start; d <= end; d.setDate(d.getDate() + 7)) {
+        statusArray.push({ date: new Date(d).toDateString(), completed: false });
+      }
+    } else if (frequency.type === "specificDays") {
+      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      const selectedDays = frequency.days || [];
+      for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+        if (selectedDays.includes(daysOfWeek[d.getDay()])) {
+          statusArray.push({ date: new Date(d).toDateString(), completed: false });
+        }
+      }
+    }
+
+    return statusArray;
   };
 
   return (

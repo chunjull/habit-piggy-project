@@ -1,6 +1,6 @@
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../utils/AuthContext";
-import { getAllUsers, getHabits, getSavings, updateUserAchievements } from "../services/api";
+import { getAllUsers, getHabits, getSavings } from "../services/api";
 
 const HabitAchievements = ["習以為常", "習蘭紅茶", "自強不習", "今非習比"];
 const SavingsAchievements = ["金豬玉葉", "錙豬必較", "豬圓玉潤", "豬絲馬跡"];
@@ -16,7 +16,6 @@ function Rank() {
   const [userHabitCounts, setUserHabitCounts] = useState([]);
   const [userSavingsCounts, setUserSavingsCounts] = useState([]);
   const { user } = useContext(AuthContext);
-  const currentCycleIndexRef = useRef(getCurrentCycleIndex());
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,25 +30,6 @@ function Rank() {
     };
     fetchData();
   }, [isActiveTab]);
-
-  useEffect(() => {
-    const checkCycleChange = () => {
-      const newCycleIndex = getCurrentCycleIndex();
-      if (newCycleIndex !== currentCycleIndexRef.current) {
-        currentCycleIndexRef.current = newCycleIndex;
-        addAchievementToTopUser();
-      }
-    };
-
-    const now = new Date();
-    const nextCheckTime = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0) - now;
-    const initialTimeout = setTimeout(() => {
-      checkCycleChange();
-      setInterval(checkCycleChange, 1000 * 60 * 60 * 24); // 每天檢查一次
-    }, nextCheckTime);
-
-    return () => clearTimeout(initialTimeout);
-  }, [userHabitCounts, userSavingsCounts]);
 
   const getStartAndEndOfWeek = () => {
     const today = new Date();
@@ -93,24 +73,6 @@ function Rank() {
       })
     );
     return userSavingsCounts;
-  };
-
-  const addAchievementToTopUser = async () => {
-    if (isActiveTab === "habit" && userHabitCounts.length > 0) {
-      const topUser = userHabitCounts[0];
-      const newAchievement = HabitAchievements[currentCycleIndexRef.current];
-      if (!topUser.achievements.includes(newAchievement)) {
-        topUser.achievements.push(newAchievement);
-        await updateUserAchievements(topUser.uid, topUser.achievements);
-      }
-    } else if (isActiveTab === "savings" && userSavingsCounts.length > 0) {
-      const topUser = userSavingsCounts[0];
-      const newAchievement = SavingsAchievements[currentCycleIndexRef.current];
-      if (!topUser.achievements.includes(newAchievement)) {
-        topUser.achievements.push(newAchievement);
-        await updateUserAchievements(topUser.uid, topUser.achievements);
-      }
-    }
   };
 
   const renderTopTenUsers = (userCounts, type) => {

@@ -16,7 +16,7 @@ function Home() {
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [habitData, setHabitData] = useState({
-    category: 0,
+    category: null,
     title: "",
     frequency: "daily",
     amount: 0,

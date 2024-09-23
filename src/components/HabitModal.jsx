@@ -1,12 +1,12 @@
 import MonthCalendar from "./MonthCalendar";
 import PropTypes from "prop-types";
-import CustomSelect from "./CustomSelect";
+import CategorySelect from "./CategorySelect";
 
 const HabitModal = ({ habitData, handleChange, handleAddHabit, handleFocus, showMonthCalendar, calendarTarget, selectedDate, handleSelectDate, calendarRef, handleHabitModal, habitCategories }) => (
   <div className="space-y-4">
     <div className="flex justify-between gap-4">
       <div className="flex gap-4 w-full">
-        <CustomSelect options={habitCategories} value={habitData.category} onChange={(value) => handleChange({ target: { name: "category", value } })} />
+        <CategorySelect options={habitCategories} value={habitData.category} onChange={(value) => handleChange({ target: { name: "category", value } })} />
         <input type="text" name="title" placeholder="輸入習慣名稱" className="py-2 px-4 w-full" value={habitData.title} onChange={handleChange} />
       </div>
       <button onClick={handleHabitModal}>close</button>

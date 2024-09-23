@@ -89,14 +89,14 @@ function Savings() {
             periodData[periodKey] += Number(habit.amount);
             savings += 1;
             total += Number(habit.amount);
+
+            if (!categoryData[habit.category]) {
+              categoryData[habit.category] = 0;
+            }
+            categoryData[habit.category] += 1;
           } else {
             completed += 1;
           }
-
-          if (!categoryData[habit.category]) {
-            categoryData[habit.category] = 0;
-          }
-          categoryData[habit.category] += 1;
         }
       });
     });
@@ -222,22 +222,35 @@ function Savings() {
           <p className="text-center mt-2">僅顯示最新的 50 筆存款記錄</p>
         </div>
       ) : (
-        <div className="p-4 border space-y-4">
-          <div>習慣類別總類</div>
-          <div className="w-full h-[400px]">
-            <CategoryChart categoryData={categoryData} habitCategories={habitCategories} />
+        <div className="p-4 border space-y-4 min-h-screen">
+          <div className="flex justify-between items-center">
+            <h2>習慣類別總覽</h2>
+            <select className="border" value={filter} onChange={(e) => setFilter(e.target.value)}>
+              <option value="week">本週</option>
+              <option value="month">本月</option>
+              <option value="all">全部</option>
+            </select>
           </div>
-          <ul className="space-y-3">
-            {habitCategories.map((category) => (
-              <li key={category.id} className="flex justify-between items-center">
-                <div className="flex items-center gap-3">
-                  <div className={`w-4 h-4 rounded-full`} style={{ backgroundColor: category.color }}></div>
-                  <p>{category.name}</p>
-                </div>
-                <p>{(((categoryData[category.id] || 0) / Object.values(categoryData).reduce((a, b) => a + b, 0)) * 100).toFixed(2)} %</p>
-              </li>
-            ))}
-          </ul>
+          {savingsCount === 0 ? (
+            <p>查無資料</p>
+          ) : (
+            <div>
+              <div className="w-full h-[400px]">
+                <CategoryChart categoryData={categoryData} habitCategories={habitCategories} />
+              </div>
+              <ul className="space-y-3">
+                {habitCategories.map((category) => (
+                  <li key={category.id} className="flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-4 h-4 rounded-full`} style={{ backgroundColor: category.color }}></div>
+                      <p>{category.name}</p>
+                    </div>
+                    <p>{(((categoryData[category.id] || 0) / Object.values(categoryData).reduce((a, b) => a + b, 0)) * 100).toFixed(1)} %</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
     </div>

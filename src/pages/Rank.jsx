@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../utils/AuthContext";
-import { getAllUsers, getHabits, getSavings } from "../services/api";
+import { getAllUsers, getHabits } from "../services/api";
 
 const HabitAchievements = ["習以為常", "習蘭紅茶", "自強不習", "今非習比"];
 const SavingsAchievements = ["金豬玉葉", "錙豬必較", "豬圓玉潤", "豬絲馬跡"];
@@ -62,12 +62,19 @@ function Rank() {
 
   const calculateUserSavingsCounts = async (startOfWeek, endOfWeek) => {
     const users = await getAllUsers();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     const userSavingsCounts = await Promise.all(
       users.map(async (user) => {
-        const savings = await getSavings(user.uid);
-        const totalSavings = savings.reduce((total, saving) => {
-          const savingDate = new Date(saving.date);
-          return savingDate >= startOfWeek && savingDate <= endOfWeek ? total + saving.amount : total;
+        const habits = await getHabits(user.uid);
+        const totalSavings = habits.reduce((total, habit) => {
+          const penaltyAmount = habit.amount;
+          const incompleteCount = habit.status.filter((status) => {
+            const statusDate = new Date(status.date);
+            return !status.completed && statusDate >= startOfWeek && statusDate <= endOfWeek && statusDate < today;
+          }).length;
+          return total + incompleteCount * penaltyAmount;
         }, 0);
         return { ...user, totalSavings };
       })

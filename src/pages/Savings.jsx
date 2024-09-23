@@ -15,18 +15,16 @@ function Savings() {
   const [habits, setHabits] = useState([]);
   const { user } = useContext(AuthContext);
 
-  const habitCategories = {
-    0: "生產力",
-    1: "個人成長",
-    2: "運動健身",
-    3: "飲食健康",
-    4: "心靈成長",
-    5: "手作興趣",
-    6: "財務管理",
-    7: "環境生活",
-  };
-
-  const COLORS = ["#FF6961", "#FFB480", "#FFE552", "#42D6A4", "#08CAD1", "#59ADF6", "#9D94FF", "#C780E8"];
+  const habitCategories = [
+    { id: 0, name: "生產力", color: "#FF6961" },
+    { id: 1, name: "個人成長", color: "#FFB480" },
+    { id: 2, name: "運動健身", color: "#FFE552" },
+    { id: 3, name: "飲食健康", color: "#42D6A4" },
+    { id: 4, name: "心靈成長", color: "#08CAD1" },
+    { id: 5, name: "手作興趣", color: "#59ADF6" },
+    { id: 6, name: "財務管理", color: "#9D94FF" },
+    { id: 7, name: "環境生活", color: "#C780E8" },
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -227,16 +225,16 @@ function Savings() {
         <div className="p-4 border space-y-4">
           <div>習慣類別總類</div>
           <div className="w-full h-[400px]">
-            <CategoryChart categoryData={categoryData} />
+            <CategoryChart categoryData={categoryData} habitCategories={habitCategories} />
           </div>
           <ul className="space-y-3">
-            {Object.keys(habitCategories).map((key, index) => (
-              <li key={key} className="flex justify-between items-center">
+            {habitCategories.map((category) => (
+              <li key={category.id} className="flex justify-between items-center">
                 <div className="flex items-center gap-3">
-                  <div className={`w-4 h-4 rounded-full`} style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
-                  <p>{habitCategories[key]}</p>
+                  <div className={`w-4 h-4 rounded-full`} style={{ backgroundColor: category.color }}></div>
+                  <p>{category.name}</p>
                 </div>
-                <p>{(((categoryData[key] || 0) / Object.values(categoryData).reduce((a, b) => a + b, 0)) * 100).toFixed(2)} %</p>
+                <p>{(((categoryData[category.id] || 0) / Object.values(categoryData).reduce((a, b) => a + b, 0)) * 100).toFixed(2)} %</p>
               </li>
             ))}
           </ul>

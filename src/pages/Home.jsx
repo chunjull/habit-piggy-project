@@ -177,6 +177,14 @@ function Home() {
 
   const handleAddHabit = async () => {
     if (user) {
+      const start = new Date(habitData.startDate);
+      const end = new Date(habitData.endDate);
+
+      if (end <= start) {
+        alert("結束日期必須晚於開始日期");
+        return;
+      }
+
       const statusArray = generateStatusArray(habitData.startDate, habitData.endDate, habitData.frequency);
       const newHabitData = { ...habitData, status: statusArray };
       await addHabit(user.uid, newHabitData);
@@ -198,6 +206,14 @@ function Home() {
 
   const handleUpdateHabit = async () => {
     if (user && selectedHabit) {
+      const start = new Date(habitData.startDate);
+      const end = new Date(habitData.endDate);
+
+      if (end <= start) {
+        alert("結束日期必須晚於開始日期");
+        return;
+      }
+
       const updatedHabitData = { ...habitData, id: selectedHabit.id };
       await updateHabit(user.uid, selectedHabit.id, updatedHabitData);
       fetchHabits();

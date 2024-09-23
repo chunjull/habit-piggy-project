@@ -79,7 +79,7 @@ const EditModal = ({
           type="text"
           name="startDate"
           id="startDate"
-          className="text-center"
+          className="text-center w-28"
           placeholder="開始日期"
           value={habitData.startDate}
           onFocus={() => handleFocus("startDate")}
@@ -93,7 +93,16 @@ const EditModal = ({
       </div>
       <p>~</p>
       <div className="relative">
-        <input type="text" name="endDate" id="endDate" className="text-center" placeholder="結束日期" value={habitData.endDate} onFocus={() => handleFocus("endDate")} onChange={handleHabitChange} />
+        <input
+          type="text"
+          name="endDate"
+          id="endDate"
+          className="text-center w-28"
+          placeholder="結束日期"
+          value={habitData.endDate}
+          onFocus={() => handleFocus("endDate")}
+          onChange={handleHabitChange}
+        />
         {showMonthCalendar && calendarTarget === "endDate" && (
           <div ref={calendarRef} className="absolute z-10 bg-white shadow-lg w-[300px]">
             <MonthCalendar date={monthCalendarDate} onSelect={handleMonthCalendarSelectDate} />

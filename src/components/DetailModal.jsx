@@ -14,7 +14,7 @@ const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncomp
               <h3>{selectedHabit.title}</h3>
               <button onClick={() => handleEditModal(selectedHabit)}>edit</button>
             </div>
-            <p>{selectedHabit.frequency}</p>
+            <p>{selectedHabit.frequency.type}</p>
           </div>
         </div>
         <button onClick={handleDetailModal}>close</button>

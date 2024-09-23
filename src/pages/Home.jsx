@@ -151,7 +151,6 @@ function Home() {
         statusArray.push({ date: new Date(d).toDateString(), completed: false });
       }
     } else if (frequency.type === "weekly") {
-      // 計算 startDate 所在週的 Sunday
       const startSunday = new Date(start);
       startSunday.setDate(start.getDate() - start.getDay());
 

@@ -348,7 +348,7 @@ function Member() {
                           <h3>{habit.title}</h3>
                           <div className="flex">
                             <p>
-                              {habit.frequency}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
+                              {habit.frequency.type}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
                             </p>
                             <p className="text-gray-500">/{habit.status.length}</p>
                           </div>

@@ -140,9 +140,23 @@ function Member() {
     }
   };
 
+  const handleHabitChange = (e) => {
+    const { name, value } = e.target;
+    setHabitData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   const fetchHabits = async () => {
-    const habitsList = await getHabits(user.uid);
-    setHabits(habitsList);
+    if (user) {
+      try {
+        const habitsList = await getHabits(user.uid);
+        setHabits(habitsList);
+      } catch (error) {
+        console.error("Error fetching habits: ", error);
+      }
+    }
   };
 
   const handleAddPost = async () => {
@@ -182,13 +196,16 @@ function Member() {
 
   const handleUpdateHabit = async () => {
     if (user && selectedHabit) {
-      const updatedHabitData = { ...habitData, id: selectedHabit.id };
-      await updateHabit(user.uid, selectedHabit.id, updatedHabitData);
-      fetchHabits();
-      setIsEditModalOpen(false);
-      setIsDetailModalOpen(false);
+      try {
+        await updateHabit(user.uid, selectedHabit.id, habitData);
+        await fetchHabits(); // 確保重新獲取習慣列表
+        setIsEditModalOpen(false); // 關閉編輯彈窗
+        console.log("Habit updated successfully");
+      } catch (error) {
+        console.error("Error updating habit: ", error);
+      }
     } else {
-      console.error("User not authenticated or habit not selected");
+      console.error("No user or selected habit");
     }
   };
 
@@ -244,6 +261,8 @@ function Member() {
   if (isPost) {
     return <Navigate to="/posts" />;
   }
+
+  console.log(habitData);
 
   return (
     <>
@@ -356,7 +375,7 @@ function Member() {
       <Modal isOpen={isEditModalOpen} onClose={handleEditModal}>
         <EditModal
           habitData={habitData}
-          handleChange={handleChange}
+          handleHabitChange={handleHabitChange}
           handleUpdateHabit={handleUpdateHabit}
           handleFocus={handleFocus}
           showMonthCalendar={showMonthCalendar}

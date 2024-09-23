@@ -94,6 +94,15 @@ function Home() {
 
   const handleHabitModal = () => {
     setIsHabitModalOpen(!isHabitModalOpen);
+    setHabitData({
+      category: null,
+      title: "",
+      frequency: "daily",
+      amount: 0,
+      startDate: "",
+      endDate: "",
+      status: [],
+    });
   };
 
   const handleDetailModal = () => {

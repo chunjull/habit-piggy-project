@@ -383,7 +383,7 @@ function Home() {
             );
           })}
       </ul>
-      <button className="fixed right-4 bottom-20 bg-slate-300" onClick={handleHabitModal}>
+      <button className="fixed right-4 bottom-28 bg-slate-300" onClick={handleHabitModal}>
         add habit
       </button>
       <Modal isOpen={isHabitModalOpen}>

@@ -1,12 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { layoutIcons } from "../assets/icons";
 import PropTypes from "prop-types";
+import Modal from "./Modal";
 
-function Layout({ children }) {
+function Layout({ children, isModalOpen, modalContent }) {
   const location = useLocation();
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen">
+    <div className="flex flex-col md:flex-row min-h-screen relative">
       <nav className="fixed inset-x-0 bottom-0 md:w-1/4 pt-2 pb-3 px-4 border bg-white z-10 md:fixed md:top-0 md:left-0 md:h-full md:overflow-auto">
         <ul className="grid grid-cols-6 items-center md:grid-cols-1 md:gap-6">
           <li className="p-2">
@@ -44,13 +45,18 @@ function Layout({ children }) {
           </li>
         </ul>
       </nav>
-      <div className="mt-0 mb-[86px] md:mb-0 md:ml-[244px] w-full">{children}</div>
+      <div className="mt-0 mb-[86px] md:mb-0 md:ml-[244px] w-full relative">
+        {children}
+        <Modal isOpen={isModalOpen}>{modalContent}</Modal>
+      </div>
     </div>
   );
 }
 
 Layout.propTypes = {
   children: PropTypes.node,
+  isModalOpen: PropTypes.bool.isRequired,
+  modalContent: PropTypes.node,
 };
 
 export default Layout;

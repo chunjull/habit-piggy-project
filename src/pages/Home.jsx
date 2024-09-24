@@ -335,7 +335,7 @@ function Home() {
   return (
     <>
       <WeekCalendar date={selectedDate} onSelect={handleSelectDate} onWeekChange={setWeekDates} />
-      <ul className="space-y-4 p-4 mb-11">
+      <ul className="space-y-4 p-4">
         {Array.isArray(habits) &&
           habits.map((habit) => {
             const habitCategory = habitCategories.find((category) => category.id === habit.category);

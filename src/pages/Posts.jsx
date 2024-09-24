@@ -80,7 +80,7 @@ function Posts() {
   };
 
   return (
-    <div className="p-4 space-y-4 mb-16 md:mb-0">
+    <div className="p-4 space-y-4">
       <div className="flex justify-between items-center">
         <h2>貼文總覽</h2>
         <select className="border" value={filter} onChange={(e) => setFilter(e.target.value)}>

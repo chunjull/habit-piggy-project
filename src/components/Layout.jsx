@@ -44,7 +44,7 @@ function Layout({ children }) {
           </li>
         </ul>
       </nav>
-      <div className="flex-1 mt-0 md:ml-1/4 overflow-auto">{children}</div>
+      <div className="mt-0 mb-[86px] md:mb-0 md:ml-[244px] w-full">{children}</div>
     </div>
   );
 }

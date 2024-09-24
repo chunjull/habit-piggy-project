@@ -185,7 +185,7 @@ function Savings() {
   };
 
   return (
-    <div className="p-4 space-y-4 mb-16 md:mb-0">
+    <div className="p-4 space-y-4">
       <ul className="grid grid-cols-2 w-full">
         <li className={`border p-2 text-center ${isOverview ? "bg-gray-200" : ""}`} onClick={() => setIsOverview(true)}>
           存款總覽

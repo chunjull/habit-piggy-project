@@ -27,7 +27,7 @@ const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncomp
       </div>
       <div className="grid grid-cols-10 gap-3">
         {selectedHabit.status.map((status, index) => (
-          <div key={index} className={`border h-9 md:h-12 ${index < selectedHabit.status.filter((s) => s.completed).length ? "bg-yellow-400" : ""}`}></div>
+          <div key={index} className={`border aspect-square ${index < selectedHabit.status.filter((s) => s.completed).length ? "bg-yellow-400" : ""}`}></div>
         ))}
       </div>
       <div className="flex justify-between">

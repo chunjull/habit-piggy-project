@@ -9,7 +9,7 @@ const Modal = ({ isOpen, children }) => {
 
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className={`p-4 w-2/3 h-fit bg-slate-100 max-h-[80vh] overflow-auto space-y-4 md:w-1/2 ${isSettingModal ? "" : "transform top-1/2 translate-y-[-50%]"}`}>{children}</div>
+      <div className={`p-4 w-2/3 h-fit bg-slate-100 max-h-[80vh] overflow-auto space-y-4 ${isSettingModal ? "" : "transform top-1/2 translate-y-[-50%]"}`}>{children}</div>
     </div>
   );
 };

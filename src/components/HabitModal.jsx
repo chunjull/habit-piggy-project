@@ -115,7 +115,7 @@ const HabitModal = ({
             onChange={handleHabitChange}
           />
           {showMonthCalendar && calendarTarget === "startDate" && (
-            <div ref={calendarRef} className="absolute z-10 bg-white shadow-lg w-[300px]">
+            <div ref={calendarRef} className="absolute -top-36 -left-8 z-10 bg-white shadow-lg w-[300px]">
               <MonthCalendar date={monthCalendarDate} onSelect={handleMonthCalendarSelectDate} />
             </div>
           )}
@@ -133,7 +133,7 @@ const HabitModal = ({
             onChange={handleHabitChange}
           />
           {showMonthCalendar && calendarTarget === "endDate" && (
-            <div ref={calendarRef} className="absolute z-10 bg-white shadow-lg w-[300px]">
+            <div ref={calendarRef} className="absolute -top-36 -left-64 z-10 bg-white shadow-lg w-[300px]">
               <MonthCalendar date={monthCalendarDate} onSelect={handleMonthCalendarSelectDate} />
             </div>
           )}

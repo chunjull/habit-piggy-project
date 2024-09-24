@@ -128,7 +128,7 @@ const EditModal = ({
         <label htmlFor="amount">習慣罰款</label>
         <div className="flex gap-2">
           <p>NT$</p>
-          <input type="number" name="amount" id="amount" className="px-4" value={habitData.amount} onChange={handleHabitChange} />
+          <input type="number" name="amount" id="amount" className="px-4 text-end" value={habitData.amount} onChange={handleHabitChange} />
         </div>
       </div>
       <div className="flex justify-between gap-4 w-full">
@@ -147,7 +147,7 @@ const EditModal = ({
             onChange={handleHabitChange}
           />
           {showMonthCalendar && calendarTarget === "startDate" && (
-            <div ref={calendarRef} className="absolute z-10 bg-white shadow-lg w-[300px]">
+            <div ref={calendarRef} className="absolute -top-36 -left-8 z-10 bg-white shadow-lg w-[300px]">
               <MonthCalendar date={monthCalendarDate} onSelect={handleMonthCalendarSelectDate} />
             </div>
           )}
@@ -165,7 +165,7 @@ const EditModal = ({
             onChange={handleHabitChange}
           />
           {showMonthCalendar && calendarTarget === "endDate" && (
-            <div ref={calendarRef} className="absolute z-10 bg-white shadow-lg w-[300px]">
+            <div ref={calendarRef} className="absolute -top-36 -left-64 z-10 bg-white shadow-lg w-[300px]">
               <MonthCalendar date={monthCalendarDate} onSelect={handleMonthCalendarSelectDate} />
             </div>
           )}

@@ -28,7 +28,7 @@ const CategorySelect = ({ options, value, onChange }) => {
         )}
       </div>
       {isOpen && (
-        <ul className="absolute top-14 z-10 bg-white border p-4 grid grid-cols-4 min-w-max gap-6">
+        <ul className="absolute top-12 z-10 bg-white border p-2 grid grid-cols-4 min-w-max gap-y-2 gap-x-4">
           {options.map((option) => (
             <li key={option.id} className="w-16 h-fit cursor-pointer flex flex-col items-center gap-1 text-nowrap" onClick={() => handleSelect(option.id)}>
               <div className="bg-slate-300 w-10 h-10 rounded-full flex justify-center items-center hover:bg-yellow-400">

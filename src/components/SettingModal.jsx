@@ -10,7 +10,7 @@ const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSav
     <div className="flex items-center gap-3">
       <img src={profileData.avatar} alt="user's avatar" className="w-10 h-10" />
       <div>
-        <input type="file" name="avatar" id="profile" onChange={handleChange} accept="image/jpg,image/jpeg,image/png,image/gif" />
+        <input type="file" name="avatar" id="profile" onChange={handleChange} accept="image/jpg,image/jpeg,image/png,image/gif" className="w-full" />
         <p>您的頭像將會被公開。</p>
       </div>
     </div>
@@ -37,7 +37,7 @@ const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSav
         <option value="true">是</option>
       </select>
     </div>
-    <button className="border w-full" onClick={handleSaveAndClose}>
+    <button className="border bg-slate-300 w-full" onClick={handleSaveAndClose}>
       儲存
     </button>
   </div>

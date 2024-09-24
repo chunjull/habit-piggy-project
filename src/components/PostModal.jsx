@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { getPostBackgrounds } from "../services/api";
 
-const PostModal = ({ postContent, setPostContent, setPostBackground, handleAddPost, handlePostModal }) => {
+const PostModal = ({ postContent, setPostContent, postBackground, setPostBackground, handleAddPost, handlePostModal }) => {
   const [backgrounds, setBackgrounds] = useState([]);
 
   useEffect(() => {
@@ -28,7 +28,21 @@ const PostModal = ({ postContent, setPostContent, setPostBackground, handleAddPo
           ))}
         </div>
       </div>
-      <textarea className="w-full h-40 border p-2" placeholder="輸入貼文內容..." required value={postContent} onChange={(e) => setPostContent(e.target.value)}></textarea>
+      <div
+        className="w-full min-h-40 h-fit border p-2 overflow-auto flex justify-center items-center"
+        style={{
+          backgroundImage: `url(${postBackground})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <textarea
+          className="w-full h-full bg-transparent border-none resize-none outline-none text-center"
+          placeholder="輸入貼文內容..."
+          value={postContent}
+          onChange={(e) => setPostContent(e.target.value)}
+        />
+      </div>
       <button className="py-1 w-full bg-slate-300" onClick={handleAddPost}>
         發佈
       </button>

@@ -1,7 +1,7 @@
 import { db, storage } from "../utils/firebaseConfig";
 import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { doc, collection, setDoc, getDoc, addDoc, getDocs, updateDoc, deleteDoc, Timestamp, query, orderBy, arrayUnion } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 
 const auth = getAuth();
 
@@ -319,6 +319,19 @@ async function addUserAchievement(uid, achievement) {
   }
 }
 
+async function getPostBackgrounds() {
+  try {
+    const storageRef = ref(storage, "post_backgrounds");
+    const result = await listAll(storageRef);
+    const urlPromises = result.items.map((itemRef) => getDownloadURL(itemRef));
+    const urls = await Promise.all(urlPromises);
+    return urls;
+  } catch (error) {
+    console.error("Error getting post backgrounds: ", error.code, error.message);
+    return [];
+  }
+}
+
 export {
   registerUser,
   logoutUser,
@@ -343,4 +356,5 @@ export {
   getAchievements,
   getUserAchievements,
   addUserAchievement,
+  getPostBackgrounds,
 };

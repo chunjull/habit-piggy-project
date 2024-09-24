@@ -10,21 +10,6 @@ function Posts() {
   const [showSelect, setShowSelect] = useState({});
   const { user } = useContext(AuthContext);
 
-  const backgroundColors = [
-    "bg-red-100",
-    "bg-orange-100",
-    "bg-yellow-100",
-    "bg-green-100",
-    "bg-cyan-100",
-    "bg-blue-100",
-    "bg-indigo-100",
-    "bg-violet-100",
-    "bg-purple-100",
-    "bg-stone-100",
-    "bg-fuchsia-100",
-    "bg-rose-100",
-  ];
-
   useEffect(() => {
     const fetchPosts = async () => {
       const postsList = await getAllPosts();
@@ -105,7 +90,6 @@ function Posts() {
       </div>
       <ul className="space-y-4">
         {filteredPosts.map((post) => {
-          const randomColor = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
           return (
             <li key={post.id} className="p-4 border space-y-2">
               <div className="flex justify-between items-start">
@@ -120,7 +104,10 @@ function Posts() {
                   </div>
                 </div>
               </div>
-              <div className={`w-full min-h-52 h-fit ${randomColor} flex justify-center items-center p-4`}>
+              <div
+                className={`w-full min-h-52 h-fit flex justify-center items-center p-4 ${!post.background ? "bg-slate-100" : ""}`}
+                style={post.background ? { backgroundImage: `url(${post.background})`, backgroundSize: "cover", backgroundPosition: "center" } : {}}
+              >
                 <p>{post.content}</p>
               </div>
               <div className="flex gap-3">

@@ -30,6 +30,7 @@ function Home() {
   const [calendarTarget, setCalendarTarget] = useState("");
   const [selectedHabit, setSelectedHabit] = useState(null);
   const [postContent, setPostContent] = useState("");
+  const [postBackground, setPostBackground] = useState("");
   const [weekDates, setWeekDates] = useState([]);
   const [uncompletedFine, setUncompletedFine] = useState(0);
   const [monthCalendarDate, setMonthCalendarDate] = useState(null);
@@ -316,12 +317,14 @@ function Home() {
     if (user && selectedHabit) {
       const postData = {
         content: postContent,
+        background: postBackground,
         habitId: selectedHabit.id,
       };
       await addPost(user.uid, postData);
       setIsPost(true);
       handlePostModal();
       setPostContent("");
+      setPostBackground("");
     }
   };
 
@@ -410,7 +413,14 @@ function Home() {
         />
       </Modal>
       <Modal isOpen={isPostModalOpen} onClose={handlePostModal}>
-        <PostModal postContent={postContent} setPostContent={setPostContent} handleAddPost={handleAddPost} handlePostModal={handlePostModal} />
+        <PostModal
+          postContent={postContent}
+          setPostContent={setPostContent}
+          postBackground={postBackground}
+          setPostBackground={setPostBackground}
+          handleAddPost={handleAddPost}
+          handlePostModal={handlePostModal}
+        />
       </Modal>
       <Modal isOpen={isEditModalOpen} onClose={handleEditModal}>
         <EditModal

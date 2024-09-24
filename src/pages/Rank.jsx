@@ -91,7 +91,7 @@ function Rank() {
           <img src={user.avatar} alt="user's avatar" className="w-10 h-10" />
           <div>
             <p>{user.name}</p>
-            <p>Lv. {user.levelPoints}</p>
+            {/* <p>Lv. {user.levelPoints}</p> */}
           </div>
         </div>
         <div className="text-end">
@@ -115,7 +115,7 @@ function Rank() {
           <img src={currentUserData.avatar} alt="user's avatar" className="w-10 h-10" />
           <div>
             <p>{currentUserData.name}</p>
-            <p>Lv. {currentUserData.levelPoints}</p>
+            {/* <p>Lv. {currentUserData.levelPoints}</p> */}
           </div>
         </div>
         <div className="text-end text-white">

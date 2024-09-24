@@ -298,7 +298,7 @@ function Member() {
                   <img src={profileData.avatar} alt="user's avatar" className="w-10 h-10" />
                   <div className="flex flex-col">
                     <h3>{profileData.name}</h3>
-                    <p className="text-slate-500">Lv.{profileData.levelPoints}</p>
+                    {/* <p className="text-slate-500">Lv.{profileData.levelPoints}</p> */}
                   </div>
                 </div>
               </div>

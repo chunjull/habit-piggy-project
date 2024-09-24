@@ -8,11 +8,11 @@ function Layout({ children, isModalOpen, modalContent }) {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen relative">
-      <nav className="fixed inset-x-0 bottom-0 md:w-1/4 pt-2 pb-3 px-4 border bg-white z-10 md:fixed md:top-0 md:left-0 md:h-full md:overflow-auto">
+      <nav className="fixed inset-x-0 bottom-0 md:w-1/4 pt-4 pb-3 px-4 border bg-white z-10 md:fixed md:top-0 md:left-0 md:h-full md:overflow-auto">
         <ul className="grid grid-cols-6 items-center md:grid-cols-1 md:gap-6">
-          <li className="p-2">
+          {/* <li className="p-2">
             <Link to="/">Habit Piggy</Link>
-          </li>
+          </li> */}
           <li className={`p-2 rounded-lg hover:md:bg-yellow-300 ${location.pathname === "/home" ? "md:bg-yellow-400" : ""}`}>
             <Link to="/home" className="flex flex-col items-center md:flex-row">
               <layoutIcons.TbHome2 className={`w-6 h-6 md:mr-4 ${location.pathname === "/home" ? "text-yellow-400 md:text-white" : ""}`} />

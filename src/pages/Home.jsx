@@ -370,13 +370,15 @@ function Home() {
                     const IconComponent = status && status.completed ? habitDetailIcons.TbCircleCheckFilled : habitDetailIcons.TbCircleCheck;
                     return (
                       <div key={index} className="flex flex-col items-center">
-                        <IconComponent
-                          className={`w-10 h-10 md:w-12 md:h-12 ${status && status.completed ? "text-primary" : "text-gray-300"}`}
-                          onClick={() => status && handleCheck(habit.id, status.date)}
-                          disabled={!status}
-                        >
-                          {status ? "CHECK" : ""}
-                        </IconComponent>
+                        {status ? (
+                          <IconComponent
+                            className={`w-10 h-10 md:w-12 md:h-12 cursor-pointer ${status && status.completed ? "text-primary" : "text-black-300"}`}
+                            onClick={() => status && handleCheck(habit.id, status.date)}
+                            disabled={!status}
+                          />
+                        ) : (
+                          <habitDetailIcons.TbCircleCheckFilled className="w-10 h-10 md:w-12 md:h-12 text-black-200 cursor-not-allowed" />
+                        )}
                       </div>
                     );
                   })}

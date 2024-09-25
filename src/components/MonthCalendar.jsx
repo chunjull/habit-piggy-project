@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { weekCalendarIcons } from "../assets/icons";
 
 const MonthCalendar = ({ date, onSelect }) => {
   const [weekNames] = useState(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
@@ -77,9 +78,13 @@ const MonthCalendar = ({ date, onSelect }) => {
   return (
     <div className="p-4 bg-slate-300">
       <div className="flex justify-between mb-3">
-        <button onClick={() => changePeriod(false)}>prev</button>
+        <button onClick={() => changePeriod(false)}>
+          <weekCalendarIcons.TbChevronLeft className="w-6 h-6" />
+        </button>
         <h1>{headerText}</h1>
-        <button onClick={() => changePeriod(true)}>next</button>
+        <button onClick={() => changePeriod(true)}>
+          <weekCalendarIcons.TbChevronRight className="w-6 h-6" />
+        </button>
       </div>
       <div className="grid grid-cols-7 text-center">
         {weekNames.map((name, index) => (

@@ -19,6 +19,9 @@ import {
   TbCircleCheck,
   TbCircleCheckFilled,
   TbPlus,
+  TbX,
+  TbPencil,
+  TbLayoutGrid,
 } from "react-icons/tb";
 export const layoutIcons = {
   TbHome2,
@@ -56,4 +59,10 @@ export const habitDetailIcons = {
 
 export const habitAddIcon = {
   TbPlus,
+};
+
+export const modalIcons = {
+  TbX,
+  TbPencil,
+  TbLayoutGrid,
 };

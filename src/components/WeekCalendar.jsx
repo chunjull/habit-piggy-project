@@ -101,25 +101,21 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
   const headerText = `${monthNames[firstDayOfWeek.getMonth()]} ${firstDayOfWeek.getFullYear()}`;
 
   return (
-    <div className="p-4 bg-slate-300">
+    <div className="p-4 bg-black-50 rounded-b-3xl">
       <div className="flex justify-between mb-3">
         <button onClick={() => changePeriod(false)}>prev</button>
-        <h1>{headerText}</h1>
+        <h1 className="font-bold text-lg leading-6">{headerText}</h1>
         <button onClick={() => changePeriod(true)}>next</button>
       </div>
-      <div className="grid grid-cols-7 gap-x-4 text-center">
-        {weekNames.map((name, index) => (
-          <div key={index} className="font-bold">
-            {name}
-          </div>
-        ))}
+      <div className="grid grid-cols-7 gap-y-1 gap-x-4 text-center">
         {daysInWeek().map((day, index) => (
           <div
             key={index}
-            className={`border-t border-r flex items-center justify-center bg-white ${checkCurrentDate(day) ? "bg-yellow-400" : checkSelectedDate(day) ? "bg-yellow-200" : ""}`}
+            className={`py-1 px-1 flex flex-col items-center gap-1 rounded-lg ${checkCurrentDate(day) ? "bg-primary" : checkSelectedDate(day) ? "bg-primary-light" : "bg-transparent"}`}
             onClick={() => selectDate(day)}
           >
-            {day.value}
+            <div className={`font-bold text-lg leading-6 ${checkCurrentDate(day) ? "text-black-50" : "text-black"}`}>{day.value}</div>
+            <div className={`font-medium text-sm leading-5 ${checkCurrentDate(day) ? "text-black-50" : "text-black"}`}>{weekNames[day.value % 7]}</div>
           </div>
         ))}
       </div>

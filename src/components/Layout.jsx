@@ -8,7 +8,7 @@ function Layout({ children, isModalOpen, modalContent }) {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen relative font-sans bg-light">
-      <nav className="fixed inset-x-0 bottom-0 md:w-[244px] pt-2 pb-3 px-4 md:p-4 bg-black-50 z-10 md:fixed md:top-0 md:left-0 md:h-full md:overflow-auto">
+      <nav className="fixed inset-x-0 bottom-0 md:w-[244px] pt-2 pb-3 px-4 md:p-4 bg-black-50 z-10 md:fixed md:top-0 md:left-0 md:h-full md:overflow-auto md:border-r md:border-primary-dark">
         <ul className="grid grid-cols-5 items-center md:grid-cols-1 md:gap-4">
           <li className={`md:p-2 md:rounded-lg hover:md:bg-primary-light ${location.pathname === "/home" ? "md:bg-primary" : ""}`}>
             <Link to="/home" className="flex flex-col gap-1 md:gap-0 items-center md:flex-row">

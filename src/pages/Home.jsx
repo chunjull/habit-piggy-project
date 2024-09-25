@@ -8,7 +8,7 @@ import DetailModal from "../components/DetailModal";
 import PostModal from "../components/PostModal";
 import EditModal from "../components/EditModal";
 import { Navigate } from "react-router-dom";
-import { habitIcons, habitDetailIcons } from "../assets/icons";
+import { habitIcons, habitDetailIcons, habitAddIcon } from "../assets/icons";
 
 function Home() {
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
@@ -385,9 +385,12 @@ function Home() {
             );
           })}
       </ul>
-      <button className="fixed right-4 bottom-28 bg-slate-300" onClick={handleHabitModal}>
-        add habit
-      </button>
+      <div
+        className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center fixed right-4 bottom-20 md:bottom-10 bg-primary hover:bg-primary-light cursor-pointer"
+        onClick={handleHabitModal}
+      >
+        <habitAddIcon.TbPlus className="w-8 h-8 md:w-10 md:h-10 text-black-0" />
+      </div>
       <Modal isOpen={isHabitModalOpen}>
         <HabitModal
           habitData={habitData}

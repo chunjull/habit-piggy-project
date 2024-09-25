@@ -18,6 +18,7 @@ import {
   TbCalendarSmile,
   TbCircleCheck,
   TbCircleCheckFilled,
+  TbPlus,
 } from "react-icons/tb";
 export const layoutIcons = {
   TbHome2,
@@ -51,4 +52,8 @@ export const habitDetailIcons = {
   TbCalendarSmile,
   TbCircleCheck,
   TbCircleCheckFilled,
+};
+
+export const habitAddIcon = {
+  TbPlus,
 };

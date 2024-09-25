@@ -8,7 +8,7 @@ import DetailModal from "../components/DetailModal";
 import PostModal from "../components/PostModal";
 import EditModal from "../components/EditModal";
 import { Navigate } from "react-router-dom";
-import { habitIcons } from "../assets/icons";
+import { habitIcons, habitDetailIcons } from "../assets/icons";
 
 function Home() {
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
@@ -335,47 +335,49 @@ function Home() {
   return (
     <>
       <WeekCalendar date={selectedDate} onSelect={handleSelectDate} onWeekChange={setWeekDates} />
-      <ul className="space-y-4 p-4">
+      <ul className="space-y-4 p-4 mt-2">
         {Array.isArray(habits) &&
           habits.map((habit) => {
             const habitCategory = habitCategories.find((category) => category.id === habit.category);
             const HabitIcon = habitCategory ? habitCategory.icon : null;
             return (
-              <li key={habit.id} className="px-2 py-4 bg-slate-100">
-                <div className="flex justify-between items-center">
+              <li key={habit.id} className="p-4 bg-black-50 rounded-2xl">
+                <div className="flex justify-between items-center mb-2">
                   <div className="flex gap-2">
                     <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">{HabitIcon && <HabitIcon className="w-8 h-8" />}</div>
                     <div className="flex flex-col">
-                      <h3>{habit.title}</h3>
+                      <h3 className="font-bold text-lg leading-6">{habit.title}</h3>
                       <div className="flex">
-                        <p>
+                        <p className="font-normal text-xs leading-4">
                           {habit.frequency.type}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
                         </p>
-                        <p className="text-gray-500">/{habit.status.length}</p>
+                        <p className="text-black-500 font-normal text-xs leading-4">/{habit.status.length}</p>
                       </div>
                     </div>
                   </div>
-                  <button className="bg-white" onClick={() => handleDetailClick(habit)}>
-                    Detail
+                  <button className="text-black" onClick={() => handleDetailClick(habit)}>
+                    <habitDetailIcons.TbCalendarSmile className="w-6 h-6 md:w-8 md:h-8" />
                   </button>
                 </div>
-                <div className="grid grid-cols-7 gap-2">
+                <div className="grid grid-cols-7 gap-y-1">
                   {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
-                    <div key={index} className="text-center">
+                    <div key={index} className="text-center text-sm leading-5 md:font-normal md:text-base md:leading-6">
                       {day}
                     </div>
                   ))}
                   {weekDates.map((date, index) => {
                     const status = habit.status.find((s) => new Date(s.date).toDateString() === new Date(date.year, date.month, date.day).toDateString());
+                    const IconComponent = status && status.completed ? habitDetailIcons.TbCircleCheckFilled : habitDetailIcons.TbCircleCheck;
                     return (
-                      <button
-                        key={index}
-                        className={`border w-full ${status && status.completed ? "bg-yellow-400" : "bg-gray-200"}`}
-                        onClick={() => status && handleCheck(habit.id, status.date)}
-                        disabled={!status}
-                      >
-                        {status ? "CHECK" : ""}
-                      </button>
+                      <div key={index} className="flex flex-col items-center">
+                        <IconComponent
+                          className={`w-10 h-10 md:w-12 md:h-12 ${status && status.completed ? "text-primary" : "text-gray-300"}`}
+                          onClick={() => status && handleCheck(habit.id, status.date)}
+                          disabled={!status}
+                        >
+                          {status ? "CHECK" : ""}
+                        </IconComponent>
+                      </div>
                     );
                   })}
                 </div>

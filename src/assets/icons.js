@@ -1,4 +1,21 @@
-import { TbHome2, TbCoin, TbMedal2, TbMessage, TbMoodSmile, TbRocket, TbBook, TbWalk, TbBowlChopsticks, TbMoodHeart, TbHandGrab, TbCash, TbPlant, TbCheck } from "react-icons/tb";
+import {
+  TbHome2,
+  TbCoin,
+  TbMedal2,
+  TbMessage,
+  TbMoodSmile,
+  TbRocket,
+  TbBook,
+  TbWalk,
+  TbBowlChopsticks,
+  TbMoodHeart,
+  TbHandGrab,
+  TbCash,
+  TbPlant,
+  TbCheck,
+  TbChevronLeft,
+  TbChevronRight,
+} from "react-icons/tb";
 export const layoutIcons = {
   TbHome2,
   TbCoin,
@@ -20,4 +37,9 @@ export const habitIcons = {
 
 export const checkIcons = {
   TbCheck,
+};
+
+export const weekCalendarIcons = {
+  TbChevronLeft,
+  TbChevronRight,
 };

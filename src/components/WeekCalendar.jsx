@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { weekCalendarIcons } from "../assets/icons";
 
 const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
   const [weekNames] = useState(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
@@ -103,9 +104,13 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
   return (
     <div className="p-4 bg-black-50 rounded-b-3xl">
       <div className="flex justify-between mb-3">
-        <button onClick={() => changePeriod(false)}>prev</button>
+        <button onClick={() => changePeriod(false)}>
+          <weekCalendarIcons.TbChevronLeft className="w-6 h-6" />
+        </button>
         <h1 className="font-bold text-lg leading-6">{headerText}</h1>
-        <button onClick={() => changePeriod(true)}>next</button>
+        <button onClick={() => changePeriod(true)}>
+          <weekCalendarIcons.TbChevronRight className="w-6 h-6" />
+        </button>
       </div>
       <div className="grid grid-cols-7 gap-y-1 gap-x-4 text-center">
         {daysInWeek().map((day, index) => (
@@ -114,8 +119,8 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
             className={`py-1 px-1 flex flex-col items-center gap-1 rounded-lg ${checkCurrentDate(day) ? "bg-primary" : checkSelectedDate(day) ? "bg-primary-light" : "bg-transparent"}`}
             onClick={() => selectDate(day)}
           >
-            <div className={`font-bold text-lg leading-6 ${checkCurrentDate(day) ? "text-black-50" : "text-black"}`}>{day.value}</div>
-            <div className={`font-medium text-sm leading-5 ${checkCurrentDate(day) ? "text-black-50" : "text-black"}`}>{weekNames[day.value % 7]}</div>
+            <div className={`font-bold text-lg leading-6 ${checkCurrentDate(day) ? "text-black-0" : "text-black"}`}>{day.value}</div>
+            <div className={`font-medium text-sm leading-5 ${checkCurrentDate(day) ? "text-black-0" : "text-black"}`}>{weekNames[day.value % 7]}</div>
           </div>
         ))}
       </div>

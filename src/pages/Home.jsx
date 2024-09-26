@@ -130,6 +130,7 @@ function Home() {
       endDate: habit.endDate,
       status: habit.status,
     });
+    setIsDetailModalOpen(false);
     setIsEditModalOpen(!isEditModalOpen);
   };
 
@@ -447,6 +448,8 @@ function Home() {
           setHabitData={setHabitData}
           monthCalendarDate={monthCalendarDate}
           handleMonthCalendarSelectDate={handleMonthCalendarSelectDate}
+          setCalendarTarget={setCalendarTarget}
+          setShowMonthCalendar={setShowMonthCalendar}
         />
       </Modal>
     </>

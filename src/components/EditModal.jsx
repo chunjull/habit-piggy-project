@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import MonthCalendar from "./MonthCalendar";
 import CategorySelect from "./CategorySelect";
+import { modalIcons } from "../assets/icons";
+import { checkIcon } from "../assets/icons";
 
 const EditModal = ({
   habitData,
@@ -10,13 +12,14 @@ const EditModal = ({
   handleDeleteHabit,
   handleFocus,
   showMonthCalendar,
-  calendarTarget,
   calendarRef,
   handleEditModal,
   habitCategories,
   setHabitData,
   monthCalendarDate,
   handleMonthCalendarSelectDate,
+  setCalendarTarget,
+  setShowMonthCalendar,
 }) => {
   const [selectedDays, setSelectedDays] = useState(habitData.frequency.days || []);
 
@@ -64,119 +67,162 @@ const EditModal = ({
     return statusArray;
   };
 
+  const startDateRef = useRef(null);
+  const endDateRef = useRef(null);
+
+  const handleStartDateClick = () => {
+    setCalendarTarget("startDate");
+    setShowMonthCalendar(true);
+  };
+
+  const handleEndDateClick = () => {
+    setCalendarTarget("endDate");
+    setShowMonthCalendar(true);
+  };
+
   return (
     <div className="space-y-4">
-      <div className="flex justify-between gap-4">
-        <div className="flex gap-4 w-full">
+      <div className="flex justify-between items-center gap-4">
+        <div className="flex items-center gap-4 w-full">
           <CategorySelect options={habitCategories} value={habitData.category} onChange={(value) => handleHabitChange({ target: { name: "category", value } })} />
-          <input type="text" name="title" placeholder="輸入習慣名稱" className="py-2 px-4 w-full" value={habitData.title} onChange={handleHabitChange} />
+          <input
+            type="text"
+            name="title"
+            placeholder="輸入習慣名稱"
+            className="py-1.5 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-sm leading-5"
+            value={habitData.title}
+            onChange={handleHabitChange}
+          />
         </div>
-        <button onClick={handleEditModal}>close</button>
+        <modalIcons.TbX className="w-6 h-6 hover:text-alert cursor-pointer" onClick={handleEditModal} />
       </div>
       <div className="flex justify-between gap-4">
-        <label htmlFor="frequency">習慣頻率</label>
-        <div className="flex items-center gap-2">
-          <input
-            type="radio"
-            name="frequency"
-            id="daily"
-            value="daily"
-            className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-slate-500 checked:border-transparent focus:outline-none"
-            checked={habitData.frequency.type === "daily"}
-            onChange={handleHabitChange}
-          />
-          <label htmlFor="daily">每日</label>
-        </div>
-        <div className="flex items-center gap-2">
-          <input
-            type="radio"
-            name="frequency"
-            id="weekly"
-            value="weekly"
-            className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-slate-500 checked:border-transparent focus:outline-none"
-            checked={habitData.frequency.type === "weekly"}
-            onChange={handleHabitChange}
-          />
-          <label htmlFor="weekly">每週</label>
-        </div>
-        <div className="flex items-center gap-2">
-          <input
-            type="radio"
-            name="frequency"
-            id="specificDays"
-            value="specificDays"
-            className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-slate-500 checked:border-transparent focus:outline-none"
-            checked={habitData.frequency.type === "specificDays"}
-            onChange={handleHabitChange}
-          />
-          <label htmlFor="specificDays">特定日期</label>
+        <label htmlFor="frequency" className="text-nowrap">
+          習慣頻率
+        </label>
+        <div className="w-full grid grid-cols-3 gap-3">
+          <div>
+            <input type="radio" name="frequency" id="daily" value="daily" className="appearance-none hidden" checked={habitData.frequency.type === "daily"} onChange={handleHabitChange} />
+            <label
+              htmlFor="daily"
+              className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
+                habitData.frequency.type === "daily" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light"
+              }`}
+            >
+              每日
+            </label>
+          </div>
+          <div>
+            <input type="radio" name="frequency" id="weekly" value="weekly" className="appearance-none hidden" checked={habitData.frequency.type === "weekly"} onChange={handleHabitChange} />
+            <label
+              htmlFor="weekly"
+              className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
+                habitData.frequency.type === "weekly" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light"
+              }`}
+            >
+              每週
+            </label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="frequency"
+              id="specificDays"
+              value="specificDays"
+              className="appearance-none hidden"
+              checked={habitData.frequency.type === "specificDays"}
+              onChange={handleHabitChange}
+            />
+            <label
+              htmlFor="specificDays"
+              className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
+                habitData.frequency.type === "specificDays" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light"
+              }`}
+            >
+              特定日期
+            </label>
+          </div>
         </div>
       </div>
       {habitData.frequency.type === "specificDays" && (
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-7 gap-2 md:gap-4">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
-            <div key={index} className="text-center flex flex-col">
+            <div key={index} className="text-center flex flex-col justify-center items-center gap-1">
               {day}
-              <button className={`border ${selectedDays.includes(day) ? "bg-yellow-400 text-white" : ""}`} onClick={() => handleDayButtonClick(day)}>
-                DO
-              </button>
+              <checkIcon.TbCheck
+                className={`w-10 h-10 rounded-full p-1 border border-black-500 ${selectedDays.includes(day) ? "bg-primary text-white border-primary" : "text-black-500 hover:bg-primary-light"}`}
+                onClick={() => handleDayButtonClick(day)}
+              />
             </div>
           ))}
         </div>
       )}
       <div className="flex justify-between gap-4">
-        <label htmlFor="amount">習慣罰款</label>
-        <div className="flex gap-2">
-          <p>NT$</p>
-          <input type="number" name="amount" id="amount" className="px-4 text-end" value={habitData.amount} onChange={handleHabitChange} />
+        <label htmlFor="amount" className="text-nowrap">
+          習慣罰款
+        </label>
+        <div className="flex gap-2 w-full">
+          <p className="font-normal text-base leading-6">NT$</p>
+          <input
+            type="number"
+            name="amount"
+            id="amount"
+            className="px-4 text-end w-full rounded border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-sm leading-5 no-spinner"
+            placeholder="請輸入未完成習慣的罰款金額"
+            value={habitData.amount}
+            onChange={handleHabitChange}
+            min={0}
+            onKeyDown={(e) => e.key === "-" && e.preventDefault()}
+          />
         </div>
       </div>
       <div className="flex justify-between gap-4 w-full">
-        <label htmlFor="range" className="text-nowrap">
-          養成期間
-        </label>
-        <div className="relative">
-          <input
-            type="text"
-            name="startDate"
-            id="startDate"
-            className="text-center w-28"
-            placeholder="開始日期"
-            value={habitData.startDate}
-            onFocus={() => handleFocus("startDate")}
-            onChange={handleHabitChange}
-          />
-          {showMonthCalendar && calendarTarget === "startDate" && (
-            <div ref={calendarRef} className="absolute -top-36 -left-8 z-10 bg-white shadow-lg w-[300px]">
-              <MonthCalendar date={monthCalendarDate} onSelect={handleMonthCalendarSelectDate} />
-            </div>
-          )}
+        <p className="text-nowrap">養成期間</p>
+        <div className="border border-black-300 w-full rounded py-0.5 px-4 flex justify-between items-center bg-black-0">
+          <button className={`text-center w-1/2 font-normal text-sm leading-5 ${habitData.startDate ? "text-black" : "text-black-300"}`} onClick={handleStartDateClick}>
+            {habitData.startDate || "開始日期"}
+          </button>
+          <p className="px-2 text-black-300 font-normal text-sm leading-5">-</p>
+          <button className={`text-center w-1/2 font-normal text-sm leading-5 ${habitData.startDate ? "text-black" : "text-black-300"}`} onClick={handleEndDateClick}>
+            {habitData.endDate || "結束日期"}
+          </button>
         </div>
-        <p>~</p>
-        <div className="relative">
-          <input
-            type="text"
-            name="endDate"
-            id="endDate"
-            className="text-center w-28"
-            placeholder="結束日期"
-            value={habitData.endDate}
-            onFocus={() => handleFocus("endDate")}
-            onChange={handleHabitChange}
-          />
-          {showMonthCalendar && calendarTarget === "endDate" && (
-            <div ref={calendarRef} className="absolute -top-36 -left-64 z-10 bg-white shadow-lg w-[300px]">
-              <MonthCalendar date={monthCalendarDate} onSelect={handleMonthCalendarSelectDate} />
-            </div>
-          )}
-        </div>
+        <input
+          type="text"
+          name="startDate"
+          id="startDate"
+          className="hidden"
+          ref={startDateRef}
+          placeholder="開始日期"
+          value={habitData.startDate}
+          onFocus={() => handleFocus("startDate")}
+          onChange={handleHabitChange}
+        />
+        <input
+          type="text"
+          name="endDate"
+          id="endDate"
+          className="hidden"
+          ref={endDateRef}
+          placeholder="結束日期"
+          value={habitData.endDate}
+          onFocus={() => handleFocus("endDate")}
+          onChange={handleHabitChange}
+        />
+        {showMonthCalendar && (
+          <div ref={calendarRef} className="absolute top-4 left-24 z-10 bg-white shadow-lg w-[300px]">
+            <MonthCalendar date={monthCalendarDate} onSelect={handleMonthCalendarSelectDate} />
+          </div>
+        )}
       </div>
-      <button className="w-full border" onClick={handleUpdateHabit}>
-        更新習慣
-      </button>
-      <button className="w-full border bg-red-500 text-white" onClick={handleDeleteHabit}>
-        刪除習慣
-      </button>
+      <div className="grid grid-cols-2 gap-4">
+        <button className="w-full py-1 font-normal text-sm leading-5 bg-alert text-white rounded-lg" onClick={handleDeleteHabit}>
+          刪除習慣
+        </button>
+        <button className="w-full py-1 font-normal text-sm leading-5 bg-primary rounded-lg hover:bg-primary-light" onClick={handleUpdateHabit}>
+          更新習慣
+        </button>
+      </div>
     </div>
   );
 };
@@ -197,6 +243,8 @@ EditModal.propTypes = {
   setHabitData: PropTypes.func.isRequired,
   monthCalendarDate: PropTypes.object.isRequired,
   handleMonthCalendarSelectDate: PropTypes.func.isRequired,
+  setCalendarTarget: PropTypes.func.isRequired,
+  setShowMonthCalendar: PropTypes.func.isRequired,
 };
 
 export default EditModal;

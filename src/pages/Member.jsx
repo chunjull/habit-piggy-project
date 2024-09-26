@@ -96,6 +96,7 @@ function Member() {
       status: habit.status,
     });
     setIsEditModalOpen(!isEditModalOpen);
+    setIsDetailModalOpen(false);
   };
 
   const handleUpdateProfile = async () => {
@@ -394,6 +395,8 @@ function Member() {
           handleEditModal={handleEditModal}
           handleDeleteHabit={handleDeleteHabit}
           habitCategories={habitCategories}
+          setCalendarTarget={setCalendarTarget}
+          setShowMonthCalendar={setShowMonthCalendar}
         />
       </Modal>
     </>

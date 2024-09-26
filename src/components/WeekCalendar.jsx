@@ -105,18 +105,20 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
     <div className="p-4 bg-black-50 rounded-b-3xl">
       <div className="flex justify-between mb-3">
         <button onClick={() => changePeriod(false)}>
-          <weekCalendarIcons.TbChevronLeft className="w-6 h-6" />
+          <weekCalendarIcons.TbChevronLeft className="w-6 h-6 text-black hover:text-alert" />
         </button>
         <h1 className="font-bold text-lg leading-6">{headerText}</h1>
         <button onClick={() => changePeriod(true)}>
-          <weekCalendarIcons.TbChevronRight className="w-6 h-6" />
+          <weekCalendarIcons.TbChevronRight className="w-6 h-6 text-black hover:text-alert" />
         </button>
       </div>
       <div className="grid grid-cols-7 gap-y-1 gap-x-4 text-center">
         {daysInWeek().map((day, index) => (
           <div
             key={index}
-            className={`py-1 px-1 flex flex-col items-center gap-1 rounded-lg ${checkCurrentDate(day) ? "bg-primary" : checkSelectedDate(day) ? "bg-primary-light" : "bg-transparent"}`}
+            className={`py-1 px-1 flex flex-col items-center gap-1 rounded-lg cursor-pointer ${
+              checkCurrentDate(day) ? "bg-primary" : checkSelectedDate(day) ? "bg-primary-light" : "bg-transparent hover:bg-primary-light"
+            }`}
             onClick={() => selectDate(day)}
           >
             <div className={`font-bold text-lg leading-6 ${checkCurrentDate(day) ? "text-black-0" : "text-black"}`}>{day.value}</div>

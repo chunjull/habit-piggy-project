@@ -48,7 +48,12 @@ const PostModal = ({ postContent, setPostContent, postBackground, setPostBackgro
         <p className="font-normal text-base leading-6">選擇背景顏色</p>
         <div className="flex gap-4 overflow-scroll">
           {backgrounds.slice(0, 6).map((url, index) => (
-            <button key={index} className="rounded w-6 h-6 flex-shrink-0 flex-grow-0" style={{ backgroundImage: `url(${url})` }} onClick={() => setPostBackground(url)}></button>
+            <button
+              key={index}
+              className="rounded w-6 h-6 flex-shrink-0 flex-grow-0"
+              style={{ backgroundImage: `url(${url})`, backgroundSize: "cover", backgroundPosition: "center" }}
+              onClick={() => setPostBackground(url)}
+            ></button>
           ))}
         </div>
         <modalIcons.TbLayoutGrid className="w-6 h-6 hover:text-alert cursor-pointer" onClick={() => setIsBackgroundSelectOpen(!isBackgroundSelectOpen)} />

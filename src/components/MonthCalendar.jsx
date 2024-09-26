@@ -76,24 +76,28 @@ const MonthCalendar = ({ date, onSelect }) => {
   const headerText = `${monthNames[displayDate.month]} ${displayDate.year}`;
 
   return (
-    <div className="p-4 bg-slate-300">
+    <div className="p-4 bg-light rounded-2xl">
       <div className="flex justify-between mb-3">
         <button onClick={() => changePeriod(false)}>
-          <weekCalendarIcons.TbChevronLeft className="w-6 h-6" />
+          <weekCalendarIcons.TbChevronLeft className="w-6 h-6 text-black hover:text-alert" />
         </button>
-        <h1>{headerText}</h1>
+        <h1 className="font-bold text-base leading-6">{headerText}</h1>
         <button onClick={() => changePeriod(true)}>
-          <weekCalendarIcons.TbChevronRight className="w-6 h-6" />
+          <weekCalendarIcons.TbChevronRight className="w-6 h-6 text-black hover:text-alert" />
         </button>
       </div>
-      <div className="grid grid-cols-7 text-center">
+      <div className="grid grid-cols-7 text-center gap-1">
         {weekNames.map((name, index) => (
-          <div key={index} className="font-bold">
+          <div key={index} className="font-medium text-sm leading-5">
             {name}
           </div>
         ))}
         {daysInMonth().map((day, index) => (
-          <div key={index} className={`border-t border-r flex items-center justify-center bg-white ${checkCurrentDate(day) ? "bg-yellow-500" : ""}`} onClick={() => day && selectDate(day)}>
+          <div
+            key={index}
+            className={`rounded-full aspect-square flex items-center justify-center cursor-pointer ${checkCurrentDate(day) ? "bg-primary" : "bg-white hover:bg-primary-light"}`}
+            onClick={() => day && selectDate(day)}
+          >
             {day ? day.value : ""}
           </div>
         ))}

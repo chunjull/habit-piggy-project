@@ -118,6 +118,7 @@ function Home() {
 
   const handlePostModal = () => {
     setIsPostModalOpen(!isPostModalOpen);
+    setIsDetailModalOpen(false);
   };
 
   const handleEditModal = (habit) => {
@@ -431,6 +432,7 @@ function Home() {
           setPostBackground={setPostBackground}
           handleAddPost={handleAddPost}
           handlePostModal={handlePostModal}
+          user={user}
         />
       </Modal>
       <Modal isOpen={isEditModalOpen} onClose={handleEditModal}>

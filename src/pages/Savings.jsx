@@ -3,6 +3,7 @@ import { AuthContext } from "../utils/AuthContext";
 import { getHabits } from "../services/api";
 import SavingsChart from "../components/SavingsChart";
 import CategoryChart from "../components/CategoryChart";
+import { dropdownIcon } from "../assets/icons";
 
 function Savings() {
   const [isOverview, setIsOverview] = useState(true);
@@ -137,17 +138,26 @@ function Savings() {
 
   const renderStatistics = ({ completed, savings, total }) => (
     <div className="flex justify-between items-center">
-      <div className="text-end">
-        <p>{completed} 次</p>
-        <p>完成習慣次數</p>
+      <div>
+        <div className="flex justify-end items-center gap-1">
+          <p className="font-bold text-base leading-6">{completed}</p>
+          <p className="font-normal text-sm leading-5">次</p>
+        </div>
+        <p className="font-normal text-xs leading-4 md:text-sm md:leading-5">完成習慣次數</p>
       </div>
-      <div className="text-end">
-        <p>{savings} 次</p>
-        <p>存款次數</p>
+      <div>
+        <div className="flex justify-end items-center gap-1">
+          <p className="font-bold text-base leading-6">{savings}</p>
+          <p className="font-normal text-sm leading-5">次</p>
+        </div>
+        <p className="font-normal text-xs leading-4 md:text-sm md:leading-5">存款次數</p>
       </div>
-      <div className="text-end">
-        <p>NT${total}</p>
-        <p>存款金額</p>
+      <div>
+        <div className="flex justify-end items-center gap-1">
+          <p className="font-normal text-sm leading-5">NT$</p>
+          <p className="font-bold text-base leading-6">{total}</p>
+        </div>
+        <p className="font-normal text-xs leading-4 md:text-sm md:leading-5">存款金額</p>
       </div>
     </div>
   );
@@ -175,10 +185,10 @@ function Savings() {
     uncompletedHabits.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     return uncompletedHabits.slice(0, 50).map((habit, index) => (
-      <li key={habit.id + habit.date} className="py-2 px-4 grid grid-cols-4 bg-slate-300">
+      <li key={habit.id + habit.date} className="py-2 px-4 grid grid-cols-5 bg-black-50 rounded-lg font-normal text-sm leading-5">
         <p>{String(index + 1).padStart(2, "0")}</p>
         <p className="text-center">{new Date(habit.date).toLocaleDateString()}</p>
-        <p className="text-center">{habit.title}</p>
+        <p className="text-center col-span-2 overflow-scroll">{habit.title}</p>
         <p className="text-center">NT${habit.amount}</p>
       </li>
     ));
@@ -199,14 +209,17 @@ function Savings() {
       </ul>
       {isOverview ? (
         <div>
-          <div className="p-4 border space-y-4">
+          <div className="p-4 bg-black-50 rounded-xl space-y-4">
             <div className="flex justify-between items-center">
-              <h2>存款總覽</h2>
-              <select className="border" value={filter} onChange={(e) => setFilter(e.target.value)}>
-                <option value="week">本週</option>
-                <option value="month">本月</option>
-                <option value="all">全部</option>
-              </select>
+              <h2 className="font-bold text-xl leading-7">存款總覽</h2>
+              <div className="relative">
+                <select className="border border-black-500 rounded-2xl appearance-none px-12 focus:outline-primary-dark" value={filter} onChange={(e) => setFilter(e.target.value)}>
+                  <option value="week">本週</option>
+                  <option value="month">本月</option>
+                  <option value="all">全部</option>
+                </select>
+                <dropdownIcon.TbChevronDown className="w-6 h-6 text-black-500 pointer-events-none absolute inset-y-0 right-2" />
+              </div>
             </div>
             {renderStatistics({ completed: completedCount, savings: savingsCount, total: totalSavings })}
             <div className="w-full h-52">
@@ -214,18 +227,18 @@ function Savings() {
             </div>
           </div>
           <ul className="space-y-2 mt-4">
-            <li className="py-2 px-4 grid grid-cols-4 border">
+            <li className="py-2 px-4 grid grid-cols-5 border border-black-500 rounded-lg font-normal text-sm leading-5">
               <p>編號</p>
               <p className="text-center">日期</p>
-              <p className="text-center">習慣名稱</p>
+              <p className="text-center col-span-2">習慣名稱</p>
               <p className="text-center">習慣存款</p>
             </li>
             {renderUncompletedHabits(habits, getStartAndEndOfPeriod(filter).startOfPeriod, getStartAndEndOfPeriod(filter).endOfPeriod)}
           </ul>
-          <p className="text-center mt-2">僅顯示最新的 50 筆存款記錄</p>
+          <p className="text-center mt-2 font-normal text-xs leading-4">僅顯示最新的 50 筆存款記錄</p>
         </div>
       ) : (
-        <div className="p-4 border space-y-4 min-h-screen">
+        <div className="p-4 bg-black-50 rounded-xl space-y-4 min-h-screen">
           <div className="flex justify-between items-center">
             <h2>習慣類別總覽</h2>
             <select className="border" value={filter} onChange={(e) => setFilter(e.target.value)}>

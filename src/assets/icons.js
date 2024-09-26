@@ -20,7 +20,9 @@ import {
   TbX,
   TbPencil,
   TbLayoutGrid,
+  TbChevronDown,
 } from "react-icons/tb";
+
 export const layoutIcons = {
   TbHome2,
   TbCoin,
@@ -61,4 +63,8 @@ export const modalIcons = {
   TbX,
   TbPencil,
   TbLayoutGrid,
+};
+
+export const dropdownIcon = {
+  TbChevronDown,
 };

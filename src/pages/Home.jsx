@@ -253,9 +253,10 @@ function Home() {
   const handleMonthCalendarSelectDate = (date) => {
     setMonthCalendarDate(date);
     if (calendarTarget) {
+      const formattedDate = `${date.year}-${String(date.month + 1).padStart(2, "0")}-${String(date.day).padStart(2, "0")}`;
       setHabitData((prev) => ({
         ...prev,
-        [calendarTarget]: `${date.year}-${String(date.month + 1).padStart(2, "0")}-${String(date.day).padStart(2, "0")}`,
+        [calendarTarget]: formattedDate,
       }));
       setShowMonthCalendar(false);
       setCalendarTarget("");
@@ -401,13 +402,14 @@ function Home() {
           handleAddHabit={handleAddHabit}
           handleFocus={handleFocus}
           showMonthCalendar={showMonthCalendar}
-          calendarTarget={calendarTarget}
           calendarRef={calendarRef}
           handleHabitModal={handleHabitModal}
           habitCategories={habitCategories}
           setHabitData={setHabitData}
           monthCalendarDate={monthCalendarDate}
           handleMonthCalendarSelectDate={handleMonthCalendarSelectDate}
+          setCalendarTarget={setCalendarTarget}
+          setShowMonthCalendar={setShowMonthCalendar}
         />
       </Modal>
       <Modal isOpen={isDetailModalOpen} onClose={handleDetailModal}>

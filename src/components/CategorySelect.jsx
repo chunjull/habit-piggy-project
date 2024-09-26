@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { checkIcons } from "../assets/icons";
+import { checkIcon } from "../assets/icons";
 
 const CategorySelect = ({ options, value, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +17,7 @@ const CategorySelect = ({ options, value, onChange }) => {
       <div className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
         {value === null ? (
           <div className="bg-slate-300 w-10 h-10 rounded-full flex justify-center items-center">
-            <checkIcons.TbCheck className="w-8 h-8" />
+            <checkIcon.TbCheck className="w-8 h-8" />
           </div>
         ) : (
           selectedOption && (

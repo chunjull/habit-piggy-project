@@ -42,7 +42,7 @@ export const habitIcons = {
   TbPlant,
 };
 
-export const checkIcons = {
+export const checkIcon = {
   TbCheck,
 };
 

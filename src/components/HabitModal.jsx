@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import MonthCalendar from "./MonthCalendar";
 import PropTypes from "prop-types";
 import CategorySelect from "./CategorySelect";
+import { modalIcons } from "../assets/icons";
+import { checkIcon } from "../assets/icons";
 
 const HabitModal = ({
   habitData,
@@ -34,69 +36,88 @@ const HabitModal = ({
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between gap-4">
-        <div className="flex gap-4 w-full">
+      <div className="flex justify-between items-center gap-4">
+        <div className="flex items-center gap-4 w-full">
           <CategorySelect options={habitCategories} value={habitData.category} onChange={(value) => handleHabitChange({ target: { name: "category", value } })} />
-          <input type="text" name="title" placeholder="輸入習慣名稱" className="py-2 px-4 w-full" value={habitData.title} onChange={handleHabitChange} />
+          <input
+            type="text"
+            name="title"
+            placeholder="輸入習慣名稱"
+            className="py-1.5 px-4 w-full rounded-2xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-sm leading-5"
+            value={habitData.title}
+            onChange={handleHabitChange}
+          />
         </div>
-        <button onClick={handleHabitModal}>close</button>
+        <modalIcons.TbX className="w-6 h-6 hover:text-alert cursor-pointer" onClick={handleHabitModal} />
       </div>
       <div className="flex justify-between gap-4">
-        <label htmlFor="frequency">習慣頻率</label>
-        <div className="flex items-center gap-2">
-          <input
-            type="radio"
-            name="frequency"
-            id="daily"
-            value="daily"
-            className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-slate-500 checked:border-transparent focus:outline-none"
-            checked={habitData.frequency.type === "daily"}
-            onChange={handleHabitChange}
-          />
-          <label htmlFor="daily">每日</label>
-        </div>
-        <div className="flex items-center gap-2">
-          <input
-            type="radio"
-            name="frequency"
-            id="weekly"
-            value="weekly"
-            className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-slate-500 checked:border-transparent focus:outline-none"
-            checked={habitData.frequency.type === "weekly"}
-            onChange={handleHabitChange}
-          />
-          <label htmlFor="weekly">每週</label>
-        </div>
-        <div className="flex items-center gap-2">
-          <input
-            type="radio"
-            name="frequency"
-            id="specificDays"
-            value="specificDays"
-            className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-slate-500 checked:border-transparent focus:outline-none"
-            checked={habitData.frequency.type === "specificDays"}
-            onChange={handleHabitChange}
-          />
-          <label htmlFor="specificDays">特定日期</label>
+        <label htmlFor="frequency" className="text-nowrap">
+          習慣頻率
+        </label>
+        <div className="w-full grid grid-cols-3 gap-3">
+          <div>
+            <input type="radio" name="frequency" id="daily" value="daily" className="appearance-none hidden" checked={habitData.frequency.type === "daily"} onChange={handleHabitChange} />
+            <label
+              htmlFor="daily"
+              className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
+                habitData.frequency.type === "daily" ? "bg-primary border-primary" : "border-black-300 hover:bg-primary-light"
+              }`}
+            >
+              每日
+            </label>
+          </div>
+          <div>
+            <input type="radio" name="frequency" id="weekly" value="weekly" className="appearance-none hidden" checked={habitData.frequency.type === "weekly"} onChange={handleHabitChange} />
+            <label
+              htmlFor="weekly"
+              className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
+                habitData.frequency.type === "weekly" ? "bg-primary border-primary" : "border-black-300 hover:bg-primary-light"
+              }`}
+            >
+              每週
+            </label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="frequency"
+              id="specificDays"
+              value="specificDays"
+              className="appearance-none hidden"
+              checked={habitData.frequency.type === "specificDays"}
+              onChange={handleHabitChange}
+            />
+            <label
+              htmlFor="specificDays"
+              className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
+                habitData.frequency.type === "specificDays" ? "bg-primary border-primary" : "border-black-300 hover:bg-primary-light"
+              }`}
+            >
+              特定日期
+            </label>
+          </div>
         </div>
       </div>
       {habitData.frequency.type === "specificDays" && (
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-7 gap-2 md:gap-4">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
-            <div key={index} className="text-center flex flex-col">
+            <div key={index} className="text-center flex flex-col justify-center items-center gap-1">
               {day}
-              <button className={`border ${selectedDays.includes(day) ? "bg-yellow-400 text-white" : ""}`} onClick={() => handleDayButtonClick(day)}>
-                DO
-              </button>
+              <checkIcon.TbCheck
+                className={`w-10 h-10 rounded-full p-1 border border-black-500 ${selectedDays.includes(day) ? "bg-primary text-white border-primary" : "text-black-500 hover:bg-primary-light"}`}
+                onClick={() => handleDayButtonClick(day)}
+              />
             </div>
           ))}
         </div>
       )}
       <div className="flex justify-between gap-4">
-        <label htmlFor="amount">習慣罰款</label>
-        <div className="flex gap-2">
+        <label htmlFor="amount" className="text-nowrap">
+          習慣罰款
+        </label>
+        <div className="flex gap-2 w-full">
           <p>NT$</p>
-          <input type="number" name="amount" id="amount" className="px-4 text-end" value={habitData.amount} onChange={handleHabitChange} />
+          <input type="number" name="amount" id="amount" className="px-4 text-end w-full" value={habitData.amount} onChange={handleHabitChange} />
         </div>
       </div>
       <div className="flex justify-between gap-4 w-full">

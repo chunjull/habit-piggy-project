@@ -16,28 +16,30 @@ const CategorySelect = ({ options, value, onChange }) => {
     <div className="relative">
       <div className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
         {value === null ? (
-          <div className="bg-slate-300 w-10 h-10 rounded-full flex justify-center items-center">
+          <div className="bg-black-200 border border-black-300 w-10 h-10 rounded-full flex justify-center items-center">
             <checkIcon.TbCheck className="w-8 h-8" />
           </div>
         ) : (
           selectedOption && (
-            <div className="bg-yellow-400 w-10 h-10 rounded-full flex justify-center items-center">
+            <div className="bg-primary w-10 h-10 rounded-full flex justify-center items-center">
               <selectedOption.icon className="w-8 h-8" />
             </div>
           )
         )}
       </div>
       {isOpen && (
-        <ul className="absolute top-12 z-10 bg-white border p-2 grid grid-cols-4 min-w-max gap-y-2 gap-x-4">
-          {options.map((option) => (
-            <li key={option.id} className="w-16 h-fit cursor-pointer flex flex-col items-center gap-1 text-nowrap" onClick={() => handleSelect(option.id)}>
-              <div className="bg-slate-300 w-10 h-10 rounded-full flex justify-center items-center hover:bg-yellow-400">
-                <option.icon className="w-8 h-8" />
-              </div>
-              {option.name}
-            </li>
-          ))}
-        </ul>
+        <div className="absolute top-12 z-10">
+          <ul className="relative before:content-[''] before:absolute before:top-[-4px] before:left-4 before:w-4 before:h-4 before:bg-black-0 before:rotate-45 before:z-20 bg-black-0 p-4 grid grid-cols-4 min-w-max gap-3 rounded-xl">
+            {options.map((option) => (
+              <li key={option.id} className="w-16 h-fit cursor-pointer flex flex-col items-center gap-1 text-nowrap font-normal text-xs leading-4" onClick={() => handleSelect(option.id)}>
+                <div className="bg-black-200 w-10 h-10 rounded-full flex justify-center items-center hover:bg-primary">
+                  <option.icon className="w-8 h-8" />
+                </div>
+                {option.name}
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );

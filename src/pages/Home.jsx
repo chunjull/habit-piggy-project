@@ -8,7 +8,7 @@ import DetailModal from "../components/DetailModal";
 import PostModal from "../components/PostModal";
 import EditModal from "../components/EditModal";
 import { Navigate } from "react-router-dom";
-import { habitIcons, habitDetailIcons, habitAddIcon } from "../assets/icons";
+import { habitIcons, habitDetailIcon, habitAddIcon, checkIcon } from "../assets/icons";
 
 function Home() {
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
@@ -356,7 +356,7 @@ function Home() {
                     </div>
                   </div>
                   <button className="text-black" onClick={() => handleDetailClick(habit)}>
-                    <habitDetailIcons.TbCalendarSmile className="w-6 h-6 md:w-8 md:h-8" />
+                    <habitDetailIcon.TbCalendarSmile className="w-6 h-6 md:w-8 md:h-8" />
                   </button>
                 </div>
                 <div className="grid grid-cols-7 gap-y-1">
@@ -367,17 +367,18 @@ function Home() {
                   ))}
                   {weekDates.map((date, index) => {
                     const status = habit.status.find((s) => new Date(s.date).toDateString() === new Date(date.year, date.month, date.day).toDateString());
-                    const IconComponent = status && status.completed ? habitDetailIcons.TbCircleCheckFilled : habitDetailIcons.TbCircleCheck;
                     return (
                       <div key={index} className="flex flex-col items-center">
                         {status ? (
-                          <IconComponent
-                            className={`w-10 h-10 md:w-12 md:h-12 cursor-pointer ${status && status.completed ? "text-primary" : "text-black-300"}`}
+                          <checkIcon.TbCheck
+                            className={`w-10 h-10 md:w-12 md:h-12 cursor-pointer border-2 rounded-full ${
+                              status && status.completed ? "bg-primary text-black-0 border-primary" : "text-black-500 border-black-500 hover:bg-primary-light"
+                            }`}
                             onClick={() => status && handleCheck(habit.id, status.date)}
                             disabled={!status}
                           />
                         ) : (
-                          <habitDetailIcons.TbCircleCheckFilled className="w-10 h-10 md:w-12 md:h-12 text-black-200 cursor-not-allowed" />
+                          <checkIcon.TbCheck className="w-10 h-10 md:w-12 md:h-12 bg-black-200 text-black-50 rounded-full cursor-not-allowed" />
                         )}
                       </div>
                     );

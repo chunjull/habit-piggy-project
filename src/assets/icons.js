@@ -16,8 +16,6 @@ import {
   TbChevronLeft,
   TbChevronRight,
   TbCalendarSmile,
-  TbCircleCheck,
-  TbCircleCheckFilled,
   TbPlus,
   TbX,
   TbPencil,
@@ -51,10 +49,8 @@ export const weekCalendarIcons = {
   TbChevronRight,
 };
 
-export const habitDetailIcons = {
+export const habitDetailIcon = {
   TbCalendarSmile,
-  TbCircleCheck,
-  TbCircleCheckFilled,
 };
 
 export const habitAddIcon = {

@@ -21,6 +21,11 @@ import {
   TbPencil,
   TbLayoutGrid,
   TbChevronDown,
+  TbHeart,
+  TbHeartFilled,
+  TbMessageChatbot,
+  TbDots,
+  TbSend2,
 } from "react-icons/tb";
 
 export const layoutIcons = {
@@ -67,4 +72,12 @@ export const modalIcons = {
 
 export const dropdownIcon = {
   TbChevronDown,
+};
+
+export const postIcons = {
+  TbHeart,
+  TbHeartFilled,
+  TbMessageChatbot,
+  TbDots,
+  TbSend2,
 };

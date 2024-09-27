@@ -14,4 +14,8 @@
       -moz-appearance: textfield;
     }
   }
+
+  .bordered-text {
+    text-shadow: -1px -1px 0 #d14d28, 1px -1px 0 #d14d28, -1px 1px 0 #d14d28, 1px 1px 0 #d14d28;
+  }
 }

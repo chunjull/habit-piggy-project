@@ -26,6 +26,8 @@ import {
   TbMessageChatbot,
   TbDots,
   TbSend2,
+  TbCircleCheck,
+  TbCircleCheckFilled,
 } from "react-icons/tb";
 
 export const layoutIcons = {
@@ -80,4 +82,9 @@ export const postIcons = {
   TbMessageChatbot,
   TbDots,
   TbSend2,
+};
+
+export const rankIcons = {
+  TbCircleCheck,
+  TbCircleCheckFilled,
 };

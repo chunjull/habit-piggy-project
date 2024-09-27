@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 const SavingsChart = ({ data }) => {
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <BarChart data={data}>
-        <CartesianGrid stroke="#E7E7E7" strokeDasharray="5 5" />
+      <BarChart data={data} margin={{ left: -24 }}>
+        <CartesianGrid stroke="#D1D1D1" strokeDasharray="5 5" />
         <XAxis dataKey="name" />
         <YAxis />
         <Tooltip cursor={{ fill: "#E7E7E7" }} />

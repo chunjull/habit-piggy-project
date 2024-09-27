@@ -28,6 +28,7 @@ import {
   TbSend2,
   TbCircleCheck,
   TbCircleCheckFilled,
+  TbCoinFilled,
 } from "react-icons/tb";
 
 export const layoutIcons = {
@@ -87,4 +88,6 @@ export const postIcons = {
 export const rankIcons = {
   TbCircleCheck,
   TbCircleCheckFilled,
+  TbCoin,
+  TbCoinFilled,
 };

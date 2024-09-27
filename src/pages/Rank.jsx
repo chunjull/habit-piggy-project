@@ -216,16 +216,32 @@ function Rank() {
         </div>
       )}
       {isActiveTab === "savings" && (
-        <div>
-          <div className="p-4 mt-4 bg-slate-300">
-            <p className="text-center">
+        <div className="relative space-y-4">
+          <div className="p-4 mt-4 bg-black-50 rounded-lg flex flex-col items-center">
+            <p className="text-center font-normal text-base leading-6">
               在 {getStartAndEndOfWeek().startOfWeek.toLocaleDateString()}～{getStartAndEndOfWeek().endOfWeek.toLocaleDateString()} 期間
             </p>
-            <p className="text-center">恭喜 {userSavingsCounts[0]?.name || "No.1"} 成為累積最多存款的玩家</p>
-            <p className="text-center">獲得{SavingsAchievements[getCurrentCycleIndex()]}成就！</p>
+            <div className="flex items-center gap-x-1">
+              <p className="font-normal text-base leading-6">恭喜</p>
+              <p className="font-bold text-xl leading-7">{userSavingsCounts[0]?.name || "No.1"}</p>
+              <p className="font-normal text-base leading-6">成為累積最多存款的玩家</p>
+            </div>
+            <div className="flex items-center gap-x-1">
+              <p className="font-normal text-base leading-6">獲得</p>
+              <p className="font-bold text-xl leading-7 text-primary bordered-text">{SavingsAchievements[getCurrentCycleIndex()]}</p>
+              <p className="font-normal text-base leading-6">成就！</p>
+            </div>
+            <div className="font-normal text-xs leading-4 text-black-700 mt-3">獎勵將於結算後發送</div>
           </div>
-          <ul className="space-y-4">{renderTopTenUsers(userSavingsCounts, "savings")}</ul>
-          {renderCurrentUser(userSavingsCounts, user, "savings")}
+          <div className="absolute -top-8 inset-x-0 text-primary flex items-center justify-center">
+            <rankIcons.TbCoin className="w-8 h-8" />
+            <rankIcons.TbCoinFilled className="w-8 h-8" />
+            <rankIcons.TbCoin className="w-8 h-8" />
+          </div>
+          <ul className="space-y-4 pb-20">{renderTopTenUsers(userSavingsCounts, "savings")}</ul>
+          <div className="fixed bottom-0 z-50 py-4 bg-light" style={{ width: "calc(100% - 276px)" }}>
+            {renderCurrentUser(userSavingsCounts, user, "savings")}
+          </div>
         </div>
       )}
       {/* {isActiveTab === "challenge" && <div>挑戰排行</div>} */}

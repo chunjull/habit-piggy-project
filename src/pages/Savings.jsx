@@ -240,12 +240,15 @@ function Savings() {
       ) : (
         <div className="p-4 bg-black-50 rounded-xl space-y-4 min-h-screen">
           <div className="flex justify-between items-center">
-            <h2>習慣類別總覽</h2>
-            <select className="border" value={filter} onChange={(e) => setFilter(e.target.value)}>
-              <option value="week">本週</option>
-              <option value="month">本月</option>
-              <option value="all">全部</option>
-            </select>
+            <h2 className="font-bold text-xl leading-7">習慣類別總覽</h2>
+            <div className="relative">
+              <select className="border border-black-500 rounded-2xl appearance-none px-12 focus:outline-primary-dark" value={filter} onChange={(e) => setFilter(e.target.value)}>
+                <option value="week">本週</option>
+                <option value="month">本月</option>
+                <option value="all">全部</option>
+              </select>
+              <dropdownIcon.TbChevronDown className="w-6 h-6 text-black-500 pointer-events-none absolute inset-y-0 right-2" />
+            </div>
           </div>
           {savingsCount === 0 ? (
             <p>查無資料</p>
@@ -254,14 +257,14 @@ function Savings() {
               <div className="w-full h-[400px]">
                 <CategoryChart categoryData={categoryData} habitCategories={habitCategories} />
               </div>
-              <ul className="space-y-3">
+              <ul className="space-y-2">
                 {habitCategories.map((category) => (
-                  <li key={category.id} className="flex justify-between items-center">
+                  <li key={category.id} className="p-2 rounded flex justify-between items-center hover:bg-black-0">
                     <div className="flex items-center gap-3">
-                      <div className={`w-4 h-4 rounded-full`} style={{ backgroundColor: category.color }}></div>
-                      <p>{category.name}</p>
+                      <div className={`w-6 h-6 rounded-full`} style={{ backgroundColor: category.color }}></div>
+                      <p className="font-normal text-base leading-6">{category.name}</p>
                     </div>
-                    <p>{(((categoryData[category.id] || 0) / Object.values(categoryData).reduce((a, b) => a + b, 0)) * 100).toFixed(1)} %</p>
+                    <p className="font-bold text-lg leading-6">{(((categoryData[category.id] || 0) / Object.values(categoryData).reduce((a, b) => a + b, 0)) * 100).toFixed(1)}%</p>
                   </li>
                 ))}
               </ul>

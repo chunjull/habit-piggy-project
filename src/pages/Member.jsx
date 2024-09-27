@@ -7,7 +7,7 @@ import DetailModal from "../components/DetailModal";
 import PostModal from "../components/PostModal";
 import EditModal from "../components/EditModal";
 import { Navigate } from "react-router-dom";
-import { habitIcons } from "../assets/icons";
+import { habitIcons, settingIcon, dropdownIcon } from "../assets/icons";
 
 function Member() {
   const { user } = useContext(AuthContext);
@@ -267,64 +267,98 @@ function Member() {
     <>
       <div className="p-4 space-y-4">
         <ul className="grid grid-cols-2 w-full">
-          <li className={`border p-2 text-center ${isActiveTab ? "bg-gray-200" : ""}`} onClick={() => setIsActiveTab(true)}>
+          <li className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center ${isActiveTab ? "bg-primary" : "bg-black-50"}`} onClick={() => setIsActiveTab(true)}>
             會員管理
           </li>
-          <li className={`border p-2 text-center ${!isActiveTab ? "bg-gray-200" : ""}`} onClick={() => setIsActiveTab(false)}>
+          <li
+            className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center ${!isActiveTab ? "bg-primary" : "bg-black-50"}`}
+            onClick={() => setIsActiveTab(false)}
+          >
             歷史習慣
           </li>
         </ul>
         {isActiveTab ? (
           <div className="flex justify-between items-center">
-            <h2>會員管理</h2>
-            <button className="border" onClick={handleSettingModal}>
-              設定
-            </button>
+            <h2 className="font-bold text-xl leading-7">會員管理</h2>
+            <settingIcon.TbSettings className="w-8 h-8 cursor-pointer hover:text-alert" onClick={handleSettingModal} />
           </div>
         ) : (
           <div className="flex justify-between items-center">
-            <h2>歷史習慣</h2>
-            <select className="border" value={filter} onChange={handleFilterChange}>
-              <option value="all">全部</option>
-              <option value="in-progress">進行中</option>
-              <option value="finished">已結束</option>
-            </select>
+            <h2 className="font-bold text-xl leading-7">歷史習慣</h2>
+            <div className="relative">
+              <select className="text-center border border-black-500 rounded-2xl appearance-none px-12 focus:outline-primary-dark" value={filter} onChange={handleFilterChange}>
+                <option value="all">全部</option>
+                <option value="in-progress">進行中</option>
+                <option value="finished">已結束</option>
+              </select>
+              <dropdownIcon.TbChevronDown className="w-6 h-6 text-black-500 pointer-events-none absolute inset-y-0 right-2" />
+            </div>
           </div>
         )}
         {isActiveTab ? (
-          <div>
-            <div className="p-4 border space-y-2">
+          <div className="space-y-14">
+            <div className="p-4 bg-black-50 rounded-2xl space-y-2">
               <div className="flex justify-between items-start">
                 <div className="flex gap-3">
-                  <img src={profileData.avatar} alt="user's avatar" className="w-10 h-10" />
+                  <img src={profileData.avatar} alt="user's avatar" className="w-12 h-12 rounded-full" />
                   <div className="flex flex-col">
-                    <h3>{profileData.name}</h3>
-                    {/* <p className="text-slate-500">Lv.{profileData.levelPoints}</p> */}
+                    <h3 className="font-bold text-base leading-6">{profileData.name}</h3>
+                    <p className="font-normal text-sm leading-5 text-black-500">Lv.{profileData.levelPoints}</p>
                   </div>
                 </div>
               </div>
-              <p>{profileData.introduction}</p>
-              <div className="w-full bg-slate-300 text-center">{profileData.levelPoints}%</div>
+              <p className="font-normal text-base leading-6 text-black-500">{profileData.introduction}</p>
+              <div className="w-full bg-light text-center rounded-2xl">{profileData.levelPoints}%</div>
             </div>
-            <div className="pt-8 pb-4 px-4 border space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="pt-9 pb-4 px-4 bg-black-50 space-y-4 rounded-2xl relative">
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+                <div className="bg-black-100 h-8 w-full"></div>
+                <div className="bg-black-100 h-8 w-full"></div>
+                <div className="bg-black-100 h-8 w-full"></div>
+                <div className="bg-black-100 h-8 w-full"></div>
                 {profileData.achievements.map((achievement, index) => (
                   <button key={index} className="border">
                     {achievement}
                   </button>
                 ))}
               </div>
-              <button className="text-center w-full bg-slate-300">更多成就</button>
+              <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-light">更多成就</button>
+              <div className="bg-primary py-1 px-4 w-fit absolute -top-12 left-1/2 transform -translate-x-1/2">
+                <p className="font-lobster font-bold text-2xl leading-8 text-alert">Achievement</p>
+                <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[-16px] before:w-0 before:h-0 before:border-l-[20px] before:border-r-0 before:border-t-[12px] before:border-l-primary before:border-r-transparent before:border-t-primary-dark before:z-20"></div>
+                <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[114px] before:w-0 before:h-0 before:border-r-[20px] before:border-l-0 before:border-t-[12px] before:border-r-primary before:border-l-transparent before:border-t-primary-dark before:z-20"></div>
+                <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[-46px] before:w-8 before:h-10 before:bg-primary"></div>
+                <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[134px] before:w-8 before:h-10 before:bg-primary"></div>
+                <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[166px] before:w-0 before:h-0 before:border-l-0 before:border-r-[20px] before:border-b-[20px] before:border-l-transparent before:border-r-transparent before:border-b-primary before:z-20"></div>
+                <div className="absolute before:content-[''] before:absolute before:bottom-1 before:left-[166px] before:w-0 before:h-0 before:border-l-0 before:border-r-[20px] before:border-t-[20px] before:border-l-transparent before:border-r-transparent before:border-t-primary before:z-20"></div>
+                <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[-66px] before:w-0 before:h-0 before:border-l-[20px] before:border-r-0 before:border-b-[20px] before:border-l-transparent before:border-r-transparent before:border-b-primary before:z-20"></div>
+                <div className="absolute before:content-[''] before:absolute before:bottom-1 before:left-[-66px] before:w-0 before:h-0 before:border-l-[20px] before:border-r-0 before:border-t-[20px] before:border-l-transparent before:border-r-transparent before:border-t-primary before:z-20"></div>
+              </div>
             </div>
-            <div className="pt-8 pb-4 px-4 border space-y-4">
+            <div className="pt-9 pb-4 px-4 bg-black-50 space-y-4 rounded-2xl relative">
               <div className="grid grid-cols-3 gap-4">
+                <div className="bg-black-100 h-8 w-full"></div>
+                <div className="bg-black-100 h-8 w-full"></div>
+                <div className="bg-black-100 h-8 w-full"></div>
+                <div className="bg-black-100 h-8 w-full"></div>
                 {profileData.badges.map((badge, index) => (
                   <div key={index} className="w-20 h-20 bg-slate-100">
                     {badge}
                   </div>
                 ))}
               </div>
-              <button className="text-center w-full bg-slate-300">更多獎勵徽章</button>
+              <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-light">更多獎勵徽章</button>
+              <div className="bg-primary py-1 px-4 w-[150px] absolute -top-12 left-1/2 transform -translate-x-1/2">
+                <p className="font-lobster font-bold text-2xl leading-8 text-alert text-center">Badge</p>
+                <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[-16px] before:w-0 before:h-0 before:border-l-[20px] before:border-r-0 before:border-t-[12px] before:border-l-primary before:border-r-transparent before:border-t-primary-dark before:z-20"></div>
+                <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[114px] before:w-0 before:h-0 before:border-r-[20px] before:border-l-0 before:border-t-[12px] before:border-r-primary before:border-l-transparent before:border-t-primary-dark before:z-20"></div>
+                <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[-46px] before:w-8 before:h-10 before:bg-primary"></div>
+                <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[134px] before:w-8 before:h-10 before:bg-primary"></div>
+                <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[166px] before:w-0 before:h-0 before:border-l-0 before:border-r-[20px] before:border-b-[20px] before:border-l-transparent before:border-r-transparent before:border-b-primary before:z-20"></div>
+                <div className="absolute before:content-[''] before:absolute before:bottom-1 before:left-[166px] before:w-0 before:h-0 before:border-l-0 before:border-r-[20px] before:border-t-[20px] before:border-l-transparent before:border-r-transparent before:border-t-primary before:z-20"></div>
+                <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[-66px] before:w-0 before:h-0 before:border-l-[20px] before:border-r-0 before:border-b-[20px] before:border-l-transparent before:border-r-transparent before:border-b-primary before:z-20"></div>
+                <div className="absolute before:content-[''] before:absolute before:bottom-1 before:left-[-66px] before:w-0 before:h-0 before:border-l-[20px] before:border-r-0 before:border-t-[20px] before:border-l-transparent before:border-r-transparent before:border-t-primary before:z-20"></div>
+              </div>
             </div>
           </div>
         ) : (

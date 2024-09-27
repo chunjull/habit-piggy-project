@@ -86,18 +86,48 @@ function Rank() {
   const renderTopTenUsers = (userCounts, type) => {
     const sortedUsers = userCounts.sort((a, b) => (type === "habit" ? b.completedCount - a.completedCount : b.totalSavings - a.totalSavings));
     return sortedUsers.slice(0, 10).map((user, index) => (
-      <li key={user.uid} className="flex justify-between py-2 px-4 bg-slate-100">
+      <li key={user.uid} className="relative flex justify-between items-center py-2 px-4 bg-black-50 rounded-2xl hover:bg-black-0">
         <div className="flex items-center gap-3">
-          <p className="w-10 h-auto">{index + 1}</p>
-          <img src={user.avatar} alt="user's avatar" className="w-10 h-10" />
-          <div>
-            <p>{user.name}</p>
-            {/* <p>Lv. {user.levelPoints}</p> */}
-          </div>
+          {index < 3 ? (
+            <div className="flex items-center gap-3">
+              <div className="absolute top-[-4px]">
+                <div className="w-10 h-[68px] flex justify-center items-center bg-primary relative">
+                  <p className="font-bold text-center text-3xl leading-9 font-lobster text-alert">{index + 1}</p>
+                  <div className="absolute before:content-[''] before:absolute before:bottom-[-34px] before:right-0 before:w-0 before:h-0 before:border-l-[20px] before:border-r-0 before:border-b-[12px] before:border-l-transparent before:border-r-transparent before:border-b-black-50 before:z-20"></div>
+                  <div className="absolute before:content-[''] before:absolute before:bottom-[-34px] before:left-0 before:w-0 before:h-0 before:border-l-0 before:border-r-[20px] before:border-b-[12px] before:border-l-transparent before:border-r-transparent before:border-b-black-50 before:z-20"></div>
+                  <div className="absolute before:content-[''] before:absolute before:bottom-[30px] before:left-5 before:w-0 before:h-0 before:border-l-0 before:border-r-[3px] before:border-b-[4px] before:border-l-transparent before:border-r-transparent before:border-b-primary-dark before:z-20"></div>
+                </div>
+              </div>
+              <img src={user.avatar} alt="user's avatar" className="w-12 h-12 rounded-full ml-14" />
+              <div>
+                <p className="font-normal text-base leading-6">{user.name}</p>
+                {/* <p>Lv. {user.levelPoints}</p> */}
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3">
+              <p className="w-10 h-auto font-bold text-center text-3xl leading-9 font-lobster">{index + 1}</p>
+              <img src={user.avatar} alt="user's avatar" className="w-12 h-12 rounded-full" />
+              <div>
+                <p className="font-normal text-base leading-6">{user.name}</p>
+                {/* <p>Lv. {user.levelPoints}</p> */}
+              </div>
+            </div>
+          )}
         </div>
-        <div className="text-end">
-          <p>{type === "habit" ? "累積數量" : "累積存款"}</p>
-          <p>{type === "habit" ? `${user.completedCount} 次` : `${user.totalSavings} 元`}</p>
+        <div className="flex flex-col items-end">
+          <p className="font-normal text-sm leading-5">{type === "habit" ? "累積數量" : "累積存款"}</p>
+          {type === "habit" ? (
+            <div className="flex items-center gap-1">
+              <p className="font-bold text-base leading-6">{user.completedCount}</p>
+              <p className="font-normal text-sm leading-5">次</p>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1">
+              <p className="font-bold text-base leading-6">{user.totalSavings}</p>
+              <p className="font-normal text-sm leading-5">元</p>
+            </div>
+          )}
         </div>
       </li>
     ));
@@ -110,18 +140,28 @@ function Rank() {
     }
     const rank = userCounts.findIndex((user) => user.uid === currentUser.uid) + 1;
     return (
-      <div className="flex justify-between py-2 px-4 bg-slate-900">
+      <div className="flex justify-between py-2 px-4 bg-black-500 rounded-2xl">
         <div className="flex items-center gap-3 text-white">
-          <p className="w-10 h-auto">{rank}</p>
-          <img src={currentUserData.avatar} alt="user's avatar" className="w-10 h-10" />
+          <p className="w-10 h-auto font-bold text-center text-3xl leading-9 font-lobster">{rank}</p>
+          <img src={currentUserData.avatar} alt="user's avatar" className="w-12 h-12 rounded-full" />
           <div>
-            <p>{currentUserData.name}</p>
+            <p className="font-normal text-base leading-6">{currentUserData.name}</p>
             {/* <p>Lv. {currentUserData.levelPoints}</p> */}
           </div>
         </div>
-        <div className="text-end text-white">
-          <p>{type === "habit" ? "累積數量" : "累積存款"}</p>
-          <p>{type === "habit" ? `${currentUserData.completedCount} 次` : `${currentUserData.totalSavings} 元`}</p>
+        <div className="flex flex-col items-end text-black-0">
+          <p className="font-normal text-sm leading-5">{type === "habit" ? "累積數量" : "累積存款"}</p>
+          {type === "habit" ? (
+            <div className="flex items-center gap-1">
+              <p className="font-bold text-base leading-6">{currentUserData.completedCount}</p>
+              <p className="font-normal text-sm leading-5">次</p>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1">
+              <p className="font-bold text-base leading-6">{currentUserData.totalSavings}</p>
+              <p className="font-normal text-sm leading-5">元</p>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -169,8 +209,10 @@ function Rank() {
             <rankIcons.TbCircleCheckFilled className="w-8 h-8" />
             <rankIcons.TbCircleCheck className="w-8 h-8" />
           </div>
-          <ul className="space-y-4">{renderTopTenUsers(userHabitCounts, "habit")}</ul>
-          {renderCurrentUser(userHabitCounts, user, "habit")}
+          <ul className="space-y-4 pb-20">{renderTopTenUsers(userHabitCounts, "habit")}</ul>
+          <div className="fixed bottom-0 z-50 py-4 bg-light" style={{ width: "calc(100% - 276px)" }}>
+            {renderCurrentUser(userHabitCounts, user, "habit")}
+          </div>
         </div>
       )}
       {isActiveTab === "savings" && (

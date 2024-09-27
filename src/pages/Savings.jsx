@@ -185,7 +185,7 @@ function Savings() {
     uncompletedHabits.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     return uncompletedHabits.slice(0, 50).map((habit, index) => (
-      <li key={habit.id + habit.date} className="py-2 px-4 grid grid-cols-5 bg-black-50 rounded-lg font-normal text-sm leading-5">
+      <li key={habit.id + habit.date} className="py-2 px-4 grid grid-cols-5 bg-black-50 rounded-lg font-normal text-sm leading-5 hover:bg-black-0">
         <p>{String(index + 1).padStart(2, "0")}</p>
         <p className="text-center">{new Date(habit.date).toLocaleDateString()}</p>
         <p className="text-center col-span-2 overflow-scroll">{habit.title}</p>

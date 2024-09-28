@@ -30,6 +30,7 @@ import {
   TbCircleCheckFilled,
   TbCoinFilled,
   TbSettings,
+  TbPhoto,
 } from "react-icons/tb";
 
 export const layoutIcons = {
@@ -93,6 +94,7 @@ export const rankIcons = {
   TbCoinFilled,
 };
 
-export const settingIcon = {
+export const settingIcons = {
   TbSettings,
+  TbPhoto,
 };

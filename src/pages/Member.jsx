@@ -7,7 +7,7 @@ import DetailModal from "../components/DetailModal";
 import PostModal from "../components/PostModal";
 import EditModal from "../components/EditModal";
 import { Navigate } from "react-router-dom";
-import { habitIcons, settingIcon, dropdownIcon } from "../assets/icons";
+import { habitIcons, settingIcons, dropdownIcon } from "../assets/icons";
 
 function Member() {
   const { user } = useContext(AuthContext);
@@ -280,7 +280,7 @@ function Member() {
         {isActiveTab ? (
           <div className="flex justify-between items-center">
             <h2 className="font-bold text-xl leading-7">會員管理</h2>
-            <settingIcon.TbSettings className="w-8 h-8 cursor-pointer hover:text-alert" onClick={handleSettingModal} />
+            <settingIcons.TbSettings className="w-8 h-8 cursor-pointer hover:text-alert" onClick={handleSettingModal} />
           </div>
         ) : (
           <div className="flex justify-between items-center">

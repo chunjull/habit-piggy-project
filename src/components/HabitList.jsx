@@ -16,9 +16,9 @@ const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, hand
           const HabitIcon = habitCategory ? habitCategory.icon : null;
 
           return (
-            <li key={habit.id} className={`p-4 rounded-2xl ${isFinished ? "bg-black-200" : "bg-black-50"}`}>
+            <li key={habit.id} className={`p-4 rounded-2xl ${isFinished ? "bg-black-300 hover:bg-black-200" : "bg-black-50 hover:bg-black-0"}`}>
               <div className="flex justify-between items-center">
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2">
                   <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">{HabitIcon && <HabitIcon className="w-8 h-8" />}</div>
                   <div className="flex flex-col">
                     <h3>{habit.title}</h3>

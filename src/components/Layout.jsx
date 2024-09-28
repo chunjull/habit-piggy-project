@@ -42,7 +42,7 @@ function Layout({ children, isModalOpen, modalContent }) {
           </li>
         </ul>
       </nav>
-      <div className="mt-0 mb-[86px] md:mb-0 md:ml-[244px] w-full relative">
+      <div className="mt-0 mb-[86px] md:mb-0 md:ml-[244px] w-full p-0 md:px-20 relative">
         {children}
         <Modal isOpen={isModalOpen}>{modalContent}</Modal>
       </div>

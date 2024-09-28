@@ -8,6 +8,7 @@ import PostModal from "../components/PostModal";
 import EditModal from "../components/EditModal";
 import { Navigate } from "react-router-dom";
 import { habitIcons, settingIcons, dropdownIcon } from "../assets/icons";
+import HabitList from "../components/HabitList";
 
 function Member() {
   const { user } = useContext(AuthContext);
@@ -362,41 +363,7 @@ function Member() {
             </div>
           </div>
         ) : (
-          <ul className="space-y-4">
-            {Array.isArray(filteredHabits) &&
-              filteredHabits.map((habit) => {
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const endDate = new Date(habit.endDate);
-                endDate.setHours(0, 0, 0, 0);
-                const isFinished = endDate < today;
-
-                const habitCategory = habitCategories.find((category) => category.id === habit.category);
-                const HabitIcon = habitCategory ? habitCategory.icon : null;
-
-                return (
-                  <li key={habit.id} className={`px-2 py-4 ${isFinished ? "bg-slate-500" : "bg-slate-100"}`}>
-                    <div className="flex justify-between items-center">
-                      <div className="flex gap-2">
-                        <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">{HabitIcon && <HabitIcon className="w-8 h-8" />}</div>
-                        <div className="flex flex-col">
-                          <h3>{habit.title}</h3>
-                          <div className="flex">
-                            <p>
-                              {habit.frequency.type}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
-                            </p>
-                            <p className="text-gray-500">/{habit.status.length}</p>
-                          </div>
-                        </div>
-                      </div>
-                      <button className="bg-white" onClick={() => handleDetailClick(habit)}>
-                        Detail
-                      </button>
-                    </div>
-                  </li>
-                );
-              })}
-          </ul>
+          <HabitList habits={filteredHabits} habitCategories={habitCategories} handleDetailClick={handleDetailClick} />
         )}
       </div>
       <Modal isOpen={isSettingModalOpen} onClose={handleSettingModal}>

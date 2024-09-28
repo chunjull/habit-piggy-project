@@ -1,0 +1,79 @@
+import PropTypes from "prop-types";
+import { checkIcon, habitDetailIcon } from "../assets/icons";
+
+const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, handleCheck }) => {
+  return (
+    <ul className="space-y-4 p-4 mt-2">
+      {Array.isArray(habits) &&
+        habits.map((habit) => {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          const endDate = new Date(habit.endDate);
+          endDate.setHours(0, 0, 0, 0);
+          const isFinished = endDate < today;
+
+          const habitCategory = habitCategories.find((category) => category.id === habit.category);
+          const HabitIcon = habitCategory ? habitCategory.icon : null;
+
+          return (
+            <li key={habit.id} className={`p-4 rounded-2xl ${isFinished ? "bg-black-200" : "bg-black-50"}`}>
+              <div className="flex justify-between items-center">
+                <div className="flex gap-2">
+                  <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">{HabitIcon && <HabitIcon className="w-8 h-8" />}</div>
+                  <div className="flex flex-col">
+                    <h3>{habit.title}</h3>
+                    <div className="flex">
+                      <p>
+                        {habit.frequency.type}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
+                      </p>
+                      <p className="text-gray-500">/{habit.status.length}</p>
+                    </div>
+                  </div>
+                </div>
+                <button className="text-black hover:text-alert" onClick={() => handleDetailClick(habit)}>
+                  <habitDetailIcon.TbCalendarSmile className="w-6 h-6 md:w-8 md:h-8" />
+                </button>
+              </div>
+              {weekDates && (
+                <div className="grid grid-cols-7 gap-y-1">
+                  {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
+                    <div key={index} className="text-center text-sm leading-5 md:font-normal md:text-base md:leading-6">
+                      {day}
+                    </div>
+                  ))}
+                  {weekDates.map((date, index) => {
+                    const status = habit.status.find((s) => new Date(s.date).toDateString() === new Date(date.year, date.month, date.day).toDateString());
+                    return (
+                      <div key={index} className="flex flex-col items-center">
+                        {status ? (
+                          <checkIcon.TbCheck
+                            className={`w-10 h-10 md:w-12 md:h-12 cursor-pointer border-2 rounded-full ${
+                              status && status.completed ? "bg-primary text-black-0 border-primary" : "text-black-500 border-black-500 hover:bg-primary-light"
+                            }`}
+                            onClick={() => status && handleCheck(habit.id, status.date)}
+                            disabled={!status}
+                          />
+                        ) : (
+                          <checkIcon.TbCheck className="w-10 h-10 md:w-12 md:h-12 bg-black-200 text-black-50 rounded-full cursor-not-allowed" />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </li>
+          );
+        })}
+    </ul>
+  );
+};
+
+HabitList.propTypes = {
+  habits: PropTypes.array.isRequired,
+  habitCategories: PropTypes.array.isRequired,
+  handleDetailClick: PropTypes.func.isRequired,
+  weekDates: PropTypes.array,
+  handleCheck: PropTypes.func,
+};
+
+export default HabitList;

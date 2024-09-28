@@ -8,7 +8,8 @@ import DetailModal from "../components/DetailModal";
 import PostModal from "../components/PostModal";
 import EditModal from "../components/EditModal";
 import { Navigate } from "react-router-dom";
-import { habitIcons, habitDetailIcon, habitAddIcon, checkIcon } from "../assets/icons";
+import { habitIcons, habitAddIcon } from "../assets/icons";
+import HabitList from "../components/HabitList";
 
 function Home() {
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
@@ -338,59 +339,7 @@ function Home() {
   return (
     <>
       <WeekCalendar date={selectedDate} onSelect={handleSelectDate} onWeekChange={setWeekDates} />
-      <ul className="space-y-4 p-4 mt-2">
-        {Array.isArray(habits) &&
-          habits.map((habit) => {
-            const habitCategory = habitCategories.find((category) => category.id === habit.category);
-            const HabitIcon = habitCategory ? habitCategory.icon : null;
-            return (
-              <li key={habit.id} className="p-4 bg-black-50 rounded-2xl">
-                <div className="flex justify-between items-center mb-2">
-                  <div className="flex gap-2">
-                    <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">{HabitIcon && <HabitIcon className="w-8 h-8" />}</div>
-                    <div className="flex flex-col">
-                      <h3 className="font-bold text-lg leading-6">{habit.title}</h3>
-                      <div className="flex">
-                        <p className="font-normal text-xs leading-4">
-                          {habit.frequency.type}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
-                        </p>
-                        <p className="text-black-500 font-normal text-xs leading-4">/{habit.status.length}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <button className="text-black" onClick={() => handleDetailClick(habit)}>
-                    <habitDetailIcon.TbCalendarSmile className="w-6 h-6 md:w-8 md:h-8" />
-                  </button>
-                </div>
-                <div className="grid grid-cols-7 gap-y-1">
-                  {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
-                    <div key={index} className="text-center text-sm leading-5 md:font-normal md:text-base md:leading-6">
-                      {day}
-                    </div>
-                  ))}
-                  {weekDates.map((date, index) => {
-                    const status = habit.status.find((s) => new Date(s.date).toDateString() === new Date(date.year, date.month, date.day).toDateString());
-                    return (
-                      <div key={index} className="flex flex-col items-center">
-                        {status ? (
-                          <checkIcon.TbCheck
-                            className={`w-10 h-10 md:w-12 md:h-12 cursor-pointer border-2 rounded-full ${
-                              status && status.completed ? "bg-primary text-black-0 border-primary" : "text-black-500 border-black-500 hover:bg-primary-light"
-                            }`}
-                            onClick={() => status && handleCheck(habit.id, status.date)}
-                            disabled={!status}
-                          />
-                        ) : (
-                          <checkIcon.TbCheck className="w-10 h-10 md:w-12 md:h-12 bg-black-200 text-black-50 rounded-full cursor-not-allowed" />
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </li>
-            );
-          })}
-      </ul>
+      <HabitList habits={habits} habitCategories={habitCategories} handleDetailClick={handleDetailClick} weekDates={weekDates} handleCheck={handleCheck} />
       <div
         className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center fixed right-4 bottom-20 md:bottom-10 bg-primary hover:bg-primary-dark cursor-pointer"
         onClick={handleHabitModal}

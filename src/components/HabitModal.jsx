@@ -74,7 +74,7 @@ const HabitModal = ({
             <label
               htmlFor="daily"
               className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
-                habitData.frequency.type === "daily" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light"
+                habitData.frequency.type === "daily" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-dark"
               }`}
             >
               每日
@@ -85,7 +85,7 @@ const HabitModal = ({
             <label
               htmlFor="weekly"
               className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
-                habitData.frequency.type === "weekly" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light"
+                habitData.frequency.type === "weekly" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-dark"
               }`}
             >
               每週
@@ -104,7 +104,7 @@ const HabitModal = ({
             <label
               htmlFor="specificDays"
               className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
-                habitData.frequency.type === "specificDays" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light"
+                habitData.frequency.type === "specificDays" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-dark"
               }`}
             >
               特定日期
@@ -118,7 +118,7 @@ const HabitModal = ({
             <div key={index} className="text-center flex flex-col justify-center items-center gap-1">
               {day}
               <checkIcon.TbCheck
-                className={`w-10 h-10 rounded-full p-1 border border-black-500 ${selectedDays.includes(day) ? "bg-primary text-white border-primary" : "text-black-500 hover:bg-primary-light"}`}
+                className={`w-10 h-10 rounded-full p-1 border border-black-500 ${selectedDays.includes(day) ? "bg-primary text-white border-primary" : "text-black-500 hover:bg-primary-dark"}`}
                 onClick={() => handleDayButtonClick(day)}
               />
             </div>
@@ -183,7 +183,7 @@ const HabitModal = ({
           </div>
         )}
       </div>
-      <button className="w-full rounded-lg bg-primary font-medium text-sm leading-5 py-1 hover:bg-primary-light" onClick={handleAddHabit}>
+      <button className="w-full rounded-lg bg-primary font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleAddHabit}>
         養成習慣
       </button>
     </div>

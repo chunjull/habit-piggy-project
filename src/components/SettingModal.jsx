@@ -21,7 +21,7 @@ const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSav
               accept="image/jpg,image/jpeg,image/png,image/gif"
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer hidden"
             />
-            <label htmlFor="profile" className="cursor-pointer bg-primary text-black font-medium text-sm leading-5 py-1 px-2 rounded-lg flex items-center gap-2 hover:bg-primary-light">
+            <label htmlFor="profile" className="cursor-pointer bg-primary text-black font-medium text-sm leading-5 py-1 px-2 rounded-lg flex items-center gap-2 hover:bg-primary-dark">
               <settingIcons.TbPhoto className="w-5 h-5" />
               更換頭像
             </label>
@@ -79,7 +79,7 @@ const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSav
         <dropdownIcon.TbChevronDown className="w-6 h-6 text-black-500 pointer-events-none absolute inset-y-0 right-2" />
       </div>
     </div>
-    <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-light" onClick={handleSaveAndClose}>
+    <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleSaveAndClose}>
       儲存
     </button>
   </div>

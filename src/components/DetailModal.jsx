@@ -35,7 +35,7 @@ const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncomp
         <p>累積存款：</p>
         <p>NT$ {uncompletedFine}</p>
       </div>
-      <button className="py-1 w-full bg-primary hover:bg-primary-light rounded-lg font-medium text-sm leading-5" onClick={handlePostModal}>
+      <button className="py-1 w-full bg-primary hover:bg-primary-dark rounded-lg font-medium text-sm leading-5" onClick={handlePostModal}>
         發佈貼文
       </button>
     </div>

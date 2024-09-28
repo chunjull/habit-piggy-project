@@ -74,7 +74,7 @@ const PostModal = ({ postContent, setPostContent, postBackground, setPostBackgro
           onChange={(e) => setPostContent(e.target.value)}
         />
       </div>
-      <button className="py-1 w-full bg-primary rounded-lg font-medium text-sm leading-5 hover:bg-primary-light" onClick={handleAddPost}>
+      <button className="py-1 w-full bg-primary rounded-lg font-medium text-sm leading-5 hover:bg-primary-dark" onClick={handleAddPost}>
         發佈貼文
       </button>
     </div>

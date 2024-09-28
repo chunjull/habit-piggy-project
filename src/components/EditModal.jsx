@@ -219,7 +219,7 @@ const EditModal = ({
         <button className="w-full py-1 font-normal text-sm leading-5 bg-alert text-white rounded-lg" onClick={handleDeleteHabit}>
           刪除習慣
         </button>
-        <button className="w-full py-1 font-normal text-sm leading-5 bg-primary rounded-lg hover:bg-primary-light" onClick={handleUpdateHabit}>
+        <button className="w-full py-1 font-normal text-sm leading-5 bg-primary rounded-lg hover:bg-primary-dark" onClick={handleUpdateHabit}>
           更新習慣
         </button>
       </div>

@@ -161,7 +161,7 @@ function Posts() {
                     value={commentContent}
                     onChange={(e) => setCommentContent(e.target.value)}
                   />
-                  <div className="w-10 h-10 bg-primary flex justify-center items-center rounded-full aspect-square cursor-pointer hover:bg-primary-light" onClick={() => handleAddComment(post.id)}>
+                  <div className="w-10 h-10 bg-primary flex justify-center items-center rounded-full aspect-square cursor-pointer hover:bg-primary-dark" onClick={() => handleAddComment(post.id)}>
                     <postIcons.TbSend2 className="w-6 h-6 text-black" />
                   </div>
                 </li>

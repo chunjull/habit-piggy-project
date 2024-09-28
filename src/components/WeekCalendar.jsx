@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { weekCalendarIcons } from "../assets/icons";
 
 const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
-  const [weekNames] = useState(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
+  const [weekNames] = useState(["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]);
   const [monthNames] = useState(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]);
   const [displayDate, setDisplayDate] = useState(null);
   const [currentDate, setCurrentDate] = useState(null);

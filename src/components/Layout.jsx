@@ -1,10 +1,22 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { layoutIcons, generalIcons } from "../assets/icons";
 import PropTypes from "prop-types";
 import Modal from "./Modal";
+import { useContext } from "react";
+import { logoutUser } from "../services/api";
+import { AuthContext } from "../utils/AuthContext";
 
 function Layout({ children, isModalOpen, modalContent }) {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { setUser } = useContext(AuthContext);
+
+  const handleLogout = async () => {
+    await logoutUser();
+    setUser(null);
+    alert("Logged out successfully");
+    navigate("/");
+  };
 
   return (
     <div className="font-sans bg-light">
@@ -49,7 +61,7 @@ function Layout({ children, isModalOpen, modalContent }) {
                   <div className={`flex justify-center py-1 hover:bg-primary-light rounded-2xl w-3/5 md:w-full 2xl:w-fit ${location.pathname === "/posts" ? "bg-light 2xl:bg-transparent" : ""}`}>
                     <layoutIcons.TbMessage className={`w-6 h-6 md:w-8 md:h-8 2xl:mr-4 ${location.pathname === "/posts" ? "text-primary-dark 2xl:text-black-50" : ""}`} />
                   </div>
-                  <p className="text-black font-normal text-xs leading-4 md:text-sm md:leading-5 2xl:text-base 2xl:leading-6">貼文</p>
+                  <p className="text-black font-normal text-xs leading-4 md:text-sm  md:leading-5 2xl:text-base 2xl:leading-6">貼文</p>
                 </div>
               </li>
             </Link>
@@ -59,12 +71,21 @@ function Layout({ children, isModalOpen, modalContent }) {
                   <div className={`flex justify-center py-1 hover:bg-primary-light rounded-2xl w-3/5 md:w-full 2xl:w-fit ${location.pathname === "/member" ? "bg-light 2xl:bg-transparent" : ""}`}>
                     <layoutIcons.TbMoodSmile className={`w-6 h-6 md:w-8 md:h-8 2xl:mr-4 ${location.pathname === "/member" ? "text-primary-dark 2xl:text-black-50" : ""}`} />
                   </div>
-                  <p className="text-black font-normal text-xs leading-4 md:text-sm md:leading-5 2xl:text-base 2xl:leading-6">會員</p>
+                  <p className="text-black font-normal text-xs leading-4 md:text-sm  md:leading-5 2xl:text-base 2xl:leading-6">會員</p>
                 </div>
               </li>
             </Link>
           </ul>
-          <generalIcons.TbLogout className="hidden md:block 2xl:hidden w-8 h-8 text-black hover:text-alert cursor-pointer mb-4" />
+          <button onClick={handleLogout} className="block w-full 2xl:mt-auto">
+            <div className="2xl:py-2 2xl:px-4 2xl:rounded-lg hover:2xl:bg-primary-light cursor-pointer">
+              <div className="flex flex-col gap-1 2xl:gap-0 items-center 2xl:flex-row">
+                <div className="flex justify-center py-1 hover:bg-primary-light rounded-2xl w-3/5 md:w-full 2xl:w-fit">
+                  <generalIcons.TbLogout className="w-6 h-6 md:w-8 md:h-8 2xl:mr-4" />
+                </div>
+                <p className="text-black font-normal text-xs leading-4 md:text-sm  md:leading-5 2xl:text-base 2xl:leading-6">登出</p>
+              </div>
+            </div>
+          </button>
         </nav>
         <div className="mt-0 mb-[86px] md:mb-0 md:ml-20 w-full p-0 relative">
           {children}

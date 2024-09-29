@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { registerUser, logoutUser } from "../services/api";
+import { registerUser } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import { Navigate } from "react-router-dom";
 
@@ -33,12 +33,6 @@ function Login() {
     }
   };
 
-  const handleLogout = async () => {
-    await logoutUser();
-    setUser(null);
-    alert("Logged out successfully");
-  };
-
   if (isLoggedIn) {
     return <Navigate to="/home" />;
   }
@@ -62,9 +56,6 @@ function Login() {
           <input type="password" name="password" id="password" placeholder="password" className="border p-3" value={password} onChange={(e) => setPassword(e.target.value)} />
           <button className="border p-3 mt-4" onClick={handleLogin}>
             Login
-          </button>
-          <button className="border bg-slate-300 p-3 mt-4" onClick={handleLogout}>
-            Logout
           </button>
         </div>
       ) : (

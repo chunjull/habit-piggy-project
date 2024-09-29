@@ -80,6 +80,24 @@ function Posts() {
     }
   };
 
+  const getTimeDifference = (timestamp) => {
+    const now = new Date();
+    const commentTime = new Date(timestamp * 1000);
+    const diffInSeconds = Math.floor((now - commentTime) / 1000);
+
+    if (diffInSeconds < 3600) {
+      return "剛剛";
+    } else if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      return `${hours} 小時前`;
+    } else if (diffInSeconds < 259200) {
+      const days = Math.floor(diffInSeconds / 86400);
+      return `${days} 天前`;
+    } else {
+      return commentTime.toLocaleString([], { year: "numeric", month: "2-digit", day: "2-digit" });
+    }
+  };
+
   return (
     <div className="p-4 space-y-4">
       <div className="flex justify-between items-center">
@@ -101,9 +119,7 @@ function Posts() {
                   <div className="w-12 h-12">{post.user && <img src={post.user.avatar} alt="avatar" className="w-full h-full object-cover rounded-full" />}</div>
                   <div className="flex flex-col">
                     <h3 className="font-bold text-lg leading-6">{post.user ? post.user.name : "Unknown"}</h3>
-                    <p className="font-normal text-sm leading-5">
-                      {new Date(post.createdTime.seconds * 1000).toLocaleString([], { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" })}
-                    </p>
+                    <p className="font-normal text-sm leading-5">{getTimeDifference(post.createdTime.seconds)}</p>
                     {/* <p className="text-slate-500">Lv.{post.user ? post.user.levelPoints : 0}</p> */}
                   </div>
                 </div>
@@ -134,9 +150,7 @@ function Posts() {
                         <div>
                           <div className="flex gap-2">
                             <h3 className="font-medium text-sm leading-5 line-clamp-1">{comment.userName}</h3>
-                            <p className="font-normal text-sm leading-5 text-black-700">
-                              {new Date(comment.createdTime.seconds * 1000).toLocaleString([], { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" })}
-                            </p>
+                            <p className="font-normal text-sm leading-5 text-black-700">{getTimeDifference(comment.createdTime.seconds)}</p>
                           </div>
                           <p className="font-normal text-base leading-6">{comment.content}</p>
                         </div>

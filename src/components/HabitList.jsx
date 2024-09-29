@@ -1,9 +1,12 @@
 import PropTypes from "prop-types";
 import { checkIcon, habitDetailIcon } from "../assets/icons";
+import { useLocation } from "react-router-dom";
 
 const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, handleCheck }) => {
+  const location = useLocation();
+
   return (
-    <ul className="space-y-4 p-4 mt-2">
+    <ul className={`space-y-4 mt-2 ${location.pathname === "/home" ? "p-4" : ""}`}>
       {Array.isArray(habits) &&
         habits.map((habit) => {
           const today = new Date();
@@ -21,12 +24,12 @@ const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, hand
                 <div className="flex items-center gap-2">
                   <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">{HabitIcon && <HabitIcon className="w-8 h-8" />}</div>
                   <div className="flex flex-col">
-                    <h3>{habit.title}</h3>
+                    <h3 className="font-bold text-base leading-6">{habit.title}</h3>
                     <div className="flex">
-                      <p>
+                      <p className="font-normal text-sm leading-5">
                         {habit.frequency.type}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
                       </p>
-                      <p className="text-black-500">/{habit.status.length}</p>
+                      <p className="text-black-500 font-normal text-sm leading-5">/{habit.status.length}</p>
                     </div>
                   </div>
                 </div>

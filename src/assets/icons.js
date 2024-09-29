@@ -32,7 +32,7 @@ import {
   TbSettings,
   TbPhoto,
   TbLogout,
-  TbMenu2,
+  TbLayoutSidebarRight,
 } from "react-icons/tb";
 
 export const layoutIcons = {
@@ -103,5 +103,5 @@ export const settingIcons = {
 
 export const generalIcons = {
   TbLogout,
-  TbMenu2,
+  TbLayoutSidebarRight,
 };

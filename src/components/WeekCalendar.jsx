@@ -112,7 +112,7 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
           <weekCalendarIcons.TbChevronRight className="w-6 h-6 text-black hover:text-alert" />
         </button>
       </div>
-      <div className="grid grid-cols-7 gap-y-1 gap-x-4 text-center">
+      <div className="grid grid-cols-7 gap-y-1 gap-x-2 md:gap-x-4 text-center">
         {daysInWeek().map((day, index) => (
           <div
             key={index}

@@ -32,6 +32,7 @@ function Member() {
   const [habits, setHabits] = useState([]);
   const [selectedHabit, setSelectedHabit] = useState(null);
   const [postContent, setPostContent] = useState("");
+  const [postBackground, setPostBackground] = useState("");
   const [habitData, setHabitData] = useState({
     category: 0,
     title: "",
@@ -42,10 +43,10 @@ function Member() {
     status: [],
   });
   const [uncompletedFine, setUncompletedFine] = useState(0);
-  const [selectedDate, setSelectedDate] = useState(null);
   const [showMonthCalendar, setShowMonthCalendar] = useState(false);
   const [calendarTarget, setCalendarTarget] = useState("");
   const calendarRef = useRef(null);
+  const [monthCalendarDate, setMonthCalendarDate] = useState(null);
   const [isPost, setIsPost] = useState(false);
   const [filter, setFilter] = useState("all");
 
@@ -74,6 +75,15 @@ function Member() {
     fetchUserProfile();
   }, [user]);
 
+  useEffect(() => {
+    const today = new Date();
+    setMonthCalendarDate({
+      year: today.getFullYear(),
+      month: today.getMonth(),
+      day: today.getDate(),
+    });
+  }, []);
+
   const handleSettingModal = () => {
     setIsSettingModalOpen(!isSettingModalOpen);
   };
@@ -84,6 +94,7 @@ function Member() {
 
   const handlePostModal = () => {
     setIsPostModalOpen(!isPostModalOpen);
+    setIsDetailModalOpen(false);
   };
 
   const handleEditModal = (habit) => {
@@ -144,10 +155,46 @@ function Member() {
 
   const handleHabitChange = (e) => {
     const { name, value } = e.target;
-    setHabitData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (name === "frequency") {
+      const newFrequency = { type: value };
+      const newStatus = generateStatusArray(habitData.startDate, habitData.endDate, newFrequency);
+      setHabitData((prevData) => ({
+        ...prevData,
+        frequency: newFrequency,
+        status: newStatus,
+      }));
+    } else {
+      setHabitData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+
+  const generateStatusArray = (startDate, endDate, frequency) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const statusArray = [];
+
+    if (frequency.type === "daily") {
+      for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+        statusArray.push({ date: new Date(d).toDateString(), completed: false });
+      }
+    } else if (frequency.type === "weekly") {
+      for (let d = start; d <= end; d.setDate(d.getDate() + 7)) {
+        statusArray.push({ date: new Date(d).toDateString(), completed: false });
+      }
+    } else if (frequency.type === "specificDays") {
+      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      const selectedDays = frequency.days || [];
+      for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+        if (selectedDays.includes(daysOfWeek[d.getDay()])) {
+          statusArray.push({ date: new Date(d).toDateString(), completed: false });
+        }
+      }
+    }
+
+    return statusArray;
   };
 
   const fetchHabits = async () => {
@@ -170,24 +217,14 @@ function Member() {
     if (user && selectedHabit) {
       const postData = {
         content: postContent,
+        background: postBackground,
         habitId: selectedHabit.id,
       };
       await addPost(user.uid, postData);
       setIsPost(true);
       handlePostModal();
       setPostContent("");
-    }
-  };
-
-  const handleSelectDate = async (date) => {
-    setSelectedDate(date);
-    if (calendarTarget) {
-      setHabitData((prev) => ({
-        ...prev,
-        [calendarTarget]: `${date.year}-${String(date.month + 1).padStart(2, "0")}-${String(date.day).padStart(2, "0")}`,
-      }));
-      setShowMonthCalendar(false);
-      setCalendarTarget("");
+      setPostBackground("");
     }
   };
 
@@ -219,6 +256,19 @@ function Member() {
       setIsDetailModalOpen(false);
     } else {
       console.error("User not authenticated or habit not selected");
+    }
+  };
+
+  const handleMonthCalendarSelectDate = (date) => {
+    setMonthCalendarDate(date);
+    if (calendarTarget) {
+      const formattedDate = `${date.year}-${String(date.month + 1).padStart(2, "0")}-${String(date.day).padStart(2, "0")}`;
+      setHabitData((prev) => ({
+        ...prev,
+        [calendarTarget]: formattedDate,
+      }));
+      setShowMonthCalendar(false);
+      setCalendarTarget("");
     }
   };
 
@@ -380,7 +430,15 @@ function Member() {
         />
       </Modal>
       <Modal isOpen={isPostModalOpen} onClose={handlePostModal}>
-        <PostModal postContent={postContent} setPostContent={setPostContent} handleAddPost={handleAddPost} handlePostModal={handlePostModal} />
+        <PostModal
+          postContent={postContent}
+          setPostContent={setPostContent}
+          postBackground={postBackground}
+          setPostBackground={setPostBackground}
+          handleAddPost={handleAddPost}
+          handlePostModal={handlePostModal}
+          user={user}
+        />
       </Modal>
       <Modal isOpen={isEditModalOpen} onClose={handleEditModal}>
         <EditModal
@@ -390,12 +448,13 @@ function Member() {
           handleFocus={handleFocus}
           showMonthCalendar={showMonthCalendar}
           calendarTarget={calendarTarget}
-          selectedDate={selectedDate}
-          handleSelectDate={handleSelectDate}
           calendarRef={calendarRef}
           handleEditModal={handleEditModal}
           handleDeleteHabit={handleDeleteHabit}
           habitCategories={habitCategories}
+          setHabitData={setHabitData}
+          monthCalendarDate={monthCalendarDate}
+          handleMonthCalendarSelectDate={handleMonthCalendarSelectDate}
           setCalendarTarget={setCalendarTarget}
           setShowMonthCalendar={setShowMonthCalendar}
         />

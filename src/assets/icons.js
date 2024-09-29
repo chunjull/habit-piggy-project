@@ -31,6 +31,8 @@ import {
   TbCoinFilled,
   TbSettings,
   TbPhoto,
+  TbLogout,
+  TbMenu2,
 } from "react-icons/tb";
 
 export const layoutIcons = {
@@ -97,4 +99,9 @@ export const rankIcons = {
 export const settingIcons = {
   TbSettings,
   TbPhoto,
+};
+
+export const generalIcons = {
+  TbLogout,
+  TbMenu2,
 };

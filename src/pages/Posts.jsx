@@ -86,7 +86,7 @@ function Posts() {
         <h2 className="font-bold text-xl leading-7">貼文總覽</h2>
         <div className="relative">
           <select className="text-center border border-black-500 rounded-2xl appearance-none px-12 focus:outline-primary-dark" value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="all">全部</option>
+            <option value="all">全部貼文</option>
             <option value="personal">僅限自己</option>
           </select>
           <dropdownIcon.TbChevronDown className="w-6 h-6 text-black-500 pointer-events-none absolute inset-y-0 right-2" />
@@ -133,7 +133,7 @@ function Posts() {
                       <div className="bg-black-200 rounded-xl px-4 py-1 w-full flex justify-between items-center">
                         <div>
                           <div className="flex gap-2">
-                            <h3 className="font-medium text-sm leading-5">{comment.userName}</h3>
+                            <h3 className="font-medium text-sm leading-5 line-clamp-1">{comment.userName}</h3>
                             <p className="font-normal text-sm leading-5 text-black-700">
                               {new Date(comment.createdTime.seconds * 1000).toLocaleString([], { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" })}
                             </p>

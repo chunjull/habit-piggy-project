@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { layoutIcons, generalIcons } from "../assets/icons";
 import PropTypes from "prop-types";
 import Modal from "./Modal";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { logoutUser } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 
@@ -10,6 +10,7 @@ function Layout({ children, isModalOpen, modalContent }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { setUser } = useContext(AuthContext);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
 
   const handleLogout = async () => {
     await logoutUser();
@@ -18,13 +19,37 @@ function Layout({ children, isModalOpen, modalContent }) {
     navigate("/");
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarExpanded(!isSidebarExpanded);
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1536) {
+        setIsSidebarExpanded(true);
+      } else {
+        setIsSidebarExpanded(false);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="font-sans bg-light">
       <div className="max-w-[1160px] my-0 mx-auto flex flex-col md:flex-row min-h-screen relative">
-        <nav className="fixed inset-x-0 bottom-0 md:w-20 2xl:w-[360px] pt-2 pb-3 px-4 md:p-4 bg-black-50 z-10 md:fixed md:top-0 md:left-0 md:h-full md:overflow-auto md:flex md:flex-col md:justify-between md:items-center md:space-y-4 2xl:justify-start 2xl:items-start">
+        <nav
+          className={`fixed inset-x-0 bottom-0 ${
+            !isSidebarExpanded ? "md:w-20" : "md:w-[360px]"
+          } pt-2 pb-3 px-4 md:p-4 bg-black-50 z-10 md:fixed md:top-0 md:left-0 md:h-full md:overflow-auto md:flex md:flex-col md:justify-between md:items-center md:space-y-4 ${
+            isSidebarExpanded ? "2xl:w-[360px] 2xl:justify-start 2xl:items-start" : ""
+          }`}
+        >
           <div className="flex justify-center w-full 2xl:justify-between items-center 2xl:py-4">
-            <p className="hidden 2xl:block font-normal text-2xl leading-8 font-lobster text-black pl-4">Habit Piggy</p>
-            <generalIcons.TbLayoutSidebarRight className="hidden md:block w-8 h-8 text-black hover:text-alert cursor-pointer mt-4 2xl:m-0" />
+            <p className={`hidden ${isSidebarExpanded ? "2xl:block" : ""} font-normal text-2xl leading-8 font-lobster text-black pl-4`}>Habit Piggy</p>
+            <generalIcons.TbLayoutSidebarRight onClick={toggleSidebar} className="hidden md:block w-8 h-8 text-black hover:text-alert cursor-pointer mt-4 2xl:m-0" />
           </div>
           <div className="md:flex md:flex-col md:justify-between w-full md:h-4/5 2xl:h-full">
             <ul className="grid grid-cols-5 items-center md:grid-cols-1 md:gap-4 w-full">

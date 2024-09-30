@@ -5,6 +5,19 @@ import { useLocation } from "react-router-dom";
 const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, handleCheck }) => {
   const location = useLocation();
 
+  const renderFrequency = (frequency) => {
+    switch (frequency.type) {
+      case "daily":
+        return "每天";
+      case "weekly":
+        return "每週";
+      case "specificDays":
+        return `特定日期`;
+      default:
+        return "";
+    }
+  };
+
   return (
     <ul className={`space-y-4 mt-2 ${location.pathname === "/home" ? "p-4" : ""}`}>
       {Array.isArray(habits) &&
@@ -27,7 +40,7 @@ const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, hand
                     <h3 className="font-bold text-base leading-6">{habit.title}</h3>
                     <div className="flex">
                       <p className="font-normal text-sm leading-5">
-                        {habit.frequency.type}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
+                        {renderFrequency(habit.frequency)}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
                       </p>
                       <p className="text-black-500 font-normal text-sm leading-5">/{habit.status.length}</p>
                     </div>

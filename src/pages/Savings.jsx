@@ -3,11 +3,16 @@ import { AuthContext } from "../utils/AuthContext";
 import { getHabits } from "../services/api";
 import SavingsChart from "../components/SavingsChart";
 import CategoryChart from "../components/CategoryChart";
-import { dropdownIcon } from "../assets/icons";
+import CustomSelect from "../components/CustomSelect";
 
 function Savings() {
   const [isOverview, setIsOverview] = useState(true);
   const [filter, setFilter] = useState("week");
+  const [options] = useState([
+    { value: "week", label: "本週" },
+    { value: "month", label: "本月" },
+    { value: "year", label: "本年" },
+  ]);
   const [completedCount, setCompletedCount] = useState(0);
   const [savingsCount, setSavingsCount] = useState(0);
   const [totalSavings, setTotalSavings] = useState(0);
@@ -213,12 +218,7 @@ function Savings() {
             <div className="flex justify-between items-center">
               <h2 className="font-bold text-xl leading-7">存款總覽</h2>
               <div className="relative">
-                <select className="border border-black-500 rounded-2xl appearance-none px-12 focus:outline-primary-dark" value={filter} onChange={(e) => setFilter(e.target.value)}>
-                  <option value="week">本週</option>
-                  <option value="month">本月</option>
-                  <option value="all">全部</option>
-                </select>
-                <dropdownIcon.TbChevronDown className="w-6 h-6 text-black-500 pointer-events-none absolute inset-y-0 right-2" />
+                <CustomSelect options={options} value={filter} onChange={setFilter} />
               </div>
             </div>
             {renderStatistics({ completed: completedCount, savings: savingsCount, total: totalSavings })}
@@ -242,12 +242,7 @@ function Savings() {
           <div className="flex justify-between items-center">
             <h2 className="font-bold text-xl leading-7">習慣類別總覽</h2>
             <div className="relative">
-              <select className="border border-black-500 rounded-2xl appearance-none px-12 focus:outline-primary-dark" value={filter} onChange={(e) => setFilter(e.target.value)}>
-                <option value="week">本週</option>
-                <option value="month">本月</option>
-                <option value="all">全部</option>
-              </select>
-              <dropdownIcon.TbChevronDown className="w-6 h-6 text-black-500 pointer-events-none absolute inset-y-0 right-2" />
+              <CustomSelect options={options} value={filter} onChange={setFilter} />
             </div>
           </div>
           {savingsCount === 0 ? (

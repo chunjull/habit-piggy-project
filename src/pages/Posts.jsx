@@ -61,18 +61,6 @@ function Posts() {
     setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
   };
 
-  const handleUpdateComment = async (postID, commentID) => {
-    const updatedContent = editingComment[commentID];
-    if (!updatedContent.trim()) {
-      alert("請輸入留言內容");
-      return;
-    }
-    await updateComment(postID, commentID, { content: updatedContent });
-    const renderComments = await getComments(postID);
-    setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
-    setEditingComment((prev) => ({ ...prev, [commentID]: "" }));
-  };
-
   const handleCancelEdit = (commentID) => {
     setEditingComment((prev) => ({ ...prev, [commentID]: "" }));
   };
@@ -83,23 +71,42 @@ function Posts() {
     setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
   };
 
-  const handleEditPost = (post) => {
-    setCurrentPost(post);
-    setIsPostModalOpen(true);
-  };
-
   const handleDeletePost = async (postID) => {
     await deletePost(postID);
     setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postID));
   };
 
+  const handleEdit = (post, commentID = null) => {
+    if (commentID) {
+      setEditingComment((prev) => ({ ...prev, [commentID]: post.comments.find((comment) => comment.id === commentID).content }));
+    } else {
+      setCurrentPost(post);
+      setIsPostModalOpen(true);
+    }
+  };
+
+  const handleUpdate = async (postID, postData, commentID = null) => {
+    if (commentID) {
+      const updatedContent = editingComment[commentID];
+      if (!updatedContent.trim()) {
+        alert("請輸入留言內容");
+        return;
+      }
+      await updateComment(postID, commentID, { content: updatedContent });
+      const renderComments = await getComments(postID);
+      setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
+      setEditingComment((prev) => ({ ...prev, [commentID]: "" }));
+    } else {
+      await updatePost(postID, postData);
+      const updatedPosts = await getAllPosts();
+      setPosts(updatedPosts);
+      setIsPostModalOpen(false);
+    }
+  };
+
   const handleSelectChange = (post, commentID, value) => {
     if (value === "edit") {
-      if (commentID) {
-        setEditingComment((prev) => ({ ...prev, [commentID]: post.comments.find((comment) => comment.id === commentID).content }));
-      } else {
-        handleEditPost(post);
-      }
+      handleEdit(post, commentID);
     } else if (value === "delete") {
       if (commentID) {
         handleDeleteComment(post.id, commentID);
@@ -107,13 +114,6 @@ function Posts() {
         handleDeletePost(post.id);
       }
     }
-  };
-
-  const handleUpdatePost = async (postID, postData) => {
-    await updatePost(postID, postData);
-    const updatedPosts = await getAllPosts();
-    setPosts(updatedPosts);
-    setIsPostModalOpen(false);
   };
 
   const getTimeDifference = (timestamp) => {
@@ -160,7 +160,7 @@ function Posts() {
                       { value: "edit", label: "編輯貼文" },
                       { value: "delete", label: "刪除貼文" },
                     ]}
-                    onChange={(value) => handleSelectChange(post, value)}
+                    onChange={(value) => handleSelectChange(post, null, value)}
                   />
                 </div>
                 <div
@@ -200,7 +200,7 @@ function Posts() {
                                 />
                                 <button
                                   className="text-nowrap font-medium text-sm leading-5 bg-primary py-1.5 px-2 rounded hover:bg-primary-dark"
-                                  onClick={() => handleUpdateComment(post.id, comment.id)}
+                                  onClick={() => handleUpdate(post.id, null, comment.id)}
                                 >
                                   確認修改
                                 </button>
@@ -251,7 +251,7 @@ function Posts() {
           handlePostModal={() => setIsPostModalOpen(false)}
           user={user}
           isEditMode={true}
-          handleUpdatePost={() => handleUpdatePost(currentPost.id, currentPost)}
+          handleUpdatePost={() => handleUpdate(currentPost.id, currentPost)}
         />
       </Modal>
     </>

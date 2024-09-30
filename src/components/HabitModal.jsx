@@ -146,7 +146,7 @@ const HabitModal = ({
       </div>
       <div className="flex justify-between gap-4 w-full">
         <p className="text-nowrap">養成期間</p>
-        <div className="border border-black-300 w-full rounded py-0.5 px-4 flex justify-between items-center bg-black-0">
+        <div className="border border-black-300 w-full rounded py-0.5 px-4 flex justify-between items-center bg-black-0 relative">
           <button className={`text-center w-1/2 font-normal text-sm leading-5 ${habitData.startDate ? "text-black" : "text-black-300"}`} onClick={handleStartDateClick}>
             {habitData.startDate || "開始日期"}
           </button>
@@ -178,7 +178,7 @@ const HabitModal = ({
           onChange={handleHabitChange}
         />
         {showMonthCalendar && (
-          <div ref={calendarRef} className="absolute top-0 left-1/4 z-10">
+          <div ref={calendarRef} className="absolute bottom-10 md:-bottom-24 2xl:bottom-4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
             <MonthCalendar date={monthCalendarDate} onSelect={handleMonthCalendarSelectDate} />
           </div>
         )}

@@ -79,6 +79,24 @@ function Savings() {
 
     const periodData = {};
 
+    // 初始化週期變量數據
+    if (filter === "week") {
+      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      daysOfWeek.forEach((day) => {
+        periodData[day] = 0;
+      });
+    } else if (filter === "month") {
+      const weeksInMonth = Math.ceil((endOfPeriod.getDate() - startOfPeriod.getDate() + 1) / 7);
+      for (let i = 1; i <= weeksInMonth; i++) {
+        periodData[`Week ${i}`] = 0;
+      }
+    } else {
+      const monthsOfYear = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      monthsOfYear.forEach((month) => {
+        periodData[month] = 0;
+      });
+    }
+
     habits.forEach((habit) => {
       habit.status.forEach((status) => {
         const statusDate = new Date(status.date);
@@ -88,9 +106,6 @@ function Savings() {
 
         if (statusDate < today && statusDate >= startOfPeriod && statusDate <= endOfPeriod) {
           const periodKey = getPeriodKey(statusDate, filter);
-          if (!periodData[periodKey]) {
-            periodData[periodKey] = 0;
-          }
           if (!status.completed) {
             periodData[periodKey] += Number(habit.amount);
             savings += 1;
@@ -132,12 +147,12 @@ function Savings() {
 
   const getPeriodKey = (date, filter) => {
     if (filter === "week") {
-      return date.toLocaleDateString("zh-TW", { weekday: "short" });
+      return date.toLocaleDateString("en-US", { weekday: "short" });
     } else if (filter === "month") {
       const weekNumber = Math.ceil(date.getDate() / 7);
       return `Week ${weekNumber}`;
     } else {
-      return date.toLocaleDateString("zh-TW", { month: "short" });
+      return date.toLocaleDateString("en-US", { month: "short" });
     }
   };
 

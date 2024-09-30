@@ -221,7 +221,7 @@ function Rank() {
             <p className="text-center font-normal text-base leading-6">
               在 {getStartAndEndOfWeek().startOfWeek.toLocaleDateString()}～{getStartAndEndOfWeek().endOfWeek.toLocaleDateString()} 期間
             </p>
-            <div className="flex items-center gap-x-1">
+            <div className="flex justify-center items-center gap-x-1 flex-wrap">
               <p className="font-normal text-base leading-6">恭喜</p>
               <p className="font-bold text-xl leading-7">{userSavingsCounts[0]?.name || "No.1"}</p>
               <p className="font-normal text-base leading-6">成為累積最多存款的玩家</p>

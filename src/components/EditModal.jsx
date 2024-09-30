@@ -158,6 +158,35 @@ const EditModal = ({
         </div>
       )}
       <div className="flex justify-between gap-4">
+        <label htmlFor="type" className="text-nowrap">
+          習慣類型
+        </label>
+        <div className="w-full grid grid-cols-2 gap-3">
+          <div>
+            <input type="radio" name="type" id="to-do" value="to-do" className="appearance-none hidden" checked={habitData.type === "to-do"} onChange={handleHabitChange} />
+            <label
+              htmlFor="to-do"
+              className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
+                habitData.type === "to-do" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light"
+              }`}
+            >
+              養成
+            </label>
+          </div>
+          <div>
+            <input type="radio" name="type" id="not-to-do" value="not-to-do" className="appearance-none hidden" checked={habitData.type === "not-to-do"} onChange={handleHabitChange} />
+            <label
+              htmlFor="not-to-do"
+              className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
+                habitData.type === "not-to-do" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light"
+              }`}
+            >
+              戒除
+            </label>
+          </div>
+        </div>
+      </div>
+      <div className="flex justify-between gap-4">
         <label htmlFor="amount" className="text-nowrap">
           習慣罰款
         </label>

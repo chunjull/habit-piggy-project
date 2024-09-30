@@ -24,6 +24,7 @@ function Home() {
     startDate: "",
     endDate: "",
     status: [],
+    type: "",
   });
   const [habits, setHabits] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -110,6 +111,7 @@ function Home() {
       startDate: "",
       endDate: "",
       status: [],
+      type: "",
     });
   };
 
@@ -131,6 +133,7 @@ function Home() {
       startDate: habit.startDate,
       endDate: habit.endDate,
       status: habit.status,
+      type: habit.type,
     });
     setIsDetailModalOpen(false);
     setIsEditModalOpen(!isEditModalOpen);
@@ -207,6 +210,7 @@ function Home() {
         startDate: "",
         endDate: "",
         status: [],
+        type: "",
       });
     } else {
       console.error("User not authenticated");

@@ -112,6 +112,35 @@ const HabitModal = ({
           </div>
         </div>
       </div>
+      <div className="flex justify-between gap-4">
+        <label htmlFor="type" className="text-nowrap">
+          習慣類型
+        </label>
+        <div className="w-full grid grid-cols-2 gap-3">
+          <div>
+            <input type="radio" name="type" id="to-do" value="to-do" className="appearance-none hidden" checked={habitData.type === "to-do"} onChange={handleHabitChange} />
+            <label
+              htmlFor="to-do"
+              className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
+                habitData.type === "to-do" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light"
+              }`}
+            >
+              養成
+            </label>
+          </div>
+          <div>
+            <input type="radio" name="type" id="not-to-do" value="not-to-do" className="appearance-none hidden" checked={habitData.type === "not-to-do"} onChange={handleHabitChange} />
+            <label
+              htmlFor="not-to-do"
+              className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
+                habitData.type === "not-to-do" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light"
+              }`}
+            >
+              戒除
+            </label>
+          </div>
+        </div>
+      </div>
       {habitData.frequency.type === "specificDays" && (
         <div className="grid grid-cols-7 gap-2 md:gap-4">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
@@ -178,7 +207,7 @@ const HabitModal = ({
           onChange={handleHabitChange}
         />
         {showMonthCalendar && (
-          <div ref={calendarRef} className="absolute bottom-10 md:-bottom-24 2xl:bottom-4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+          <div ref={calendarRef} className="absolute bottom-10 md:-bottom-24 2xl:bottom- left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
             <MonthCalendar date={monthCalendarDate} onSelect={handleMonthCalendarSelectDate} />
           </div>
         )}

@@ -5,14 +5,12 @@ import { useLocation } from "react-router-dom";
 const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, handleCheck }) => {
   const location = useLocation();
 
-  const renderFrequency = (frequency) => {
-    switch (frequency.type) {
-      case "daily":
-        return "每天";
-      case "weekly":
-        return "每週";
-      case "specificDays":
-        return `特定日期`;
+  const renderType = (type) => {
+    switch (type) {
+      case "to-do":
+        return "養成";
+      case "not-to-do":
+        return "戒除";
       default:
         return "";
     }
@@ -40,7 +38,7 @@ const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, hand
                     <h3 className="font-bold text-base leading-6">{habit.title}</h3>
                     <div className="flex">
                       <p className="font-normal text-sm leading-5">
-                        {renderFrequency(habit.frequency)}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
+                        {renderType(habit.type)}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
                       </p>
                       <p className="text-black-500 font-normal text-sm leading-5">/{habit.status.length}</p>
                     </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { getAllPosts, getUserProfile, addComment, getComments, updateComment, deleteComment, updatePost, deletePost } from "../services/api";
+import { getAllPosts, getUserProfile, addComment, getComments, updateComment, deleteComment, updatePost, deletePost, addLike, removeLike } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import { postIcons } from "../assets/icons";
 import CustomSelect from "../components/CustomSelect";
@@ -116,6 +116,40 @@ function Posts() {
     }
   };
 
+  const handleLike = async (postID) => {
+    try {
+      await addLike(postID, user.uid);
+      const updatedPosts = await getAllPosts();
+      const postsWithUserDetails = await Promise.all(
+        updatedPosts.map(async (post) => {
+          const userProfile = await getUserProfile(post.userID);
+          const comments = await getComments(post.id);
+          return { ...post, user: userProfile, comments: comments };
+        })
+      );
+      setPosts(postsWithUserDetails);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleUnlike = async (postID) => {
+    try {
+      await removeLike(postID, user.uid);
+      const updatedPosts = await getAllPosts();
+      const postsWithUserDetails = await Promise.all(
+        updatedPosts.map(async (post) => {
+          const userProfile = await getUserProfile(post.userID);
+          const comments = await getComments(post.id);
+          return { ...post, user: userProfile, comments: comments };
+        })
+      );
+      setPosts(postsWithUserDetails);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const getTimeDifference = (timestamp) => {
     const now = new Date();
     const commentTime = new Date(timestamp * 1000);
@@ -171,8 +205,12 @@ function Posts() {
                 </div>
                 <div className="flex gap-3">
                   <div className="flex gap-1">
-                    <postIcons.TbHeart className="w-6 h-6 cursor-pointer text-black-500 hover:text-alert" />
-                    <p className="text-black-500 font-normal text-base leading-6">0</p>
+                    {post.likes && post.likes.includes(user.uid) ? (
+                      <postIcons.TbHeartFilled className="w-6 h-6 cursor-pointer text-alert" onClick={() => handleUnlike(post.id)} />
+                    ) : (
+                      <postIcons.TbHeart className="w-6 h-6 cursor-pointer text-black-500 hover:text-alert" onClick={() => handleLike(post.id)} />
+                    )}
+                    <p className="text-black-500 font-normal text-base leading-6">{post.likes ? post.likes.length : 0}</p>
                   </div>
                   <div className="flex gap-1">
                     <postIcons.TbMessageChatbot className="w-6 h-6 cursor-pointer text-black-500 hover:text-black-900" onClick={() => handleCommentSection(post.id)} />

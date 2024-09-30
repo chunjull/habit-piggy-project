@@ -296,11 +296,16 @@ async function getPostBackgrounds() {
 async function addLike(postID, userID) {
   try {
     const postDocRef = doc(db, "posts", postID);
-    const likesCollectionRef = collection(postDocRef, "likes");
-    await setDoc(doc(likesCollectionRef, userID), {
-      createdTime: Timestamp.now(),
-    });
-    console.log("Like added to post ID: ", postID);
+    const postSnapshot = await getDoc(postDocRef);
+    if (postSnapshot.exists()) {
+      const postData = postSnapshot.data();
+      const likes = postData.likes || [];
+      if (!likes.includes(userID)) {
+        likes.push(userID);
+        await updateDoc(postDocRef, { likes });
+        console.log("Like added to post ID: ", postID);
+      }
+    }
   } catch (error) {
     console.error("Error adding like: ", error.code, error.message);
   }
@@ -309,9 +314,21 @@ async function addLike(postID, userID) {
 async function removeLike(postID, userID) {
   try {
     const postDocRef = doc(db, "posts", postID);
-    const likesCollectionRef = collection(postDocRef, "likes");
-    await deleteDoc(doc(likesCollectionRef, userID));
-    console.log("Like removed from post ID: ", postID);
+    const postSnapshot = await getDoc(postDocRef);
+    if (postSnapshot.exists()) {
+      const postData = postSnapshot.data();
+      const likes = postData.likes || [];
+      const index = likes.indexOf(userID);
+      if (index > -1) {
+        likes.splice(index, 1);
+        await updateDoc(postDocRef, { likes });
+        console.log("Like removed from post ID: ", postID);
+
+        const likeDocRef = doc(db, "posts", postID, "likes", userID);
+        await deleteDoc(likeDocRef);
+        console.log("Like document removed for user ID: ", userID);
+      }
+    }
   } catch (error) {
     console.error("Error removing like: ", error.code, error.message);
   }

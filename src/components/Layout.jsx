@@ -41,7 +41,7 @@ function Layout({ children, isModalOpen, modalContent }) {
     <div className="font-sans bg-light">
       <nav
         className={`pt-2 pb-3 px-4 bg-black-50 fixed inset-x-0 bottom-0 flex gap-x-4 z-50 border-t border-primary md:p-4 md:flex-col md:justify-between md:border-t-0 md:border-r md:h-full ${
-          isSidebarExpanded ? "md:w-[360px]" : "md:w-20"
+          isSidebarExpanded ? "md:w-[240px]" : "md:w-20"
         }`}
       >
         <div className={`hidden md:flex md:items-center ${isSidebarExpanded ? "md:justify-between" : "md:justify-center"}`}>

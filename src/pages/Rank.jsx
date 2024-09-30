@@ -210,7 +210,7 @@ function Rank() {
             <rankIcons.TbCircleCheck className="w-8 h-8" />
           </div>
           <ul className="space-y-4 pb-20">{renderTopTenUsers(userHabitCounts, "habit")}</ul>
-          <div className="fixed bottom-0 z-50 py-4 bg-light" style={{ width: "calc(100% - 276px)" }}>
+          <div className="fixed bottom-0 left-0 md:left-auto w-full max-w-full md:max-w-[1128px] mx-auto p-4 pb-[88px] bg-light md:p-0 md:py-4">
             {renderCurrentUser(userHabitCounts, user, "habit")}
           </div>
         </div>
@@ -239,7 +239,7 @@ function Rank() {
             <rankIcons.TbCoin className="w-8 h-8" />
           </div>
           <ul className="space-y-4 pb-20">{renderTopTenUsers(userSavingsCounts, "savings")}</ul>
-          <div className="fixed bottom-0 z-50 py-4 bg-light" style={{ width: "calc(100% - 276px)" }}>
+          <div className="fixed bottom-0 left-0 md:left-auto w-full max-w-full md:max-w-[1128px] mx-auto p-4 pb-[88px] bg-light md:p-0 md:py-4">
             {renderCurrentUser(userSavingsCounts, user, "savings")}
           </div>
         </div>

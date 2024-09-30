@@ -1,89 +1,98 @@
 import PropTypes from "prop-types";
-import { modalIcons, dropdownIcon, settingIcons } from "../assets/icons";
+import { modalIcons, settingIcons } from "../assets/icons";
+import { useState } from "react";
+import CustomSelect from "./CustomSelect";
 
-const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSaveAndClose }) => (
-  <div className="space-y-4">
-    <div className="flex justify-between items-center">
-      <h3 className="font-bold text-lg leading-7">設定</h3>
-      <modalIcons.TbX className="w-8 h-8 cursor-pointer hover:text-alert" onClick={handleSettingModal} />
-    </div>
-    <div>
-      <p className="mb-1 font-normal text-base leading-6">會員頭像</p>
-      <div className="flex items-center gap-3">
-        <img src={profileData.avatar} alt="user's avatar" className="w-12 h-12 rounded-full" />
-        <div className="space-y-1">
-          <div className="relative inline-block">
-            <input
-              type="file"
-              name="avatar"
-              id="profile"
-              onChange={handleChange}
-              accept="image/jpg,image/jpeg,image/png,image/gif"
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer hidden"
-            />
-            <label htmlFor="profile" className="cursor-pointer bg-primary text-black font-medium text-sm leading-5 py-1 px-2 rounded-lg flex items-center gap-2 hover:bg-primary-dark">
-              <settingIcons.TbPhoto className="w-5 h-5" />
-              更換頭像
-            </label>
+const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSaveAndClose }) => {
+  const [theme, setTheme] = useState(profileData.theme || "light");
+  const [isAcceptReminder, setIsAcceptReminder] = useState(profileData.isAcceptReminder ? "true" : "false");
+
+  const themeOptions = [
+    { value: "light", label: "淺色" },
+    { value: "dark", label: "深色" },
+  ];
+
+  const reminderOptions = [
+    { value: "false", label: "否" },
+    { value: "true", label: "是" },
+  ];
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <h3 className="font-bold text-lg leading-7">設定</h3>
+        <modalIcons.TbX className="w-8 h-8 cursor-pointer hover:text-alert" onClick={handleSettingModal} />
+      </div>
+      <div>
+        <p className="mb-1 font-normal text-base leading-6">會員頭像</p>
+        <div className="flex items-center gap-3">
+          <img src={profileData.avatar} alt="user's avatar" className="w-12 h-12 rounded-full" />
+          <div className="space-y-1">
+            <div className="relative inline-block">
+              <input
+                type="file"
+                name="avatar"
+                id="profile"
+                onChange={handleChange}
+                accept="image/jpg,image/jpeg,image/png,image/gif"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer hidden"
+              />
+              <label htmlFor="profile" className="cursor-pointer bg-primary text-black font-medium text-sm leading-5 py-1 px-2 rounded-lg flex items-center gap-2 hover:bg-primary-dark">
+                <settingIcons.TbPhoto className="w-5 h-5" />
+                更換頭像
+              </label>
+            </div>
+            <p className="font-normal text-sm leading-5 text-black-700">您的頭像將會被公開。</p>
           </div>
-          <p className="font-normal text-sm leading-5 text-black-700">您的頭像將會被公開。</p>
         </div>
       </div>
-    </div>
-    <div className="flex flex-col gap-1">
-      <label htmlFor="name" className="mb-1 font-normal text-base leading-6">
-        會員名稱
-      </label>
-      <input
-        type="text"
-        name="name"
-        id="name"
-        placeholder="會員名稱"
-        className="px-4 py-1 w-full rounded border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6"
-        value={profileData.name || ""}
-        onChange={handleChange}
-      />
-    </div>
-    <div className="flex flex-col gap-1">
-      <label htmlFor="introduction" className="mb-1 font-normal text-base leading-6">
-        自我介紹
-      </label>
-      <input
-        type="text"
-        name="introduction"
-        id="introduction"
-        placeholder="自我介紹"
-        className="px-4 py-1 w-full rounded border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6"
-        value={profileData.introduction || ""}
-        onChange={handleChange}
-      />
-    </div>
-    <div className="border"></div>
-    <div className="flex justify-between items-center">
-      <p className="font-normal text-base leading-6">主題</p>
-      <div className="relative">
-        <select className="text-center border border-black-500 rounded-2xl appearance-none px-12 focus:outline-primary-dark">
-          <option value="light">淺色</option>
-          <option value="dark">深色</option>
-        </select>
-        <dropdownIcon.TbChevronDown className="w-6 h-6 text-black-500 pointer-events-none absolute inset-y-0 right-2" />
+      <div className="flex flex-col gap-1">
+        <label htmlFor="name" className="mb-1 font-normal text-base leading-6">
+          會員名稱
+        </label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          placeholder="會員名稱"
+          className="px-4 py-1 w-full rounded border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6"
+          value={profileData.name || ""}
+          onChange={handleChange}
+        />
       </div>
-    </div>
-    <div className="flex justify-between items-center">
-      <p className="font-normal text-base leading-6">接收 Email 提醒</p>
-      <div className="relative">
-        <select className="text-center border border-black-500 rounded-2xl appearance-none px-12 focus:outline-primary-dark">
-          <option value="false">{profileData.isAcceptReminder ? "是" : "否"}</option>
-          <option value="true">是</option>
-        </select>
-        <dropdownIcon.TbChevronDown className="w-6 h-6 text-black-500 pointer-events-none absolute inset-y-0 right-2" />
+      <div className="flex flex-col gap-1">
+        <label htmlFor="introduction" className="mb-1 font-normal text-base leading-6">
+          自我介紹
+        </label>
+        <input
+          type="text"
+          name="introduction"
+          id="introduction"
+          placeholder="自我介紹"
+          className="px-4 py-1 w-full rounded border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6"
+          value={profileData.introduction || ""}
+          onChange={handleChange}
+        />
       </div>
+      <div className="border"></div>
+      <div className="flex justify-between items-center">
+        <p className="font-normal text-base leading-6">主題</p>
+        <div className="relative w-fit">
+          <CustomSelect options={themeOptions} value={theme} onChange={setTheme} />
+        </div>
+      </div>
+      <div className="flex justify-between items-center">
+        <p className="font-normal text-base leading-6">接收 Email 提醒</p>
+        <div className="relative w-fit">
+          <CustomSelect options={reminderOptions} value={isAcceptReminder} onChange={setIsAcceptReminder} />
+        </div>
+      </div>
+      <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleSaveAndClose}>
+        儲存
+      </button>
     </div>
-    <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleSaveAndClose}>
-      儲存
-    </button>
-  </div>
-);
+  );
+};
 
 SettingModal.propTypes = {
   profileData: PropTypes.object.isRequired,

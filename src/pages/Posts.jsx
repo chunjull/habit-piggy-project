@@ -1,11 +1,16 @@
 import { useEffect, useState, useContext } from "react";
 import { getAllPosts, getUserProfile, addComment, getComments, updateComment, deleteComment } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
-import { dropdownIcon, postIcons } from "../assets/icons";
+import { postIcons } from "../assets/icons";
+import CustomSelect from "../components/CustomSelect";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
   const [filter, setFilter] = useState("all");
+  const [options] = useState([
+    { label: "全部貼文", value: "all" },
+    { label: "僅限自己", value: "personal" },
+  ]);
   const [commentSection, setCommentSection] = useState({});
   const [commentContent, setCommentContent] = useState("");
   const [showSelect, setShowSelect] = useState({});
@@ -103,11 +108,7 @@ function Posts() {
       <div className="flex justify-between items-center">
         <h2 className="font-bold text-xl leading-7">貼文總覽</h2>
         <div className="relative">
-          <select className="text-center border border-black-500 rounded-2xl appearance-none px-12 focus:outline-primary-dark" value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="all">全部貼文</option>
-            <option value="personal">僅限自己</option>
-          </select>
-          <dropdownIcon.TbChevronDown className="w-6 h-6 text-black-500 pointer-events-none absolute inset-y-0 right-2" />
+          <CustomSelect options={options} value={filter} onChange={setFilter} />
         </div>
       </div>
       <ul className="space-y-4">

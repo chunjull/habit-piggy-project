@@ -7,8 +7,9 @@ import DetailModal from "../components/DetailModal";
 import PostModal from "../components/PostModal";
 import EditModal from "../components/EditModal";
 import { Navigate } from "react-router-dom";
-import { habitIcons, settingIcons, dropdownIcon } from "../assets/icons";
+import { habitIcons, settingIcons } from "../assets/icons";
 import HabitList from "../components/HabitList";
+import CustomSelect from "../components/CustomSelect";
 
 function Member() {
   const { user } = useContext(AuthContext);
@@ -49,6 +50,11 @@ function Member() {
   const [monthCalendarDate, setMonthCalendarDate] = useState(null);
   const [isPost, setIsPost] = useState(false);
   const [filter, setFilter] = useState("all");
+  const [options] = useState([
+    { label: "全部習慣", value: "all" },
+    { label: "進行中", value: "in-progress" },
+    { label: "已結束", value: "finished" },
+  ]);
 
   const habitCategories = [
     { id: 0, name: "生產力", icon: habitIcons.TbRocket },
@@ -289,10 +295,6 @@ function Member() {
     setIsDetailModalOpen(true);
   };
 
-  const handleFilterChange = (e) => {
-    setFilter(e.target.value);
-  };
-
   const filteredHabits = habits
     .filter((habit) => {
       const today = new Date();
@@ -337,12 +339,7 @@ function Member() {
           <div className="flex justify-between items-center">
             <h2 className="font-bold text-xl leading-7">歷史習慣</h2>
             <div className="relative">
-              <select className="text-center border border-black-500 rounded-2xl appearance-none px-12 focus:outline-primary-dark" value={filter} onChange={handleFilterChange}>
-                <option value="all">全部</option>
-                <option value="in-progress">進行中</option>
-                <option value="finished">已結束</option>
-              </select>
-              <dropdownIcon.TbChevronDown className="w-6 h-6 text-black-500 pointer-events-none absolute inset-y-0 right-2" />
+              <CustomSelect options={options} value={filter} onChange={setFilter} />
             </div>
           </div>
         )}

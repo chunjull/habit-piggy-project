@@ -1,6 +1,6 @@
 import { db, storage } from "../utils/firebaseConfig";
 import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, collection, setDoc, getDoc, addDoc, getDocs, updateDoc, deleteDoc, Timestamp, query, orderBy, arrayUnion } from "firebase/firestore";
+import { doc, collection, setDoc, getDoc, addDoc, getDocs, updateDoc, deleteDoc, Timestamp, query, orderBy } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 
 const auth = getAuth();
@@ -280,45 +280,6 @@ async function deleteComment(postID, commentID) {
   }
 }
 
-async function getAchievements() {
-  try {
-    const querySnapshot = await getDocs(collection(db, "achievements"));
-    const achievementsData = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    return achievementsData;
-  } catch (error) {
-    console.error("Error getting achievements: ", error.code, error.message);
-    return [];
-  }
-}
-
-async function getUserAchievements(uid) {
-  try {
-    const userDocRef = doc(db, "users", uid);
-    const userSnapshot = await getDoc(userDocRef);
-    if (userSnapshot.exists()) {
-      const userData = userSnapshot.data();
-      return userData.achievements || [];
-    } else {
-      console.log("No such document!");
-      return [];
-    }
-  } catch (error) {
-    console.error("Error fetching user achievements: ", error.code, error.message);
-    return [];
-  }
-}
-
-async function addUserAchievement(uid, achievement) {
-  try {
-    const userDocRef = doc(db, "users", uid);
-    await updateDoc(userDocRef, {
-      achievements: arrayUnion(achievement),
-    });
-  } catch (error) {
-    console.error("Error adding user achievement: ", error.code, error.message);
-  }
-}
-
 async function getPostBackgrounds() {
   try {
     const storageRef = ref(storage, "post_backgrounds");
@@ -329,6 +290,30 @@ async function getPostBackgrounds() {
   } catch (error) {
     console.error("Error getting post backgrounds: ", error.code, error.message);
     return [];
+  }
+}
+
+async function addLike(postID, userID) {
+  try {
+    const postDocRef = doc(db, "posts", postID);
+    const likesCollectionRef = collection(postDocRef, "likes");
+    await setDoc(doc(likesCollectionRef, userID), {
+      createdTime: Timestamp.now(),
+    });
+    console.log("Like added to post ID: ", postID);
+  } catch (error) {
+    console.error("Error adding like: ", error.code, error.message);
+  }
+}
+
+async function removeLike(postID, userID) {
+  try {
+    const postDocRef = doc(db, "posts", postID);
+    const likesCollectionRef = collection(postDocRef, "likes");
+    await deleteDoc(doc(likesCollectionRef, userID));
+    console.log("Like removed from post ID: ", postID);
+  } catch (error) {
+    console.error("Error removing like: ", error.code, error.message);
   }
 }
 
@@ -353,8 +338,7 @@ export {
   getComments,
   updateComment,
   deleteComment,
-  getAchievements,
-  getUserAchievements,
-  addUserAchievement,
   getPostBackgrounds,
+  addLike,
+  removeLike,
 };

@@ -1,8 +1,11 @@
 import { useEffect, useState, useContext } from "react";
-import { getAllPosts, getUserProfile, addComment, getComments, updateComment, deleteComment } from "../services/api";
+import { getAllPosts, getUserProfile, addComment, getComments, updateComment, deleteComment, updatePost, deletePost } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import { postIcons } from "../assets/icons";
 import CustomSelect from "../components/CustomSelect";
+import PostSelect from "../components/PostSelect";
+import Modal from "../components/Modal";
+import PostModal from "../components/PostModal";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
@@ -13,7 +16,9 @@ function Posts() {
   ]);
   const [commentSection, setCommentSection] = useState({});
   const [commentContent, setCommentContent] = useState("");
-  const [showSelect, setShowSelect] = useState({});
+  const [editingComment, setEditingComment] = useState({});
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [currentPost, setCurrentPost] = useState(null);
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -56,12 +61,8 @@ function Posts() {
     setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
   };
 
-  const handleShowSelect = (commentID) => {
-    setShowSelect((prev) => ({ ...prev, [commentID]: !prev[commentID] }));
-  };
-
   const handleUpdateComment = async (postID, commentID) => {
-    const updatedContent = prompt("請輸入新的留言內容");
+    const updatedContent = editingComment[commentID];
     if (!updatedContent.trim()) {
       alert("請輸入留言內容");
       return;
@@ -69,6 +70,11 @@ function Posts() {
     await updateComment(postID, commentID, { content: updatedContent });
     const renderComments = await getComments(postID);
     setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
+    setEditingComment((prev) => ({ ...prev, [commentID]: "" }));
+  };
+
+  const handleCancelEdit = (commentID) => {
+    setEditingComment((prev) => ({ ...prev, [commentID]: "" }));
   };
 
   const handleDeleteComment = async (postID, commentID) => {
@@ -77,12 +83,37 @@ function Posts() {
     setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
   };
 
-  const handleSelectChange = (postID, commentID, value) => {
+  const handleEditPost = (post) => {
+    setCurrentPost(post);
+    setIsPostModalOpen(true);
+  };
+
+  const handleDeletePost = async (postID) => {
+    await deletePost(postID);
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postID));
+  };
+
+  const handleSelectChange = (post, commentID, value) => {
     if (value === "edit") {
-      handleUpdateComment(postID, commentID);
+      if (commentID) {
+        setEditingComment((prev) => ({ ...prev, [commentID]: post.comments.find((comment) => comment.id === commentID).content }));
+      } else {
+        handleEditPost(post);
+      }
     } else if (value === "delete") {
-      handleDeleteComment(postID, commentID);
+      if (commentID) {
+        handleDeleteComment(post.id, commentID);
+      } else {
+        handleDeletePost(post.id);
+      }
     }
+  };
+
+  const handleUpdatePost = async (postID, postData) => {
+    await updatePost(postID, postData);
+    const updatedPosts = await getAllPosts();
+    setPosts(updatedPosts);
+    setIsPostModalOpen(false);
   };
 
   const getTimeDifference = (timestamp) => {
@@ -104,88 +135,126 @@ function Posts() {
   };
 
   return (
-    <div className="p-4 space-y-4">
-      <div className="flex justify-between items-center">
-        <h2 className="font-bold text-xl leading-7">貼文總覽</h2>
-        <div className="relative">
-          <CustomSelect options={options} value={filter} onChange={setFilter} />
+    <>
+      <div className="p-4 space-y-4">
+        <div className="flex justify-between items-center">
+          <h2 className="font-bold text-xl leading-7">貼文總覽</h2>
+          <div className="relative">
+            <CustomSelect options={options} value={filter} onChange={setFilter} />
+          </div>
         </div>
-      </div>
-      <ul className="space-y-4">
-        {filteredPosts.map((post) => {
-          return (
-            <li key={post.id} className="p-4 bg-black-50 rounded-2xl space-y-3">
-              <div className="flex justify-between items-center">
-                <div className="flex gap-3 items-center">
-                  <div className="w-12 h-12">{post.user && <img src={post.user.avatar} alt="avatar" className="w-full h-full object-cover rounded-full" />}</div>
-                  <div className="flex flex-col">
-                    <h3 className="font-bold text-lg leading-6">{post.user ? post.user.name : "Unknown"}</h3>
-                    <p className="font-normal text-sm leading-5">{getTimeDifference(post.createdTime.seconds)}</p>
-                    {/* <p className="text-slate-500">Lv.{post.user ? post.user.levelPoints : 0}</p> */}
+        <ul className="space-y-4">
+          {filteredPosts.map((post) => {
+            return (
+              <li key={post.id} className="p-4 bg-black-50 rounded-2xl space-y-3 w-full">
+                <div className="flex justify-between items-center w-full">
+                  <div className="flex gap-3 items-center">
+                    <div className="w-12 h-12">{post.user && <img src={post.user.avatar} alt="avatar" className="w-full h-full object-cover rounded-full" />}</div>
+                    <div className="flex flex-col">
+                      <h3 className="font-bold text-lg leading-6">{post.user ? post.user.name : "Unknown"}</h3>
+                      <p className="font-normal text-sm leading-5">{getTimeDifference(post.createdTime.seconds)}</p>
+                    </div>
                   </div>
-                </div>
-                <postIcons.TbDots className="w-6 h-6 text-black cursor-pointer hover:text-alert" />
-              </div>
-              <div
-                className={`w-full min-h-52 h-fit flex justify-center items-center p-4 rounded-xl ${!post.background ? "bg-slate-100" : ""}`}
-                style={post.background ? { backgroundImage: `url(${post.background})`, backgroundSize: "cover", backgroundPosition: "center" } : {}}
-              >
-                <p>{post.content}</p>
-              </div>
-              <div className="flex gap-3">
-                <div className="flex gap-1">
-                  <postIcons.TbHeart className="w-6 h-6 cursor-pointer text-black-500 hover:text-alert" />
-                  <p className="text-black-500 font-normal text-base leading-6">0</p>
-                </div>
-                <div className="flex gap-1">
-                  <postIcons.TbMessageChatbot className="w-6 h-6 cursor-pointer text-black-500 hover:text-black-900" onClick={() => handleCommentSection(post.id)} />
-                  <p className="text-black-500 font-normal text-base leading-6">{post.comments ? post.comments.length : 0}</p>
-                </div>
-              </div>
-              <ul className={`space-y-3 ${commentSection[post.id] ? "block" : "hidden"}`}>
-                {post.comments &&
-                  post.comments.map((comment) => (
-                    <li key={comment.id} className="flex justify-between items-center gap-3">
-                      <img src={comment.userAvatar} alt="user's avatar" className="w-12 h-12 rounded-full" />
-                      <div className="bg-black-200 rounded-xl px-4 py-1 w-full flex justify-between items-center">
-                        <div>
-                          <div className="flex gap-2">
-                            <h3 className="font-medium text-sm leading-5 line-clamp-1">{comment.userName}</h3>
-                            <p className="font-normal text-sm leading-5 text-black-700">{getTimeDifference(comment.createdTime.seconds)}</p>
-                          </div>
-                          <p className="font-normal text-base leading-6">{comment.content}</p>
-                        </div>
-                        <div className="flex flex-col">
-                          <postIcons.TbDots className="w-6 h-6 text-black cursor-pointer hover:text-alert" onClick={() => handleShowSelect(comment.id)} />
-                          {showSelect[comment.id] && (
-                            <select className="border" onChange={(e) => handleSelectChange(post.id, comment.id, e.target.value)}>
-                              <option value="">選擇操作</option>
-                              <option value="edit">Edit</option>
-                              <option value="delete">Delete</option>
-                            </select>
-                          )}
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                <li className="flex justify-between items-center gap-2">
-                  <input
-                    type="text"
-                    placeholder="請輸入留言"
-                    className="bg-black-100 text-black py-2 px-4 w-full rounded-2xl placeholder:text-black-500  caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark focus:bg-black-0"
-                    value={commentContent}
-                    onChange={(e) => setCommentContent(e.target.value)}
+                  <PostSelect
+                    options={[
+                      { value: "edit", label: "編輯貼文" },
+                      { value: "delete", label: "刪除貼文" },
+                    ]}
+                    onChange={(value) => handleSelectChange(post, value)}
                   />
-                  <div className="w-10 h-10 bg-primary flex justify-center items-center rounded-full aspect-square cursor-pointer hover:bg-primary-dark" onClick={() => handleAddComment(post.id)}>
-                    <postIcons.TbSend2 className="w-6 h-6 text-black" />
+                </div>
+                <div
+                  className={`w-full min-h-52 h-fit flex justify-center items-center p-4 rounded-xl ${!post.background ? "bg-slate-100" : ""}`}
+                  style={post.background ? { backgroundImage: `url(${post.background})`, backgroundSize: "cover", backgroundPosition: "center" } : {}}
+                >
+                  <p>{post.content}</p>
+                </div>
+                <div className="flex gap-3">
+                  <div className="flex gap-1">
+                    <postIcons.TbHeart className="w-6 h-6 cursor-pointer text-black-500 hover:text-alert" />
+                    <p className="text-black-500 font-normal text-base leading-6">0</p>
                   </div>
-                </li>
-              </ul>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+                  <div className="flex gap-1">
+                    <postIcons.TbMessageChatbot className="w-6 h-6 cursor-pointer text-black-500 hover:text-black-900" onClick={() => handleCommentSection(post.id)} />
+                    <p className="text-black-500 font-normal text-base leading-6">{post.comments ? post.comments.length : 0}</p>
+                  </div>
+                </div>
+                <ul className={`space-y-3 ${commentSection[post.id] ? "block" : "hidden"}`}>
+                  {post.comments &&
+                    post.comments.map((comment) => (
+                      <li key={comment.id} className="flex justify-between items-center gap-3">
+                        <img src={comment.userAvatar} alt="user's avatar" className="w-12 h-12 rounded-full" />
+                        <div className="bg-black-200 rounded-xl px-4 py-1 w-full flex justify-between items-center">
+                          <div className="w-4/5">
+                            <div className="flex gap-2">
+                              <h3 className="font-medium text-sm leading-5 line-clamp-1">{comment.userName}</h3>
+                              <p className="font-normal text-sm leading-5 text-black-700">{getTimeDifference(comment.updatedTime ? comment.updatedTime.seconds : comment.createdTime.seconds)}</p>
+                            </div>
+                            {editingComment[comment.id] ? (
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="text"
+                                  value={editingComment[comment.id]}
+                                  onChange={(e) => setEditingComment({ ...editingComment, [comment.id]: e.target.value })}
+                                  className="font-normal text-base leading-6 rounded px-2 py-1 w-full bg-black-0 text-black caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark my-1"
+                                />
+                                <button
+                                  className="text-nowrap font-medium text-sm leading-5 bg-primary py-1.5 px-2 rounded hover:bg-primary-dark"
+                                  onClick={() => handleUpdateComment(post.id, comment.id)}
+                                >
+                                  確認修改
+                                </button>
+                                <button className="text-nowrap font-medium text-sm leading-5 bg-black-100 py-1.5 px-2 rounded hover:bg-black-300" onClick={() => handleCancelEdit(comment.id)}>
+                                  取消修改
+                                </button>
+                              </div>
+                            ) : (
+                              <p className="font-normal text-base leading-6">{comment.content}</p>
+                            )}
+                          </div>
+                          <div className="flex flex-col">
+                            <PostSelect
+                              options={[
+                                { value: "edit", label: "編輯留言" },
+                                { value: "delete", label: "刪除留言" },
+                              ]}
+                              onChange={(value) => handleSelectChange(post, comment.id, value)}
+                            />
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  <li className="flex justify-between items-center gap-2">
+                    <input
+                      type="text"
+                      placeholder="請輸入留言"
+                      className="bg-black-100 text-black py-2 px-4 w-full rounded-2xl placeholder:text-black-500  caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark focus:bg-black-0"
+                      value={commentContent}
+                      onChange={(e) => setCommentContent(e.target.value)}
+                    />
+                    <div className="w-10 h-10 bg-primary flex justify-center items-center rounded-full aspect-square cursor-pointer hover:bg-primary-dark" onClick={() => handleAddComment(post.id)}>
+                      <postIcons.TbSend2 className="w-6 h-6 text-black" />
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <Modal isOpen={isPostModalOpen} onRequestClose={() => setIsPostModalOpen(false)}>
+        <PostModal
+          postContent={currentPost ? currentPost.content : ""}
+          setPostContent={(content) => setCurrentPost((prev) => ({ ...prev, content }))}
+          postBackground={currentPost ? currentPost.background : ""}
+          setPostBackground={(background) => setCurrentPost((prev) => ({ ...prev, background }))}
+          handlePostModal={() => setIsPostModalOpen(false)}
+          user={user}
+          isEditMode={true}
+          handleUpdatePost={() => handleUpdatePost(currentPost.id, currentPost)}
+        />
+      </Modal>
+    </>
   );
 }
 

@@ -4,7 +4,7 @@ import { getPostBackgrounds, getUserProfile } from "../services/api";
 import BackgroundSelect from "./BackgroundSelect";
 import { modalIcons } from "../assets/icons";
 
-const PostModal = ({ postContent, setPostContent, postBackground, setPostBackground, handleAddPost, handlePostModal, user }) => {
+const PostModal = ({ postContent, setPostContent, postBackground, setPostBackground, handleAddPost, handlePostModal, user, isEditMode, handleUpdatePost }) => {
   const [backgrounds, setBackgrounds] = useState([]);
   const [isBackgroundSelectOpen, setIsBackgroundSelectOpen] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -74,9 +74,16 @@ const PostModal = ({ postContent, setPostContent, postBackground, setPostBackgro
           onChange={(e) => setPostContent(e.target.value)}
         />
       </div>
-      <button className="py-1 w-full bg-primary rounded-lg font-medium text-sm leading-5 hover:bg-primary-dark" onClick={handleAddPost}>
-        發佈貼文
-      </button>
+      <div className="flex gap-4">
+        <button className="py-1 w-full bg-primary rounded-lg font-medium text-sm leading-5 hover:bg-primary-dark" onClick={isEditMode ? handleUpdatePost : handleAddPost}>
+          {isEditMode ? "確認修改" : "發佈貼文"}
+        </button>
+        {isEditMode && (
+          <button className="py-1 w-full bg-black-100 rounded-lg font-medium text-sm leading-5 hover:bg-black-300" onClick={handlePostModal}>
+            取消修改
+          </button>
+        )}
+      </div>
     </div>
   );
 };
@@ -89,6 +96,8 @@ PostModal.propTypes = {
   handleAddPost: PropTypes.func.isRequired,
   handlePostModal: PropTypes.func.isRequired,
   user: PropTypes.object,
+  isEditMode: PropTypes.bool,
+  handleUpdatePost: PropTypes.func,
 };
 
 export default PostModal;

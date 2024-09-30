@@ -164,8 +164,12 @@ function Home() {
         statusArray.push({ date: new Date(d).toDateString(), completed: false });
       }
     } else if (frequency.type === "weekly") {
-      for (let d = start; d <= end; d.setDate(d.getDate() + 7)) {
-        statusArray.push({ date: new Date(d).toDateString(), completed: false });
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 7)) {
+        const saturday = new Date(d);
+        saturday.setDate(saturday.getDate() + (6 - saturday.getDay()));
+        if (saturday <= end) {
+          statusArray.push({ date: saturday.toDateString(), completed: false });
+        }
       }
     } else if (frequency.type === "specificDays") {
       const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

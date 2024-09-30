@@ -23,22 +23,22 @@ function Layout({ children, isModalOpen, modalContent }) {
     setIsSidebarExpanded(!isSidebarExpanded);
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1536) {
-        setIsSidebarExpanded(true);
-      } else {
-        setIsSidebarExpanded(false);
-      }
-    };
+  const handleResize = () => {
+    if (window.innerWidth >= 1536) {
+      setIsSidebarExpanded(true);
+    } else {
+      setIsSidebarExpanded(false);
+    }
+  };
 
+  useEffect(() => {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
-    <div className="font-sans bg-light">
+    <div className="font-sans bg-light relative min-h-screen">
       <nav
         className={`pt-2 pb-3 px-4 bg-black-50 fixed inset-x-0 bottom-0 flex gap-x-4 z-50 border-t border-primary md:p-4 md:flex-col md:justify-between md:border-t-0 md:border-r md:h-full ${
           isSidebarExpanded ? "md:w-[240px]" : "md:w-20"
@@ -160,11 +160,9 @@ function Layout({ children, isModalOpen, modalContent }) {
         </Link>
       </nav>
       <div className={`max-w-[1160px] my-0 mx-auto flex flex-col md:flex-row min-h-screen relative`}>
-        <div className="mt-0 mb-[86px] md:mb-0 w-full p-0 relative">
-          {children}
-          <Modal isOpen={isModalOpen}>{modalContent}</Modal>
-        </div>
+        <div className="mt-0 mb-[86px] md:mb-0 w-full p-0 relative">{children}</div>
       </div>
+      {isModalOpen && <Modal isOpen={isModalOpen}>{modalContent}</Modal>}
     </div>
   );
 }

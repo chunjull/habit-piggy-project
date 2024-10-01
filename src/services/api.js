@@ -352,15 +352,14 @@ async function getUserAchievements(uid) {
     if (userSnapshot.exists()) {
       const userData = userSnapshot.data();
       const achievements = userData.achievements || [];
-      const badges = userData.badges || [];
-      return { achievements, badges };
+      return achievements;
     } else {
       console.log("No such document!");
-      return { achievements: [], badges: [] };
+      return [];
     }
   } catch (error) {
     console.error("Error getting user achievements: ", error.code, error.message);
-    return { achievements: [], badges: [] };
+    return [];
   }
 }
 

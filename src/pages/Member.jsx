@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useRef } from "react";
-import { updateUserProfile, getUserProfile, uploadAvatar, getHabits, addPost, updateHabit, deleteHabit } from "../services/api";
+import { updateUserProfile, getUserProfile, uploadAvatar, getHabits, addPost, updateHabit, deleteHabit, getAchievements, getUserAchievements } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import Modal from "../components/Modal";
 import SettingModal from "../components/SettingModal";
@@ -54,6 +54,8 @@ function Member() {
   const [monthCalendarDate, setMonthCalendarDate] = useState(null);
   const [isPost, setIsPost] = useState(false);
   const [filter, setFilter] = useState("all");
+  const [achievements, setAchievements] = useState([]);
+  const [userAchievements, setUserAchievements] = useState([]);
   const [options] = useState([
     { label: "全部習慣", value: "all" },
     { label: "進行中", value: "in-progress" },
@@ -79,6 +81,8 @@ function Member() {
           setProfileData(userProfile);
         }
         fetchHabits();
+        fetchAchievements();
+        fetchUserAchievements(user.uid);
       }
     };
 
@@ -93,6 +97,16 @@ function Member() {
       day: today.getDate(),
     });
   }, []);
+
+  const fetchAchievements = async () => {
+    const achievementsList = await getAchievements();
+    setAchievements(achievementsList);
+  };
+
+  const fetchUserAchievements = async (uid) => {
+    const userAchievementsList = await getUserAchievements(uid);
+    setUserAchievements(userAchievementsList);
+  };
 
   const handleSettingModal = () => {
     setIsSettingModalOpen(!isSettingModalOpen);
@@ -371,17 +385,21 @@ function Member() {
               <div className="w-full bg-light text-center rounded-2xl">{profileData.levelPoints}%</div>
             </div>
             <div className="pt-9 pb-4 px-4 bg-black-50 space-y-4 rounded-2xl relative">
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-                <div className="bg-black-100 h-8 w-full"></div>
-                <div className="bg-black-100 h-8 w-full"></div>
-                <div className="bg-black-100 h-8 w-full"></div>
-                <div className="bg-black-100 h-8 w-full"></div>
-                {profileData.achievements.map((achievement, index) => (
-                  <button key={index} className="border">
-                    {achievement}
-                  </button>
+              <ul className="grid grid-cols-2 gap-4 md:grid-cols-3">
+                {achievements.map((achievement) => (
+                  <li
+                    key={achievement.id}
+                    className={`py-1 w-full flex justify-center items-center rounded-lg border-2 cursor-default ${
+                      userAchievements.includes(achievement.id)
+                        ? "opacity-100 border-primary-dark bg-light text-primary-dark bordered-achievement"
+                        : "opacity-50 border-black-500 bg-black-100 text-black-500"
+                    }`}
+                  >
+                    <div className="font-normal text-base leading-6">{achievement.name}</div>
+                    {/* <div>{achievement.description}</div> */}
+                  </li>
                 ))}
-              </div>
+              </ul>
               <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleAchievementModal}>
                 更多成就
               </button>
@@ -473,7 +491,7 @@ function Member() {
         />
       </Modal>
       <Modal isOpen={isAchievementModalOpen} onClose={handleAchievementModal}>
-        <AchievementModal handleAchievementModal={handleAchievementModal} />
+        <AchievementModal handleAchievementModal={handleAchievementModal} achievements={achievements} userAchievements={userAchievements} />
       </Modal>
       <Modal isOpen={isBadgeModalOpen} onClose={handleBadgeModal}>
         <BadgeModal handleBadgeModal={handleBadgeModal} />

@@ -28,7 +28,7 @@ const CategorySelect = ({ options, value, onChange }) => {
         )}
       </div>
       {isOpen && (
-        <div className="absolute top-12 z-10">
+        <div className="absolute top-12 z-10 drop-shadow">
           <ul className="relative before:content-[''] before:absolute before:top-[-4px] before:left-4 before:w-4 before:h-4 before:bg-black-0 before:rotate-45 before:z-20 bg-black-0 p-4 grid grid-cols-4 min-w-max gap-3 rounded-xl">
             {options.map((option) => (
               <li key={option.id} className="w-16 h-fit cursor-pointer flex flex-col items-center gap-1 text-nowrap font-normal text-xs leading-4" onClick={() => handleSelect(option.id)}>

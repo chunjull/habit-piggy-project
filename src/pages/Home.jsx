@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { AuthContext } from "../utils/AuthContext";
-import { getHabits, updateHabit, addHabit, addPost, deleteHabit, calculateTaskValue, checkAndAwardAchievements, calculateBadges, checkAndAwardBadges } from "../services/api";
+import { getHabits, updateHabit, addHabit, addPost, deleteHabit, calculateTaskValue, checkAndAwardAchievements, calculateBadges, checkAndAwardBadges, removeBadge } from "../services/api";
 import WeekCalendar from "../components/WeekCalendar";
 import Modal from "../components/Modal";
 import HabitModal from "../components/HabitModal";
@@ -240,6 +240,8 @@ function Home() {
       await updateHabit(user.uid, selectedHabit.id, updatedHabitData);
       await calculateBadges(user.uid);
       await checkAndAwardBadges(user.uid);
+      const taskValue = await calculateTaskValue(user.uid, "habit");
+      await checkAndAwardAchievements(user.uid, "habit", taskValue);
       fetchHabits();
       setIsEditModalOpen(false);
       setIsDetailModalOpen(false);
@@ -251,6 +253,20 @@ function Home() {
   const handleDeleteHabit = async () => {
     if (user && selectedHabit) {
       await deleteHabit(user.uid, selectedHabit.id);
+      await calculateBadges(user.uid);
+      await checkAndAwardBadges(user.uid);
+
+      const taskValue = await calculateTaskValue(user.uid, "habit");
+      await checkAndAwardAchievements(user.uid, "habit", taskValue);
+
+      const updatedHabits = await getHabits(user.uid);
+      setHabits(updatedHabits);
+
+      const categoryHabits = updatedHabits.filter((habit) => habit.category === selectedHabit.category);
+      if (categoryHabits.length === 0) {
+        await removeBadge(user.uid, selectedHabit.category);
+      }
+
       fetchHabits();
       setIsEditModalOpen(false);
       setIsDetailModalOpen(false);

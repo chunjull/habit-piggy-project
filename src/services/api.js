@@ -524,6 +524,21 @@ async function checkAndAwardBadges(uid) {
   }
 }
 
+async function removeBadge(uid, category) {
+  try {
+    const userDocRef = doc(db, "users", uid);
+    const userSnapshot = await getDoc(userDocRef);
+    if (userSnapshot.exists()) {
+      const userData = userSnapshot.data();
+      const updatedBadges = userData.badges.filter((badge) => badge.category !== category);
+      await updateDoc(userDocRef, { badges: updatedBadges });
+      console.log(`Badge for category ${category} removed for user ID: ${uid}`);
+    }
+  } catch (error) {
+    console.error("Error removing badge: ", error.code, error.message);
+  }
+}
+
 export {
   registerUser,
   logoutUser,
@@ -556,4 +571,5 @@ export {
   getUserBadges,
   calculateBadges,
   checkAndAwardBadges,
+  removeBadge,
 };

@@ -9,10 +9,13 @@ import {
   deleteHabit,
   getAchievements,
   getUserAchievements,
+  calculateTaskValue,
+  checkAndAwardAchievements,
   getBadges,
   getUserBadges,
   calculateBadges,
   checkAndAwardBadges,
+  removeBadge,
 } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import Modal from "../components/Modal";
@@ -315,6 +318,8 @@ function Member() {
       await updateHabit(user.uid, selectedHabit.id, updatedHabitData);
       await calculateBadges(user.uid);
       await checkAndAwardBadges(user.uid);
+      const taskValue = await calculateTaskValue(user.uid, "habit");
+      await checkAndAwardAchievements(user.uid, "habit", taskValue);
       fetchHabits();
       setIsEditModalOpen(false);
       setIsDetailModalOpen(false);
@@ -326,6 +331,20 @@ function Member() {
   const handleDeleteHabit = async () => {
     if (user && selectedHabit) {
       await deleteHabit(user.uid, selectedHabit.id);
+      await calculateBadges(user.uid);
+      await checkAndAwardBadges(user.uid);
+
+      const taskValue = await calculateTaskValue(user.uid, "habit");
+      await checkAndAwardAchievements(user.uid, "habit", taskValue);
+
+      const updatedHabits = await getHabits(user.uid);
+      setHabits(updatedHabits);
+
+      const categoryHabits = updatedHabits.filter((habit) => habit.category === selectedHabit.category);
+      if (categoryHabits.length === 0) {
+        await removeBadge(user.uid, selectedHabit.category);
+      }
+
       fetchHabits();
       setIsEditModalOpen(false);
       setIsDetailModalOpen(false);

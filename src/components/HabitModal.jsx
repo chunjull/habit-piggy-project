@@ -112,6 +112,19 @@ const HabitModal = ({
           </div>
         </div>
       </div>
+      {habitData.frequency.type === "specificDays" && (
+        <div className="grid grid-cols-7 gap-2 md:gap-4">
+          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
+            <div key={index} className="text-center flex flex-col justify-center items-center gap-1">
+              {day}
+              <checkIcon.TbCheck
+                className={`w-10 h-10 rounded-full p-1 border border-black-500 ${selectedDays.includes(day) ? "bg-primary text-white border-primary" : "text-black-500 hover:bg-primary-light"}`}
+                onClick={() => handleDayButtonClick(day)}
+              />
+            </div>
+          ))}
+        </div>
+      )}
       <div className="flex justify-between gap-4">
         <label htmlFor="type" className="text-nowrap">
           習慣類型
@@ -141,19 +154,6 @@ const HabitModal = ({
           </div>
         </div>
       </div>
-      {habitData.frequency.type === "specificDays" && (
-        <div className="grid grid-cols-7 gap-2 md:gap-4">
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
-            <div key={index} className="text-center flex flex-col justify-center items-center gap-1">
-              {day}
-              <checkIcon.TbCheck
-                className={`w-10 h-10 rounded-full p-1 border border-black-500 ${selectedDays.includes(day) ? "bg-primary text-white border-primary" : "text-black-500 hover:bg-primary-light"}`}
-                onClick={() => handleDayButtonClick(day)}
-              />
-            </div>
-          ))}
-        </div>
-      )}
       <div className="flex justify-between gap-4">
         <label htmlFor="amount" className="text-nowrap">
           習慣罰款

@@ -454,6 +454,76 @@ async function getBadges() {
   }
 }
 
+async function getUserBadges(uid) {
+  try {
+    const userDocRef = doc(db, "users", uid);
+    const userSnapshot = await getDoc(userDocRef);
+    if (userSnapshot.exists()) {
+      const userData = userSnapshot.data();
+      const badges = userData.badges || [];
+      return badges;
+    } else {
+      console.log("No such document!");
+      return [];
+    }
+  } catch (error) {
+    console.error("Error getting user badges: ", error.code, error.message);
+    return [];
+  }
+}
+
+async function calculateBadges(uid) {
+  try {
+    const userDocRef = doc(db, "users", uid);
+    const habitsCollectionRef = collection(userDocRef, "habits");
+    const habitsSnapshot = await getDocs(habitsCollectionRef);
+    const habitsList = habitsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+    const categoryCounts = habitsList.reduce((counts, habit) => {
+      const category = habit.category;
+      if (!counts[category]) {
+        counts[category] = 0;
+      }
+      counts[category]++;
+      return counts;
+    }, {});
+
+    return categoryCounts;
+  } catch (error) {
+    console.error("Error calculating badges: ", error.code, error.message);
+    return {};
+  }
+}
+
+async function checkAndAwardBadges(uid) {
+  try {
+    const badgesSnapshot = await getDocs(collection(db, "badges"));
+    const userDocRef = doc(db, "users", uid);
+    const userSnapshot = await getDoc(userDocRef);
+    const userBadges = userSnapshot.exists() ? userSnapshot.data().badges || [] : [];
+
+    const categoryCounts = await calculateBadges(uid);
+
+    badgesSnapshot.forEach(async (doc) => {
+      const badge = doc.data();
+      const condition = badge.condition;
+
+      let achieved = false;
+      if (categoryCounts[condition.category] && categoryCounts[condition.category] >= condition.times) {
+        achieved = true;
+      }
+
+      if (achieved && !userBadges.includes(doc.id)) {
+        userBadges.push(doc.id);
+        await updateDoc(userDocRef, { badges: userBadges });
+        console.log(`Badge ${badge.description} awarded to user ID: ${uid}`);
+      }
+    });
+  } catch (error) {
+    console.error("Error checking and awarding badges: ", error.code, error.message);
+  }
+}
+
 export {
   registerUser,
   logoutUser,
@@ -483,4 +553,7 @@ export {
   calculateTaskValue,
   checkAndAwardAchievements,
   getBadges,
+  getUserBadges,
+  calculateBadges,
+  checkAndAwardBadges,
 };

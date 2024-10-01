@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useRef } from "react";
-import { updateUserProfile, getUserProfile, uploadAvatar, getHabits, addPost, updateHabit, deleteHabit, getAchievements, getUserAchievements, getBadges } from "../services/api";
+import { updateUserProfile, getUserProfile, uploadAvatar, getHabits, addPost, updateHabit, deleteHabit, getAchievements, getUserAchievements, getBadges, getUserBadges } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import Modal from "../components/Modal";
 import SettingModal from "../components/SettingModal";
@@ -57,6 +57,7 @@ function Member() {
   const [achievements, setAchievements] = useState([]);
   const [userAchievements, setUserAchievements] = useState([]);
   const [badges, setBadges] = useState([]);
+  const [userBadges, setUserBadges] = useState([]);
   const [options] = useState([
     { label: "全部習慣", value: "all" },
     { label: "進行中", value: "in-progress" },
@@ -85,6 +86,7 @@ function Member() {
         fetchAchievements();
         fetchUserAchievements(user.uid);
         fetchBadges();
+        fetchUserBadges(user.uid);
       }
     };
 
@@ -113,6 +115,11 @@ function Member() {
   const fetchBadges = async () => {
     const badgesList = await getBadges();
     setBadges(badgesList);
+  };
+
+  const fetchUserBadges = async (uid) => {
+    const userBadgesList = await getUserBadges(uid);
+    setUserBadges(userBadgesList);
   };
 
   const handleSettingModal = () => {
@@ -375,6 +382,20 @@ function Member() {
 
   const sortedAchievements = sortAchievements(achievements, userAchievements);
 
+  const sortBadges = (badges, userBadges) => {
+    return badges.sort((a, b) => {
+      const aAchieved = userBadges.includes(a.id);
+      const bAchieved = userBadges.includes(b.id);
+
+      if (aAchieved && !bAchieved) return -1;
+      if (!aAchieved && bAchieved) return 1;
+
+      return 0;
+    });
+  };
+
+  const sortedBadges = sortBadges(badges, userBadges);
+
   return (
     <>
       <div className="p-4 space-y-4">
@@ -449,9 +470,9 @@ function Member() {
             </div>
             <div className="pt-9 pb-4 px-4 bg-black-50 space-y-4 rounded-2xl relative">
               <ul className="grid grid-cols-3 gap-4 md:grid-cols-6">
-                {badges.slice(0, 6).map((badge, index) => (
+                {sortedBadges.slice(0, 6).map((badge, index) => (
                   <li key={badge.id} className="relative w-full h-fit">
-                    <img src={badge.image} alt={`Badge ${index}`} className={`w-full h-full object-cover ${userAchievements.includes(badge.id) ? "opacity-100" : "opacity-30"}`} />
+                    <img src={badge.image} alt={`Badge ${index}`} className={`w-full h-full object-cover ${userBadges.includes(badge.id) ? "opacity-100" : "opacity-30"}`} />
                   </li>
                 ))}
               </ul>
@@ -522,7 +543,7 @@ function Member() {
         <AchievementModal handleAchievementModal={handleAchievementModal} userAchievements={userAchievements} sortedAchievements={sortedAchievements} />
       </Modal>
       <Modal isOpen={isBadgeModalOpen} onClose={handleBadgeModal}>
-        <BadgeModal handleBadgeModal={handleBadgeModal} badges={badges} userAchievements={userAchievements} />
+        <BadgeModal handleBadgeModal={handleBadgeModal} badges={badges} userBadges={userBadges} sortedBadges={sortedBadges} />
       </Modal>
     </>
   );

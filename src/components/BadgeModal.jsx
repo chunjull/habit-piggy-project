@@ -1,7 +1,7 @@
 import { modalIcons } from "../assets/icons";
 import PropTypes from "prop-types";
 
-const BadgeModal = ({ handleBadgeModal, badges, userAchievements }) => {
+const BadgeModal = ({ handleBadgeModal, sortedBadges, userBadges }) => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -10,9 +10,9 @@ const BadgeModal = ({ handleBadgeModal, badges, userAchievements }) => {
       </div>
       <div className="max-h-56 overflow-scroll">
         <ul className="grid grid-cols-3 gap-4">
-          {badges.map((badge, index) => (
+          {sortedBadges.map((badge, index) => (
             <li key={badge.id} className="relative w-full h-fit">
-              <img src={badge.image} alt={`Badge ${index}`} className={`w-full h-full object-cover ${userAchievements.includes(badge.id) ? "opacity-100" : "opacity-30"}`} />
+              <img src={badge.image} alt={`Badge ${index}`} className={`w-full h-full object-cover ${userBadges.includes(badge.id) ? "opacity-100" : "opacity-30"}`} />
               <div className="mt-1 text-black-700 text-center font-normal text-xs leading-4 md:text-sm md:leading-5">{badge.description}</div>
             </li>
           ))}
@@ -24,8 +24,8 @@ const BadgeModal = ({ handleBadgeModal, badges, userAchievements }) => {
 
 BadgeModal.propTypes = {
   handleBadgeModal: PropTypes.func.isRequired,
-  badges: PropTypes.array.isRequired,
-  userAchievements: PropTypes.array.isRequired,
+  sortedBadges: PropTypes.array.isRequired,
+  userBadges: PropTypes.array.isRequired,
 };
 
 export default BadgeModal;

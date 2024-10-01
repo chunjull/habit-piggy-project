@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { AuthContext } from "../utils/AuthContext";
-import { getHabits, updateHabit, addHabit, addPost, deleteHabit, calculateTaskValue, checkAndAwardAchievements } from "../services/api";
+import { getHabits, updateHabit, addHabit, addPost, deleteHabit, calculateTaskValue, checkAndAwardAchievements, calculateBadges, checkAndAwardBadges } from "../services/api";
 import WeekCalendar from "../components/WeekCalendar";
 import Modal from "../components/Modal";
 import HabitModal from "../components/HabitModal";
@@ -200,6 +200,8 @@ function Home() {
       const statusArray = generateStatusArray(habitData.startDate, habitData.endDate, habitData.frequency);
       const newHabitData = { ...habitData, status: statusArray };
       await addHabit(user.uid, newHabitData);
+      await calculateBadges(user.uid);
+      await checkAndAwardBadges(user.uid);
       fetchHabits();
       handleHabitModal();
       setHabitData({
@@ -229,6 +231,8 @@ function Home() {
 
       const updatedHabitData = { ...habitData, id: selectedHabit.id };
       await updateHabit(user.uid, selectedHabit.id, updatedHabitData);
+      await calculateBadges(user.uid);
+      await checkAndAwardBadges(user.uid);
       fetchHabits();
       setIsEditModalOpen(false);
       setIsDetailModalOpen(false);

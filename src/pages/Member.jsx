@@ -393,7 +393,7 @@ function Member() {
             </div>
             <div className="pt-9 pb-4 px-4 bg-black-50 space-y-4 rounded-2xl relative">
               <ul className="grid grid-cols-2 gap-4 md:grid-cols-3">
-                {achievements.map((achievement) => (
+                {achievements.slice(0, 6).map((achievement) => (
                   <li
                     key={achievement.id}
                     className={`py-1 w-full flex justify-center items-center rounded-lg border-2 cursor-default ${
@@ -403,7 +403,6 @@ function Member() {
                     }`}
                   >
                     <div className="font-normal text-base leading-6">{achievement.name}</div>
-                    {/* <div>{achievement.description}</div> */}
                   </li>
                 ))}
               </ul>

@@ -424,8 +424,8 @@ function Member() {
             <div className="pt-9 pb-4 px-4 bg-black-50 space-y-4 rounded-2xl relative">
               <ul className="grid grid-cols-3 gap-4 md:grid-cols-6">
                 {badges.slice(0, 6).map((badge, index) => (
-                  <li key={index} className="relative w-full h-fit">
-                    <img src={badge} alt={`Badge ${index}`} className={`w-full h-full object-cover ${userAchievements.includes(badge.id) ? "opacity-100" : "opacity-30"}`} />
+                  <li key={badge.id} className="relative w-full h-fit">
+                    <img src={badge.image} alt={`Badge ${index}`} className={`w-full h-full object-cover ${userAchievements.includes(badge.id) ? "opacity-100" : "opacity-30"}`} />
                   </li>
                 ))}
               </ul>

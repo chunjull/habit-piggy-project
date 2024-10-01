@@ -11,8 +11,9 @@ const BadgeModal = ({ handleBadgeModal, badges, userAchievements }) => {
       <div className="max-h-56 overflow-scroll">
         <ul className="grid grid-cols-3 gap-4">
           {badges.map((badge, index) => (
-            <li key={index} className="w-full h-fit">
-              <img src={badge} alt={`Badge ${index}`} className={`w-full h-full object-cover ${userAchievements.includes(badge.id) ? "opacity-100" : "opacity-30"}`} />
+            <li key={badge.id} className="relative w-full h-fit">
+              <img src={badge.image} alt={`Badge ${index}`} className={`w-full h-full object-cover ${userAchievements.includes(badge.id) ? "opacity-100" : "opacity-30"}`} />
+              <div className="mt-1 text-black-700 text-center font-normal text-xs leading-4 md:text-sm md:leading-5">{badge.description}</div>
             </li>
           ))}
         </ul>

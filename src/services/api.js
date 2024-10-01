@@ -398,11 +398,10 @@ async function checkAndAwardAchievements(uid, taskType, taskValue) {
 
 async function getBadges() {
   try {
-    const storageRef = ref(storage, "badges");
-    const result = await listAll(storageRef);
-    const urlPromises = result.items.map((itemRef) => getDownloadURL(itemRef));
-    const urls = await Promise.all(urlPromises);
-    return urls;
+    const badgesCollectionRef = collection(db, "badges");
+    const badgesSnapshot = await getDocs(badgesCollectionRef);
+    const badgesList = badgesSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    return badgesList;
   } catch (error) {
     console.error("Error getting badges: ", error.code, error.message);
     return [];

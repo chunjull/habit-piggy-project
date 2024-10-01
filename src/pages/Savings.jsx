@@ -79,7 +79,6 @@ function Savings() {
 
     const periodData = {};
 
-    // 初始化週期變量數據
     if (filter === "week") {
       const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
       daysOfWeek.forEach((day) => {

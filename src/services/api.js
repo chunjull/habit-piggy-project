@@ -363,6 +363,52 @@ async function getUserAchievements(uid) {
   }
 }
 
+async function calculateTaskValue(uid, taskType) {
+  try {
+    const userDocRef = doc(db, "users", uid);
+    const habitsCollectionRef = collection(userDocRef, "habits");
+    const habitsSnapshot = await getDocs(habitsCollectionRef);
+    const habitsList = habitsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+    let taskValue = 0;
+    const now = new Date();
+    const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    switch (taskType) {
+      case "habit":
+        taskValue = habitsList.reduce((total, habit) => {
+          const completedCount = habit.status.filter((status) => status.completed && new Date(status.date) < todayMidnight).length;
+          return total + completedCount;
+        }, 0);
+        break;
+
+      case "savings":
+        taskValue = habitsList.reduce((total, habit) => {
+          const incompleteCount = habit.status.filter((status) => !status.completed && new Date(status.date) < todayMidnight).length;
+          return total + habit.amount * incompleteCount;
+        }, 0);
+        break;
+
+      case "streak":
+        taskValue =
+          habitsList.reduce((total, habit) => {
+            const completedCount = habit.status.filter((status) => status.completed && new Date(status.date) < todayMidnight).length;
+            const totalCount = habit.status.filter((status) => new Date(status.date) < todayMidnight).length;
+            return total + (totalCount > 0 ? completedCount / totalCount : 0);
+          }, 0) / habitsList.length;
+        break;
+
+      default:
+        throw new Error("Invalid task type");
+    }
+
+    return taskValue;
+  } catch (error) {
+    console.error("Error calculating task value: ", error.code, error.message);
+    return 0;
+  }
+}
+
 async function checkAndAwardAchievements(uid, taskType, taskValue) {
   try {
     const achievementsSnapshot = await getDocs(collection(db, "achievements"));
@@ -434,6 +480,7 @@ export {
   removeLike,
   getAchievements,
   getUserAchievements,
+  calculateTaskValue,
   checkAndAwardAchievements,
   getBadges,
 };

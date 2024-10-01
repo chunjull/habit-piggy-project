@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { AuthContext } from "../utils/AuthContext";
-import { getHabits, updateHabit, addHabit, addPost, deleteHabit } from "../services/api";
+import { getHabits, updateHabit, addHabit, addPost, deleteHabit, calculateTaskValue, checkAndAwardAchievements } from "../services/api";
 import WeekCalendar from "../components/WeekCalendar";
 import Modal from "../components/Modal";
 import HabitModal from "../components/HabitModal";
@@ -298,6 +298,7 @@ function Home() {
     const habitToUpdate = updatedHabits.find((habit) => habit.id === habitId);
     try {
       await updateHabit(user.uid, habitId, habitToUpdate);
+      await handleAchievements("habit");
     } catch (error) {
       console.error("Error updating habit in Firestore: ", error);
     }
@@ -343,6 +344,17 @@ function Home() {
   if (isPost) {
     return <Navigate to="/posts" />;
   }
+
+  const handleAchievements = async (taskType) => {
+    if (!user || !user.uid) return;
+
+    try {
+      const taskValue = await calculateTaskValue(user.uid, taskType);
+      await checkAndAwardAchievements(user.uid, taskType, taskValue);
+    } catch (error) {
+      console.error("Error handling achievements: ", error);
+    }
+  };
 
   return (
     <>

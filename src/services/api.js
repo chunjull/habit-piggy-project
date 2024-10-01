@@ -334,6 +334,69 @@ async function removeLike(postID, userID) {
   }
 }
 
+async function getAchievements() {
+  try {
+    const achievementsSnapshot = await getDocs(collection(db, "achievements"));
+    const achievementsList = achievementsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    return achievementsList;
+  } catch (error) {
+    console.error("Error getting achievements: ", error.code, error.message);
+    return [];
+  }
+}
+
+async function getUserAchievements(uid) {
+  try {
+    const userDocRef = doc(db, "users", uid);
+    const userSnapshot = await getDoc(userDocRef);
+    if (userSnapshot.exists()) {
+      const userData = userSnapshot.data();
+      const achievements = userData.achievements || [];
+      const badges = userData.badges || [];
+      return { achievements, badges };
+    } else {
+      console.log("No such document!");
+      return { achievements: [], badges: [] };
+    }
+  } catch (error) {
+    console.error("Error getting user achievements: ", error.code, error.message);
+    return { achievements: [], badges: [] };
+  }
+}
+
+async function checkAndAwardAchievements(uid, taskType, taskValue) {
+  try {
+    const achievementsSnapshot = await getDocs(collection(db, "achievements"));
+    const userDocRef = doc(db, "users", uid);
+    const userSnapshot = await getDoc(userDocRef);
+    const userAchievements = userSnapshot.exists() ? userSnapshot.data().achievements || [] : [];
+
+    achievementsSnapshot.forEach(async (doc) => {
+      const achievement = doc.data();
+      const condition = achievement.condition;
+
+      let achieved = false;
+      if (condition.type === taskType) {
+        if (taskType === "habit" && taskValue >= condition.count) {
+          achieved = true;
+        } else if (taskType === "savings" && taskValue >= condition.amount) {
+          achieved = true;
+        } else if (taskType === "streak" && taskValue >= condition.count) {
+          achieved = true;
+        }
+      }
+
+      if (achieved && !userAchievements.includes(doc.id)) {
+        userAchievements.push(doc.id);
+        await updateDoc(userDocRef, { achievements: userAchievements });
+        console.log(`Achievement ${achievement.name} awarded to user ID: ${uid}`);
+      }
+    });
+  } catch (error) {
+    console.error("Error checking and awarding achievements: ", error.code, error.message);
+  }
+}
+
 export {
   registerUser,
   logoutUser,
@@ -358,4 +421,7 @@ export {
   getPostBackgrounds,
   addLike,
   removeLike,
+  getAchievements,
+  getUserAchievements,
+  checkAndAwardAchievements,
 };

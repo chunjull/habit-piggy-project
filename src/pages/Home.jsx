@@ -229,7 +229,14 @@ function Home() {
         return;
       }
 
-      const updatedHabitData = { ...habitData, id: selectedHabit.id };
+      const originalHabitData = selectedHabit;
+
+      const updatedHabitData = {
+        ...originalHabitData,
+        ...habitData,
+        id: selectedHabit.id,
+      };
+
       await updateHabit(user.uid, selectedHabit.id, updatedHabitData);
       await calculateBadges(user.uid);
       await checkAndAwardBadges(user.uid);

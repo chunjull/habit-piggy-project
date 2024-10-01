@@ -1,5 +1,19 @@
 import { useState, useContext, useEffect, useRef } from "react";
-import { updateUserProfile, getUserProfile, uploadAvatar, getHabits, addPost, updateHabit, deleteHabit, getAchievements, getUserAchievements, getBadges, getUserBadges } from "../services/api";
+import {
+  updateUserProfile,
+  getUserProfile,
+  uploadAvatar,
+  getHabits,
+  addPost,
+  updateHabit,
+  deleteHabit,
+  getAchievements,
+  getUserAchievements,
+  getBadges,
+  getUserBadges,
+  calculateBadges,
+  checkAndAwardBadges,
+} from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import Modal from "../components/Modal";
 import SettingModal from "../components/SettingModal";
@@ -144,6 +158,7 @@ function Member() {
       startDate: habit.startDate,
       endDate: habit.endDate,
       status: habit.status,
+      type: habit.type,
     });
     setIsEditModalOpen(!isEditModalOpen);
     setIsDetailModalOpen(false);
@@ -281,16 +296,30 @@ function Member() {
 
   const handleUpdateHabit = async () => {
     if (user && selectedHabit) {
-      try {
-        await updateHabit(user.uid, selectedHabit.id, habitData);
-        await fetchHabits();
-        setIsEditModalOpen(false);
-        console.log("Habit updated successfully");
-      } catch (error) {
-        console.error("Error updating habit: ", error);
+      const start = new Date(habitData.startDate);
+      const end = new Date(habitData.endDate);
+
+      if (end <= start) {
+        alert("結束日期必須晚於開始日期");
+        return;
       }
+
+      const originalHabitData = selectedHabit;
+
+      const updatedHabitData = {
+        ...originalHabitData,
+        ...habitData,
+        id: selectedHabit.id,
+      };
+
+      await updateHabit(user.uid, selectedHabit.id, updatedHabitData);
+      await calculateBadges(user.uid);
+      await checkAndAwardBadges(user.uid);
+      fetchHabits();
+      setIsEditModalOpen(false);
+      setIsDetailModalOpen(false);
     } else {
-      console.error("No user or selected habit");
+      console.error("User not authenticated or habit not selected");
     }
   };
 

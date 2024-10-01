@@ -349,6 +349,32 @@ function Member() {
     return <Navigate to="/posts" />;
   }
 
+  const sortAchievements = (achievements, userAchievements) => {
+    return achievements.sort((a, b) => {
+      const aAchieved = userAchievements.includes(a.id);
+      const bAchieved = userAchievements.includes(b.id);
+
+      if (aAchieved && !bAchieved) return -1;
+      if (!aAchieved && bAchieved) return 1;
+
+      if (!aAchieved && !bAchieved) {
+        const typeOrder = { habit: 1, savings: 2, streak: 3 };
+        const aTypeOrder = typeOrder[a.condition.type] || 4;
+        const bTypeOrder = typeOrder[b.condition.type] || 4;
+
+        if (aTypeOrder !== bTypeOrder) return aTypeOrder - bTypeOrder;
+
+        if (a.condition.count !== b.condition.count) return (a.condition.count || 0) - (b.condition.count || 0);
+        if (a.condition.amount !== b.condition.amount) return (a.condition.amount || 0) - (b.condition.amount || 0);
+        if (a.condition.percent !== b.condition.percent) return (a.condition.percent || 0) - (b.condition.percent || 0);
+      }
+
+      return 0;
+    });
+  };
+
+  const sortedAchievements = sortAchievements(achievements, userAchievements);
+
   return (
     <>
       <div className="p-4 space-y-4">
@@ -393,7 +419,7 @@ function Member() {
             </div>
             <div className="pt-9 pb-4 px-4 bg-black-50 space-y-4 rounded-2xl relative">
               <ul className="grid grid-cols-2 gap-4 md:grid-cols-3">
-                {achievements.slice(0, 6).map((achievement) => (
+                {sortedAchievements.slice(0, 6).map((achievement) => (
                   <li
                     key={achievement.id}
                     className={`py-1 w-full flex justify-center items-center rounded-lg border-2 cursor-default ${
@@ -493,7 +519,7 @@ function Member() {
         />
       </Modal>
       <Modal isOpen={isAchievementModalOpen} onClose={handleAchievementModal}>
-        <AchievementModal handleAchievementModal={handleAchievementModal} achievements={achievements} userAchievements={userAchievements} />
+        <AchievementModal handleAchievementModal={handleAchievementModal} userAchievements={userAchievements} sortedAchievements={sortedAchievements} />
       </Modal>
       <Modal isOpen={isBadgeModalOpen} onClose={handleBadgeModal}>
         <BadgeModal handleBadgeModal={handleBadgeModal} badges={badges} userAchievements={userAchievements} />

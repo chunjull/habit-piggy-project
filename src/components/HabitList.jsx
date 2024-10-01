@@ -61,14 +61,14 @@ const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, hand
                       <div key={index} className="flex flex-col items-center">
                         {status ? (
                           <checkIcon.TbCheck
-                            className={`w-10 h-10 md:w-12 md:h-12 cursor-pointer border-2 rounded-full ${
-                              status && status.completed ? "bg-primary text-black-0 border-primary" : "text-black-500 border-black-500 hover:bg-primary-light"
+                            className={`w-10 h-10 md:w-12 md:h-12 border-2 rounded-full ${status && status.completed ? "bg-primary text-black-0 border-primary" : "text-black-500 border-black-500"} ${
+                              isFinished ? "cursor-not-allowed" : "cursor-pointer hover:bg-primary-light"
                             }`}
-                            onClick={() => status && handleCheck(habit.id, status.date)}
+                            onClick={() => !isFinished && status && handleCheck(habit.id, status.date)}
                             disabled={!status}
                           />
                         ) : (
-                          <checkIcon.TbCheck className="w-10 h-10 md:w-12 md:h-12 bg-black-200 text-black-50 rounded-full cursor-not-allowed" />
+                          <checkIcon.TbCheck className={`w-10 h-10 md:w-12 md:h-12 rounded-full cursor-not-allowed ${isFinished ? "bg-black-400 text-black-200" : "bg-black-200 text-black-50"}`} />
                         )}
                       </div>
                     );

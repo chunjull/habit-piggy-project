@@ -396,6 +396,19 @@ async function checkAndAwardAchievements(uid, taskType, taskValue) {
   }
 }
 
+async function getBadges() {
+  try {
+    const storageRef = ref(storage, "badges");
+    const result = await listAll(storageRef);
+    const urlPromises = result.items.map((itemRef) => getDownloadURL(itemRef));
+    const urls = await Promise.all(urlPromises);
+    return urls;
+  } catch (error) {
+    console.error("Error getting badges: ", error.code, error.message);
+    return [];
+  }
+}
+
 export {
   registerUser,
   logoutUser,
@@ -423,4 +436,5 @@ export {
   getAchievements,
   getUserAchievements,
   checkAndAwardAchievements,
+  getBadges,
 };

@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useRef } from "react";
-import { updateUserProfile, getUserProfile, uploadAvatar, getHabits, addPost, updateHabit, deleteHabit, getAchievements, getUserAchievements } from "../services/api";
+import { updateUserProfile, getUserProfile, uploadAvatar, getHabits, addPost, updateHabit, deleteHabit, getAchievements, getUserAchievements, getBadges } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import Modal from "../components/Modal";
 import SettingModal from "../components/SettingModal";
@@ -56,6 +56,7 @@ function Member() {
   const [filter, setFilter] = useState("all");
   const [achievements, setAchievements] = useState([]);
   const [userAchievements, setUserAchievements] = useState([]);
+  const [badges, setBadges] = useState([]);
   const [options] = useState([
     { label: "全部習慣", value: "all" },
     { label: "進行中", value: "in-progress" },
@@ -83,6 +84,7 @@ function Member() {
         fetchHabits();
         fetchAchievements();
         fetchUserAchievements(user.uid);
+        fetchBadges();
       }
     };
 
@@ -106,6 +108,11 @@ function Member() {
   const fetchUserAchievements = async (uid) => {
     const userAchievementsList = await getUserAchievements(uid);
     setUserAchievements(userAchievementsList);
+  };
+
+  const fetchBadges = async () => {
+    const badgesList = await getBadges();
+    setBadges(badgesList);
   };
 
   const handleSettingModal = () => {
@@ -416,17 +423,13 @@ function Member() {
               </div>
             </div>
             <div className="pt-9 pb-4 px-4 bg-black-50 space-y-4 rounded-2xl relative">
-              <div className="grid grid-cols-3 gap-4">
-                <div className="bg-black-100 h-8 w-full"></div>
-                <div className="bg-black-100 h-8 w-full"></div>
-                <div className="bg-black-100 h-8 w-full"></div>
-                <div className="bg-black-100 h-8 w-full"></div>
-                {profileData.badges.map((badge, index) => (
-                  <div key={index} className="w-20 h-20 bg-slate-100">
-                    {badge}
-                  </div>
+              <ul className="grid grid-cols-3 gap-4 md:grid-cols-6">
+                {badges.slice(0, 6).map((badge, index) => (
+                  <li key={index} className="relative w-full h-fit">
+                    <img src={badge} alt={`Badge ${index}`} className={`w-full h-full object-cover ${userAchievements.includes(badge.id) ? "opacity-100" : "opacity-30"}`} />
+                  </li>
                 ))}
-              </div>
+              </ul>
               <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleBadgeModal}>
                 更多獎勵徽章
               </button>
@@ -494,7 +497,7 @@ function Member() {
         <AchievementModal handleAchievementModal={handleAchievementModal} achievements={achievements} userAchievements={userAchievements} />
       </Modal>
       <Modal isOpen={isBadgeModalOpen} onClose={handleBadgeModal}>
-        <BadgeModal handleBadgeModal={handleBadgeModal} />
+        <BadgeModal handleBadgeModal={handleBadgeModal} badges={badges} userAchievements={userAchievements} />
       </Modal>
     </>
   );

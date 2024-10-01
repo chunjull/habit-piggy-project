@@ -45,7 +45,7 @@ function Layout({ children, isModalOpen, modalContent }) {
         }`}
       >
         <div className={`hidden md:flex md:items-center ${isSidebarExpanded ? "md:justify-between" : "md:justify-center"}`}>
-          <p className={`font-lobster font-bold text-2xl leading-8 ml-6 hidden ${isSidebarExpanded ? "md:block" : ""}`}>Habit Piggy</p>
+          <p className={`font-lobster font-normal text-2xl leading-8 ml-6 hidden ${isSidebarExpanded ? "md:block" : ""}`}>Habit Piggy</p>
           <generalIcons.TbLayoutSidebarRight className="w-6 h-6 md:w-8 md:h-8 hover:text-alert cursor-pointer" onClick={toggleSidebar} />
         </div>
         <ul className="grid grid-cols-5 items-center w-full md:grid-cols-1 md:gap-4">

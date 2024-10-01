@@ -410,7 +410,7 @@ function Member() {
                 更多成就
               </button>
               <div className="bg-primary py-1 px-4 w-fit absolute -top-12 left-1/2 transform -translate-x-1/2">
-                <p className="font-lobster font-bold text-2xl leading-8 text-alert">Achievement</p>
+                <p className="font-lobster font-normal text-2xl leading-8 text-alert">Achievement</p>
                 <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[-16px] before:w-0 before:h-0 before:border-l-[20px] before:border-r-0 before:border-t-[12px] before:border-l-primary before:border-r-transparent before:border-t-primary-dark before:z-20"></div>
                 <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[114px] before:w-0 before:h-0 before:border-r-[20px] before:border-l-0 before:border-t-[12px] before:border-r-primary before:border-l-transparent before:border-t-primary-dark before:z-20"></div>
                 <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[-46px] before:w-8 before:h-10 before:bg-primary"></div>
@@ -433,7 +433,7 @@ function Member() {
                 更多獎勵徽章
               </button>
               <div className="bg-primary py-1 px-4 w-[150px] absolute -top-12 left-1/2 transform -translate-x-1/2">
-                <p className="font-lobster font-bold text-2xl leading-8 text-alert text-center">Badge</p>
+                <p className="font-lobster font-normal text-2xl leading-8 text-alert text-center">Badge</p>
                 <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[-16px] before:w-0 before:h-0 before:border-l-[20px] before:border-r-0 before:border-t-[13px] before:border-l-primary before:border-r-transparent before:border-t-primary-dark before:z-20"></div>
                 <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[114px] before:w-0 before:h-0 before:border-r-[20px] before:border-l-0 before:border-t-[13px] before:border-r-primary before:border-l-transparent before:border-t-primary-dark before:z-20"></div>
                 <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[-46px] before:w-8 before:h-10 before:bg-primary"></div>

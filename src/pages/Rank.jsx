@@ -92,7 +92,7 @@ function Rank() {
             <div className="flex items-center gap-3">
               <div className="absolute top-[-4px]">
                 <div className="w-10 h-[68px] flex justify-center items-center bg-primary relative">
-                  <p className="font-bold text-center text-3xl leading-9 font-lobster text-alert">{index + 1}</p>
+                  <p className="font-normal text-center text-3xl leading-9 font-lobster text-alert">{index + 1}</p>
                   <div className="absolute before:content-[''] before:absolute before:bottom-[-34px] before:right-0 before:w-0 before:h-0 before:border-l-[20px] before:border-r-0 before:border-b-[12px] before:border-l-transparent before:border-r-transparent before:border-b-black-50 before:z-20"></div>
                   <div className="absolute before:content-[''] before:absolute before:bottom-[-34px] before:left-0 before:w-0 before:h-0 before:border-l-0 before:border-r-[20px] before:border-b-[12px] before:border-l-transparent before:border-r-transparent before:border-b-black-50 before:z-20"></div>
                   <div className="absolute before:content-[''] before:absolute before:bottom-[30px] before:left-5 before:w-0 before:h-0 before:border-l-0 before:border-r-[3px] before:border-b-[4px] before:border-l-transparent before:border-r-transparent before:border-b-primary-dark before:z-20"></div>
@@ -106,7 +106,7 @@ function Rank() {
             </div>
           ) : (
             <div className="flex items-center gap-3">
-              <p className="w-10 h-auto font-bold text-center text-3xl leading-9 font-lobster">{index + 1}</p>
+              <p className="w-10 h-auto font-normal text-center text-3xl leading-9 font-lobster">{index + 1}</p>
               <img src={user.avatar} alt="user's avatar" className="w-12 h-12 rounded-full" />
               <div>
                 <p className="font-normal text-base leading-6">{user.name}</p>
@@ -142,7 +142,7 @@ function Rank() {
     return (
       <div className="flex justify-between py-2 px-4 bg-black-500 rounded-2xl">
         <div className="flex items-center gap-3 text-white">
-          <p className="w-10 h-auto font-bold text-center text-3xl leading-9 font-lobster">{rank}</p>
+          <p className="w-10 h-auto font-normal text-center text-3xl leading-9 font-lobster">{rank}</p>
           <img src={currentUserData.avatar} alt="user's avatar" className="w-12 h-12 rounded-full" />
           <div>
             <p className="font-normal text-base leading-6">{currentUserData.name}</p>

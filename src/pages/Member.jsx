@@ -10,6 +10,8 @@ import { Navigate } from "react-router-dom";
 import { habitIcons, settingIcons } from "../assets/icons";
 import HabitList from "../components/HabitList";
 import CustomSelect from "../components/CustomSelect";
+import AchievementModal from "../components/AchievementModal";
+import BadgeModal from "../components/BadgeModal";
 
 function Member() {
   const { user } = useContext(AuthContext);
@@ -17,6 +19,8 @@ function Member() {
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isAchievementModalOpen, setIsAchievementModalOpen] = useState(false);
+  const [isBadgeModalOpen, setIsBadgeModalOpen] = useState(false);
   const [isActiveTab, setIsActiveTab] = useState(true);
   const [profileData, setProfileData] = useState({
     uid: "",
@@ -115,6 +119,14 @@ function Member() {
     });
     setIsEditModalOpen(!isEditModalOpen);
     setIsDetailModalOpen(false);
+  };
+
+  const handleAchievementModal = () => {
+    setIsAchievementModalOpen(!isAchievementModalOpen);
+  };
+
+  const handleBadgeModal = () => {
+    setIsBadgeModalOpen(!isBadgeModalOpen);
   };
 
   const handleUpdateProfile = async () => {
@@ -370,7 +382,9 @@ function Member() {
                   </button>
                 ))}
               </div>
-              <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark">更多成就</button>
+              <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleAchievementModal}>
+                更多成就
+              </button>
               <div className="bg-primary py-1 px-4 w-fit absolute -top-12 left-1/2 transform -translate-x-1/2">
                 <p className="font-lobster font-bold text-2xl leading-8 text-alert">Achievement</p>
                 <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[-16px] before:w-0 before:h-0 before:border-l-[20px] before:border-r-0 before:border-t-[12px] before:border-l-primary before:border-r-transparent before:border-t-primary-dark before:z-20"></div>
@@ -395,7 +409,9 @@ function Member() {
                   </div>
                 ))}
               </div>
-              <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark">更多獎勵徽章</button>
+              <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleBadgeModal}>
+                更多獎勵徽章
+              </button>
               <div className="bg-primary py-1 px-4 w-[150px] absolute -top-12 left-1/2 transform -translate-x-1/2">
                 <p className="font-lobster font-bold text-2xl leading-8 text-alert text-center">Badge</p>
                 <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[-16px] before:w-0 before:h-0 before:border-l-[20px] before:border-r-0 before:border-t-[12px] before:border-l-primary before:border-r-transparent before:border-t-primary-dark before:z-20"></div>
@@ -455,6 +471,12 @@ function Member() {
           setCalendarTarget={setCalendarTarget}
           setShowMonthCalendar={setShowMonthCalendar}
         />
+      </Modal>
+      <Modal isOpen={isAchievementModalOpen} onClose={handleAchievementModal}>
+        <AchievementModal handleAchievementModal={handleAchievementModal} />
+      </Modal>
+      <Modal isOpen={isBadgeModalOpen} onClose={handleBadgeModal}>
+        <BadgeModal handleBadgeModal={handleBadgeModal} />
       </Modal>
     </>
   );

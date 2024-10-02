@@ -8,10 +8,10 @@ const AchievementList = ({ sortedAchievements, userAchievements, handleAchieveme
           <li
             key={achievement.id}
             className={`py-1 w-full flex justify-center items-center rounded-lg border-2 cursor-default ${
-              userAchievements.includes(achievement.id) ? "opacity-100 border-primary-dark bg-light text-primary-dark bordered-achievement" : "opacity-50 border-black-500 bg-black-100 text-black-500"
+              userAchievements.includes(achievement.id) ? "opacity-100 border-primary-dark bg-light" : "opacity-50 border-black-500 bg-black-100"
             }`}
           >
-            <div className="font-normal text-base leading-6">{achievement.name}</div>
+            <p className={`font-normal text-base leading-6 md:text-xl md:leading-7 ${userAchievements.includes(achievement.id) ? "text-primary-dark" : "text-black-500"}`}>{achievement.name}</p>
           </li>
         ))}
       </ul>

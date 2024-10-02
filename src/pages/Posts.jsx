@@ -201,7 +201,7 @@ function Posts() {
                   className={`w-full min-h-52 h-fit flex justify-center items-center p-4 rounded-xl ${!post.background ? "bg-slate-100" : ""}`}
                   style={post.background ? { backgroundImage: `url(${post.background})`, backgroundSize: "cover", backgroundPosition: "center" } : {}}
                 >
-                  <p>{post.content}</p>
+                  <p className="font-normal text-base leading-6 md:text-xl md:leading-7 xl:text-2xl xl:leading-8">{post.content}</p>
                 </div>
                 <div className="flex gap-3">
                   <div className="flex gap-1">

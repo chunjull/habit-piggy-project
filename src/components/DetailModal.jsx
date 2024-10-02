@@ -18,6 +18,23 @@ const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncomp
     }
   };
 
+  const stampPosition = [
+    { bottom: 0, left: 0 },
+    { bottom: 2, left: -1 },
+    { bottom: -1, left: -2 },
+    { bottom: 2, left: 0 },
+    { bottom: 1, left: -1 },
+    { bottom: 2, left: -2 },
+    { bottom: -2, left: 1 },
+    { bottom: 2, left: 1 },
+  ];
+
+  const getPositionClasses = (position) => {
+    const bottomClass = position.bottom >= 0 ? `bottom-${position.bottom}` : `-bottom-${Math.abs(position.bottom)}`;
+    const leftClass = position.left >= 0 ? `left-${position.left}` : `-left-${Math.abs(position.left)}`;
+    return `${bottomClass} ${leftClass}`;
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -42,9 +59,17 @@ const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncomp
           {selectedHabit.startDate}～{selectedHabit.endDate}
         </p>
       </div>
-      <div className="grid grid-cols-6 gap-2 md:grid-cols-10 md:gap-3 max-h-28 overflow-y-auto">
+      <div className="grid grid-cols-5 md:grid-cols-7 2xl:grid-cols-10 gap-2 md:gap-3 max-h-40 overflow-y-auto overflow-x-hidden">
         {selectedHabit.status.map((status, index) => (
-          <div key={index} className={`border border-black-500 rounded aspect-square ${index < selectedHabit.status.filter((s) => s.completed).length ? "bg-primary" : ""}`}></div>
+          <div key={index} className="border border-black-500 rounded aspect-square relative">
+            {status.completed && (
+              <div className={`border-2 border-alert rounded-full aspect-square flex justify-center items-center absolute ${getPositionClasses(stampPosition[index % stampPosition.length])}`}>
+                <p className="font-lobster font-normal text-sm leading-5 text-alert -rotate-[30deg] p-1 w-12 h-10 flex items-center justify-center">
+                  {new Date(status.date).toLocaleDateString("zh-TW", { month: "2-digit", day: "2-digit" })}
+                </p>
+              </div>
+            )}
+          </div>
         ))}
       </div>
       <div className="flex justify-between">

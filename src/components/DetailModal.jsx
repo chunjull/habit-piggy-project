@@ -5,20 +5,36 @@ const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncomp
   const habitCategory = habitCategories.find((category) => category.id === selectedHabit.category);
   const HabitIcon = habitCategory ? habitCategory.icon : null;
 
+  const renderType = (frequency) => {
+    switch (frequency.type) {
+      case "daily":
+        return "每日";
+      case "weekly":
+        return "每週";
+      case "specificDays":
+        return "特定日期";
+      default:
+        return "";
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <div className="flex gap-4">
+        <div className="flex gap-4 items-center">
           <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">{HabitIcon && <HabitIcon className="w-8 h-8" />}</div>
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
               <h3 className="font-bold text-lg leading-6">{selectedHabit.title}</h3>
               <modalIcons.TbPencil className="w-6 h-6 cursor-pointer hover:text-alert" onClick={() => handleEditModal(selectedHabit)} />
             </div>
-            <p className="font-normal text-xs leading-4">{selectedHabit.frequency.type}</p>
           </div>
         </div>
         <modalIcons.TbX className="w-6 h-6 hover:text-alert cursor-pointer" onClick={handleDetailModal} />
+      </div>
+      <div className="flex justify-between">
+        <h3>養成頻率：</h3>
+        <p>{renderType(selectedHabit.frequency)}</p>
       </div>
       <div className="flex justify-between">
         <h3>養成期間：</h3>

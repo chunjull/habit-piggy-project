@@ -3,14 +3,14 @@ import { AuthContext } from "../utils/AuthContext";
 import { getAllUsers, getHabits } from "../services/api";
 import { rankIcons } from "../assets/icons";
 
-const HabitAchievements = ["習以為常", "習蘭紅茶", "自強不習", "今非習比"];
-const SavingsAchievements = ["金豬玉葉", "錙豬必較", "豬圓玉潤", "豬絲馬跡"];
+// const HabitAchievements = ["習以為常", "習蘭紅茶", "自強不習", "今非習比"];
+// const SavingsAchievements = ["金豬玉葉", "錙豬必較", "豬圓玉潤", "豬絲馬跡"];
 
-const getCurrentCycleIndex = () => {
-  const startOfYear = new Date(new Date().getFullYear(), 0, 1);
-  const currentWeekNumber = Math.ceil(((new Date() - startOfYear) / (24 * 60 * 60 * 1000) + startOfYear.getDay() + 1) / 7);
-  return (currentWeekNumber - 1) % HabitAchievements.length;
-};
+// const getCurrentCycleIndex = () => {
+//   const startOfYear = new Date(new Date().getFullYear(), 0, 1);
+//   const currentWeekNumber = Math.ceil(((new Date() - startOfYear) / (24 * 60 * 60 * 1000) + startOfYear.getDay() + 1) / 7);
+//   return (currentWeekNumber - 1) % HabitAchievements.length;
+// };
 
 function Rank() {
   const [isActiveTab, setIsActiveTab] = useState("habit");

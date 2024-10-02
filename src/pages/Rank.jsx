@@ -197,12 +197,12 @@ function Rank() {
               <p className="font-bold text-xl leading-7">{userHabitCounts[0]?.name || "No.1"}</p>
               <p className="font-normal text-base leading-6">成為累積最多次習慣的玩家</p>
             </div>
-            <div className="flex items-center gap-x-1">
+            {/* <div className="flex items-center gap-x-1">
               <p className="font-normal text-base leading-6">獲得</p>
               <p className="font-bold text-xl leading-7 text-primary bordered-text">{HabitAchievements[getCurrentCycleIndex()]}</p>
               <p className="font-normal text-base leading-6">成就！</p>
             </div>
-            <div className="font-normal text-xs leading-4 text-black-700 mt-3">獎勵將於結算後發送</div>
+            <div className="font-normal text-xs leading-4 text-black-700 mt-3">獎勵將於結算後發送</div> */}
           </div>
           <div className="absolute -top-8 inset-x-0 text-primary flex items-center justify-center">
             <rankIcons.TbCircleCheck className="w-8 h-8" />
@@ -226,12 +226,12 @@ function Rank() {
               <p className="font-bold text-xl leading-7">{userSavingsCounts[0]?.name || "No.1"}</p>
               <p className="font-normal text-base leading-6">成為累積最多存款的玩家</p>
             </div>
-            <div className="flex items-center gap-x-1">
+            {/* <div className="flex items-center gap-x-1">
               <p className="font-normal text-base leading-6">獲得</p>
               <p className="font-bold text-xl leading-7 text-primary bordered-text">{SavingsAchievements[getCurrentCycleIndex()]}</p>
               <p className="font-normal text-base leading-6">成就！</p>
             </div>
-            <div className="font-normal text-xs leading-4 text-black-700 mt-3">獎勵將於結算後發送</div>
+            <div className="font-normal text-xs leading-4 text-black-700 mt-3">獎勵將於結算後發送</div> */}
           </div>
           <div className="absolute -top-8 inset-x-0 text-primary flex items-center justify-center">
             <rankIcons.TbCoin className="w-8 h-8" />

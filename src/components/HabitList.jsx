@@ -68,7 +68,11 @@ const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, hand
                             disabled={!status}
                           />
                         ) : (
-                          <checkIcon.TbCheck className={`w-10 h-10 md:w-12 md:h-12 rounded-full cursor-not-allowed ${isFinished ? "bg-black-400 text-black-200" : "bg-black-200 text-black-50"}`} />
+                          <div
+                            className={`w-10 h-10 md:w-12 md:h-12 rounded-full cursor-not-allowed border-2 border-dashed ${
+                              isFinished ? "bg-black-transparent border-black-500" : "bg-black-100 border-black-300"
+                            }`}
+                          />
                         )}
                       </div>
                     );

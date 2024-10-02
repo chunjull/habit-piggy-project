@@ -15,7 +15,17 @@
     }
   }
 
-  .bordered-text {
-    text-shadow: -1px -1px 0 #d14d28, 1px -1px 0 #d14d28, -1px 1px 0 #d14d28, 1px 1px 0 #d14d28;
+  .stroke-text {
+    position: relative;
+    color: #faad14;
+  }
+
+  .stroke-text::before {
+    content: attr(data-stroke);
+    position: absolute;
+    color: #d14d28;
+    -webkit-text-stroke: 4px #d14d28;
+    text-stroke: 4px #d14d28;
+    z-index: -1;
   }
 }

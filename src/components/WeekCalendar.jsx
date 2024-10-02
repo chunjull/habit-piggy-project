@@ -102,7 +102,7 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
   const headerText = `${monthNames[firstDayOfWeek.getMonth()]} ${firstDayOfWeek.getFullYear()}`;
 
   return (
-    <div className="p-4 bg-black-50 rounded-b-3xl">
+    <div className="p-4 md:pt-6 bg-black-50 rounded-b-3xl">
       <div className="flex justify-between mb-3">
         <button onClick={() => changePeriod(false)}>
           <weekCalendarIcons.TbChevronLeft className="w-6 h-6 text-black hover:text-alert" />

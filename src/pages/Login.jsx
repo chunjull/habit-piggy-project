@@ -38,7 +38,7 @@ function Login() {
   }
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4 md:py-10 space-y-4">
       <ul className="grid grid-cols-2 w-full">
         <li className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center ${isRegister ? "bg-primary" : "bg-black-50"}`} onClick={() => setIsRegister(true)}>
           Login

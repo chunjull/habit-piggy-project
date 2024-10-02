@@ -384,7 +384,7 @@ function Home() {
   };
 
   return (
-    <>
+    <div className="md:pb-6">
       <WeekCalendar date={selectedDate} onSelect={handleSelectDate} onWeekChange={setWeekDates} />
       <HabitList habits={habits} habitCategories={habitCategories} handleDetailClick={handleDetailClick} weekDates={weekDates} handleCheck={handleCheck} />
       <div
@@ -450,7 +450,7 @@ function Home() {
           setShowMonthCalendar={setShowMonthCalendar}
         />
       </Modal>
-    </>
+    </div>
   );
 }
 

@@ -159,7 +159,7 @@ function Layout({ children, isModalOpen, modalContent }) {
           </div>
         </Link>
       </nav>
-      <div className={`max-w-[1160px] my-0 mx-auto flex flex-col md:flex-row min-h-screen relative`}>
+      <div className={`md:max-w-screen-md xl:max-w-[1160px] my-0 mx-auto flex flex-col md:flex-row min-h-screen relative`}>
         <div className="mt-0 mb-[86px] md:mb-0 w-full p-0 relative">{children}</div>
       </div>
       {isModalOpen && <Modal isOpen={isModalOpen}>{modalContent}</Modal>}

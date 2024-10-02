@@ -170,7 +170,7 @@ function Posts() {
 
   return (
     <>
-      <div className="p-4 space-y-4">
+      <div className="p-4 md:py-10 space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="font-bold text-xl leading-7">貼文總覽</h2>
           <div className="relative">

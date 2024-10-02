@@ -207,7 +207,7 @@ const HabitModal = ({
           onChange={handleHabitChange}
         />
         {showMonthCalendar && (
-          <div ref={calendarRef} className="absolute bottom-10 md:-bottom-24 2xl:bottom- left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+          <div ref={calendarRef} className="w-3/5 md:w-1/6 absolute bottom-0 md:-bottom-12 2xl:-bottom-16 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
             <MonthCalendar date={monthCalendarDate} onSelect={handleMonthCalendarSelectDate} />
           </div>
         )}

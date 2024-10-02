@@ -26,7 +26,7 @@ const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncomp
           {selectedHabit.startDate}～{selectedHabit.endDate}
         </p>
       </div>
-      <div className="grid grid-cols-10 gap-3 max-h-28 overflow-y-auto">
+      <div className="grid grid-cols-6 gap-2 md:grid-cols-10 md:gap-3 max-h-28 overflow-y-auto">
         {selectedHabit.status.map((status, index) => (
           <div key={index} className={`border border-black-500 rounded aspect-square ${index < selectedHabit.status.filter((s) => s.completed).length ? "bg-primary" : ""}`}></div>
         ))}

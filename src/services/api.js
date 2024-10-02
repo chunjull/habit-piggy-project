@@ -94,6 +94,7 @@ async function addHabit(uid, habitData) {
     await addDoc(habitsCollectionRef, {
       ...habitData,
       createdTime: Timestamp.now(),
+      updatedTime: Timestamp.now(),
     });
     console.log("Habit added for user ID: ", uid);
   } catch (error) {
@@ -105,7 +106,10 @@ async function getHabits(uid) {
   try {
     const userDocRef = doc(db, "users", uid);
     const habitsCollectionRef = collection(userDocRef, "habits");
-    const habitsSnapshot = await getDocs(habitsCollectionRef);
+
+    const habitsQuery = query(habitsCollectionRef, orderBy("updatedTime", "desc"));
+    const habitsSnapshot = await getDocs(habitsQuery);
+
     const habitsList = habitsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     return habitsList;
   } catch (error) {

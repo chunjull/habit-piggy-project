@@ -97,7 +97,8 @@ function Home() {
   const fetchHabits = async (selectedDate = null) => {
     const habitsList = await getHabits(user.uid);
     const today = selectedDate ? new Date(selectedDate.year, selectedDate.month, selectedDate.day) : new Date();
-    const filteredHabits = habitsList.filter((habit) => isDateInRange(today, habit.startDate, habit.endDate)).sort((a, b) => new Date(b.endDate) - new Date(a.endDate));
+    const sortedHabits = habitsList.sort((a, b) => new Date(b.createdTime) - new Date(a.createdTime));
+    const filteredHabits = sortedHabits.filter((habit) => isDateInRange(today, habit.startDate, habit.endDate)).sort((a, b) => new Date(b.endDate) - new Date(a.endDate));
     setHabits(filteredHabits || []);
   };
 

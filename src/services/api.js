@@ -21,6 +21,7 @@ async function registerUser(email, password) {
       createdTime: Timestamp.now(),
       levelPoints: 0,
       isAcceptReminder: false,
+      isDarkMode: false,
       achievements: [],
       badges: [],
     });

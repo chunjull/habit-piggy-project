@@ -1,15 +1,14 @@
 import PropTypes from "prop-types";
 import { modalIcons, settingIcons } from "../assets/icons";
-import { useState } from "react";
 import CustomSelect from "./CustomSelect";
 
 const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSaveAndClose }) => {
-  const [theme, setTheme] = useState(profileData.theme || "light");
-  const [isAcceptReminder, setIsAcceptReminder] = useState(profileData.isAcceptReminder ? "true" : "false");
+  const isDarkMode = profileData.isDarkMode ? "true" : "false";
+  const isAcceptReminder = profileData.isAcceptReminder ? "true" : "false";
 
   const themeOptions = [
-    { value: "light", label: "淺色" },
-    { value: "dark", label: "深色" },
+    { value: "false", label: "淺色" },
+    { value: "true", label: "深色" },
   ];
 
   const reminderOptions = [
@@ -78,13 +77,13 @@ const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSav
       <div className="flex justify-between items-center">
         <p className="font-normal text-base leading-6 text-black dark:text-black-0">主題色彩</p>
         <div className="relative w-fit text-nowrap">
-          <CustomSelect options={themeOptions} value={theme} onChange={setTheme} />
+          <CustomSelect options={themeOptions} value={isDarkMode} onChange={(value) => handleChange({ target: { name: "isDarkMode", value } })} />
         </div>
       </div>
       <div className="flex justify-between items-center">
         <p className="font-normal text-base leading-6 text-black dark:text-black-0">接收 Email 提醒</p>
         <div className="relative w-fit">
-          <CustomSelect options={reminderOptions} value={isAcceptReminder} onChange={setIsAcceptReminder} />
+          <CustomSelect options={reminderOptions} value={isAcceptReminder} onChange={(value) => handleChange({ target: { name: "isAcceptReminder", value } })} />
         </div>
       </div>
       <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleSaveAndClose}>

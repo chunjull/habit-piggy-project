@@ -49,6 +49,7 @@ function Member() {
     avatar: "",
     levelPoints: 0,
     isAcceptReminder: false,
+    isDarkMode: false,
     achievements: [],
     badges: [],
     habits: [],
@@ -196,7 +197,7 @@ function Member() {
   const handleChange = async (e) => {
     const { name, value, files } = e.target;
     if (name === "avatar" && files && files[0]) {
-      const file = event.target.files[0];
+      const file = e.target.files[0];
       const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
       if (!file) return;
       if (!allowedTypes.includes(file.type)) {
@@ -211,6 +212,11 @@ function Member() {
       } catch (error) {
         console.error("Error uploading avatar: ", error);
       }
+    } else if (name === "isDarkMode" || name === "isAcceptReminder") {
+      setProfileData((prev) => ({
+        ...prev,
+        [name]: value === "true",
+      }));
     } else {
       setProfileData((prev) => ({
         ...prev,

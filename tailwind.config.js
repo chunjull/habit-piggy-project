@@ -28,8 +28,8 @@ export default {
         alert: "#D14D28",
       },
       fontFamily: {
-        sans: ["Noto Sans TC", "sans-serif"],
         lobster: ["Lobster", "sans-serif"],
+        huninn: ["FakePearl-Regular", "Noto Sans TC", "sans-serif"],
       },
     },
   },

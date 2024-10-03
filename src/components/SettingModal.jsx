@@ -37,12 +37,15 @@ const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSav
                 accept="image/jpg,image/jpeg,image/png,image/gif"
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer hidden"
               />
-              <label htmlFor="profile" className="cursor-pointer bg-primary text-black font-medium text-sm leading-5 py-1 px-2 rounded-lg flex items-center gap-2 hover:bg-primary-dark">
+              <label
+                htmlFor="profile"
+                className="cursor-pointer bg-primary text-black dark:text-black-0 font-medium text-sm leading-5 py-1 px-2 rounded-lg flex items-center gap-2 hover:bg-primary-dark"
+              >
                 <settingIcons.TbPhoto className="w-5 h-5" />
                 更換頭像
               </label>
             </div>
-            <p className="font-normal text-sm leading-5 text-black-700">您的頭像將會被公開。</p>
+            <p className="font-normal text-sm leading-5 text-black dark:text-black-0-700">您的頭像將會被公開。</p>
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 
 const AchievementList = ({ sortedAchievements, userAchievements, handleAchievementModal }) => {
   return (
-    <div className="pt-9 pb-4 px-4 bg-black-50 space-y-4 rounded-2xl relative">
+    <div className="pt-9 pb-4 px-4 bg-black-50 dark:bg-black-800 space-y-4 rounded-2xl relative">
       <ul className="grid grid-cols-2 gap-4 md:grid-cols-3">
         {sortedAchievements.slice(0, 6).map((achievement) => {
           const isAchieved = userAchievements.includes(achievement.id);
@@ -14,7 +14,7 @@ const AchievementList = ({ sortedAchievements, userAchievements, handleAchieveme
               }`}
             >
               <p
-                className={`font-normal text-base leading-6 md:text-xl md:leading-7 stroke-text ${isAchieved ? "text-primary z-0" : "text-black-500"}`}
+                className={`font-normal text-base leading-6 md:text-xl md:leading-7 stroke-text ${isAchieved ? "text-primary z-0" : "text-black dark:text-black-0-500"}`}
                 data-stroke={isAchieved ? achievement.name : ""}
               >
                 {achievement.name}

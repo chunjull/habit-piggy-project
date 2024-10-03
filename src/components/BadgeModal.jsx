@@ -13,7 +13,7 @@ const BadgeModal = ({ handleBadgeModal, sortedBadges, userBadges }) => {
           {sortedBadges.map((badge, index) => (
             <li key={badge.id} className="relative w-full h-fit">
               <img src={badge.image} alt={`Badge ${index}`} className={`w-full h-full object-cover ${userBadges.includes(badge.id) ? "opacity-100" : "opacity-30"}`} />
-              <div className="mt-1 text-black-700 text-center font-normal text-xs leading-4 md:text-sm md:leading-5">{badge.description}</div>
+              <div className="mt-1 text-black dark:text-black-0-700 text-center font-normal text-xs leading-4 md:text-sm md:leading-5">{badge.description}</div>
             </li>
           ))}
         </ul>

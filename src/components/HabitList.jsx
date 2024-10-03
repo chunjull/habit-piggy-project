@@ -30,7 +30,7 @@ const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, hand
           const HabitIcon = habitCategory ? habitCategory.icon : null;
 
           return (
-            <li key={habit.id} className={`p-4 rounded-2xl ${isFinished ? "bg-black-300 hover:bg-black-200" : "bg-black-50 hover:bg-black-0"}`}>
+            <li key={habit.id} className={`p-4 rounded-2xl ${isFinished ? "bg-black-300 hover:bg-black-200" : "bg-black-50 dark:bg-black-800 hover:bg-black-0"}`}>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
                   <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">{HabitIcon && <HabitIcon className="w-8 h-8" />}</div>
@@ -40,11 +40,11 @@ const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, hand
                       <p className="font-normal text-sm leading-5">
                         {renderType(habit.type)}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
                       </p>
-                      <p className="text-black-500 font-normal text-sm leading-5">/{habit.status.length}</p>
+                      <p className="text-black dark:text-black-0-500 font-normal text-sm leading-5">/{habit.status.length}</p>
                     </div>
                   </div>
                 </div>
-                <button className="text-black hover:text-alert" onClick={() => handleDetailClick(habit)}>
+                <button className="text-black dark:text-black-0 hover:text-alert" onClick={() => handleDetailClick(habit)}>
                   <habitDetailIcon.TbCalendarSmile className="w-6 h-6 md:w-8 md:h-8" />
                 </button>
               </div>
@@ -61,9 +61,9 @@ const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, hand
                       <div key={index} className="flex flex-col items-center">
                         {status ? (
                           <checkIcon.TbCheck
-                            className={`w-10 h-10 md:w-12 md:h-12 border-2 rounded-full ${status && status.completed ? "bg-primary text-black-0 border-primary" : "text-black-500 border-black-500"} ${
-                              isFinished ? "cursor-not-allowed" : "cursor-pointer hover:bg-primary-light"
-                            }`}
+                            className={`w-10 h-10 md:w-12 md:h-12 border-2 rounded-full ${
+                              status && status.completed ? "bg-primary text-black dark:text-black-0-0 border-primary" : "text-black dark:text-black-0-500 border-black-500"
+                            } ${isFinished ? "cursor-not-allowed" : "cursor-pointer hover:bg-primary-light"}`}
                             onClick={() => !isFinished && status && handleCheck(habit.id, status.date)}
                             disabled={!status}
                           />

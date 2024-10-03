@@ -450,11 +450,14 @@ function Member() {
     <>
       <div className="p-4 md:py-10 space-y-4">
         <ul className="grid grid-cols-2 w-full">
-          <li className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center ${isActiveTab ? "bg-primary" : "bg-black-50"}`} onClick={() => setIsActiveTab(true)}>
+          <li
+            className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center ${isActiveTab ? "bg-primary" : "bg-black-50 dark:bg-black-800"}`}
+            onClick={() => setIsActiveTab(true)}
+          >
             會員管理
           </li>
           <li
-            className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center ${!isActiveTab ? "bg-primary" : "bg-black-50"}`}
+            className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center ${!isActiveTab ? "bg-primary" : "bg-black-50 dark:bg-black-800"}`}
             onClick={() => setIsActiveTab(false)}
           >
             歷史習慣
@@ -475,18 +478,18 @@ function Member() {
         )}
         {isActiveTab ? (
           <div className="space-y-14">
-            <div className="p-4 bg-black-50 rounded-2xl space-y-2">
+            <div className="p-4 bg-black-50 dark:bg-black-800 rounded-2xl space-y-2">
               <div className="flex justify-between items-start">
                 <div className="flex gap-3">
                   <img src={profileData.avatar} alt="user's avatar" className="w-12 h-12 rounded-full" />
                   <div className="flex flex-col">
                     <h3 className="font-bold text-base leading-6">{profileData.name}</h3>
-                    <p className="font-normal text-sm leading-5 text-black-500">Lv.{profileData.levelPoints}</p>
+                    <p className="font-normal text-sm leading-5 text-black dark:text-black-0-500">Lv.{profileData.levelPoints}</p>
                   </div>
                 </div>
               </div>
-              <p className="font-normal text-base leading-6 text-black-500">{profileData.introduction}</p>
-              <div className="w-full bg-light text-center rounded-2xl">{profileData.levelPoints}%</div>
+              <p className="font-normal text-base leading-6 text-black dark:text-black-0-500">{profileData.introduction}</p>
+              <div className="w-full bg-light dark:bg-dark-950 text-center rounded-2xl">{profileData.levelPoints}%</div>
             </div>
             <AchievementList sortedAchievements={sortedAchievements} userAchievements={userAchievements} handleAchievementModal={handleAchievementModal} />
             <BadgeList sortedBadges={sortedBadges} userBadges={userBadges} handleBadgeModal={handleBadgeModal} />

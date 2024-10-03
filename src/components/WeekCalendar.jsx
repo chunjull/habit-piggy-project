@@ -102,14 +102,14 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
   const headerText = `${monthNames[firstDayOfWeek.getMonth()]} ${firstDayOfWeek.getFullYear()}`;
 
   return (
-    <div className="p-4 md:pt-6 bg-black-50 rounded-b-3xl">
+    <div className="p-4 md:pt-6 bg-black-50 dark:bg-black-800 rounded-b-3xl">
       <div className="flex justify-between mb-3">
         <button onClick={() => changePeriod(false)}>
-          <weekCalendarIcons.TbChevronLeft className="w-6 h-6 text-black hover:text-alert" />
+          <weekCalendarIcons.TbChevronLeft className="w-6 h-6 text-black dark:text-black-0 hover:text-alert" />
         </button>
         <h1 className="font-bold text-lg leading-6">{headerText}</h1>
         <button onClick={() => changePeriod(true)}>
-          <weekCalendarIcons.TbChevronRight className="w-6 h-6 text-black hover:text-alert" />
+          <weekCalendarIcons.TbChevronRight className="w-6 h-6 text-black dark:text-black-0 hover:text-alert" />
         </button>
       </div>
       <div className="grid grid-cols-7 gap-y-1 gap-x-2 md:gap-x-4 text-center">
@@ -121,8 +121,8 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
             }`}
             onClick={() => selectDate(day)}
           >
-            <div className={`font-bold text-lg leading-6 ${checkCurrentDate(day) ? "text-black-0" : "text-black"}`}>{day.value}</div>
-            <div className={`font-medium text-sm leading-5 ${checkCurrentDate(day) ? "text-black-0" : "text-black"}`}>{weekNames[day.value % 7]}</div>
+            <div className={`font-bold text-lg leading-6 ${checkCurrentDate(day) ? "text-black dark:text-black-0-0" : "text-black dark:text-black-0"}`}>{day.value}</div>
+            <div className={`font-medium text-sm leading-5 ${checkCurrentDate(day) ? "text-black dark:text-black-0-0" : "text-black dark:text-black-0"}`}>{weekNames[day.value % 7]}</div>
           </div>
         ))}
       </div>

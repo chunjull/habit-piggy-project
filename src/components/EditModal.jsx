@@ -150,7 +150,9 @@ const EditModal = ({
             <div key={index} className="text-center flex flex-col justify-center items-center gap-1">
               {day}
               <checkIcon.TbCheck
-                className={`w-10 h-10 rounded-full p-1 border border-black-500 ${selectedDays.includes(day) ? "bg-primary text-white border-primary" : "text-black-500 hover:bg-primary-light"}`}
+                className={`w-10 h-10 rounded-full p-1 border border-black-500 ${
+                  selectedDays.includes(day) ? "bg-primary text-white border-primary" : "text-black dark:text-black-0-500 hover:bg-primary-light"
+                }`}
                 onClick={() => handleDayButtonClick(day)}
               />
             </div>
@@ -208,11 +210,17 @@ const EditModal = ({
       <div className="flex justify-between gap-4 w-full">
         <p className="text-nowrap">養成期間</p>
         <div className="border border-black-300 w-full rounded py-0.5 px-4 flex justify-between items-center bg-black-0 relative">
-          <button className={`text-center w-1/2 font-normal text-sm leading-5 ${habitData.startDate ? "text-black" : "text-black-300"}`} onClick={handleStartDateClick}>
+          <button
+            className={`text-center w-1/2 font-normal text-sm leading-5 ${habitData.startDate ? "text-black dark:text-black-0" : "text-black dark:text-black-0-300"}`}
+            onClick={handleStartDateClick}
+          >
             {habitData.startDate || "開始日期"}
           </button>
-          <p className="px-2 text-black-300 font-normal text-sm leading-5">-</p>
-          <button className={`text-center w-1/2 font-normal text-sm leading-5 ${habitData.startDate ? "text-black" : "text-black-300"}`} onClick={handleEndDateClick}>
+          <p className="px-2 text-black dark:text-black-0-300 font-normal text-sm leading-5">-</p>
+          <button
+            className={`text-center w-1/2 font-normal text-sm leading-5 ${habitData.startDate ? "text-black dark:text-black-0" : "text-black dark:text-black-0-300"}`}
+            onClick={handleEndDateClick}
+          >
             {habitData.endDate || "結束日期"}
           </button>
         </div>

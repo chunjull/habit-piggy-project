@@ -76,14 +76,14 @@ const MonthCalendar = ({ date, onSelect }) => {
   const headerText = `${monthNames[displayDate.month]} ${displayDate.year}`;
 
   return (
-    <div className="p-4 bg-light rounded-2xl">
+    <div className="p-4 bg-light dark:bg-dark-950 rounded-2xl">
       <div className="flex justify-between mb-3">
         <button onClick={() => changePeriod(false)}>
-          <weekCalendarIcons.TbChevronLeft className="w-6 h-6 text-black hover:text-alert" />
+          <weekCalendarIcons.TbChevronLeft className="w-6 h-6 text-black dark:text-black-0 hover:text-alert" />
         </button>
         <h1 className="font-bold text-base leading-6">{headerText}</h1>
         <button onClick={() => changePeriod(true)}>
-          <weekCalendarIcons.TbChevronRight className="w-6 h-6 text-black hover:text-alert" />
+          <weekCalendarIcons.TbChevronRight className="w-6 h-6 text-black dark:text-black-0 hover:text-alert" />
         </button>
       </div>
       <div className="grid grid-cols-7 text-center gap-1">

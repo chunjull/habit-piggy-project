@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 
 const BadgeList = ({ sortedBadges, userBadges, handleBadgeModal }) => {
   return (
-    <div className="pt-9 pb-4 px-4 bg-black-50 space-y-4 rounded-2xl relative">
+    <div className="pt-9 pb-4 px-4 bg-black-50 dark:bg-black-800 space-y-4 rounded-2xl relative">
       <ul className="grid grid-cols-3 gap-4 md:grid-cols-6">
         {sortedBadges.slice(0, 6).map((badge, index) => (
           <li key={badge.id} className="relative w-full h-fit">

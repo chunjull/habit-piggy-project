@@ -80,7 +80,7 @@ function Rank() {
   const renderTopTenUsers = (userCounts, type) => {
     const sortedUsers = userCounts.sort((a, b) => (type === "habit" ? b.completedCount - a.completedCount : b.totalSavings - a.totalSavings));
     return sortedUsers.slice(0, 10).map((user, index) => (
-      <li key={user.uid} className="relative flex justify-between items-center py-2 px-4 bg-black-50 rounded-2xl hover:bg-black-0">
+      <li key={user.uid} className="relative flex justify-between items-center py-2 px-4 bg-black-50 dark:bg-black-800 rounded-2xl hover:bg-black-0">
         <div className="flex items-center gap-3">
           {index < 3 ? (
             <div className="flex items-center gap-3">
@@ -134,7 +134,7 @@ function Rank() {
     }
     const rank = userCounts.findIndex((user) => user.uid === currentUser.uid) + 1;
     return (
-      <div className="flex justify-between py-2 px-4 bg-black-500 rounded-2xl">
+      <div className="flex justify-between py-2 px-4 bg-black-50 dark:bg-black-8000 rounded-2xl">
         <div className="flex items-center gap-3 text-white">
           <p className="w-10 h-auto font-normal text-center text-3xl leading-9 font-lobster">{rank}</p>
           <img src={currentUserData.avatar} alt="user's avatar" className="w-12 h-12 rounded-full" />
@@ -143,7 +143,7 @@ function Rank() {
             {/* <p>Lv. {currentUserData.levelPoints}</p> */}
           </div>
         </div>
-        <div className="flex flex-col items-end text-black-0">
+        <div className="flex flex-col items-end text-black dark:text-black-0-0">
           <p className="font-normal text-sm leading-5">{type === "habit" ? "累積數量" : "累積存款"}</p>
           {type === "habit" ? (
             <div className="flex items-center gap-1">
@@ -165,13 +165,13 @@ function Rank() {
     <div className="p-4 md:py-10 space-y-4">
       <ul className="grid grid-cols-2 w-full pb-3">
         <li
-          className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center ${isActiveTab === "habit" ? "bg-primary" : "bg-black-50"}`}
+          className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center ${isActiveTab === "habit" ? "bg-primary" : "bg-black-50 dark:bg-black-800"}`}
           onClick={() => setIsActiveTab("habit")}
         >
           習慣排行
         </li>
         <li
-          className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center ${isActiveTab === "savings" ? "bg-primary" : "bg-black-50"}`}
+          className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center ${isActiveTab === "savings" ? "bg-primary" : "bg-black-50 dark:bg-black-800"}`}
           onClick={() => setIsActiveTab("savings")}
         >
           存款排行
@@ -185,7 +185,7 @@ function Rank() {
         <>
           {isActiveTab === "habit" && (
             <div className="relative space-y-4">
-              <div className="p-4 mt-4 bg-black-50 rounded-lg flex flex-col items-center">
+              <div className="p-4 mt-4 bg-black-50 dark:bg-black-800 rounded-lg flex flex-col items-center">
                 <p className="text-center font-normal text-base leading-6">
                   在 {getStartAndEndOfWeek().startOfWeek.toLocaleDateString()}～{getStartAndEndOfWeek().endOfWeek.toLocaleDateString()} 期間
                 </p>
@@ -201,14 +201,14 @@ function Rank() {
                 <rankIcons.TbCircleCheck className="w-8 h-8" />
               </div>
               <ul className="space-y-4 pb-20">{renderTopTenUsers(userHabitCounts, "habit")}</ul>
-              <div className="fixed bottom-0 left-0 md:left-auto w-full max-w-full md:max-w-[1128px] mx-auto p-4 pb-[88px] bg-light md:p-0 md:py-4">
+              <div className="fixed bottom-0 left-0 md:left-auto w-full max-w-full md:max-w-[1128px] mx-auto p-4 pb-[88px] bg-light dark:bg-dark-950 md:p-0 md:py-4">
                 {renderCurrentUser(userHabitCounts, user, "habit")}
               </div>
             </div>
           )}
           {isActiveTab === "savings" && (
             <div className="relative space-y-4">
-              <div className="p-4 mt-4 bg-black-50 rounded-lg flex flex-col items-center">
+              <div className="p-4 mt-4 bg-black-50 dark:bg-black-800 rounded-lg flex flex-col items-center">
                 <p className="text-center font-normal text-base leading-6">
                   在 {getStartAndEndOfWeek().startOfWeek.toLocaleDateString()}～{getStartAndEndOfWeek().endOfWeek.toLocaleDateString()} 期間
                 </p>
@@ -224,7 +224,7 @@ function Rank() {
                 <rankIcons.TbCoin className="w-8 h-8" />
               </div>
               <ul className="space-y-4 pb-20">{renderTopTenUsers(userSavingsCounts, "savings")}</ul>
-              <div className="fixed bottom-0 left-0 md:left-auto w-full max-w-full md:max-w-[1128px] mx-auto p-4 pb-[88px] bg-light md:p-0 md:py-4">
+              <div className="fixed bottom-0 left-0 md:left-auto w-full max-w-full md:max-w-[1128px] mx-auto p-4 pb-[88px] bg-light dark:bg-dark-950 md:p-0 md:py-4">
                 {renderCurrentUser(userSavingsCounts, user, "savings")}
               </div>
             </div>

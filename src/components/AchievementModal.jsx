@@ -16,17 +16,19 @@ const AchievementModal = ({ handleAchievementModal, userAchievements, sortedAchi
               <li key={achievement.id}>
                 <div
                   className={`py-1 w-full flex justify-center items-center rounded-lg border-2 cursor-default ${
-                    isAchieved ? "opacity-100 border-primary-dark bg-gradient-to-br from-primary via-primary-dark to-alert" : "opacity-50 border-black-500 bg-black-100 text-black-500"
+                    isAchieved
+                      ? "opacity-100 border-primary-dark bg-gradient-to-br from-primary via-primary-dark to-alert"
+                      : "opacity-50 border-black-500 bg-black-100 text-black dark:text-black-0-500"
                   }`}
                 >
                   <p
-                    className={`font-normal text-base leading-6 md:text-xl md:leading-7 stroke-text ${isAchieved ? "text-primary z-0" : "text-black-500"}`}
+                    className={`font-normal text-base leading-6 md:text-xl md:leading-7 stroke-text ${isAchieved ? "text-primary z-0" : "text-black dark:text-black-0-500"}`}
                     data-stroke={isAchieved ? achievement.name : ""}
                   >
                     {achievement.name}
                   </p>
                 </div>
-                <p className="mt-1 text-black-700 text-center font-normal text-xs leading-4 md:text-sm md:leading-5">{achievement.description}</p>
+                <p className="mt-1 text-black dark:text-black-0-700 text-center font-normal text-xs leading-4 md:text-sm md:leading-5">{achievement.description}</p>
               </li>
             );
           })}

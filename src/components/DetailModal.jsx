@@ -61,7 +61,7 @@ const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncomp
       </div>
       <div className="grid grid-cols-5 md:grid-cols-7 2xl:grid-cols-10 gap-2 md:gap-3 max-h-40 overflow-y-auto overflow-x-hidden">
         {selectedHabit.status.map((status, index) => (
-          <div key={index} className="border border-black-500 dark:border-black-300 rounded aspect-square relative">
+          <div key={index} className="border border-black-500 dark:border-black-300 rounded aspect-square bg-black-50 relative">
             {status.completed && (
               <div className={`border-2 border-alert rounded-full aspect-square flex justify-center items-center absolute ${getPositionClasses(stampPosition[index % stampPosition.length])}`}>
                 <p className="font-lobster font-normal text-sm leading-5 text-alert -rotate-[30deg] p-1 w-12 h-10 flex items-center justify-center">

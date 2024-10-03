@@ -2,7 +2,7 @@ import { useState } from "react";
 import { postIcons } from "../assets/icons";
 import PropTypes from "prop-types";
 
-const CustomSelect = ({ options, onChange }) => {
+const CustomSelect = ({ options, onChange, theme }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = (option) => {
@@ -12,7 +12,7 @@ const CustomSelect = ({ options, onChange }) => {
 
   return (
     <div className="relative inline-block">
-      <postIcons.TbDots className="w-6 h-6 text-black dark:text-black-0 cursor-pointer hover:text-alert" onClick={() => setIsOpen(!isOpen)} />
+      <postIcons.TbDots className={`w-6 h-6 text-black ${theme === "dark" ? "dark:text-black-0" : ""} cursor-pointer hover:text-alert`} onClick={() => setIsOpen(!isOpen)} />
       {isOpen && (
         <ul className="absolute z-10 mt-1 w-fit -right-4 bg-white border border-black-500 rounded-2xl shadow-lg text-center text-nowrap overflow-hidden">
           {options.map((option) => (
@@ -30,6 +30,7 @@ CustomSelect.propTypes = {
   options: PropTypes.array.isRequired,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  theme: PropTypes.string.isRequired,
 };
 
 export default CustomSelect;

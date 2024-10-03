@@ -172,7 +172,7 @@ function Posts() {
     <>
       <div className="p-4 md:py-10 space-y-4">
         <div className="flex justify-between items-center">
-          <h2 className="font-bold text-xl leading-7">貼文總覽</h2>
+          <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">貼文總覽</h2>
           <div className="relative">
             <CustomSelect options={options} value={filter} onChange={setFilter} />
           </div>
@@ -185,8 +185,8 @@ function Posts() {
                   <div className="flex gap-3 items-center">
                     <div className="w-12 h-12">{post.user && <img src={post.user.avatar} alt="avatar" className="w-full h-full object-cover rounded-full" />}</div>
                     <div className="flex flex-col">
-                      <h3 className="font-bold text-lg leading-6">{post.user ? post.user.name : "Unknown"}</h3>
-                      <p className="font-normal text-sm leading-5">{getTimeDifference(post.createdTime.seconds)}</p>
+                      <h3 className="font-bold text-lg leading-6 text-black dark:text-black-0">{post.user ? post.user.name : "Unknown"}</h3>
+                      <p className="font-normal text-sm leading-5 text-black dark:text-black-0">{getTimeDifference(post.createdTime.seconds)}</p>
                     </div>
                   </div>
                   <PostSelect
@@ -195,6 +195,7 @@ function Posts() {
                       { value: "delete", label: "刪除貼文" },
                     ]}
                     onChange={(value) => handleSelectChange(post, null, value)}
+                    theme="dark"
                   />
                 </div>
                 <div
@@ -208,16 +209,16 @@ function Posts() {
                     {post.likes && post.likes.includes(user.uid) ? (
                       <postIcons.TbHeartFilled className="w-6 h-6 cursor-pointer text-alert" onClick={() => handleUnlike(post.id)} />
                     ) : (
-                      <postIcons.TbHeart className="w-6 h-6 cursor-pointer text-black dark:text-black-0-500 hover:text-alert" onClick={() => handleLike(post.id)} />
+                      <postIcons.TbHeart className="w-6 h-6 cursor-pointer text-black dark:text-black-0 hover:text-alert" onClick={() => handleLike(post.id)} />
                     )}
-                    <p className="text-black dark:text-black-0-500 font-normal text-base leading-6">{post.likes ? post.likes.length : 0}</p>
+                    <p className="text-black dark:text-black-0 font-normal text-base leading-6">{post.likes ? post.likes.length : 0}</p>
                   </div>
                   <div className="flex gap-1">
                     <postIcons.TbMessageChatbot
-                      className="w-6 h-6 cursor-pointer text-black dark:text-black-0-500 hover:text-black dark:text-black-0-900"
+                      className="w-6 h-6 cursor-pointer text-black dark:text-black-0 hover:text-black dark:hover:text-black-200"
                       onClick={() => handleCommentSection(post.id)}
                     />
-                    <p className="text-black dark:text-black-0-500 font-normal text-base leading-6">{post.comments ? post.comments.length : 0}</p>
+                    <p className="text-black dark:text-black-0 font-normal text-base leading-6">{post.comments ? post.comments.length : 0}</p>
                   </div>
                 </div>
                 <ul className={`space-y-3 ${commentSection[post.id] ? "block" : "hidden"}`}>
@@ -239,7 +240,7 @@ function Posts() {
                                   type="text"
                                   value={editingComment[comment.id]}
                                   onChange={(e) => setEditingComment({ ...editingComment, [comment.id]: e.target.value })}
-                                  className="font-normal text-base leading-6 rounded px-2 py-1 w-full bg-black-0 text-black dark:text-black-0 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark my-1"
+                                  className="font-normal text-base leading-6 rounded px-2 py-1 w-full bg-black-0 text-black caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark my-1"
                                 />
                                 <button
                                   className="text-nowrap font-medium text-sm leading-5 bg-primary py-1.5 px-2 rounded hover:bg-primary-dark"
@@ -262,6 +263,7 @@ function Posts() {
                                 { value: "delete", label: "刪除留言" },
                               ]}
                               onChange={(value) => handleSelectChange(post, comment.id, value)}
+                              theme="light"
                             />
                           </div>
                         </div>
@@ -271,12 +273,12 @@ function Posts() {
                     <input
                       type="text"
                       placeholder="請輸入留言"
-                      className="bg-black-100 text-black dark:text-black-0 py-2 px-4 w-full rounded-2xl placeholder:text-black dark:text-black-0-500  caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark focus:bg-black-0"
+                      className="bg-black-100 text-black py-2 px-4 w-full rounded-2xl placeholder:text-black dark:text-black-0-500  caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark focus:bg-black-0"
                       value={commentContent}
                       onChange={(e) => setCommentContent(e.target.value)}
                     />
                     <div className="w-10 h-10 bg-primary flex justify-center items-center rounded-full aspect-square cursor-pointer hover:bg-primary-dark" onClick={() => handleAddComment(post.id)}>
-                      <postIcons.TbSend2 className="w-6 h-6 text-black dark:text-black-0" />
+                      <postIcons.TbSend2 className="w-6 h-6 text-black" />
                     </div>
                   </li>
                 </ul>

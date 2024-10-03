@@ -40,14 +40,11 @@ function Login() {
   return (
     <div className="p-4 md:py-10 space-y-4">
       <ul className="grid grid-cols-2 w-full">
-        <li
-          className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center ${isRegister ? "bg-primary" : "bg-black-50 dark:bg-black-800"}`}
-          onClick={() => setIsRegister(true)}
-        >
+        <li className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center ${isRegister ? "bg-primary" : "bg-black-50"}`} onClick={() => setIsRegister(true)}>
           Login
         </li>
         <li
-          className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center ${!isRegister ? "bg-primary" : "bg-black-50 dark:bg-black-800"}`}
+          className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center ${!isRegister ? "bg-primary" : "bg-black-50"}`}
           onClick={() => setIsRegister(false)}
         >
           Register
@@ -56,7 +53,7 @@ function Login() {
 
       {isRegister ? (
         <div className="flex flex-col">
-          <label htmlFor="email" className="font-bold text-base leading-6 mb-2">
+          <label htmlFor="email" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
             Email
           </label>
           <input
@@ -64,11 +61,11 @@ function Login() {
             name="email"
             id="email"
             placeholder="Email"
-            className="py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 mb-4"
+            className="py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 mb-4 dark:bg-black-100 placeholder-black"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <label htmlFor="password" className="font-bold text-base leading-6 mb-2">
+          <label htmlFor="password" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
             Password
           </label>
           <input
@@ -76,7 +73,7 @@ function Login() {
             name="password"
             id="password"
             placeholder="Password"
-            className="py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 mb-8"
+            className="py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 mb-8 dark:bg-black-100 placeholder-black"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -86,7 +83,7 @@ function Login() {
         </div>
       ) : (
         <div className="flex flex-col">
-          <label htmlFor="email" className="font-bold text-base leading-6 mb-2">
+          <label htmlFor="email" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
             Email
           </label>
           <input
@@ -94,11 +91,11 @@ function Login() {
             name="email"
             id="email"
             placeholder="Email"
-            className="py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 mb-4"
+            className="py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 mb-4 dark:bg-black-100 placeholder-black"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <label htmlFor="password" className="font-bold text-base leading-6 mb-2">
+          <label htmlFor="password" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
             Password
           </label>
           <input
@@ -106,7 +103,7 @@ function Login() {
             name="password"
             id="password"
             placeholder="Password"
-            className="py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 mb-8"
+            className="py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 mb-8 dark:bg-black-100 placeholder-black"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

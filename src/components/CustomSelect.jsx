@@ -14,7 +14,7 @@ const CustomSelect = ({ options, value, onChange }) => {
     <div className="relative inline-block w-full">
       <div className="border border-black-500 rounded-2xl px-4 py-0.5 bg-white cursor-pointer flex justify-between items-center" onClick={() => setIsOpen(!isOpen)}>
         <span>{options.find((option) => option.value === value).label}</span>
-        <dropdownIcon.TbChevronDown className="w-6 h-6 text-black dark:text-black-0" />
+        <dropdownIcon.TbChevronDown className="w-6 h-6 text-black" />
       </div>
       {isOpen && (
         <ul className="absolute z-10 mt-1 w-full bg-white border border-black-500 rounded-2xl shadow-lg text-center overflow-hidden">

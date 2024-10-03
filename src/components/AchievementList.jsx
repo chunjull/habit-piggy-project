@@ -10,13 +10,10 @@ const AchievementList = ({ sortedAchievements, userAchievements, handleAchieveme
             <li
               key={achievement.id}
               className={`py-1 w-full flex justify-center items-center rounded-lg border-2 cursor-default ${
-                isAchieved ? "opacity-100 border-primary-dark bg-gradient-to-br from-primary via-primary-dark to-alert" : "opacity-50 border-black-500 bg-black-100"
+                isAchieved ? "opacity-100 border-primary-dark bg-gradient-to-br from-primary via-primary-dark to-alert" : "opacity-50 border-black-500 bg-black-100 dark:border-black-300"
               }`}
             >
-              <p
-                className={`font-normal text-base leading-6 md:text-xl md:leading-7 stroke-text ${isAchieved ? "text-primary z-0" : "text-black dark:text-black-0-500"}`}
-                data-stroke={isAchieved ? achievement.name : ""}
-              >
+              <p className={`font-normal text-base leading-6 md:text-xl md:leading-7 stroke-text ${isAchieved ? "text-primary z-0" : "text-black"}`} data-stroke={isAchieved ? achievement.name : ""}>
                 {achievement.name}
               </p>
             </li>

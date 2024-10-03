@@ -20,11 +20,11 @@ const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSav
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="font-bold text-lg leading-7">設定</h3>
-        <modalIcons.TbX className="w-8 h-8 cursor-pointer hover:text-alert" onClick={handleSettingModal} />
+        <h3 className="font-bold text-lg leading-7 text-black dark:text-black-0">設定</h3>
+        <modalIcons.TbX className="w-8 h-8 cursor-pointer hover:text-alert text-black dark:text-black-0" onClick={handleSettingModal} />
       </div>
       <div>
-        <p className="mb-1 font-normal text-base leading-6">會員頭像</p>
+        <p className="mb-1 font-normal text-base leading-6 text-black dark:text-black-0">會員頭像</p>
         <div className="flex items-center gap-3">
           <img src={profileData.avatar} alt="user's avatar" className="w-12 h-12 rounded-full" />
           <div className="space-y-1">
@@ -37,20 +37,17 @@ const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSav
                 accept="image/jpg,image/jpeg,image/png,image/gif"
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer hidden"
               />
-              <label
-                htmlFor="profile"
-                className="cursor-pointer bg-primary text-black dark:text-black-0 font-medium text-sm leading-5 py-1 px-2 rounded-lg flex items-center gap-2 hover:bg-primary-dark"
-              >
+              <label htmlFor="profile" className="cursor-pointer bg-primary text-black font-medium text-sm leading-5 py-1 px-2 rounded-lg flex items-center gap-2 hover:bg-primary-dark">
                 <settingIcons.TbPhoto className="w-5 h-5" />
                 更換頭像
               </label>
             </div>
-            <p className="font-normal text-sm leading-5 text-black dark:text-black-0-700">您的頭像將會被公開。</p>
+            <p className="font-normal text-sm leading-5 text-black dark:text-black-0">您的頭像將會被公開。</p>
           </div>
         </div>
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="name" className="mb-1 font-normal text-base leading-6">
+        <label htmlFor="name" className="mb-1 font-normal text-base leading-6 text-black dark:text-black-0">
           會員名稱
         </label>
         <input
@@ -64,7 +61,7 @@ const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSav
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="introduction" className="mb-1 font-normal text-base leading-6">
+        <label htmlFor="introduction" className="mb-1 font-normal text-base leading-6 text-black dark:text-black-0">
           自我介紹
         </label>
         <input
@@ -79,13 +76,13 @@ const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSav
       </div>
       <div className="border"></div>
       <div className="flex justify-between items-center">
-        <p className="font-normal text-base leading-6">主題</p>
+        <p className="font-normal text-base leading-6 text-black dark:text-black-0">主題</p>
         <div className="relative w-fit">
           <CustomSelect options={themeOptions} value={theme} onChange={setTheme} />
         </div>
       </div>
       <div className="flex justify-between items-center">
-        <p className="font-normal text-base leading-6">接收 Email 提醒</p>
+        <p className="font-normal text-base leading-6 text-black dark:text-black-0">接收 Email 提醒</p>
         <div className="relative w-fit">
           <CustomSelect options={reminderOptions} value={isAcceptReminder} onChange={setIsAcceptReminder} />
         </div>

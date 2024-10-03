@@ -8,6 +8,7 @@ const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSav
   const [isAcceptReminder, setIsAcceptReminder] = useState(profileData.isAcceptReminder ? "true" : "false");
 
   const themeOptions = [
+    { value: "system", label: "依照系統設定" },
     { value: "light", label: "淺色" },
     { value: "dark", label: "深色" },
   ];
@@ -76,8 +77,8 @@ const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSav
       </div>
       <div className="border"></div>
       <div className="flex justify-between items-center">
-        <p className="font-normal text-base leading-6 text-black dark:text-black-0">主題</p>
-        <div className="relative w-fit">
+        <p className="font-normal text-base leading-6 text-black dark:text-black-0">主題色彩</p>
+        <div className="relative w-fit text-nowrap">
           <CustomSelect options={themeOptions} value={theme} onChange={setTheme} />
         </div>
       </div>

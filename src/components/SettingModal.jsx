@@ -8,7 +8,6 @@ const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSav
   const [isAcceptReminder, setIsAcceptReminder] = useState(profileData.isAcceptReminder ? "true" : "false");
 
   const themeOptions = [
-    { value: "system", label: "依照系統設定" },
     { value: "light", label: "淺色" },
     { value: "dark", label: "深色" },
   ];

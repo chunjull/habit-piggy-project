@@ -16,8 +16,8 @@ const CategorySelect = ({ options, value, onChange }) => {
     <div className="relative">
       <div className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
         {value === null ? (
-          <div className="bg-black-200 border border-black-300 w-10 h-10 rounded-full flex justify-center items-center">
-            <checkIcon.TbCheck className="w-8 h-8" />
+          <div className="bg-black-200 dark:bg-black-400 border border-black-300 w-10 h-10 rounded-full flex justify-center items-center">
+            <checkIcon.TbCheck className="w-8 h-8 text-black-700 dark:text-black-0" />
           </div>
         ) : (
           selectedOption && (

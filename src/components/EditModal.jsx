@@ -89,15 +89,15 @@ const EditModal = ({
             type="text"
             name="title"
             placeholder="輸入習慣名稱"
-            className="py-1.5 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-sm leading-5"
+            className="py-1.5 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-sm leading-5 dark:bg-black-100 dark:placeholder-black"
             value={habitData.title}
             onChange={handleHabitChange}
           />
         </div>
-        <modalIcons.TbX className="w-6 h-6 hover:text-alert cursor-pointer" onClick={handleEditModal} />
+        <modalIcons.TbX className="w-6 h-6 hover:text-alert cursor-pointer text-black dark:text-black-0" onClick={handleEditModal} />
       </div>
       <div className="flex justify-between gap-4">
-        <label htmlFor="frequency" className="text-nowrap">
+        <label htmlFor="frequency" className="text-nowrap text-black dark:text-black-0">
           習慣頻率
         </label>
         <div className="w-full grid grid-cols-3 gap-3">
@@ -106,7 +106,7 @@ const EditModal = ({
             <label
               htmlFor="daily"
               className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
-                habitData.frequency.type === "daily" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light"
+                habitData.frequency.type === "daily" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light dark:bg-black-100"
               }`}
             >
               每日
@@ -117,7 +117,7 @@ const EditModal = ({
             <label
               htmlFor="weekly"
               className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
-                habitData.frequency.type === "weekly" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light"
+                habitData.frequency.type === "weekly" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light dark:bg-black-100"
               }`}
             >
               每週
@@ -136,7 +136,7 @@ const EditModal = ({
             <label
               htmlFor="specificDays"
               className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
-                habitData.frequency.type === "specificDays" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light"
+                habitData.frequency.type === "specificDays" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light dark:bg-black-100"
               }`}
             >
               特定日期
@@ -147,11 +147,11 @@ const EditModal = ({
       {habitData.frequency.type === "specificDays" && (
         <div className="grid grid-cols-7 gap-2 md:gap-4">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
-            <div key={index} className="text-center flex flex-col justify-center items-center gap-1">
+            <div key={index} className="text-center flex flex-col justify-center items-center gap-1 text-black dark:text-black-0">
               {day}
               <checkIcon.TbCheck
                 className={`w-10 h-10 rounded-full p-1 border border-black-500 ${
-                  selectedDays.includes(day) ? "bg-primary text-white border-primary" : "text-black dark:text-black-0-500 hover:bg-primary-light"
+                  selectedDays.includes(day) ? "bg-primary text-white border-primary" : "text-black dark:text-black-0 hover:bg-primary-light"
                 }`}
                 onClick={() => handleDayButtonClick(day)}
               />
@@ -160,7 +160,7 @@ const EditModal = ({
         </div>
       )}
       <div className="flex justify-between gap-4">
-        <label htmlFor="type" className="text-nowrap">
+        <label htmlFor="type" className="text-nowrap text-black dark:text-black-0">
           習慣類型
         </label>
         <div className="w-full grid grid-cols-2 gap-3">
@@ -169,7 +169,7 @@ const EditModal = ({
             <label
               htmlFor="to-do"
               className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
-                habitData.type === "to-do" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light"
+                habitData.type === "to-do" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light dark:bg-black-100"
               }`}
             >
               養成
@@ -180,7 +180,7 @@ const EditModal = ({
             <label
               htmlFor="not-to-do"
               className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
-                habitData.type === "not-to-do" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light"
+                habitData.type === "not-to-do" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light dark:bg-black-100"
               }`}
             >
               戒除
@@ -189,16 +189,16 @@ const EditModal = ({
         </div>
       </div>
       <div className="flex justify-between gap-4">
-        <label htmlFor="amount" className="text-nowrap">
+        <label htmlFor="amount" className="text-nowrap text-black dark:text-black-0">
           習慣罰款
         </label>
         <div className="flex gap-2 w-full">
-          <p className="font-normal text-base leading-6">NT$</p>
+          <p className="font-normal text-base leading-6 text-black dark:text-black-0">NT$</p>
           <input
             type="number"
             name="amount"
             id="amount"
-            className="px-4 text-end w-full rounded border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-sm leading-5 no-spinner"
+            className="px-4 text-end w-full rounded border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-sm leading-5 no-spinner dark:bg-black-100 dark:placeholder-black"
             placeholder="請輸入未完成習慣的罰款金額"
             value={habitData.amount}
             onChange={handleHabitChange}
@@ -208,19 +208,13 @@ const EditModal = ({
         </div>
       </div>
       <div className="flex justify-between gap-4 w-full">
-        <p className="text-nowrap">養成期間</p>
-        <div className="border border-black-300 w-full rounded py-0.5 px-4 flex justify-between items-center bg-black-0 relative">
-          <button
-            className={`text-center w-1/2 font-normal text-sm leading-5 ${habitData.startDate ? "text-black dark:text-black-0" : "text-black dark:text-black-0-300"}`}
-            onClick={handleStartDateClick}
-          >
+        <p className="text-nowrap text-black dark:text-black-0">養成期間</p>
+        <div className="border border-black-300 w-full rounded py-0.5 px-4 flex justify-between items-center bg-black-0 dark:bg-black-100 relative">
+          <button className={`text-center w-1/2 font-normal text-sm leading-5 text-black`} onClick={handleStartDateClick}>
             {habitData.startDate || "開始日期"}
           </button>
-          <p className="px-2 text-black dark:text-black-0-300 font-normal text-sm leading-5">-</p>
-          <button
-            className={`text-center w-1/2 font-normal text-sm leading-5 ${habitData.startDate ? "text-black dark:text-black-0" : "text-black dark:text-black-0-300"}`}
-            onClick={handleEndDateClick}
-          >
+          <p className="px-2 text-black font-normal text-sm leading-5">-</p>
+          <button className={`text-center w-1/2 font-normal text-sm leading-5 text-black`} onClick={handleEndDateClick}>
             {habitData.endDate || "結束日期"}
           </button>
         </div>

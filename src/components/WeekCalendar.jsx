@@ -107,7 +107,7 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
         <button onClick={() => changePeriod(false)}>
           <weekCalendarIcons.TbChevronLeft className="w-6 h-6 text-black dark:text-black-0 hover:text-alert" />
         </button>
-        <h1 className="font-bold text-lg leading-6">{headerText}</h1>
+        <h1 className="font-bold text-lg leading-6 text-black dark:text-black-0">{headerText}</h1>
         <button onClick={() => changePeriod(true)}>
           <weekCalendarIcons.TbChevronRight className="w-6 h-6 text-black dark:text-black-0 hover:text-alert" />
         </button>
@@ -121,8 +121,12 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
             }`}
             onClick={() => selectDate(day)}
           >
-            <div className={`font-bold text-lg leading-6 ${checkCurrentDate(day) ? "text-black dark:text-black-0-0" : "text-black dark:text-black-0"}`}>{day.value}</div>
-            <div className={`font-medium text-sm leading-5 ${checkCurrentDate(day) ? "text-black dark:text-black-0-0" : "text-black dark:text-black-0"}`}>{weekNames[day.value % 7]}</div>
+            <div className={`font-bold text-lg leading-6 ${checkCurrentDate(day) ? "text-black dark:text-black-0-0" : checkSelectedDate(day) ? "text-black" : "text-black dark:text-black-0"}`}>
+              {day.value}
+            </div>
+            <div className={`font-medium text-sm leading-5 ${checkCurrentDate(day) ? "text-black dark:text-black-0-0" : checkSelectedDate(day) ? "text-black" : "text-black dark:text-black-0"}`}>
+              {weekNames[day.value % 7]}
+            </div>
           </div>
         ))}
       </div>

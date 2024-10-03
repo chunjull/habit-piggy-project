@@ -76,19 +76,19 @@ const MonthCalendar = ({ date, onSelect }) => {
   const headerText = `${monthNames[displayDate.month]} ${displayDate.year}`;
 
   return (
-    <div className="p-4 bg-light dark:bg-dark-950 rounded-2xl">
+    <div className="p-4 bg-light dark:bg-black-800 rounded-2xl">
       <div className="flex justify-between mb-3">
         <button onClick={() => changePeriod(false)}>
           <weekCalendarIcons.TbChevronLeft className="w-6 h-6 text-black dark:text-black-0 hover:text-alert" />
         </button>
-        <h1 className="font-bold text-base leading-6">{headerText}</h1>
+        <h1 className="font-bold text-base leading-6 text-black dark:text-black-0">{headerText}</h1>
         <button onClick={() => changePeriod(true)}>
           <weekCalendarIcons.TbChevronRight className="w-6 h-6 text-black dark:text-black-0 hover:text-alert" />
         </button>
       </div>
       <div className="grid grid-cols-7 text-center gap-1">
         {weekNames.map((name, index) => (
-          <div key={index} className="font-medium text-sm leading-5">
+          <div key={index} className="font-medium text-sm leading-5 text-black dark:text-black-0">
             {name}
           </div>
         ))}

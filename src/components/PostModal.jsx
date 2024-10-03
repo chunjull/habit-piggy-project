@@ -40,12 +40,12 @@ const PostModal = ({ postContent, setPostContent, postBackground, setPostBackgro
               <div className="w-full h-full bg-gray-200 flex items-center justify-center">No Image</div>
             )}
           </div>
-          <h3 className="font-bold text-base leading-6">{userData && userData.name ? userData.name : "Unknown"}</h3>
+          <h3 className="font-bold text-base leading-6 text-black dark:text-black-0">{userData && userData.name ? userData.name : "Unknown"}</h3>
         </div>
-        <modalIcons.TbX className="w-6 h-6 hover:text-alert cursor-pointer" onClick={handlePostModal} />
+        <modalIcons.TbX className="w-6 h-6 hover:text-alert cursor-pointer text-black dark:text-black-0" onClick={handlePostModal} />
       </div>
       <div className="flex justify-between items-center gap-4">
-        <p className="font-normal text-base leading-6">選擇背景顏色</p>
+        <p className="font-normal text-base leading-6 text-black dark:text-black-0">選擇背景顏色</p>
         <div className="flex gap-4 overflow-scroll">
           {backgrounds.slice(0, 6).map((url, index) => (
             <button
@@ -56,7 +56,7 @@ const PostModal = ({ postContent, setPostContent, postBackground, setPostBackgro
             ></button>
           ))}
         </div>
-        <modalIcons.TbLayoutGrid className="w-6 h-6 hover:text-alert cursor-pointer" onClick={() => setIsBackgroundSelectOpen(!isBackgroundSelectOpen)} />
+        <modalIcons.TbLayoutGrid className="w-6 h-6 hover:text-alert cursor-pointer text-black dark:text-black-0" onClick={() => setIsBackgroundSelectOpen(!isBackgroundSelectOpen)} />
       </div>
       <BackgroundSelect backgrounds={backgrounds} setPostBackground={setPostBackground} isOpen={isBackgroundSelectOpen} setIsOpen={setIsBackgroundSelectOpen} />
       <div

@@ -42,26 +42,26 @@ const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncomp
           <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">{HabitIcon && <HabitIcon className="w-8 h-8" />}</div>
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <h3 className="font-bold text-lg leading-6">{selectedHabit.title}</h3>
-              <modalIcons.TbPencil className="w-6 h-6 cursor-pointer hover:text-alert" onClick={() => handleEditModal(selectedHabit)} />
+              <h3 className="font-bold text-lg leading-6 text-black dark:text-black-0">{selectedHabit.title}</h3>
+              <modalIcons.TbPencil className="w-6 h-6 cursor-pointer hover:text-alert text-black dark:text-black-0" onClick={() => handleEditModal(selectedHabit)} />
             </div>
           </div>
         </div>
-        <modalIcons.TbX className="w-6 h-6 hover:text-alert cursor-pointer" onClick={handleDetailModal} />
+        <modalIcons.TbX className="w-6 h-6 hover:text-alert cursor-pointer text-black dark:text-black-0" onClick={handleDetailModal} />
       </div>
       <div className="flex justify-between">
-        <h3>養成頻率：</h3>
-        <p>{renderType(selectedHabit.frequency)}</p>
+        <h3 className="text-black dark:text-black-0">養成頻率：</h3>
+        <p className="text-black dark:text-black-0">{renderType(selectedHabit.frequency)}</p>
       </div>
       <div className="flex justify-between">
-        <h3>養成期間：</h3>
-        <p>
+        <h3 className="text-black dark:text-black-0">養成期間：</h3>
+        <p className="text-black dark:text-black-0">
           {selectedHabit.startDate}～{selectedHabit.endDate}
         </p>
       </div>
       <div className="grid grid-cols-5 md:grid-cols-7 2xl:grid-cols-10 gap-2 md:gap-3 max-h-40 overflow-y-auto overflow-x-hidden">
         {selectedHabit.status.map((status, index) => (
-          <div key={index} className="border border-black-500 rounded aspect-square relative">
+          <div key={index} className="border border-black-500 dark:border-black-300 rounded aspect-square relative">
             {status.completed && (
               <div className={`border-2 border-alert rounded-full aspect-square flex justify-center items-center absolute ${getPositionClasses(stampPosition[index % stampPosition.length])}`}>
                 <p className="font-lobster font-normal text-sm leading-5 text-alert -rotate-[30deg] p-1 w-12 h-10 flex items-center justify-center">
@@ -73,8 +73,8 @@ const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncomp
         ))}
       </div>
       <div className="flex justify-between">
-        <p>累積存款：</p>
-        <p>NT$ {uncompletedFine}</p>
+        <p className="text-black dark:text-black-0">累積存款：</p>
+        <p className="text-black dark:text-black-0">NT$ {uncompletedFine}</p>
       </div>
       <button className="py-1 w-full bg-primary hover:bg-primary-dark rounded-lg font-medium text-sm leading-5" onClick={handlePostModal}>
         發佈貼文

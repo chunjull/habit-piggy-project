@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { checkIcon, habitDetailIcon } from "../assets/icons";
+import { checkIcon, habitDetailIcon, modalIcons } from "../assets/icons";
 import { useLocation } from "react-router-dom";
 
 const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, handleCheck }) => {
@@ -30,17 +30,22 @@ const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, hand
           const HabitIcon = habitCategory ? habitCategory.icon : null;
 
           return (
-            <li key={habit.id} className={`p-4 rounded-2xl ${isFinished ? "bg-black-300 hover:bg-black-200" : "bg-black-50 dark:bg-black-800 hover:bg-black-0"}`}>
+            <li
+              key={habit.id}
+              className={`p-4 rounded-2xl ${
+                isFinished ? "bg-black-300 hover:bg-black-200 dark:bg-black-800 dark:hover:bg-black-900" : "bg-black-50 dark:bg-black-500 hover:bg-black-0 dark:hover:bg-black-600"
+              }`}
+            >
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
                   <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">{HabitIcon && <HabitIcon className="w-8 h-8" />}</div>
                   <div className="flex flex-col">
-                    <h3 className="font-bold text-base leading-6">{habit.title}</h3>
+                    <h3 className="font-bold text-base leading-6 text-black dark:text-black-0">{habit.title}</h3>
                     <div className="flex">
-                      <p className="font-normal text-sm leading-5">
+                      <p className="font-normal text-sm leading-5 text-black dark:text-black-0">
                         {renderType(habit.type)}｜罰款 ${habit.amount}｜已達成 {habit.status.filter((status) => status.completed).length}
                       </p>
-                      <p className="text-black dark:text-black-0-500 font-normal text-sm leading-5">/{habit.status.length}</p>
+                      <p className="text-black-500 dark:text-black-300 font-normal text-sm leading-5">/{habit.status.length}</p>
                     </div>
                   </div>
                 </div>
@@ -51,7 +56,7 @@ const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, hand
               {weekDates && (
                 <div className="grid grid-cols-7 gap-y-1">
                   {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
-                    <div key={index} className="text-center text-sm leading-5 md:font-normal md:text-base md:leading-6">
+                    <div key={index} className="text-center text-sm leading-5 md:font-normal md:text-base md:leading-6 text-black dark:text-black-0">
                       {day}
                     </div>
                   ))}
@@ -60,17 +65,21 @@ const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, hand
                     return (
                       <div key={index} className="flex flex-col items-center">
                         {status ? (
-                          <checkIcon.TbCheck
-                            className={`w-10 h-10 md:w-12 md:h-12 border-2 rounded-full ${
-                              status && status.completed ? "bg-primary text-black dark:text-black-0-0 border-primary" : "text-black dark:text-black-0-500 border-black-500"
-                            } ${isFinished ? "cursor-not-allowed" : "cursor-pointer hover:bg-primary-light"}`}
-                            onClick={() => !isFinished && status && handleCheck(habit.id, status.date)}
-                            disabled={!status}
-                          />
+                          isFinished && !status.completed ? (
+                            <modalIcons.TbX className="w-10 h-10 md:w-12 md:h-12 border-2 rounded-full bg-alert text-black-0 border-alert cursor-not-allowed" />
+                          ) : (
+                            <checkIcon.TbCheck
+                              className={`w-10 h-10 md:w-12 md:h-12 border-2 rounded-full ${
+                                status.completed ? "bg-primary text-black-0 border-primary" : "text-black-500 dark:text-black-0 border-black-500 dark:border-black-300"
+                              } ${isFinished ? "cursor-not-allowed" : "cursor-pointer hover:bg-primary-light"}`}
+                              onClick={() => !isFinished && status && handleCheck(habit.id, status.date)}
+                              disabled={!status}
+                            />
+                          )
                         ) : (
                           <div
                             className={`w-10 h-10 md:w-12 md:h-12 rounded-full cursor-not-allowed border-2 border-dashed ${
-                              isFinished ? "bg-black-transparent border-black-500" : "bg-black-100 border-black-300"
+                              isFinished ? "bg-black-transparent border-black-500" : "bg-transparent border-black-300"
                             }`}
                           />
                         )}

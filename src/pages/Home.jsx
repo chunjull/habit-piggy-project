@@ -392,7 +392,7 @@ function Home() {
         className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center fixed right-4 bottom-20 md:bottom-10 bg-primary hover:bg-primary-dark cursor-pointer"
         onClick={handleHabitModal}
       >
-        <habitAddIcon.TbPlus className="w-8 h-8 md:w-10 md:h-10 text-black dark:text-black-0-0" />
+        <habitAddIcon.TbPlus className="w-8 h-8 md:w-10 md:h-10 text-black-0" />
       </div>
       <Modal isOpen={isHabitModalOpen}>
         <HabitModal

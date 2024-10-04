@@ -19,6 +19,7 @@ import {
   TbPlus,
   TbX,
   TbLayoutGrid,
+  TbInfoCircle,
   TbChevronDown,
   TbHeart,
   TbHeartFilled,
@@ -73,6 +74,7 @@ export const habitAddIcon = {
 export const modalIcons = {
   TbX,
   TbLayoutGrid,
+  TbInfoCircle,
 };
 
 export const dropdownIcon = {

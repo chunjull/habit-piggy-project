@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import MonthCalendar from "./MonthCalendar";
 import CategorySelect from "./CategorySelect";
-import { modalIcons } from "../assets/icons";
-import { checkIcon } from "../assets/icons";
+import { modalIcons, checkIcon } from "../assets/icons";
 
 const EditModal = ({
   habitData,
@@ -96,15 +95,27 @@ const EditModal = ({
         <modalIcons.TbX className="w-6 h-6 hover:text-alert cursor-pointer text-black dark:text-black-0" onClick={handleEditModal} />
       </div>
       <div className="flex justify-between items-start gap-4">
-        <label htmlFor="category" className="text-nowrap text-black dark:text-black-0">
-          習慣類別
-        </label>
+        <div className="relative flex items-center gap-1 group">
+          <label htmlFor="category" className="text-nowrap text-black dark:text-black-0 group-hover:relative">
+            習慣類別
+            <span className="absolute -bottom-1 left-24 transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
+              你想要培養什麼類別的習慣呢？
+            </span>
+          </label>
+          <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200" />
+        </div>
         <CategorySelect options={habitCategories} value={habitData.category} onChange={(value) => handleHabitChange({ target: { name: "category", value } })} />
       </div>
       <div className="flex justify-between gap-4">
-        <label htmlFor="frequency" className="text-nowrap text-black dark:text-black-0">
-          習慣頻率
-        </label>
+        <div className="relative flex items-center gap-1 group">
+          <label htmlFor="frequency" className="text-nowrap text-black dark:text-black-0 group-hover:relative">
+            習慣頻率
+            <span className="absolute -bottom-1 left-24 transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
+              你想要每天、每週還是在特定日期培養習慣呢？
+            </span>
+          </label>
+          <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200" />
+        </div>
         <div className="w-full grid grid-cols-3 gap-3">
           <div>
             <input type="radio" name="frequency" id="daily" value="daily" className="appearance-none hidden" checked={habitData.frequency.type === "daily"} onChange={handleHabitChange} />
@@ -165,9 +176,15 @@ const EditModal = ({
         </div>
       )}
       <div className="flex justify-between gap-4">
-        <label htmlFor="type" className="text-nowrap text-black dark:text-black-0">
-          習慣類型
-        </label>
+        <div className="relative flex items-center gap-1 group">
+          <label htmlFor="type" className="text-nowrap text-black dark:text-black-0 group-hover:relative">
+            習慣類型
+            <span className="absolute -bottom-1 left-24 transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
+              你想要養成還是戒除呢？
+            </span>
+          </label>
+          <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200" />
+        </div>
         <div className="w-full grid grid-cols-2 gap-3">
           <div>
             <input type="radio" name="type" id="to-do" value="to-do" className="appearance-none hidden" checked={habitData.type === "to-do"} onChange={handleHabitChange} />
@@ -194,9 +211,15 @@ const EditModal = ({
         </div>
       </div>
       <div className="flex justify-between gap-4">
-        <label htmlFor="amount" className="text-nowrap text-black dark:text-black-0">
-          習慣罰款
-        </label>
+        <div className="relative flex items-center gap-1 group">
+          <label htmlFor="amount" className="text-nowrap text-black dark:text-black-0 group-hover:relative">
+            習慣罰款
+            <span className="absolute -bottom-1 left-24 transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
+              如果沒有完成習慣，你願意支付多少罰款呢？
+            </span>
+          </label>
+          <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200" />
+        </div>
         <div className="flex gap-2 w-full">
           <p className="font-normal text-base leading-6 text-black dark:text-black-0">NT$</p>
           <input
@@ -213,7 +236,15 @@ const EditModal = ({
         </div>
       </div>
       <div className="flex justify-between gap-4 w-full">
-        <p className="text-nowrap text-black dark:text-black-0">養成期間</p>
+        <div className="relative flex items-center gap-1 group">
+          <label htmlFor="time" className="text-nowrap text-black dark:text-black-0 group-hover:relative">
+            養成期間
+            <span className="absolute -bottom-1 left-24 transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
+              你想要從哪一天開始、哪一天結束培養這個習慣呢？
+            </span>
+          </label>
+          <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200" />
+        </div>
         <div className="border border-black-300 w-full rounded py-0.5 px-4 flex justify-between items-center bg-black-0 dark:bg-black-100 relative">
           <button className={`text-center w-1/2 font-normal text-sm leading-5 text-black`} onClick={handleStartDateClick}>
             {habitData.startDate || "開始日期"}

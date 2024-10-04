@@ -15,7 +15,7 @@ const CategorySelect = ({ options, value, onChange }) => {
             <div className={`w-10 h-10 rounded-full flex justify-center items-center ${selectedOption && selectedOption.id === option.id ? "bg-primary" : "bg-black-200 hover:bg-primary"}`}>
               <option.icon className="w-8 h-8" />
             </div>
-            {option.name}
+            <p className="text-black dark:text-black-0">{option.name}</p>
           </li>
         ))}
       </ul>

@@ -412,14 +412,7 @@ function Home() {
         />
       </Modal>
       <Modal isOpen={isDetailModalOpen} onClose={handleDetailModal}>
-        <DetailModal
-          selectedHabit={selectedHabit}
-          handleDetailModal={handleDetailModal}
-          handlePostModal={handlePostModal}
-          uncompletedFine={uncompletedFine}
-          handleEditModal={handleEditModal}
-          habitCategories={habitCategories}
-        />
+        <DetailModal selectedHabit={selectedHabit} handleDetailModal={handleDetailModal} uncompletedFine={uncompletedFine} handleEditModal={handleEditModal} habitCategories={habitCategories} />
       </Modal>
       <Modal isOpen={isPostModalOpen} onClose={handlePostModal}>
         <PostModal

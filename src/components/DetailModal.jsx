@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { modalIcons } from "../assets/icons";
 
-const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncompletedFine, handleEditModal, habitCategories }) => {
+const DetailModal = ({ selectedHabit, handleDetailModal, uncompletedFine, handleEditModal, habitCategories }) => {
   const habitCategory = habitCategories.find((category) => category.id === selectedHabit.category);
   const HabitIcon = habitCategory ? habitCategory.icon : null;
 
@@ -43,7 +43,6 @@ const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncomp
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
               <h3 className="font-bold text-lg leading-6 text-black dark:text-black-0">{selectedHabit.title}</h3>
-              <modalIcons.TbPencil className="w-6 h-6 cursor-pointer hover:text-alert text-black dark:text-black-0" onClick={() => handleEditModal(selectedHabit)} />
             </div>
           </div>
         </div>
@@ -76,8 +75,8 @@ const DetailModal = ({ selectedHabit, handleDetailModal, handlePostModal, uncomp
         <p className="text-black dark:text-black-0">累積存款：</p>
         <p className="text-black dark:text-black-0">NT$ {uncompletedFine}</p>
       </div>
-      <button className="py-1 w-full bg-primary hover:bg-primary-dark rounded-lg font-medium text-sm leading-5" onClick={handlePostModal}>
-        發佈貼文
+      <button className="py-1 w-full bg-primary hover:bg-primary-dark rounded-lg font-medium text-sm leading-5" onClick={() => handleEditModal(selectedHabit)}>
+        編輯習慣
       </button>
     </div>
   );

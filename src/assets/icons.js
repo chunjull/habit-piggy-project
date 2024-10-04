@@ -18,7 +18,6 @@ import {
   TbCalendarSmile,
   TbPlus,
   TbX,
-  TbPencil,
   TbLayoutGrid,
   TbChevronDown,
   TbHeart,
@@ -73,7 +72,6 @@ export const habitAddIcon = {
 
 export const modalIcons = {
   TbX,
-  TbPencil,
   TbLayoutGrid,
 };
 

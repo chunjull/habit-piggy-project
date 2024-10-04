@@ -84,7 +84,6 @@ const EditModal = ({
     <div className="space-y-4">
       <div className="flex justify-between items-center gap-4">
         <div className="flex items-center gap-4 w-full">
-          <CategorySelect options={habitCategories} value={habitData.category} onChange={(value) => handleHabitChange({ target: { name: "category", value } })} />
           <input
             type="text"
             name="title"
@@ -95,6 +94,12 @@ const EditModal = ({
           />
         </div>
         <modalIcons.TbX className="w-6 h-6 hover:text-alert cursor-pointer text-black dark:text-black-0" onClick={handleEditModal} />
+      </div>
+      <div className="flex justify-between items-start gap-4">
+        <label htmlFor="category" className="text-nowrap text-black dark:text-black-0">
+          習慣類別
+        </label>
+        <CategorySelect options={habitCategories} value={habitData.category} onChange={(value) => handleHabitChange({ target: { name: "category", value } })} />
       </div>
       <div className="flex justify-between gap-4">
         <label htmlFor="frequency" className="text-nowrap text-black dark:text-black-0">

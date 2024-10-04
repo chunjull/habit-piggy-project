@@ -1,8 +1,11 @@
 import PropTypes from "prop-types";
 import { modalIcons, settingIcons } from "../assets/icons";
 import CustomSelect from "./CustomSelect";
+import { useContext } from "react";
+import { AuthContext } from "../utils/AuthContext";
 
 const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSaveAndClose }) => {
+  const { setIsDarkMode } = useContext(AuthContext);
   const isDarkMode = profileData.isDarkMode ? "true" : "false";
   const isAcceptReminder = profileData.isAcceptReminder ? "true" : "false";
 
@@ -15,6 +18,11 @@ const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSav
     { value: "false", label: "否" },
     { value: "true", label: "是" },
   ];
+
+  const handleThemeChange = (value) => {
+    handleChange({ target: { name: "isDarkMode", value } });
+    setIsDarkMode(value === "true");
+  };
 
   return (
     <div className="space-y-4">
@@ -77,7 +85,7 @@ const SettingModal = ({ profileData, handleSettingModal, handleChange, handleSav
       <div className="flex justify-between items-center">
         <p className="font-normal text-base leading-6 text-black dark:text-black-0">主題色彩</p>
         <div className="relative w-fit text-nowrap">
-          <CustomSelect options={themeOptions} value={isDarkMode} onChange={(value) => handleChange({ target: { name: "isDarkMode", value } })} />
+          <CustomSelect options={themeOptions} value={isDarkMode} onChange={handleThemeChange} />
         </div>
       </div>
       <div className="flex justify-between items-center">

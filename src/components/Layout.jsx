@@ -9,7 +9,7 @@ import { AuthContext } from "../utils/AuthContext";
 function Layout({ children, isModalOpen, modalContent }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { setUser } = useContext(AuthContext);
+  const { setUser, isDarkMode } = useContext(AuthContext);
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
 
   const handleLogout = async () => {
@@ -31,11 +31,23 @@ function Layout({ children, isModalOpen, modalContent }) {
     }
   };
 
+  const handleDarkMode = () => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
+
   useEffect(() => {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    handleDarkMode();
+  }, [isDarkMode]);
 
   return (
     <div className="font-huninn bg-light dark:bg-black-950 relative min-h-screen">

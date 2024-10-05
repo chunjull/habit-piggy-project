@@ -212,6 +212,11 @@ function Posts() {
       setPosts((prevPosts) => [postData, ...prevPosts]);
       setPostContent("");
       setPostBackground("");
+
+      const textarea = document.querySelector("textarea");
+      if (textarea) {
+        textarea.style.height = "auto";
+      }
     }
   };
 
@@ -255,7 +260,7 @@ function Posts() {
             <CustomSelect options={options} value={filter} onChange={setFilter} />
           </div>
         </div>
-        <div className="border border-black-500 bg-black-50 p-4 rounded-xl space-y-2">
+        <div className="border border-black-500 bg-black-50 dark:bg-black-800 p-4 rounded-xl space-y-2">
           {renderUserDetails()}
           <div className="flex items-center gap-4">
             <p className="font-normal text-base leading-6 text-black dark:text-black-0 text-nowrap">選擇背景顏色</p>
@@ -279,11 +284,16 @@ function Posts() {
             }}
           >
             <textarea
-              className="w-full h-fit bg-transparent border-none resize-none outline-none text-center placeholder-black font-normal text-base leading-6 md:text-xl md:leading-7 xl:text-2xl xl:leading-8"
+              className="w-full h-fit bg-transparent border-none overflow-hidden resize-none outline-none text-center placeholder-black font-normal text-base leading-6 md:text-xl md:leading-7 xl:text-2xl xl:leading-8"
               placeholder="輸入貼文內容..."
               value={postContent}
-              onChange={(e) => setPostContent(e.target.value)}
+              onChange={(e) => {
+                setPostContent(e.target.value);
+                e.target.style.height = "auto";
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }}
               style={{ color: calculateTextColor(postBackground) }}
+              rows="1"
             />
           </div>
           <div className="text-end">

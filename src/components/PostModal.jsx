@@ -45,9 +45,9 @@ const PostModal = ({ postContent, setPostContent, postBackground, setPostBackgro
         <modalIcons.TbX className="w-6 h-6 hover:text-alert cursor-pointer text-black dark:text-black-0" onClick={handlePostModal} />
       </div>
       <div className="flex justify-between items-center gap-4">
-        <p className="font-normal text-base leading-6 text-black dark:text-black-0">選擇背景顏色</p>
+        <p className="font-normal text-base leading-6 text-black dark:text-black-0 text-nowrap">選擇背景顏色</p>
         <div className="flex gap-4 overflow-scroll">
-          {backgrounds.slice(0, 6).map((url, index) => (
+          {backgrounds.map((url, index) => (
             <button
               key={index}
               className="rounded w-6 h-6 flex-shrink-0 flex-grow-0"
@@ -56,7 +56,6 @@ const PostModal = ({ postContent, setPostContent, postBackground, setPostBackgro
             ></button>
           ))}
         </div>
-        <modalIcons.TbLayoutGrid className="w-6 h-6 hover:text-alert cursor-pointer text-black dark:text-black-0" onClick={() => setIsBackgroundSelectOpen(!isBackgroundSelectOpen)} />
       </div>
       <BackgroundSelect backgrounds={backgrounds} setPostBackground={setPostBackground} isOpen={isBackgroundSelectOpen} setIsOpen={setIsBackgroundSelectOpen} />
       <div
@@ -68,7 +67,7 @@ const PostModal = ({ postContent, setPostContent, postBackground, setPostBackgro
         }}
       >
         <textarea
-          className="w-full h-full bg-transparent border-none resize-none outline-none text-center placeholder-black"
+          className="w-full h-full bg-transparent border-none resize-none outline-none text-center placeholder-black font-normal text-base leading-6 md:text-xl md:leading-7 xl:text-2xl xl:leading-8"
           placeholder="輸入貼文內容..."
           value={postContent}
           onChange={(e) => setPostContent(e.target.value)}

@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { getAllPosts, getUserProfile, addComment, getComments, updateComment, deleteComment, updatePost, deletePost, addLike, removeLike } from "../services/api";
+import { addPost, getAllPosts, getUserProfile, addComment, getComments, updateComment, deleteComment, updatePost, deletePost, addLike, removeLike, getPostBackgrounds } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import { postIcons } from "../assets/icons";
 import CustomSelect from "../components/CustomSelect";
@@ -19,7 +19,11 @@ function Posts() {
   const [editingComment, setEditingComment] = useState({});
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [currentPost, setCurrentPost] = useState(null);
+  const [postContent, setPostContent] = useState("");
+  const [postBackground, setPostBackground] = useState("");
+  const [backgrounds, setBackgrounds] = useState([]);
   const { user } = useContext(AuthContext);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -36,6 +40,26 @@ function Posts() {
 
     fetchPosts();
   }, []);
+
+  useEffect(() => {
+    const fetchBackgrounds = async () => {
+      const urls = await getPostBackgrounds();
+      setBackgrounds(urls);
+    };
+
+    fetchBackgrounds();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user && user.uid) {
+        const data = await getUserProfile(user.uid);
+        setUserData(data);
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
 
   const filteredPosts = filter === "personal" ? posts.filter((post) => post.userID === user.uid) : posts;
 
@@ -168,6 +192,47 @@ function Posts() {
     }
   };
 
+  const handleAddPost = async () => {
+    if (!postContent.trim()) {
+      return;
+    }
+
+    if (user) {
+      const userProfile = await getUserProfile(user.uid);
+      const postData = {
+        content: postContent,
+        background: postBackground,
+        userID: user.uid,
+        user: userProfile, // 包含使用者資料
+        createdTime: { seconds: Math.floor(Date.now() / 1000) },
+        likes: [],
+        comments: [],
+      };
+      await addPost(user.uid, postData);
+      setPosts((prevPosts) => [postData, ...prevPosts]);
+      setPostContent("");
+      setPostBackground("");
+    }
+  };
+
+  const renderUserDetails = () => {
+    if (!userData) {
+      return (
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 bg-black-500 rounded-full"></div>
+          <p className="font-bold text-lg leading-6 text-black dark:text-black-0">Unknown</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex items-center gap-3">
+        <img src={userData.avatar} alt="avatar" className="w-12 h-12 object-cover rounded-full" />
+        <p className="font-bold text-lg leading-6 text-black dark:text-black-0">{userData.name}</p>
+      </div>
+    );
+  };
+
   return (
     <>
       <div className="p-4 md:py-10 space-y-4">
@@ -175,6 +240,42 @@ function Posts() {
           <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">貼文總覽</h2>
           <div className="relative">
             <CustomSelect options={options} value={filter} onChange={setFilter} />
+          </div>
+        </div>
+        <div className="border border-black-500 bg-black-50 p-4 rounded-xl space-y-2">
+          {renderUserDetails()}
+          <div className="flex items-center gap-4">
+            <p className="font-normal text-base leading-6 text-black dark:text-black-0 text-nowrap">選擇背景顏色</p>
+            <div className="flex gap-4 overflow-scroll">
+              {backgrounds.map((url, index) => (
+                <button
+                  key={index}
+                  className="rounded w-6 h-6 flex-shrink-0 flex-grow-0"
+                  style={{ backgroundImage: `url(${url})`, backgroundSize: "cover", backgroundPosition: "center" }}
+                  onClick={() => setPostBackground(url)}
+                ></button>
+              ))}
+            </div>
+          </div>
+          <div
+            className="w-full min-h-40 h-fit border rounded-xl bg-black-100 p-2 overflow-auto flex justify-center items-center"
+            style={{
+              backgroundImage: `url(${postBackground})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          >
+            <textarea
+              className="w-full h-fit bg-transparent border-none resize-none outline-none text-center placeholder-black font-normal text-base leading-6 md:text-xl md:leading-7 xl:text-2xl xl:leading-8"
+              placeholder="輸入貼文內容..."
+              value={postContent}
+              onChange={(e) => setPostContent(e.target.value)}
+            />
+          </div>
+          <div className="text-end">
+            <button className="py-1 px-3 w-fit bg-primary rounded-lg font-medium text-sm leading-5 hover:bg-primary-dark" onClick={handleAddPost}>
+              發佈貼文
+            </button>
           </div>
         </div>
         <ul className="space-y-4">

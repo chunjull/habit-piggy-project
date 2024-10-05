@@ -1,20 +1,17 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { AuthContext } from "../utils/AuthContext";
-import { getHabits, updateHabit, addHabit, addPost, deleteHabit, calculateTaskValue, checkAndAwardAchievements, calculateBadges, checkAndAwardBadges, removeBadge } from "../services/api";
+import { getHabits, updateHabit, addHabit, deleteHabit, calculateTaskValue, checkAndAwardAchievements, calculateBadges, checkAndAwardBadges, removeBadge } from "../services/api";
 import WeekCalendar from "../components/WeekCalendar";
 import Modal from "../components/Modal";
 import HabitModal from "../components/HabitModal";
 import DetailModal from "../components/DetailModal";
-import PostModal from "../components/PostModal";
 import EditModal from "../components/EditModal";
-import { Navigate } from "react-router-dom";
 import { habitIcons, habitAddIcon } from "../assets/icons";
 import HabitList from "../components/HabitList";
 
 function Home() {
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [habitData, setHabitData] = useState({
     category: null,
@@ -31,12 +28,9 @@ function Home() {
   const [showMonthCalendar, setShowMonthCalendar] = useState(false);
   const [calendarTarget, setCalendarTarget] = useState("");
   const [selectedHabit, setSelectedHabit] = useState(null);
-  const [postContent, setPostContent] = useState("");
-  const [postBackground, setPostBackground] = useState("");
   const [weekDates, setWeekDates] = useState([]);
   const [uncompletedFine, setUncompletedFine] = useState(0);
   const [monthCalendarDate, setMonthCalendarDate] = useState(null);
-  const [isPost, setIsPost] = useState(false);
   const calendarRef = useRef(null);
 
   const { user } = useContext(AuthContext);
@@ -118,11 +112,6 @@ function Home() {
 
   const handleDetailModal = () => {
     setIsDetailModalOpen(!isDetailModalOpen);
-  };
-
-  const handlePostModal = () => {
-    setIsPostModalOpen(!isPostModalOpen);
-    setIsDetailModalOpen(false);
   };
 
   const handleEditModal = (habit) => {
@@ -349,30 +338,6 @@ function Home() {
     setIsDetailModalOpen(true);
   };
 
-  const handleAddPost = async () => {
-    if (!postContent.trim()) {
-      alert("請輸入貼文內容");
-      return;
-    }
-
-    if (user && selectedHabit) {
-      const postData = {
-        content: postContent,
-        background: postBackground,
-        habitId: selectedHabit.id,
-      };
-      await addPost(user.uid, postData);
-      setIsPost(true);
-      handlePostModal();
-      setPostContent("");
-      setPostBackground("");
-    }
-  };
-
-  if (isPost) {
-    return <Navigate to="/posts" />;
-  }
-
   const handleAchievements = async (taskType) => {
     if (!user || !user.uid) return;
 
@@ -413,17 +378,6 @@ function Home() {
       </Modal>
       <Modal isOpen={isDetailModalOpen} onClose={handleDetailModal}>
         <DetailModal selectedHabit={selectedHabit} handleDetailModal={handleDetailModal} uncompletedFine={uncompletedFine} handleEditModal={handleEditModal} habitCategories={habitCategories} />
-      </Modal>
-      <Modal isOpen={isPostModalOpen} onClose={handlePostModal}>
-        <PostModal
-          postContent={postContent}
-          setPostContent={setPostContent}
-          postBackground={postBackground}
-          setPostBackground={setPostBackground}
-          handleAddPost={handleAddPost}
-          handlePostModal={handlePostModal}
-          user={user}
-        />
       </Modal>
       <Modal isOpen={isEditModalOpen} onClose={handleEditModal}>
         <EditModal

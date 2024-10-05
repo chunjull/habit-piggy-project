@@ -5,6 +5,7 @@ import SavingsChart from "../components/SavingsChart";
 import CategoryChart from "../components/CategoryChart";
 import TypeChart from "../components/TypeChart";
 import CustomSelect from "../components/CustomSelect";
+import { modalIcons } from "../assets/icons";
 
 function Savings() {
   const [isActiveTab, setIsActiveTab] = useState("overview");
@@ -253,7 +254,13 @@ function Savings() {
         <div>
           <div className="p-4 bg-black-50 dark:bg-black-800 rounded-xl space-y-4">
             <div className="flex justify-between items-center">
-              <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">存款總覽</h2>
+              <div className="relative group flex items-center">
+                <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">存款總覽</h2>
+                <modalIcons.TbInfoCircle className="w-6 h-6 text-black-500 dark:text-black-200 ml-2 inline-block" />
+                <span className="absolute -bottom-1 left-32 transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
+                  結算時間為每日 23:59:59，存款金額為當日未完成的習慣存款金額總和
+                </span>
+              </div>
               <div className="relative">
                 <CustomSelect options={options} value={filter} onChange={setFilter} />
               </div>
@@ -272,19 +279,34 @@ function Savings() {
             </li>
             {renderUncompletedHabits(habits, getStartAndEndOfPeriod(filter).startOfPeriod, getStartAndEndOfPeriod(filter).endOfPeriod)}
           </ul>
-          <p className="text-center mt-2 font-normal text-xs leading-4 text-black dark:text-black-0">僅顯示最新的 50 筆存款記錄</p>
+          {savingsCount === 0 && (
+            <>
+              <p className="text-center mt-2 font-normal text-xs leading-4 md:text-base md:leading-6 text-black dark:text-black-0">找不到相關的存款資料</p>
+              <p className="text-center mt-2 font-normal text-xs leading-4 md:text-base md:leading-6 text-black dark:text-black-0">要不要試著培養一些習慣呢？</p>
+            </>
+          )}
+          {savingsCount >= 50 && <p className="text-center mt-2 font-normal text-xs leading-4 md:text-base md:leading-6 text-black dark:text-black-0">僅顯示最新的 50 筆存款記錄</p>}
         </div>
       )}
       {isActiveTab === "category" && (
-        <div className="p-4 bg-black-50 dark:bg-black-800 rounded-xl space-y-4 min-h-screen">
+        <div className={`p-4 bg-black-50 dark:bg-black-800 rounded-xl space-y-4 ${savingsCount === 0 ? "min-h-screen" : "h-fit"}`}>
           <div className="flex justify-between items-center">
-            <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">習慣類別總覽</h2>
+            <div className="relative group flex items-center">
+              <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">習慣類別總覽</h2>
+              <modalIcons.TbInfoCircle className="w-6 h-6 text-black-500 dark:text-black-200 ml-2 inline-block" />
+              <span className="absolute -bottom-1 left-[168px] transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
+                來看看你的習慣類別分布吧！哪些類別的習慣讓你累積最多存款呢？
+              </span>
+            </div>
             <div className="relative">
               <CustomSelect options={options} value={filter} onChange={setFilter} />
             </div>
           </div>
           {savingsCount === 0 ? (
-            <p className="text-black dark:text-black-0">查無資料</p>
+            <div className="space-y-2">
+              <p className="text-center font-normal text-base leading-6 text-black dark:text-black-0">找不到相關的存款資料</p>
+              <p className="text-center font-normal text-base leading-6 text-black dark:text-black-0">要不要試著培養一些習慣呢？</p>
+            </div>
           ) : (
             <div>
               <div className="w-full h-[400px]">
@@ -308,15 +330,24 @@ function Savings() {
         </div>
       )}
       {isActiveTab === "type" && (
-        <div className="p-4 bg-black-50 dark:bg-black-800 rounded-xl space-y-4 min-h-screen md:min-h-fit">
+        <div className={`p-4 bg-black-50 dark:bg-black-800 rounded-xl space-y-4 ${savingsCount === 0 ? "min-h-screen" : "h-fit"}`}>
           <div className="flex justify-between items-center">
-            <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">習慣類型總覽</h2>
+            <div className="relative group flex items-center">
+              <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">習慣類型總覽</h2>
+              <modalIcons.TbInfoCircle className="w-6 h-6 text-black-500 dark:text-black-200 ml-2 inline-block" />
+              <span className="absolute -bottom-1 left-[168px] transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
+                來看看你的習慣類型分布吧！你比較擅長養成還是戒除習慣呢？
+              </span>
+            </div>
             <div className="relative">
               <CustomSelect options={options} value={filter} onChange={setFilter} />
             </div>
           </div>
           {savingsCount === 0 ? (
-            <p className="text-black dark:text-black-0">查無資料</p>
+            <div className="space-y-2">
+              <p className="text-center font-normal text-base leading-6 text-black dark:text-black-0">找不到相關的存款資料</p>
+              <p className="text-center font-normal text-base leading-6 text-black dark:text-black-0">要不要試著培養一些習慣呢？</p>
+            </div>
           ) : (
             <div>
               <div className="w-full h-[400px]">

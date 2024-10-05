@@ -178,19 +178,19 @@ function Member() {
     setIsBadgeModalOpen(!isBadgeModalOpen);
   };
 
-  const handleUpdateProfile = async () => {
+  const handleUpdateProfile = async (updatedProfileData) => {
     if (user && user.uid) {
       try {
-        await updateUserProfile(user.uid, profileData);
-        console.log("Profile updated successfully");
+        await updateUserProfile(user.uid, updatedProfileData);
+        setProfileData(updatedProfileData);
       } catch (error) {
-        console.error("Error updating profile: ", error);
+        console.error("更新資料失敗", error);
       }
     }
   };
 
-  const handleSaveAndClose = async () => {
-    await handleUpdateProfile();
+  const handleSaveAndClose = async (updatedProfileData) => {
+    await handleUpdateProfile(updatedProfileData);
     handleSettingModal();
   };
 
@@ -200,26 +200,24 @@ function Member() {
       const file = e.target.files[0];
       const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
       if (!file) return;
-      if (!allowedTypes.includes(file.type)) {
-        return;
-      }
+      if (!allowedTypes.includes(file.type)) return;
       try {
-        const downloadURL = await uploadAvatar(user.uid, files[0]);
-        setProfileData((prev) => ({
-          ...prev,
-          avatar: downloadURL,
+        const avatarUrl = await uploadAvatar(user.uid, file);
+        setProfileData((prevData) => ({
+          ...prevData,
+          avatar: avatarUrl,
         }));
       } catch (error) {
-        console.error("Error uploading avatar: ", error);
+        console.error("上傳頭像失敗", error);
       }
     } else if (name === "isDarkMode" || name === "isAcceptReminder") {
-      setProfileData((prev) => ({
-        ...prev,
+      setProfileData((prevData) => ({
+        ...prevData,
         [name]: value === "true",
       }));
     } else {
-      setProfileData((prev) => ({
-        ...prev,
+      setProfileData((prevData) => ({
+        ...prevData,
         [name]: value,
       }));
     }

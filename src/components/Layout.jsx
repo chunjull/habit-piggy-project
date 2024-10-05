@@ -50,17 +50,17 @@ function Layout({ children, isModalOpen, modalContent }) {
   }, [isDarkMode]);
 
   return (
-    <div className="font-huninn bg-light dark:bg-black-950 relative min-h-screen">
+    <div className={"font-huninn bg-light dark:bg-black-950 relative min-h-screen"}>
       <nav
-        className={`pt-2 pb-3 px-4 bg-black-50 dark:bg-black-800 fixed inset-x-0 bottom-0 flex gap-x-4 z-50 border-t border-primary md:p-4 md:flex-col md:justify-between md:border-t-0 md:border-r md:h-full ${
+        className={`pt-2 pb-3 px-4 bg-black-50 dark:bg-black-800 fixed inset-x-0 bottom-0 flex gap-x-4 z-50 border-t border-primary md:p-4 md:flex-col md:justify-between md:border-t-0 md:border-r md:h-full transition-all duration-200 ease-in-out ${
           isSidebarExpanded ? "md:w-[240px]" : "md:w-20"
         }`}
       >
         <div className={`hidden md:flex md:items-center ${isSidebarExpanded ? "md:justify-between" : "md:justify-center"}`}>
-          <p className={`text-black dark:text-black-0 font-lobster font-normal text-2xl leading-8 ml-6 hidden ${isSidebarExpanded ? "md:block" : ""}`}>Habit Piggy</p>
+          <p className={`text-black dark:text-black-0 font-lobster font-normal text-2xl leading-8 ml-6 hidden text-nowrap ${isSidebarExpanded ? "md:block" : ""}`}>Habit Piggy</p>
           <generalIcons.TbLayoutSidebarRight className="w-6 h-6 md:w-8 md:h-8 text-black dark:text-black-0 hover:text-alert cursor-pointer" onClick={toggleSidebar} />
         </div>
-        <ul className="grid grid-cols-5 items-center w-full md:grid-cols-1 md:gap-4">
+        <ul className="grid grid-cols-5 items-center w-full md:grid-cols-1 md:gap-4 transition-all duration-200 ease-in-out">
           <Link to="/home" className="block">
             <li
               className={`md:py-1 md:px-2 flex flex-col items-center gap-1 ${isSidebarExpanded ? "md:rounded-full md:flex-row hover:md:bg-primary-light" : ""} ${
@@ -171,7 +171,7 @@ function Layout({ children, isModalOpen, modalContent }) {
           </div>
         </Link>
       </nav>
-      <div className={`md:max-w-screen-md xl:max-w-[1160px] my-0 mx-auto flex flex-col md:flex-row min-h-screen relative`}>
+      <div className={`md:max-w-screen-md xl:max-w-[1160px] my-0 mx-auto flex flex-col md:flex-row min-h-screen relative ${isSidebarExpanded && window.innerWidth < 1536 ? "blur-sm" : ""}`}>
         <div className="mt-0 mb-[86px] md:mb-0 w-full p-0 relative">{children}</div>
       </div>
       {isModalOpen && <Modal isOpen={isModalOpen}>{modalContent}</Modal>}

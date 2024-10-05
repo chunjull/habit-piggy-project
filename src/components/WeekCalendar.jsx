@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { weekCalendarIcons } from "../assets/icons";
 
 const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
-  const [weekNames] = useState(["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]);
+  const [weekNames] = useState(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
   const [monthNames] = useState(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]);
   const [displayDate, setDisplayDate] = useState(null);
   const [currentDate, setCurrentDate] = useState(null);
@@ -125,7 +125,7 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
               {day.value}
             </div>
             <div className={`font-medium text-sm leading-5 ${checkCurrentDate(day) ? "text-black dark:text-black-0-0" : checkSelectedDate(day) ? "text-black" : "text-black dark:text-black-0"}`}>
-              {weekNames[day.value % 7]}
+              {weekNames[new Date(day.year, day.month, day.value).getDay()]}
             </div>
           </div>
         ))}

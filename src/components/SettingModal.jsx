@@ -44,7 +44,7 @@ const SettingModal = ({ profileData, handleSettingModal, handleSaveAndClose }) =
       setLocalProfileData((prevData) => ({
         ...prevData,
         avatar: URL.createObjectURL(file),
-        avatarFile: file, // 保存文件以便上傳
+        avatarFile: file,
       }));
     } else {
       setLocalProfileData((prevData) => ({

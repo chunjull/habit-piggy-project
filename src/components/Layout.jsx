@@ -36,26 +36,14 @@ function Layout({ children, isModalOpen, modalContent }) {
     }
   };
 
-  const handleDarkMode = () => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  };
-
   useEffect(() => {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    handleDarkMode();
-  }, [isDarkMode]);
-
   return (
-    <div className={"font-huninn bg-light dark:bg-black-950 relative min-h-screen"}>
+    <div className={`font-huninn bg-light dark:bg-black-950 relative min-h-screen ${isDarkMode ? "dark" : ""}`}>
       <nav
         className={`pt-2 pb-3 px-4 bg-black-50 dark:bg-black-800 fixed inset-x-0 bottom-0 flex gap-x-4 z-50 border-t border-primary md:p-4 md:flex-col md:justify-between md:border-t-0 md:border-r md:h-full transition-all duration-200 ease-in-out ${
           isSidebarExpanded ? "md:w-[240px]" : "md:w-20"

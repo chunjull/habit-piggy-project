@@ -58,12 +58,7 @@ async function getUserProfile(uid) {
     const userDocRef = doc(db, "users", uid);
     const userSnapshot = await getDoc(userDocRef);
     if (userSnapshot.exists()) {
-      const userData = userSnapshot.data();
-      if (!userData.avatar) {
-        const defaultAvatarURL = await getDefaultAvatar("Piggy.png");
-        userData.avatar = defaultAvatarURL;
-      }
-      return userData;
+      return userSnapshot.data();
     } else {
       console.log("No such document!");
       const defaultAvatarURL = await getDefaultAvatar("Piggy.png");

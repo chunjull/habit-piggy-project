@@ -7,21 +7,20 @@ function Rank() {
   const [isActiveTab, setIsActiveTab] = useState("habit");
   const [userHabitCounts, setUserHabitCounts] = useState([]);
   const [userSavingsCounts, setUserSavingsCounts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       const { startOfWeek, endOfWeek } = getStartAndEndOfWeek();
       if (isActiveTab === "habit") {
         const userHabitCounts = await calculateUserHabitCounts(startOfWeek, endOfWeek);
-        setUserHabitCounts(userHabitCounts);
+        const sortedUserHabitCounts = [...userHabitCounts].sort((a, b) => b.completedCount - a.completedCount);
+        setUserHabitCounts(sortedUserHabitCounts);
       } else if (isActiveTab === "savings") {
         const userSavingsCounts = await calculateUserSavingsCounts(startOfWeek, endOfWeek);
-        setUserSavingsCounts(userSavingsCounts);
+        const sortedUserSavingsCounts = [...userSavingsCounts].sort((a, b) => b.totalSavings - a.totalSavings);
+        setUserSavingsCounts(sortedUserSavingsCounts);
       }
-      setLoading(false);
     };
     fetchData();
   }, [isActiveTab]);
@@ -78,7 +77,8 @@ function Rank() {
   };
 
   const renderTopTenUsers = (userCounts, type) => {
-    const sortedUsers = userCounts.sort((a, b) => (type === "habit" ? b.completedCount - a.completedCount : b.totalSavings - a.totalSavings));
+    const sortedUsers = [...userCounts].sort((a, b) => (type === "habit" ? b.completedCount - a.completedCount : b.totalSavings - a.totalSavings));
+
     return sortedUsers.slice(0, 10).map((user, index) => (
       <li key={user.uid} className="relative flex justify-between items-center py-2 px-4 bg-black-50 dark:bg-black-800 rounded-2xl hover:bg-black-0 dark:hover:bg-black-600">
         <div className="flex items-center gap-3">
@@ -177,59 +177,51 @@ function Rank() {
           存款排行
         </li>
       </ul>
-      {loading ? (
-        <div className="flex justify-center items-center h-64 text-black dark:text-black-0">
-          <p>加載中...</p>
+      {isActiveTab === "habit" && (
+        <div className="relative space-y-4">
+          <div className="p-4 mt-4 bg-black-50 dark:bg-black-800 rounded-lg flex flex-col items-center">
+            <p className="text-center font-normal text-base leading-6 text-black dark:text-black-0">
+              在 {getStartAndEndOfWeek().startOfWeek.toLocaleDateString()}～{getStartAndEndOfWeek().endOfWeek.toLocaleDateString()} 期間
+            </p>
+            <div className="flex justify-center items-center gap-x-1 flex-wrap">
+              <p className="font-normal text-base leading-6 text-black dark:text-black-0">恭喜</p>
+              <p className="font-bold text-xl leading-7 text-black dark:text-black-0">{userHabitCounts[0]?.name || "No.1"}</p>
+              <p className="font-normal text-base leading-6 text-black dark:text-black-0">成為累積最多次習慣的玩家</p>
+            </div>
+          </div>
+          <div className="absolute -top-8 inset-x-0 text-primary flex items-center justify-center">
+            <rankIcons.TbCircleCheck className="w-8 h-8" />
+            <rankIcons.TbCircleCheckFilled className="w-8 h-8" />
+            <rankIcons.TbCircleCheck className="w-8 h-8" />
+          </div>
+          <ul className="space-y-4 pb-20">{renderTopTenUsers(userHabitCounts, "habit")}</ul>
+          <div className="fixed bottom-0 left-0 md:left-auto w-full max-w-full md:max-w-[1128px] mx-auto p-4 pb-[88px] bg-light dark:bg-black-950 md:p-0 md:py-4">
+            {renderCurrentUser(userHabitCounts, user, "habit")}
+          </div>
         </div>
-      ) : (
-        <>
-          {isActiveTab === "habit" && (
-            <div className="relative space-y-4">
-              <div className="p-4 mt-4 bg-black-50 dark:bg-black-800 rounded-lg flex flex-col items-center">
-                <p className="text-center font-normal text-base leading-6 text-black dark:text-black-0">
-                  在 {getStartAndEndOfWeek().startOfWeek.toLocaleDateString()}～{getStartAndEndOfWeek().endOfWeek.toLocaleDateString()} 期間
-                </p>
-                <div className="flex justify-center items-center gap-x-1 flex-wrap">
-                  <p className="font-normal text-base leading-6 text-black dark:text-black-0">恭喜</p>
-                  <p className="font-bold text-xl leading-7 text-black dark:text-black-0">{userHabitCounts[0]?.name || "No.1"}</p>
-                  <p className="font-normal text-base leading-6 text-black dark:text-black-0">成為累積最多次習慣的玩家</p>
-                </div>
-              </div>
-              <div className="absolute -top-8 inset-x-0 text-primary flex items-center justify-center">
-                <rankIcons.TbCircleCheck className="w-8 h-8" />
-                <rankIcons.TbCircleCheckFilled className="w-8 h-8" />
-                <rankIcons.TbCircleCheck className="w-8 h-8" />
-              </div>
-              <ul className="space-y-4 pb-20">{renderTopTenUsers(userHabitCounts, "habit")}</ul>
-              <div className="fixed bottom-0 left-0 md:left-auto w-full max-w-full md:max-w-[1128px] mx-auto p-4 pb-[88px] bg-light dark:bg-black-950 md:p-0 md:py-4">
-                {renderCurrentUser(userHabitCounts, user, "habit")}
-              </div>
+      )}
+      {isActiveTab === "savings" && (
+        <div className="relative space-y-4">
+          <div className="p-4 mt-4 bg-black-50 dark:bg-black-800 rounded-lg flex flex-col items-center">
+            <p className="text-center font-normal text-base leading-6 text-black dark:text-black-0">
+              在 {getStartAndEndOfWeek().startOfWeek.toLocaleDateString()}～{getStartAndEndOfWeek().endOfWeek.toLocaleDateString()} 期間
+            </p>
+            <div className="flex justify-center items-center gap-x-1 flex-wrap">
+              <p className="font-normal text-base leading-6 text-black dark:text-black-0">恭喜</p>
+              <p className="font-bold text-xl leading-7 text-black dark:text-black-0">{userSavingsCounts[0]?.name || "No.1"}</p>
+              <p className="font-normal text-base leading-6 text-black dark:text-black-0">成為累積最多存款的玩家</p>
             </div>
-          )}
-          {isActiveTab === "savings" && (
-            <div className="relative space-y-4">
-              <div className="p-4 mt-4 bg-black-50 dark:bg-black-800 rounded-lg flex flex-col items-center">
-                <p className="text-center font-normal text-base leading-6 text-black dark:text-black-0">
-                  在 {getStartAndEndOfWeek().startOfWeek.toLocaleDateString()}～{getStartAndEndOfWeek().endOfWeek.toLocaleDateString()} 期間
-                </p>
-                <div className="flex justify-center items-center gap-x-1 flex-wrap">
-                  <p className="font-normal text-base leading-6 text-black dark:text-black-0">恭喜</p>
-                  <p className="font-bold text-xl leading-7 text-black dark:text-black-0">{userSavingsCounts[0]?.name || "No.1"}</p>
-                  <p className="font-normal text-base leading-6 text-black dark:text-black-0">成為累積最多存款的玩家</p>
-                </div>
-              </div>
-              <div className="absolute -top-8 inset-x-0 text-primary flex items-center justify-center">
-                <rankIcons.TbCoin className="w-8 h-8" />
-                <rankIcons.TbCoinFilled className="w-8 h-8" />
-                <rankIcons.TbCoin className="w-8 h-8" />
-              </div>
-              <ul className="space-y-4 pb-20">{renderTopTenUsers(userSavingsCounts, "savings")}</ul>
-              <div className="fixed bottom-0 left-0 md:left-auto w-full max-w-full md:max-w-[1128px] mx-auto p-4 pb-[88px] bg-light dark:bg-black-950 md:p-0 md:py-4">
-                {renderCurrentUser(userSavingsCounts, user, "savings")}
-              </div>
-            </div>
-          )}
-        </>
+          </div>
+          <div className="absolute -top-8 inset-x-0 text-primary flex items-center justify-center">
+            <rankIcons.TbCoin className="w-8 h-8" />
+            <rankIcons.TbCoinFilled className="w-8 h-8" />
+            <rankIcons.TbCoin className="w-8 h-8" />
+          </div>
+          <ul className="space-y-4 pb-20">{renderTopTenUsers(userSavingsCounts, "savings")}</ul>
+          <div className="fixed bottom-0 left-0 md:left-auto w-full max-w-full md:max-w-[1128px] mx-auto p-4 pb-[88px] bg-light dark:bg-black-950 md:p-0 md:py-4">
+            {renderCurrentUser(userSavingsCounts, user, "savings")}
+          </div>
+        </div>
       )}
     </div>
   );

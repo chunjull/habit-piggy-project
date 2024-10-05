@@ -16,9 +16,7 @@ const AchievementModal = ({ handleAchievementModal, userAchievements, sortedAchi
               <li key={achievement.id}>
                 <div
                   className={`py-1 w-full flex justify-center items-center rounded-lg border-2 cursor-default ${
-                    isAchieved
-                      ? "opacity-100 border-primary-dark bg-gradient-to-br from-primary via-primary-dark to-alert"
-                      : "opacity-50 border-black-500 bg-black-100 text-black dark:border-black-300"
+                    isAchieved ? "opacity-100 border-primary-dark bg-light" : "opacity-50 border-black-500 bg-black-100 text-black dark:border-black-300"
                   }`}
                 >
                   <p

@@ -203,7 +203,7 @@ function Posts() {
         content: postContent,
         background: postBackground,
         userID: user.uid,
-        user: userProfile, // 包含使用者資料
+        user: userProfile,
         createdTime: { seconds: Math.floor(Date.now() / 1000) },
         likes: [],
         comments: [],
@@ -231,6 +231,19 @@ function Posts() {
         <p className="font-bold text-lg leading-6 text-black dark:text-black-0">{userData.name}</p>
       </div>
     );
+  };
+
+  const calculateTextColor = (background) => {
+    if (!background) return "black";
+
+    const rgb = background.match(/\d+/g);
+    const r = parseInt(rgb[0], 10);
+    const g = parseInt(rgb[1], 10);
+    const b = parseInt(rgb[2], 10);
+
+    const brightness = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+    return brightness > 0.5 ? "black" : "white";
   };
 
   return (
@@ -270,6 +283,7 @@ function Posts() {
               placeholder="輸入貼文內容..."
               value={postContent}
               onChange={(e) => setPostContent(e.target.value)}
+              style={{ color: calculateTextColor(postBackground) }}
             />
           </div>
           <div className="text-end">
@@ -300,10 +314,16 @@ function Posts() {
                   />
                 </div>
                 <div
-                  className={`w-full min-h-52 h-fit flex justify-center items-center p-4 rounded-xl ${!post.background ? "bg-slate-100" : ""}`}
-                  style={post.background ? { backgroundImage: `url(${post.background})`, backgroundSize: "cover", backgroundPosition: "center" } : {}}
+                  className={`w-full min-h-52 h-fit flex justify-center items-center p-4 rounded-xl font-normal text-base leading-6 md:text-xl md:leading-7 xl:text-2xl xl:leading-8 ${
+                    !post.background ? "bg-slate-100" : ""
+                  }`}
+                  style={
+                    post.background
+                      ? { backgroundImage: `url(${post.background})`, backgroundSize: "cover", backgroundPosition: "center", color: calculateTextColor(post.background) }
+                      : { color: calculateTextColor(post.background) }
+                  }
                 >
-                  <p className="font-normal text-base leading-6 md:text-xl md:leading-7 xl:text-2xl xl:leading-8">{post.content}</p>
+                  <p className="text-center">{post.content}</p>
                 </div>
                 <div className="flex gap-3">
                   <div className="flex gap-1">
@@ -405,6 +425,7 @@ function Posts() {
           user={user}
           isEditMode={true}
           handleUpdatePost={() => handleUpdate(currentPost.id, currentPost)}
+          calculateTextColor={calculateTextColor}
         />
       </Modal>
     </>

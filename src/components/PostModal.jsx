@@ -4,7 +4,7 @@ import { getPostBackgrounds, getUserProfile } from "../services/api";
 import BackgroundSelect from "./BackgroundSelect";
 import { modalIcons } from "../assets/icons";
 
-const PostModal = ({ postContent, setPostContent, postBackground, setPostBackground, handleAddPost, handlePostModal, user, isEditMode, handleUpdatePost }) => {
+const PostModal = ({ postContent, setPostContent, postBackground, setPostBackground, handleAddPost, handlePostModal, user, isEditMode, handleUpdatePost, calculateTextColor }) => {
   const [backgrounds, setBackgrounds] = useState([]);
   const [isBackgroundSelectOpen, setIsBackgroundSelectOpen] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -71,6 +71,7 @@ const PostModal = ({ postContent, setPostContent, postBackground, setPostBackgro
           placeholder="輸入貼文內容..."
           value={postContent}
           onChange={(e) => setPostContent(e.target.value)}
+          style={{ color: calculateTextColor(postBackground) }}
         />
       </div>
       <div className="flex gap-4">
@@ -97,6 +98,7 @@ PostModal.propTypes = {
   user: PropTypes.object,
   isEditMode: PropTypes.bool,
   handleUpdatePost: PropTypes.func,
+  calculateTextColor: PropTypes.func.isRequired,
 };
 
 export default PostModal;

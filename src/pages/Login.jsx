@@ -7,6 +7,7 @@ import { Navigate } from "react-router-dom";
 import { modalIcons } from "../assets/icons";
 import habitPiggyLoading1 from "../assets/images/habit-piggy-loading-1.svg";
 import habitPiggyLoading2 from "../assets/images/habit-piggy-loading-2.svg";
+import habitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
 
 function Login() {
   const {
@@ -21,16 +22,48 @@ function Login() {
   const [currentImage, setCurrentImage] = useState(habitPiggyLoading1);
   const { setUser } = useContext(AuthContext);
   const [loginError, setLoginError] = useState("");
+  const [dialogIndex, setDialogIndex] = useState(0);
+  const [isDialogComplete, setIsDialogComplete] = useState(false);
+
+  const dialog = {
+    0: "I'm Habit Piggy!",
+    1: "I'm Hungry!",
+    2: "Do Your Habits!",
+    3: "Or Feed me!",
+    4: "Feed me!",
+  };
 
   useEffect(() => {
     let interval;
     if (isLoading) {
       interval = setInterval(() => {
         setCurrentImage((prevImage) => (prevImage === habitPiggyLoading1 ? habitPiggyLoading2 : habitPiggyLoading1));
-      }, 500);
+      }, 250);
     }
     return () => clearInterval(interval);
   }, [isLoading]);
+
+  useEffect(() => {
+    const dialogKeys = Object.keys(dialog);
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index < dialogKeys.length) {
+        setDialogIndex(index);
+        index++;
+      } else {
+        clearInterval(interval);
+        setIsDialogComplete(true);
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleLogoClick = () => {
+    if (isDialogComplete) {
+      setDialogIndex(4); // "Feed me!"
+    }
+  };
 
   const handleRegister = async (data) => {
     const { email, registerPassword, account, name } = data;
@@ -89,43 +122,54 @@ function Login() {
       </ul>
 
       {isLogin ? (
-        <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col">
-          <label htmlFor="email" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
-            帳號
-          </label>
-          <input
-            type="text"
-            name="email"
-            id="email"
-            placeholder="請輸入帳號或 Email"
-            className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
-              errors.email ? "" : "mb-4"
-            }`}
-            {...register("email", { required: "Email 是必填項目" })}
-          />
-          {errors.email && <p className="text-alert pl-4 mt-1 mb-3">{errors.email.message}</p>}
+        <div className="relative min-h-screen">
+          <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col">
+            <label htmlFor="email" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
+              帳號
+            </label>
+            <input
+              type="text"
+              name="email"
+              id="email"
+              placeholder="請輸入帳號或 Email"
+              className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
+                errors.email ? "" : "mb-4"
+              }`}
+              {...register("email", { required: "Email 是必填項目" })}
+            />
+            {errors.email && <p className="text-alert pl-4 mt-1 mb-3">{errors.email.message}</p>}
 
-          <label htmlFor="loginPassword" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
-            密碼
-          </label>
-          <input
-            type="password"
-            name="loginPassword"
-            id="loginPassword"
-            placeholder="請輸入密碼"
-            className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
-              errors.loginPassword ? "" : "mb-8"
-            }`}
-            {...register("loginPassword", { required: "密碼是必填項目" })}
-          />
-          {errors.loginPassword && <p className="text-alert pl-4 mt-1 mb-3">{errors.loginPassword.message}</p>}
+            <label htmlFor="loginPassword" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
+              密碼
+            </label>
+            <input
+              type="password"
+              name="loginPassword"
+              id="loginPassword"
+              placeholder="請輸入密碼"
+              className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
+                errors.loginPassword ? "" : "mb-8"
+              }`}
+              {...register("loginPassword", { required: "密碼是必填項目" })}
+            />
+            {errors.loginPassword && <p className="text-alert pl-4 mt-1 mb-3">{errors.loginPassword.message}</p>}
 
-          {loginError && <p className="text-alert">{loginError}</p>}
+            {loginError && <p className="text-alert">{loginError}</p>}
 
-          <button type="submit" className="w-full rounded-lg bg-primary font-bold text-base leading-6 py-2 hover:bg-primary-dark">
-            登入帳號
-          </button>
-        </form>
+            <button type="submit" className="w-full rounded-lg bg-primary font-bold text-base leading-6 py-2 hover:bg-primary-dark">
+              登入帳號
+            </button>
+          </form>
+          <div className="flex justify-center absolute bottom-20 inset-x-0">
+            <div className="flex flex-col items-center">
+              <div className="bg-black-50 w-fit h-fit rounded-full relative mt-4">
+                <p className="text-black font-lobster font-normal text-2xl leading-8 md:text-4xl md:leading-tight py-4 px-8">{dialog[dialogIndex]}</p>
+                <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-20 before:w-0 before:h-0 before:border-l-0 before:border-r-[20px] before:border-t-[20px] before:border-l-transparent before:border-r-transparent before:border-t-black-50 before:z-20"></div>
+              </div>
+              <img src={habitPiggyLogo} alt="Habit Piggy" className="w-60 h-60 md:w-80 md:h-80" onClick={handleLogoClick} />
+            </div>
+          </div>
+        </div>
       ) : (
         <form onSubmit={handleSubmit(handleRegister)} className="flex flex-col">
           <label htmlFor="email" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">

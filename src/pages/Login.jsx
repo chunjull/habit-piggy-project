@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { registerUser, getEmailByAccount } from "../services/api";
+import { registerUser } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import { Navigate } from "react-router-dom";
 import { modalIcons } from "../assets/icons";
@@ -19,11 +19,11 @@ function Login() {
   const [loginError, setLoginError] = useState("");
 
   const handleRegister = async (data) => {
-    const { email, password, account, name } = data;
+    const { email, registerPassword, account, name } = data;
     try {
-      await registerUser(email, password, account, name);
+      await registerUser(email, registerPassword, account, name);
       const auth = getAuth();
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, registerPassword);
       setUser(userCredential.user);
       setIsLoggedIn(true);
     } catch (error) {
@@ -32,14 +32,10 @@ function Login() {
   };
 
   const handleLogin = async (data) => {
-    const { emailOrAccount, password } = data;
+    const { email, loginPassword } = data;
     const auth = getAuth();
     try {
-      let email = emailOrAccount;
-      if (!emailOrAccount.includes("@")) {
-        email = await getEmailByAccount(emailOrAccount);
-      }
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, loginPassword);
       setUser(userCredential.user);
       setIsLoggedIn(true);
     } catch (error) {
@@ -65,26 +61,26 @@ function Login() {
 
       {isLogin ? (
         <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col">
-          <label htmlFor="emailOrAccount" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
+          <label htmlFor="email" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
             帳號
           </label>
           <input
             type="text"
-            name="emailOrAccount"
-            id="emailOrAccount"
+            name="email"
+            id="email"
             placeholder="請輸入帳號或 Email"
             className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
-              errors.emailOrAccount ? "" : "mb-4"
+              errors.email ? "" : "mb-4"
             }`}
-            {...register("emailOrAccount", { required: "帳號是必填項目" })}
+            {...register("email", { required: "Email 是必填項目" })}
           />
-          {errors.emailOrAccount && <p className="text-alert pl-4 mt-1 mb-3">{errors.emailOrAccount.message}</p>}
+          {errors.email && <p className="text-alert pl-4 mt-1 mb-3">{errors.email.message}</p>}
 
           <label htmlFor="loginPassword" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
             密碼
           </label>
           <input
-            type="loginPassword"
+            type="password"
             name="loginPassword"
             id="loginPassword"
             placeholder="請輸入密碼"
@@ -140,7 +136,7 @@ function Login() {
           {errors.account && <p className="text-alert pl-4 mt-1 mb-3">{errors.account.message}</p>}
 
           <div className="relative group flex items-center mb-2">
-            <label htmlFor="password" className="font-bold text-base leading-6 text-black dark:text-black-0">
+            <label htmlFor="registerPassword" className="font-bold text-base leading-6 text-black dark:text-black-0">
               密碼
             </label>
             <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200 ml-2 inline-block" />
@@ -150,13 +146,13 @@ function Login() {
           </div>
           <input
             type="password"
-            name="password"
-            id="password"
+            name="registerPassword"
+            id="registerPassword"
             placeholder="請輸入密碼"
             className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
-              errors.password ? "" : "mb-4"
+              errors.registerPassword ? "" : "mb-4"
             }`}
-            {...register("password", {
+            {...register("registerPassword", {
               required: "密碼是必填項目",
               minLength: {
                 value: 6,
@@ -164,29 +160,29 @@ function Login() {
               },
             })}
           />
-          {errors.password && <p className="text-alert pl-4 mt-1 mb-3">{errors.password.message}</p>}
+          {errors.registerPassword && <p className="text-alert pl-4 mt-1 mb-3">{errors.registerPassword.message}</p>}
 
-          <label htmlFor="checkPassword" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
+          <label htmlFor="registerCheckPassword" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
             確認密碼
           </label>
           <input
             type="password"
-            name="checkPassword"
-            id="checkPassword"
+            name="registerCheckPassword"
+            id="registerCheckPassword"
             placeholder="請再次輸入密碼"
             className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
-              errors.checkPassword ? "" : "mb-4"
+              errors.registerCheckPassword ? "" : "mb-4"
             }`}
-            {...register("checkPassword", {
+            {...register("registerCheckPassword", {
               required: "確認密碼是必填項目",
-              validate: (value) => value === watch("password") || "密碼不一致",
+              validate: (value) => value === watch("registerPassword") || "密碼不一致",
               minLength: {
                 value: 6,
                 message: "密碼至少需要 6 個字符",
               },
             })}
           />
-          {errors.checkPassword && <p className="text-alert pl-4 mt-1 mb-3">{errors.checkPassword.message}</p>}
+          {errors.registerCheckPassword && <p className="text-alert pl-4 mt-1 mb-3">{errors.registerCheckPassword.message}</p>}
 
           <div className="relative group flex items-center mb-2">
             <label htmlFor="name" className="font-bold text-base leading-6 text-black dark:text-black-0">

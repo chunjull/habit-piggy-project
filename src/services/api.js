@@ -1,6 +1,6 @@
 import { db, storage } from "../utils/firebaseConfig";
 import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, collection, setDoc, getDoc, addDoc, getDocs, updateDoc, deleteDoc, Timestamp, query, orderBy } from "firebase/firestore";
+import { doc, collection, setDoc, getDoc, addDoc, getDocs, updateDoc, deleteDoc, Timestamp, query, orderBy, where } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 
 const auth = getAuth();
@@ -32,6 +32,23 @@ async function registerUser(email, password, account, name) {
     console.log("Empty habits sub-collection created for user ID: ", user.uid);
   } catch (error) {
     console.error("Error creating user: ", error.code, error.message);
+  }
+}
+
+async function getEmailByAccount(account) {
+  try {
+    const usersCollectionRef = collection(db, "users");
+    const q = query(usersCollectionRef, where("account", "==", account));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const userDoc = querySnapshot.docs[0];
+      return userDoc.data().email;
+    } else {
+      throw new Error("No user found with this account");
+    }
+  } catch (error) {
+    console.error("Error getting email by account: ", error.code, error.message);
+    throw error;
   }
 }
 
@@ -542,6 +559,7 @@ async function removeBadge(uid, category) {
 
 export {
   registerUser,
+  getEmailByAccount,
   logoutUser,
   updateUserProfile,
   getUserProfile,

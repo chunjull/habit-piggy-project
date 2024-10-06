@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { registerUser } from "../services/api";
+import { registerUser, getEmailByAccount } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import { Navigate } from "react-router-dom";
 import { modalIcons } from "../assets/icons";
@@ -32,9 +32,13 @@ function Login() {
   };
 
   const handleLogin = async (data) => {
-    const { email, password } = data;
+    const { emailOrAccount, password } = data;
     const auth = getAuth();
     try {
+      let email = emailOrAccount;
+      if (!emailOrAccount.includes("@")) {
+        email = await getEmailByAccount(emailOrAccount);
+      }
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       setUser(userCredential.user);
       setIsLoggedIn(true);
@@ -61,35 +65,35 @@ function Login() {
 
       {isLogin ? (
         <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col">
-          <label htmlFor="email" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
+          <label htmlFor="emailOrAccount" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
             帳號
           </label>
           <input
             type="text"
-            name="email"
-            id="email"
+            name="emailOrAccount"
+            id="emailOrAccount"
             placeholder="請輸入帳號或 Email"
             className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
-              errors.email ? "" : "mb-4"
+              errors.emailOrAccount ? "" : "mb-4"
             }`}
-            {...register("email", { required: "Email 是必填項目" })}
+            {...register("emailOrAccount", { required: "帳號是必填項目" })}
           />
-          {errors.email && <p className="text-alert pl-4 mt-1 mb-3">{errors.email.message}</p>}
+          {errors.emailOrAccount && <p className="text-alert pl-4 mt-1 mb-3">{errors.emailOrAccount.message}</p>}
 
-          <label htmlFor="password" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
+          <label htmlFor="loginPassword" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
             密碼
           </label>
           <input
-            type="password"
-            name="password"
-            id="password"
+            type="loginPassword"
+            name="loginPassword"
+            id="loginPassword"
             placeholder="請輸入密碼"
             className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
-              errors.password ? "" : "mb-8"
+              errors.loginPassword ? "" : "mb-8"
             }`}
-            {...register("password", { required: "密碼是必填項目" })}
+            {...register("loginPassword", { required: "密碼是必填項目" })}
           />
-          {errors.password && <p className="text-alert pl-4 mt-1 mb-3">{errors.password.message}</p>}
+          {errors.loginPassword && <p className="text-alert pl-4 mt-1 mb-3">{errors.loginPassword.message}</p>}
 
           {loginError && <p className="text-alert">{loginError}</p>}
 

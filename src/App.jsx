@@ -8,7 +8,7 @@ import Member from "./pages/Member";
 import Error from "./pages/Error";
 import Layout from "./components/Layout";
 import { AuthProvider } from "./utils/AuthContext";
-// import { AchievementProvider } from "./utils/AchievementsContext";
+import PrivateRoute from "./utils/PrivateRoute";
 
 function App() {
   return (
@@ -18,16 +18,50 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Login />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/savings" element={<Savings />} />
-            <Route path="/rank" element={<Rank />} />
-            <Route path="/posts" element={<Posts />} />
-            <Route path="/member" element={<Member />} />
+            <Route
+              path="/home"
+              element={
+                <PrivateRoute>
+                  <Home />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/savings"
+              element={
+                <PrivateRoute>
+                  <Savings />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/rank"
+              element={
+                <PrivateRoute>
+                  <Rank />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/posts"
+              element={
+                <PrivateRoute>
+                  <Posts />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/member"
+              element={
+                <PrivateRoute>
+                  <Member />
+                </PrivateRoute>
+              }
+            />
             <Route path="*" element={<Error />} />
           </Routes>
         </Layout>
       </Router>
-      {/* </AchievementProvider> */}
     </AuthProvider>
   );
 }

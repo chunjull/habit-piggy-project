@@ -5,7 +5,7 @@ import { ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
 
 const auth = getAuth();
 
-async function registerUser(email, password) {
+async function registerUser(email, password, account, name) {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
@@ -15,9 +15,10 @@ async function registerUser(email, password) {
     await setDoc(userDocRef, {
       uid: user.uid,
       email: user.email,
-      name: "",
-      introduction: "",
-      avatar: "",
+      account: account,
+      name: name,
+      introduction: "我要養成好習慣！",
+      avatar: "https://firebasestorage.googleapis.com/v0/b/habit-piggy-project.appspot.com/o/default_avatars%2FPiggy.png?alt=media&token=abb71b06-4b8d-41ce-b087-f3aa0d3e86f9",
       createdTime: Timestamp.now(),
       levelPoints: 0,
       isAcceptReminder: false,

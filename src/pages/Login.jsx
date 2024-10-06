@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { registerUser } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
@@ -6,30 +7,39 @@ import { Navigate } from "react-router-dom";
 import { modalIcons } from "../assets/icons";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isRegister, setIsRegister] = useState(true);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const [isLogin, setIsLogin] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { setUser } = useContext(AuthContext);
+  const [loginError, setLoginError] = useState("");
 
-  const handleRegister = async () => {
-    await registerUser(email, password);
-    alert("Registered successfully");
-    setIsRegister(true);
-    setEmail("");
-    setPassword("");
+  const handleRegister = async (data) => {
+    const { email, password, account, name } = data;
+    try {
+      await registerUser(email, password, account, name);
+      const auth = getAuth();
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      setUser(userCredential.user);
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.error("Error registering user: ", error.code, error.message);
+    }
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (data) => {
+    const { email, password } = data;
     const auth = getAuth();
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       setUser(userCredential.user);
       setIsLoggedIn(true);
-      console.log("Login with", email, password);
-      setEmail("");
-      setPassword("");
     } catch (error) {
+      setLoginError("帳號或密碼錯誤");
       console.error("Error logging in: ", error.code, error.message);
     }
   };
@@ -41,19 +51,16 @@ function Login() {
   return (
     <div className="p-4 md:py-10 space-y-4">
       <ul className="grid grid-cols-2 w-full">
-        <li className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center ${isRegister ? "bg-primary" : "bg-black-50"}`} onClick={() => setIsRegister(true)}>
+        <li className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center ${isLogin ? "bg-primary" : "bg-black-50"}`} onClick={() => setIsLogin(true)}>
           登入帳號
         </li>
-        <li
-          className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center ${!isRegister ? "bg-primary" : "bg-black-50"}`}
-          onClick={() => setIsRegister(false)}
-        >
+        <li className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center ${!isLogin ? "bg-primary" : "bg-black-50"}`} onClick={() => setIsLogin(false)}>
           註冊帳號
         </li>
       </ul>
 
-      {isRegister ? (
-        <div className="flex flex-col">
+      {isLogin ? (
+        <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col">
           <label htmlFor="email" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
             帳號
           </label>
@@ -62,10 +69,13 @@ function Login() {
             name="email"
             id="email"
             placeholder="請輸入帳號或 Email"
-            className="py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 mb-4 dark:bg-black-100 placeholder-black"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
+              errors.email ? "" : "mb-4"
+            }`}
+            {...register("email", { required: "Email 是必填項目" })}
           />
+          {errors.email && <p className="text-alert pl-4 mt-1 mb-3">{errors.email.message}</p>}
+
           <label htmlFor="password" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
             密碼
           </label>
@@ -74,16 +84,21 @@ function Login() {
             name="password"
             id="password"
             placeholder="請輸入密碼"
-            className="py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 mb-4 dark:bg-black-100 placeholder-black"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
+              errors.password ? "" : "mb-8"
+            }`}
+            {...register("password", { required: "密碼是必填項目" })}
           />
-          <button className="w-full rounded-lg bg-primary font-bold text-base leading-6 py-2 hover:bg-primary-dark" onClick={handleLogin}>
+          {errors.password && <p className="text-alert pl-4 mt-1 mb-3">{errors.password.message}</p>}
+
+          {loginError && <p className="text-alert">{loginError}</p>}
+
+          <button type="submit" className="w-full rounded-lg bg-primary font-bold text-base leading-6 py-2 hover:bg-primary-dark">
             登入帳號
           </button>
-        </div>
+        </form>
       ) : (
-        <div className="flex flex-col">
+        <form onSubmit={handleSubmit(handleRegister)} className="flex flex-col">
           <label htmlFor="email" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
             Email
           </label>
@@ -92,17 +107,20 @@ function Login() {
             name="email"
             id="email"
             placeholder="請輸入 Email"
-            className="py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 mb-4 dark:bg-black-100 placeholder-black"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
+              errors.email ? "" : "mb-4"
+            }`}
+            {...register("email", { required: "Email 是必填項目" })}
           />
+          {errors.email && <p className="text-alert pl-4 mt-1 mb-3">{errors.email.message}</p>}
+
           <div className="relative group flex items-center mb-2">
             <label htmlFor="account" className="font-bold text-base leading-6 text-black dark:text-black-0">
               帳號
             </label>
             <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200 ml-2 inline-block" />
             <span className="absolute -bottom-1 left-[72px] transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
-              帳號必須是英文及數字，且不可用符號
+              帳號可以是英文、數字或符號的組合
             </span>
           </div>
           <input
@@ -110,15 +128,20 @@ function Login() {
             name="account"
             id="account"
             placeholder="請輸入帳號"
-            className="py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 mb-4 dark:bg-black-100 placeholder-black"
+            className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
+              errors.account ? "" : "mb-4"
+            }`}
+            {...register("account", { required: "帳號是必填項目" })}
           />
+          {errors.account && <p className="text-alert pl-4 mt-1 mb-3">{errors.account.message}</p>}
+
           <div className="relative group flex items-center mb-2">
             <label htmlFor="password" className="font-bold text-base leading-6 text-black dark:text-black-0">
               密碼
             </label>
             <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200 ml-2 inline-block" />
             <span className="absolute -bottom-1 left-[72px] transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
-              密碼可以是英文、數字或符號的組合
+              密碼可以是英文、數字或符號的組合，至少需要 6 個字符
             </span>
           </div>
           <input
@@ -126,27 +149,48 @@ function Login() {
             name="password"
             id="password"
             placeholder="請輸入密碼"
-            className="py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 mb-4 dark:bg-black-100 placeholder-black"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
+              errors.password ? "" : "mb-4"
+            }`}
+            {...register("password", {
+              required: "密碼是必填項目",
+              minLength: {
+                value: 6,
+                message: "密碼至少需要 6 個字符",
+              },
+            })}
           />
+          {errors.password && <p className="text-alert pl-4 mt-1 mb-3">{errors.password.message}</p>}
+
           <label htmlFor="checkPassword" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
             確認密碼
           </label>
           <input
-            type="checkPassword"
+            type="password"
             name="checkPassword"
             id="checkPassword"
             placeholder="請再次輸入密碼"
-            className="py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 mb-4 dark:bg-black-100 placeholder-black"
+            className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
+              errors.checkPassword ? "" : "mb-4"
+            }`}
+            {...register("checkPassword", {
+              required: "確認密碼是必填項目",
+              validate: (value) => value === watch("password") || "密碼不一致",
+              minLength: {
+                value: 6,
+                message: "密碼至少需要 6 個字符",
+              },
+            })}
           />
+          {errors.checkPassword && <p className="text-alert pl-4 mt-1 mb-3">{errors.checkPassword.message}</p>}
+
           <div className="relative group flex items-center mb-2">
             <label htmlFor="name" className="font-bold text-base leading-6 text-black dark:text-black-0">
               會員名稱
             </label>
             <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200 ml-2 inline-block" />
             <span className="absolute -bottom-1 left-[104px] transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
-              會員名稱可以是中文、英文、數字或符號，但不得超過九個字
+              會員名稱可以是中文、英文、數字或符號，但不得超過 9 個字
             </span>
           </div>
           <input
@@ -154,12 +198,23 @@ function Login() {
             name="name"
             id="name"
             placeholder="請輸入會員名稱"
-            className="py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 mb-8 dark:bg-black-100 placeholder-black"
+            className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
+              errors.name ? "" : "mb-8"
+            }`}
+            {...register("name", {
+              required: "會員名稱是必填項目",
+              maxLength: {
+                value: 9,
+                message: "會員名稱不得超過 9 個字符",
+              },
+            })}
           />
-          <button className="w-full rounded-lg bg-primary font-bold text-base leading-6 py-2 hover:bg-primary-dark" onClick={handleRegister}>
+          {errors.name && <p className="text-alert pl-4 mt-1 mb-3">{errors.name.message}</p>}
+
+          <button type="submit" className="w-full rounded-lg bg-primary font-bold text-base leading-6 py-2 hover:bg-primary-dark">
             註冊帳號
           </button>
-        </div>
+        </form>
       )}
     </div>
   );

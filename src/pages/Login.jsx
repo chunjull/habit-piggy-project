@@ -1,10 +1,12 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { registerUser } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import { Navigate } from "react-router-dom";
 import { modalIcons } from "../assets/icons";
+import habitPiggyLoading1 from "../assets/images/habit-piggy-loading-1.svg";
+import habitPiggyLoading2 from "../assets/images/habit-piggy-loading-2.svg";
 
 function Login() {
   const {
@@ -15,8 +17,20 @@ function Login() {
   } = useForm();
   const [isLogin, setIsLogin] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentImage, setCurrentImage] = useState(habitPiggyLoading1);
   const { setUser } = useContext(AuthContext);
   const [loginError, setLoginError] = useState("");
+
+  useEffect(() => {
+    let interval;
+    if (isLoading) {
+      interval = setInterval(() => {
+        setCurrentImage((prevImage) => (prevImage === habitPiggyLoading1 ? habitPiggyLoading2 : habitPiggyLoading1));
+      }, 500);
+    }
+    return () => clearInterval(interval);
+  }, [isLoading]);
 
   const handleRegister = async (data) => {
     const { email, registerPassword, account, name } = data;
@@ -25,7 +39,10 @@ function Login() {
       const auth = getAuth();
       const userCredential = await signInWithEmailAndPassword(auth, email, registerPassword);
       setUser(userCredential.user);
-      setIsLoggedIn(true);
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoggedIn(true);
+      }, 2000);
     } catch (error) {
       console.error("Error registering user: ", error.code, error.message);
     }
@@ -37,7 +54,10 @@ function Login() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, loginPassword);
       setUser(userCredential.user);
-      setIsLoggedIn(true);
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoggedIn(true);
+      }, 2000);
     } catch (error) {
       setLoginError("帳號或密碼錯誤");
       console.error("Error logging in: ", error.code, error.message);
@@ -46,6 +66,15 @@ function Login() {
 
   if (isLoggedIn) {
     return <Navigate to="/home" />;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen gap-4">
+        <img src={currentImage} alt="loading" className="w-40 h-40" />
+        <p className="font-normal text-base text-black dark:text-black-0">準備好培養習慣了嗎？</p>
+      </div>
+    );
   }
 
   return (

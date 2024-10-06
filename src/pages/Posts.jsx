@@ -22,6 +22,7 @@ function Posts() {
   const [postContent, setPostContent] = useState("");
   const [postBackground, setPostBackground] = useState("");
   const [backgrounds, setBackgrounds] = useState([]);
+  const [isHighlighted, setIsHighlighted] = useState(false);
   const { user } = useContext(AuthContext);
   const [userData, setUserData] = useState(null);
 
@@ -251,6 +252,10 @@ function Posts() {
     return brightness > 0.5 ? "black" : "white";
   };
 
+  const handleClick = () => {
+    setIsHighlighted(true);
+  };
+
   return (
     <>
       <div className="p-4 md:py-10 space-y-4">
@@ -260,7 +265,10 @@ function Posts() {
             <CustomSelect options={options} value={filter} onChange={setFilter} />
           </div>
         </div>
-        <div className="border border-black-500 bg-black-50 dark:bg-black-800 p-4 rounded-xl space-y-2">
+        <div
+          className={`border ${isHighlighted ? "border-primary-dark drop-shadow-md" : "border-transparent"} bg-black-50 dark:bg-black-800 p-4 rounded-xl space-y-2 md:space-y-3`}
+          onClick={handleClick}
+        >
           {renderUserDetails()}
           <div className="flex items-center gap-4">
             <p className="font-normal text-base leading-6 text-black dark:text-black-0 text-nowrap">選擇背景顏色</p>
@@ -297,7 +305,7 @@ function Posts() {
             />
           </div>
           <div className="text-end">
-            <button className="py-1 px-3 w-fit bg-primary rounded-lg font-medium text-sm leading-5 hover:bg-primary-dark" onClick={handleAddPost}>
+            <button className="py-1 px-3 w-fit bg-primary rounded-lg font-medium text-sm leading-5 md:text-base md:leading-6 hover:bg-primary-dark" onClick={handleAddPost}>
               發佈貼文
             </button>
           </div>

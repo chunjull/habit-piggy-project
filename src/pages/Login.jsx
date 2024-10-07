@@ -61,7 +61,7 @@ function Login() {
 
   const handleLogoClick = () => {
     if (isDialogComplete) {
-      setDialogIndex(4); // "Feed me!"
+      setDialogIndex(4);
     }
   };
 
@@ -82,10 +82,10 @@ function Login() {
   };
 
   const handleLogin = async (data) => {
-    const { email, loginPassword } = data;
+    const { loginEmail, loginPassword } = data;
     const auth = getAuth();
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, loginPassword);
+      const userCredential = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
       setUser(userCredential.user);
       setIsLoading(true);
       setTimeout(() => {
@@ -124,20 +124,20 @@ function Login() {
       {isLogin ? (
         <div className="relative min-h-screen">
           <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col">
-            <label htmlFor="email" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
+            <label htmlFor="loginEmail" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
               帳號
             </label>
             <input
               type="text"
-              name="email"
-              id="email"
+              name="loginEmail"
+              id="loginEmail"
               placeholder="請輸入帳號或 Email"
               className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
-                errors.email ? "" : "mb-4"
+                errors.loginEmail ? "" : "mb-4"
               }`}
-              {...register("email", { required: "Email 是必填項目" })}
+              {...register("loginEmail", { required: "Email 是必填項目" })}
             />
-            {errors.email && <p className="text-alert pl-4 mt-1 mb-3">{errors.email.message}</p>}
+            {errors.loginEmail && <p className="text-alert pl-4 mt-1 mb-3">{errors.loginEmail.message}</p>}
 
             <label htmlFor="loginPassword" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
               密碼
@@ -192,7 +192,7 @@ function Login() {
               帳號
             </label>
             <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200 ml-2 inline-block" />
-            <span className="absolute -bottom-1 left-[72px] transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
+            <span className="absolute -bottom-1 left-[72px] transform -translate-x-0 w-fit p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark whitespace-normal break-words">
               帳號可以是英文、數字或符號的組合
             </span>
           </div>
@@ -213,7 +213,7 @@ function Login() {
               密碼
             </label>
             <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200 ml-2 inline-block" />
-            <span className="absolute -bottom-1 left-[72px] transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
+            <span className="absolute -bottom-1 left-[72px] transform -translate-x-0 w-fit p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark whitespace-normal break-words">
               密碼可以是英文、數字或符號的組合，至少需要 6 個字符
             </span>
           </div>
@@ -262,8 +262,8 @@ function Login() {
               會員名稱
             </label>
             <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200 ml-2 inline-block" />
-            <span className="absolute -bottom-1 left-[104px] transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
-              會員名稱可以是中文、英文、數字或符號，但不得超過 9 個字
+            <span className="absolute -bottom-1 left-[104px] transform -translate-x-0 w-fit p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark whitespace-normal break-words">
+              會員名稱可以是中文、英文、數字或符號，但不得超過 9 個字符
             </span>
           </div>
           <input

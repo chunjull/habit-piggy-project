@@ -132,7 +132,7 @@ const EditModal = ({
         <div className="relative flex items-center gap-1 group">
           <label htmlFor="category" className="text-nowrap text-black dark:text-black-0 group-hover:relative">
             習慣類別
-            <span className="absolute -bottom-1 left-24 transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
+            <span className="absolute -bottom-1 left-24 transform -translate-x-0 w-fit p-2 bg-primary-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
               你想要培養什麼類別的習慣呢？
             </span>
           </label>
@@ -144,8 +144,8 @@ const EditModal = ({
         <div className="relative flex items-center gap-1 group">
           <label htmlFor="frequency" className="text-nowrap text-black dark:text-black-0 group-hover:relative">
             習慣頻率
-            <span className="absolute -bottom-1 left-24 transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
-              你想要每天、每週還是在特定日期培養習慣呢？
+            <span className="absolute -bottom-1 left-24 transform -translate-x-0 w-fit p-2 bg-primary-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
+              你想要怎麼安排習慣頻率呢？
             </span>
           </label>
           <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200" />
@@ -213,7 +213,7 @@ const EditModal = ({
         <div className="relative flex items-center gap-1 group">
           <label htmlFor="type" className="text-nowrap text-black dark:text-black-0 group-hover:relative">
             習慣類型
-            <span className="absolute -bottom-1 left-24 transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
+            <span className="absolute -bottom-1 left-24 transform -translate-x-0 w-fit p-2 bg-primary-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
               你想要養成還是戒除呢？
             </span>
           </label>
@@ -248,8 +248,8 @@ const EditModal = ({
         <div className="relative flex items-center gap-1 group">
           <label htmlFor="amount" className="text-nowrap text-black dark:text-black-0 group-hover:relative">
             習慣罰款
-            <span className="absolute -bottom-1 left-24 transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
-              如果沒有完成習慣，你願意支付多少罰款呢？
+            <span className="absolute -bottom-1 left-24 transform -translate-x-0 w-fit p-2 bg-primary-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
+              如果沒完成習慣，你想支付多少罰款呢？
             </span>
           </label>
           <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200" />
@@ -273,8 +273,8 @@ const EditModal = ({
         <div className="relative flex items-center gap-1 group">
           <label htmlFor="time" className="text-nowrap text-black dark:text-black-0 group-hover:relative">
             養成期間
-            <span className="absolute -bottom-1 left-24 transform -translate-x-0 w-max p-2 bg-primary-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
-              你想要從哪一天開始、哪一天結束培養這個習慣呢？
+            <span className="absolute -bottom-1 left-24 transform -translate-x-0 w-fit p-2 bg-primary-dark text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark">
+              你想要在什麼時候培養這個習慣呢？
             </span>
           </label>
           <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200" />

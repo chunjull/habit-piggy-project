@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { addPost, getAllPosts, getUserProfile, addComment, getComments, updateComment, deleteComment, updatePost, deletePost, addLike, removeLike, getPostBackgrounds } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import { postIcons } from "../assets/icons";
@@ -25,6 +25,8 @@ function Posts() {
   const [isHighlighted, setIsHighlighted] = useState(false);
   const { user } = useContext(AuthContext);
   const [userData, setUserData] = useState(null);
+
+  const postRef = useRef(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -256,6 +258,19 @@ function Posts() {
     setIsHighlighted(true);
   };
 
+  const handleClickOutside = (event) => {
+    if (postRef.current && !postRef.current.contains(event.target)) {
+      setIsHighlighted(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
       <div className="p-4 md:py-10 space-y-4">
@@ -265,49 +280,49 @@ function Posts() {
             <CustomSelect options={options} value={filter} onChange={setFilter} />
           </div>
         </div>
-        <div
-          className={`border ${isHighlighted ? "border-primary-dark drop-shadow-md" : "border-transparent"} bg-black-50 dark:bg-black-800 p-4 rounded-xl space-y-2 md:space-y-3`}
-          onClick={handleClick}
-        >
-          {renderUserDetails()}
-          <div className="flex items-center gap-4">
-            <p className="font-normal text-base leading-6 text-black dark:text-black-0 text-nowrap">選擇背景顏色</p>
-            <div className="flex gap-4 overflow-scroll">
-              {backgrounds.map((url, index) => (
-                <button
-                  key={index}
-                  className="rounded w-6 h-6 flex-shrink-0 flex-grow-0"
-                  style={{ backgroundImage: `url(${url})`, backgroundSize: "cover", backgroundPosition: "center" }}
-                  onClick={() => setPostBackground(url)}
-                ></button>
-              ))}
+        <div className="relative">
+          <div ref={postRef} className="relative bg-black-50 dark:bg-black-800 p-4 rounded-xl space-y-2 md:space-y-3 z-0" onClick={handleClick}>
+            <div className={`absolute inset-0 rounded-xl -z-10 ${isHighlighted ? "block" : "hidden"}`} style={{ boxShadow: "0 0 8px 1px rgba(250, 173, 20, 1)" }}></div>
+            {renderUserDetails()}
+            <div className="flex items-center gap-4">
+              <p className="font-normal text-base leading-6 text-black dark:text-black-0 text-nowrap">選擇背景顏色</p>
+              <div className="flex gap-4 overflow-scroll">
+                {backgrounds.map((url, index) => (
+                  <button
+                    key={index}
+                    className="rounded w-6 h-6 flex-shrink-0 flex-grow-0"
+                    style={{ backgroundImage: `url(${url})`, backgroundSize: "cover", backgroundPosition: "center" }}
+                    onClick={() => setPostBackground(url)}
+                  ></button>
+                ))}
+              </div>
             </div>
-          </div>
-          <div
-            className="w-full min-h-40 h-fit border rounded-xl bg-black-100 p-2 overflow-auto flex justify-center items-center"
-            style={{
-              backgroundImage: `url(${postBackground})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          >
-            <textarea
-              className="w-full h-fit bg-transparent border-none overflow-hidden resize-none outline-none text-center placeholder-black font-normal text-base leading-6 md:text-xl md:leading-7 xl:text-2xl xl:leading-8"
-              placeholder="輸入貼文內容..."
-              value={postContent}
-              onChange={(e) => {
-                setPostContent(e.target.value);
-                e.target.style.height = "auto";
-                e.target.style.height = `${e.target.scrollHeight}px`;
+            <div
+              className="w-full min-h-40 h-fit border rounded-xl bg-black-100 p-2 overflow-auto flex justify-center items-center"
+              style={{
+                backgroundImage: `url(${postBackground})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
               }}
-              style={{ color: calculateTextColor(postBackground) }}
-              rows="1"
-            />
-          </div>
-          <div className="text-end">
-            <button className="py-1 px-3 w-fit bg-primary rounded-lg font-medium text-sm leading-5 md:text-base md:leading-6 hover:bg-primary-dark" onClick={handleAddPost}>
-              發佈貼文
-            </button>
+            >
+              <textarea
+                className="w-full h-fit bg-transparent border-none overflow-hidden resize-none outline-none text-center placeholder-black font-normal text-base leading-6 md:text-xl md:leading-7 xl:text-2xl xl:leading-8"
+                placeholder="輸入貼文內容..."
+                value={postContent}
+                onChange={(e) => {
+                  setPostContent(e.target.value);
+                  e.target.style.height = "auto";
+                  e.target.style.height = `${e.target.scrollHeight}px`;
+                }}
+                style={{ color: calculateTextColor(postBackground) }}
+                rows="1"
+              />
+            </div>
+            <div className="text-end">
+              <button className="py-1 px-3 w-fit bg-primary rounded-lg font-medium text-sm leading-5 md:text-base md:leading-6 hover:bg-primary-dark" onClick={handleAddPost}>
+                發佈貼文
+              </button>
+            </div>
           </div>
         </div>
         <ul className="space-y-4">

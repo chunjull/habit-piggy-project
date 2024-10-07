@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
+import { useForm } from "react-hook-form";
 import { modalIcons, settingIcons } from "../assets/icons";
 import CustomSelect from "./CustomSelect";
 import { AuthContext } from "../utils/AuthContext";
@@ -12,6 +13,20 @@ const SettingModal = ({ profileData, handleSettingModal, handleSaveAndClose }) =
   useEffect(() => {
     setLocalProfileData(profileData);
   }, [profileData]);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm({
+    defaultValues: {
+      name: localProfileData.name || "",
+      introduction: localProfileData.introduction || "",
+    },
+  });
+
+  const nameValue = watch("name");
 
   const isDarkMode = localProfileData.isDarkMode ? "true" : "false";
   const isAcceptReminder = localProfileData.isAcceptReminder ? "true" : "false";
@@ -54,21 +69,21 @@ const SettingModal = ({ profileData, handleSettingModal, handleSaveAndClose }) =
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = async (data) => {
     try {
       if (localProfileData.avatarFile) {
         const avatarUrl = await uploadAvatar(user.uid, localProfileData.avatarFile);
         localProfileData.avatar = avatarUrl;
       }
-      await updateUserProfile(user.uid, localProfileData);
-      handleSaveAndClose(localProfileData);
+      await updateUserProfile(user.uid, { ...localProfileData, ...data });
+      handleSaveAndClose({ ...localProfileData, ...data });
     } catch (error) {
       console.error("更新資料失敗", error);
     }
   };
 
   return (
-    <div className="space-y-4">
+    <form onSubmit={handleSubmit(handleSave)} className="space-y-4">
       <div className="flex justify-between items-center">
         <h3 className="font-bold text-lg leading-7 text-black dark:text-black-0">設定</h3>
         <modalIcons.TbX className="w-8 h-8 cursor-pointer hover:text-alert text-black dark:text-black-0" onClick={handleSettingModal} />
@@ -96,20 +111,35 @@ const SettingModal = ({ profileData, handleSettingModal, handleSaveAndClose }) =
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-1">
-        <label htmlFor="name" className="mb-1 font-normal text-base leading-6 text-black dark:text-black-0">
-          會員名稱
-        </label>
+      <div>
+        <div className="relative group flex items-center mb-2">
+          <label htmlFor="name" className="font-bold text-base leading-6 text-black dark:text-black-0">
+            會員名稱
+          </label>
+          <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200 ml-2 inline-block" />
+          <span className="absolute -bottom-1 left-[104px] transform -translate-x-0 w-fit p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:-bottom-2 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark whitespace-normal break-words">
+            會員名稱可以是中文、英文、數字或符號，但不得超過 9 個字符
+          </span>
+        </div>
         <input
           type="text"
           name="name"
           id="name"
-          placeholder="會員名稱"
-          className="px-4 py-1 w-full rounded border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6"
-          value={localProfileData.name || ""}
-          onChange={handleLocalChange}
+          placeholder="請輸入會員名稱"
+          className={`px-4 py-1 w-full rounded border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 ${
+            errors.name || nameValue.length > 9 ? "mb-1" : "mb-4"
+          }`}
+          {...register("name", {
+            required: "會員名稱是必填項目",
+            maxLength: {
+              value: 9,
+              message: "會員名稱不得超過 9 個字符",
+            },
+          })}
         />
+        {(errors.name || nameValue.length > 9) && <p className="text-alert dark:text-red-500 mt-1 mb-3">{errors.name ? errors.name.message : "會員名稱不得超過 9 個字符"}</p>}
       </div>
+
       <div className="flex flex-col gap-1">
         <label htmlFor="introduction" className="mb-1 font-normal text-base leading-6 text-black dark:text-black-0">
           自我介紹
@@ -120,8 +150,7 @@ const SettingModal = ({ profileData, handleSettingModal, handleSaveAndClose }) =
           id="introduction"
           placeholder="自我介紹"
           className="px-4 py-1 w-full rounded border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6"
-          value={localProfileData.introduction || ""}
-          onChange={handleLocalChange}
+          {...register("introduction")}
         />
       </div>
       <div className="border"></div>
@@ -137,10 +166,10 @@ const SettingModal = ({ profileData, handleSettingModal, handleSaveAndClose }) =
           <CustomSelect options={reminderOptions} value={isAcceptReminder} onChange={(value) => setLocalProfileData((prevData) => ({ ...prevData, isAcceptReminder: value === "true" }))} />
         </div>
       </div>
-      <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleSave}>
+      <button type="submit" className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark">
         儲存
       </button>
-    </div>
+    </form>
   );
 };
 

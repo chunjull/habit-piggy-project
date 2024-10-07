@@ -19,6 +19,7 @@ import {
   TbPlus,
   TbX,
   TbInfoCircle,
+  TbAlertCircle,
   TbChevronDown,
   TbHeart,
   TbHeartFilled,
@@ -73,6 +74,7 @@ export const habitAddIcon = {
 export const modalIcons = {
   TbX,
   TbInfoCircle,
+  TbAlertCircle,
 };
 
 export const dropdownIcon = {

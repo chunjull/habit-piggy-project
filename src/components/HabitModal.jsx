@@ -20,6 +20,7 @@ const HabitModal = ({
   setShowMonthCalendar,
 }) => {
   const [selectedDays, setSelectedDays] = useState(habitData.frequency.days || []);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     setSelectedDays(habitData.frequency.days || []);
@@ -47,6 +48,39 @@ const HabitModal = ({
     setShowMonthCalendar(true);
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!habitData.title) newErrors.title = "請輸入習慣名稱";
+    if (!habitData.category && habitData.category !== 0) newErrors.category = "請選擇習慣類別";
+    if (!habitData.frequency.type) newErrors.frequency = "請選擇習慣頻率";
+    if (habitData.frequency.type === "specificDays" && selectedDays.length === 0) newErrors.days = "請選擇至少一天";
+    if (!habitData.type) newErrors.type = "請選擇習慣類型";
+    if (!habitData.amount) newErrors.amount = "請輸入罰款金額";
+    if (!habitData.startDate) newErrors.startDate = "請選擇開始日期";
+    if (!habitData.endDate) newErrors.endDate = "請選擇結束日期";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = () => {
+    if (validateForm()) {
+      handleAddHabit();
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    handleHabitChange(e);
+
+    setErrors((prevErrors) => {
+      const newErrors = { ...prevErrors };
+      if (value) {
+        delete newErrors[name];
+      }
+      return newErrors;
+    });
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center gap-4">
@@ -55,9 +89,9 @@ const HabitModal = ({
             type="text"
             name="title"
             placeholder="輸入習慣名稱"
-            className="py-1.5 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-sm leading-5 dark:bg-black-100 placeholder-black"
+            className="py-1.5 px-4 w-full rounded-xl border caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-sm leading-5 dark:bg-black-100 placeholder-black"
             value={habitData.title}
-            onChange={handleHabitChange}
+            onChange={handleInputChange}
           />
         </div>
         <modalIcons.TbX className="w-6 h-6 hover:text-alert cursor-pointer text-black dark:text-black-0" onClick={handleHabitModal} />
@@ -72,7 +106,7 @@ const HabitModal = ({
           </label>
           <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200" />
         </div>
-        <CategorySelect options={habitCategories} value={habitData.category} onChange={(value) => handleHabitChange({ target: { name: "category", value } })} />
+        <CategorySelect options={habitCategories} value={habitData.category} onChange={(value) => handleInputChange({ target: { name: "category", value } })} />
       </div>
       <div className="flex justify-between gap-4">
         <div className="relative flex items-center gap-1 group">
@@ -86,7 +120,7 @@ const HabitModal = ({
         </div>
         <div className="w-full grid grid-cols-3 gap-3">
           <div>
-            <input type="radio" name="frequency" id="daily" value="daily" className="appearance-none hidden" checked={habitData.frequency.type === "daily"} onChange={handleHabitChange} />
+            <input type="radio" name="frequency" id="daily" value="daily" className="appearance-none hidden" checked={habitData.frequency.type === "daily"} onChange={handleInputChange} />
             <label
               htmlFor="daily"
               className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
@@ -97,7 +131,7 @@ const HabitModal = ({
             </label>
           </div>
           <div>
-            <input type="radio" name="frequency" id="weekly" value="weekly" className="appearance-none hidden" checked={habitData.frequency.type === "weekly"} onChange={handleHabitChange} />
+            <input type="radio" name="frequency" id="weekly" value="weekly" className="appearance-none hidden" checked={habitData.frequency.type === "weekly"} onChange={handleInputChange} />
             <label
               htmlFor="weekly"
               className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
@@ -115,7 +149,7 @@ const HabitModal = ({
               value="specificDays"
               className="appearance-none hidden"
               checked={habitData.frequency.type === "specificDays"}
-              onChange={handleHabitChange}
+              onChange={handleInputChange}
             />
             <label
               htmlFor="specificDays"
@@ -155,7 +189,7 @@ const HabitModal = ({
         </div>
         <div className="w-full grid grid-cols-2 gap-3">
           <div>
-            <input type="radio" name="type" id="to-do" value="to-do" className="appearance-none hidden" checked={habitData.type === "to-do"} onChange={handleHabitChange} />
+            <input type="radio" name="type" id="to-do" value="to-do" className="appearance-none hidden" checked={habitData.type === "to-do"} onChange={handleInputChange} />
             <label
               htmlFor="to-do"
               className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
@@ -166,7 +200,7 @@ const HabitModal = ({
             </label>
           </div>
           <div>
-            <input type="radio" name="type" id="not-to-do" value="not-to-do" className="appearance-none hidden" checked={habitData.type === "not-to-do"} onChange={handleHabitChange} />
+            <input type="radio" name="type" id="not-to-do" value="not-to-do" className="appearance-none hidden" checked={habitData.type === "not-to-do"} onChange={handleInputChange} />
             <label
               htmlFor="not-to-do"
               className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
@@ -197,7 +231,7 @@ const HabitModal = ({
             className="px-4 text-end w-full rounded border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-sm leading-5 no-spinner dark:bg-black-100 dark:placeholder-black-400"
             placeholder="請輸入未完成習慣的罰款"
             value={habitData.amount}
-            onChange={handleHabitChange}
+            onChange={handleInputChange}
             min={0}
             onKeyDown={(e) => e.key === "-" && e.preventDefault()}
           />
@@ -231,7 +265,7 @@ const HabitModal = ({
           placeholder="開始日期"
           value={habitData.startDate}
           onFocus={() => handleFocus("startDate")}
-          onChange={handleHabitChange}
+          onChange={handleInputChange}
         />
         <input
           type="text"
@@ -242,7 +276,7 @@ const HabitModal = ({
           placeholder="結束日期"
           value={habitData.endDate}
           onFocus={() => handleFocus("endDate")}
-          onChange={handleHabitChange}
+          onChange={handleInputChange}
         />
         {showMonthCalendar && (
           <div ref={calendarRef} className="w-3/5 md:w-1/6 absolute bottom-0 md:-bottom-12 2xl:-bottom-16 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
@@ -250,9 +284,19 @@ const HabitModal = ({
           </div>
         )}
       </div>
-      <button className="w-full rounded-lg bg-primary font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleAddHabit}>
-        養成習慣
-      </button>
+      <div className="space-y-2">
+        {errors.title && <p className="text-alert text-sm leading-5">{errors.title}</p>}
+        {errors.category && <p className="text-alert text-sm leading-5">{errors.category}</p>}
+        {errors.frequency && <p className="text-alert text-sm leading-5">{errors.frequency}</p>}
+        {errors.days && <p className="text-alert text-sm leading-5">{errors.days}</p>}
+        {errors.type && <p className="text-alert text-sm leading-5">{errors.type}</p>}
+        {errors.amount && <p className="text-alert text-sm leading-5">{errors.amount}</p>}
+        {errors.startDate && <p className="text-alert text-sm leading-5">{errors.startDate}</p>}
+        {errors.endDate && <p className="text-alert text-sm leading-5">{errors.endDate}</p>}
+        <button className="w-full rounded-lg bg-primary font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleSubmit}>
+          養成習慣
+        </button>
+      </div>
     </div>
   );
 };

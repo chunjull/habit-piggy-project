@@ -132,11 +132,24 @@ function Home() {
   const handleHabitChange = (e) => {
     const { name, value } = e.target;
     if (name === "frequency") {
-      const newFrequency = { type: value };
+      let newFrequency;
+      if (value === "specificDays") {
+        newFrequency = { type: value, days: habitData.frequency.days || [] };
+      } else {
+        newFrequency = { type: value };
+      }
       const newStatus = generateStatusArray(habitData.startDate, habitData.endDate, newFrequency);
       setHabitData((prevData) => ({
         ...prevData,
         frequency: newFrequency,
+        status: newStatus,
+      }));
+    } else if (name === "startDate" || name === "endDate") {
+      const newHabitData = { ...habitData, [name]: value };
+      const newStatus = generateStatusArray(newHabitData.startDate, newHabitData.endDate, newHabitData.frequency);
+      setHabitData((prevData) => ({
+        ...prevData,
+        [name]: value,
         status: newStatus,
       }));
     } else {
@@ -166,8 +179,8 @@ function Home() {
       }
     } else if (frequency.type === "specificDays") {
       const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-      const selectedDays = habitData.frequency.days || [];
-      for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+      const selectedDays = Object.values(frequency.days) || [];
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
         if (selectedDays.includes(daysOfWeek[d.getDay()])) {
           statusArray.push({ date: new Date(d).toDateString(), completed: false });
         }

@@ -482,7 +482,7 @@ function Member() {
             <div className="p-4 bg-black-50 dark:bg-black-800 rounded-2xl space-y-2">
               <div className="flex justify-between items-start">
                 <div className="flex gap-3">
-                  <img src={profileData.avatar} alt="user's avatar" className="w-12 h-12 rounded-full" />
+                  <img src={profileData.avatar} alt="user's avatar" className="w-12 h-12 rounded-full outline outline-primary-dark dark:outline-primary" />
                   <div className="flex flex-col">
                     <h3 className="font-bold text-base leading-6 text-black dark:text-black-0">{profileData.name}</h3>
                     <p className="font-normal text-sm leading-5 text-black dark:text-black-0">Lv.{profileData.levelPoints}</p>

@@ -233,7 +233,7 @@ function Posts() {
 
     return (
       <div className="flex items-center gap-3">
-        <img src={userData.avatar} alt="avatar" className="w-12 h-12 object-cover rounded-full" />
+        <img src={userData.avatar} alt="avatar" className="w-12 h-12 object-cover rounded-full outline outline-primary-dark dark:outline-primary" />
         <p className="font-bold text-lg leading-6 text-black dark:text-black-0">{userData.name}</p>
       </div>
     );
@@ -316,7 +316,9 @@ function Posts() {
               <li key={post.id} className="p-4 bg-black-50 dark:bg-black-800 rounded-2xl space-y-3 w-full">
                 <div className="flex justify-between items-center w-full">
                   <div className="flex gap-3 items-center">
-                    <div className="w-12 h-12">{post.user && <img src={post.user.avatar} alt="avatar" className="w-full h-full object-cover rounded-full" />}</div>
+                    <div className="w-12 h-12">
+                      {post.user && <img src={post.user.avatar} alt="avatar" className="w-full h-full object-cover rounded-full outline outline-primary-dark dark:outline-primary" />}
+                    </div>
                     <div className="flex flex-col">
                       <h3 className="font-bold text-lg leading-6 text-black dark:text-black-0">{post.user ? post.user.name : "Unknown"}</h3>
                       <p className="font-normal text-sm leading-5 text-black dark:text-black-0">{getTimeDifference(post.createdTime.seconds)}</p>

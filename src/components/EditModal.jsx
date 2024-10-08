@@ -22,6 +22,8 @@ const EditModal = ({
 }) => {
   const [selectedDays, setSelectedDays] = useState(habitData.frequency.days || []);
   const [errors, setErrors] = useState({});
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmAction, setConfirmAction] = useState(null);
 
   useEffect(() => {
     setSelectedDays(habitData.frequency.days || []);
@@ -326,12 +328,45 @@ const EditModal = ({
         {errors.startDate && <p className="text-alert text-sm leading-5">{errors.startDate}</p>}
         {errors.endDate && <p className="text-alert text-sm leading-5">{errors.endDate}</p>}
         <div className="grid grid-cols-2 gap-4">
-          <button className="w-full py-1 font-normal text-sm leading-5 bg-alert text-white rounded-lg" onClick={handleDeleteHabit}>
+          <button
+            className="w-full py-1 font-normal text-sm leading-5 bg-alert text-white rounded-lg"
+            onClick={() => {
+              setConfirmAction(() => handleDeleteHabit);
+              setShowConfirmModal(true);
+            }}
+          >
             刪除習慣
           </button>
-          <button className="w-full py-1 font-normal text-sm leading-5 bg-primary rounded-lg hover:bg-primary-dark" onClick={handleUpdateSubmit}>
+          <button
+            className="w-full py-1 font-normal text-sm leading-5 bg-primary rounded-lg hover:bg-primary-dark"
+            onClick={() => {
+              setConfirmAction(() => handleUpdateSubmit);
+              setShowConfirmModal(true);
+            }}
+          >
             更新習慣
           </button>
+          {showConfirmModal && (
+            <div className="fixed inset-0 flex items-center justify-center z-50">
+              <div className="bg-white dark:bg-black-800 p-4 rounded-xl shadow-lg">
+                <p className="text-black dark:text-white mb-4">你確定要執行這個操作嗎？</p>
+                <div className="flex justify-end gap-2">
+                  <button className="py-1 px-3 bg-gray-300 rounded-lg" onClick={() => setShowConfirmModal(false)}>
+                    取消
+                  </button>
+                  <button
+                    className="py-1 px-3 bg-primary rounded-lg text-black"
+                    onClick={() => {
+                      confirmAction();
+                      setShowConfirmModal(false);
+                    }}
+                  >
+                    確認
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

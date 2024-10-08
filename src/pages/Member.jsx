@@ -508,7 +508,7 @@ function Member() {
               <p className="font-normal text-base leading-6 text-black dark:text-black-0">{profileData.introduction}</p>
               <div className="w-full h-6 bg-light dark:bg-black-950 text-center rounded-2xl text-black dark:text-black-0 relative">
                 <div className="bg-primary-dark h-full rounded-2xl relative" style={{ width: `${points}%` }}>
-                  <img src={currentImage} alt="habit piggy" className="w-14 h-14 absolute top-1/2 transform -translate-y-1/2 z-20" style={{ right: "-10px" }} />
+                  <img src={currentImage} alt="habit piggy" className="w-14 h-14 absolute top-2/3 transform -translate-y-2/3 z-20" style={{ right: "-20px" }} />
                 </div>
                 <span className="absolute inset-0 flex items-center justify-center">{points}%</span>
               </div>

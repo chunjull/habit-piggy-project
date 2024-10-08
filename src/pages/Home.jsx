@@ -62,7 +62,7 @@ function Home() {
     if (user) {
       fetchHabits();
     }
-  }, [user]);
+  });
 
   useEffect(() => {
     const handleClickOutside = (event) => {

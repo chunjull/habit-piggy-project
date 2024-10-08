@@ -57,7 +57,7 @@ function Login() {
     }, 2000);
 
     return () => clearInterval(interval);
-  }, []);
+  });
 
   const handleLogoClick = () => {
     if (isDialogComplete) {

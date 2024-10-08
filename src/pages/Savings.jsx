@@ -56,7 +56,7 @@ function Savings() {
       }
     };
     fetchData();
-  }, [user, filter]);
+  });
 
   const getStartAndEndOfPeriod = (filter) => {
     const today = new Date();

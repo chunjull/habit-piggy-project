@@ -365,8 +365,8 @@ function Member() {
     setIsDetailModalOpen(true);
   };
 
-  const filteredHabits = habits
-    .filter((habit) => {
+  const filteredHabits = [
+    ...habits.filter((habit) => {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const endDate = new Date(habit.endDate);
@@ -379,11 +379,11 @@ function Member() {
       } else {
         return true;
       }
-    })
-    .sort((a, b) => new Date(b.endDate) - new Date(a.endDate));
+    }),
+  ].sort((a, b) => new Date(b.endDate) - new Date(a.endDate));
 
   const sortAchievements = (achievements, userAchievements) => {
-    return achievements.sort((a, b) => {
+    return [...achievements].sort((a, b) => {
       const aAchieved = userAchievements.includes(a.id);
       const bAchieved = userAchievements.includes(b.id);
 
@@ -409,7 +409,7 @@ function Member() {
   const sortedAchievements = sortAchievements(achievements, userAchievements);
 
   const sortBadges = (badges, userBadges) => {
-    return badges.sort((a, b) => {
+    return [...badges].sort((a, b) => {
       const aAchieved = userBadges.includes(a.id);
       const bAchieved = userBadges.includes(b.id);
 

@@ -4,7 +4,6 @@ import {
   getUserProfile,
   uploadAvatar,
   getHabits,
-  addPost,
   updateHabit,
   deleteHabit,
   getAchievements,
@@ -21,9 +20,7 @@ import { AuthContext } from "../utils/AuthContext";
 import Modal from "../components/Modal";
 import SettingModal from "../components/SettingModal";
 import DetailModal from "../components/DetailModal";
-import PostModal from "../components/PostModal";
 import EditModal from "../components/EditModal";
-import { Navigate } from "react-router-dom";
 import { habitIcons, settingIcons } from "../assets/icons";
 import HabitList from "../components/HabitList";
 import AchievementList from "../components/AchievementList";
@@ -31,12 +28,13 @@ import BadgeList from "../components/BadgeList";
 import CustomSelect from "../components/CustomSelect";
 import AchievementModal from "../components/AchievementModal";
 import BadgeModal from "../components/BadgeModal";
+import habitPiggyLoading1 from "../assets/images/habit-piggy-loading-1.svg";
+import habitPiggyLoading2 from "../assets/images/habit-piggy-loading-2.svg";
 
 function Member() {
   const { user } = useContext(AuthContext);
   const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAchievementModalOpen, setIsAchievementModalOpen] = useState(false);
   const [isBadgeModalOpen, setIsBadgeModalOpen] = useState(false);
@@ -56,8 +54,6 @@ function Member() {
   });
   const [habits, setHabits] = useState([]);
   const [selectedHabit, setSelectedHabit] = useState(null);
-  const [postContent, setPostContent] = useState("");
-  const [postBackground, setPostBackground] = useState("");
   const [habitData, setHabitData] = useState({
     category: 0,
     title: "",
@@ -72,12 +68,12 @@ function Member() {
   const [calendarTarget, setCalendarTarget] = useState("");
   const calendarRef = useRef(null);
   const [monthCalendarDate, setMonthCalendarDate] = useState(null);
-  const [isPost, setIsPost] = useState(false);
   const [filter, setFilter] = useState("all");
   const [achievements, setAchievements] = useState([]);
   const [userAchievements, setUserAchievements] = useState([]);
   const [badges, setBadges] = useState([]);
   const [userBadges, setUserBadges] = useState([]);
+  const [currentImage, setCurrentImage] = useState(habitPiggyLoading1);
   const [options] = useState([
     { label: "全部習慣", value: "all" },
     { label: "進行中", value: "in-progress" },
@@ -148,11 +144,6 @@ function Member() {
 
   const handleDetailModal = () => {
     setIsDetailModalOpen(!isDetailModalOpen);
-  };
-
-  const handlePostModal = () => {
-    setIsPostModalOpen(!isPostModalOpen);
-    setIsDetailModalOpen(false);
   };
 
   const handleEditModal = (habit) => {
@@ -278,26 +269,6 @@ function Member() {
     }
   };
 
-  const handleAddPost = async () => {
-    if (!postContent.trim()) {
-      alert("請輸入貼文內容");
-      return;
-    }
-
-    if (user && selectedHabit) {
-      const postData = {
-        content: postContent,
-        background: postBackground,
-        habitId: selectedHabit.id,
-      };
-      await addPost(user.uid, postData);
-      setIsPost(true);
-      handlePostModal();
-      setPostContent("");
-      setPostBackground("");
-    }
-  };
-
   const handleFocus = (target) => {
     setCalendarTarget(target);
     setShowMonthCalendar(true);
@@ -406,10 +377,6 @@ function Member() {
     })
     .sort((a, b) => new Date(b.endDate) - new Date(a.endDate));
 
-  if (isPost) {
-    return <Navigate to="/posts" />;
-  }
-
   const sortAchievements = (achievements, userAchievements) => {
     return achievements.sort((a, b) => {
       const aAchieved = userAchievements.includes(a.id);
@@ -458,6 +425,14 @@ function Member() {
 
   const { level, points } = calculateLevelAndPoints(profileData.levelPoints);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prevImage) => (prevImage === habitPiggyLoading1 ? habitPiggyLoading2 : habitPiggyLoading1));
+    }, 250);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
       <div className="p-4 md:py-10 space-y-4">
@@ -498,7 +473,12 @@ function Member() {
                 </div>
               </div>
               <p className="font-normal text-base leading-6 text-black dark:text-black-0">{profileData.introduction}</p>
-              <div className="w-full bg-light dark:bg-black-950 text-center rounded-2xl text-black dark:text-black-0">{points}%</div>
+              <div className="w-full h-6 bg-light dark:bg-black-950 text-center rounded-2xl text-black dark:text-black-0 relative">
+                <div className="bg-primary-dark h-full rounded-2xl relative" style={{ width: `${points}%` }}>
+                  <img src={currentImage} alt="habit piggy" className="w-14 h-14 absolute top-1/2 transform -translate-y-1/2 z-20" style={{ right: "-10px" }} />
+                </div>
+                <span className="absolute inset-0 flex items-center justify-center">{points}%</span>
+              </div>
             </div>
             <AchievementList sortedAchievements={sortedAchievements} userAchievements={userAchievements} handleAchievementModal={handleAchievementModal} />
             <BadgeList sortedBadges={sortedBadges} userBadges={userBadges} handleBadgeModal={handleBadgeModal} />
@@ -511,25 +491,7 @@ function Member() {
         <SettingModal profileData={profileData} handleChange={handleChange} handleSaveAndClose={handleSaveAndClose} handleSettingModal={handleSettingModal} />
       </Modal>
       <Modal isOpen={isDetailModalOpen} onClose={handleDetailModal}>
-        <DetailModal
-          selectedHabit={selectedHabit}
-          handleDetailModal={handleDetailModal}
-          handlePostModal={handlePostModal}
-          uncompletedFine={uncompletedFine}
-          handleEditModal={handleEditModal}
-          habitCategories={habitCategories}
-        />
-      </Modal>
-      <Modal isOpen={isPostModalOpen} onClose={handlePostModal}>
-        <PostModal
-          postContent={postContent}
-          setPostContent={setPostContent}
-          postBackground={postBackground}
-          setPostBackground={setPostBackground}
-          handleAddPost={handleAddPost}
-          handlePostModal={handlePostModal}
-          user={user}
-        />
+        <DetailModal selectedHabit={selectedHabit} handleDetailModal={handleDetailModal} uncompletedFine={uncompletedFine} handleEditModal={handleEditModal} habitCategories={habitCategories} />
       </Modal>
       <Modal isOpen={isEditModalOpen} onClose={handleEditModal}>
         <EditModal

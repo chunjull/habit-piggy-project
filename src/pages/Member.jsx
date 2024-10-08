@@ -461,9 +461,9 @@ function Member() {
     });
   };
 
-  const updateUserProfileNotify = () => CustomToast("個人資料已更新");
+  const updateUserProfileNotify = () => CustomToast("你知道嗎？每個人都有兩顆腎臟");
   const updateHabitNotify = () => CustomToast("人要時時刻刻做好準備！");
-  const deleteHabitNotify = () => CustomToast("人都會忘記初心的嗎？");
+  const deleteHabitNotify = () => CustomToast("這段感情只有我在付出🥲");
   const dateErrorNotify = () => AlertToast("結束日期必須晚於開始日期喔！");
 
   return (

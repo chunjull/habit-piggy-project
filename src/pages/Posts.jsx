@@ -311,7 +311,7 @@ function Posts() {
     });
   };
 
-  const addPostNotify = () => CustomToast("已新增貼文！");
+  const addPostNotify = () => CustomToast("今天也是快樂的貓咪日");
   const updatePostNotify = () => CustomToast("已更新貼文！");
   const deletePostNotify = () => CustomToast("已刪除貼文！");
   const addCommentNotify = () => CustomToast("已新增留言！");

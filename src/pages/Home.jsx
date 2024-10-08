@@ -424,8 +424,8 @@ function Home() {
 
   const addHabitNotify = () => CustomToast("從今天開始培養習慣吧！");
   const updateHabitNotify = () => CustomToast("人要時時刻刻做好準備！");
-  const deleteHabitNotify = () => CustomToast("人都會忘記初心的嗎？");
-  const checkHabitNotify = () => CustomToast("你好棒！繼續保持！");
+  const deleteHabitNotify = () => CustomToast("這段感情只有我在付出🥲");
+  const checkHabitNotify = () => CustomToast("給你一個乖寶寶印章");
   const unCheckHabitNotify = () => CustomToast("要記得回來完成喔！");
   const dateErrorNotify = () => AlertToast("結束日期必須晚於開始日期喔！");
 

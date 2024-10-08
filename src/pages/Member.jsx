@@ -30,6 +30,7 @@ import AchievementModal from "../components/AchievementModal";
 import BadgeModal from "../components/BadgeModal";
 import habitPiggyLoading1 from "../assets/images/habit-piggy-loading-1.svg";
 import habitPiggyLoading2 from "../assets/images/habit-piggy-loading-2.svg";
+import { CustomToast, Toaster } from "../components/CustomToast";
 
 function Member() {
   const { user } = useContext(AuthContext);
@@ -174,6 +175,7 @@ function Member() {
       try {
         await updateUserProfile(user.uid, updatedProfileData);
         setProfileData(updatedProfileData);
+        updateUserProfileNotify();
       } catch (error) {
         console.error("更新資料失敗", error);
       }
@@ -433,6 +435,8 @@ function Member() {
     return () => clearInterval(interval);
   }, []);
 
+  const updateUserProfileNotify = () => CustomToast("個人資料已更新");
+
   return (
     <>
       <div className="p-4 md:py-10 space-y-4">
@@ -487,6 +491,7 @@ function Member() {
           <HabitList habits={filteredHabits} habitCategories={habitCategories} handleDetailClick={handleDetailClick} />
         )}
       </div>
+      <Toaster />
       <Modal isOpen={isSettingModalOpen} onClose={handleSettingModal}>
         <SettingModal profileData={profileData} handleChange={handleChange} handleSaveAndClose={handleSaveAndClose} handleSettingModal={handleSettingModal} />
       </Modal>

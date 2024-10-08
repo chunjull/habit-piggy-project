@@ -6,6 +6,7 @@ import CustomSelect from "../components/CustomSelect";
 import PostSelect from "../components/PostSelect";
 import Modal from "../components/Modal";
 import PostModal from "../components/PostModal";
+import { CustomToast, Toaster } from "../components/CustomToast";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
@@ -88,6 +89,7 @@ function Posts() {
     setCommentContent("");
     const renderComments = await getComments(postID);
     setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
+    addCommentNotify();
   };
 
   const handleCancelEdit = (commentID) => {
@@ -99,6 +101,7 @@ function Posts() {
       await deleteComment(postID, commentID);
       const renderComments = await getComments(postID);
       setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
+      deleteCommentNotify();
     });
     setShowConfirmModal(true);
   };
@@ -107,6 +110,7 @@ function Posts() {
     setConfirmAction(() => async () => {
       await deletePost(postID);
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postID));
+      deletePostNotify();
     });
     setShowConfirmModal(true);
   };
@@ -131,11 +135,13 @@ function Posts() {
       const renderComments = await getComments(postID);
       setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
       setEditingComment((prev) => ({ ...prev, [commentID]: "" }));
+      updateCommentNotify();
     } else {
       await updatePost(postID, postData);
       const updatedPosts = await getAllPosts();
       setPosts(updatedPosts);
       setIsPostModalOpen(false);
+      updatePostNotify();
     }
   };
 
@@ -223,6 +229,7 @@ function Posts() {
       setPosts((prevPosts) => [postData, ...prevPosts]);
       setPostContent("");
       setPostBackground("");
+      addPostNotify();
 
       const textarea = document.querySelector("textarea");
       if (textarea) {
@@ -278,6 +285,13 @@ function Posts() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const addPostNotify = () => CustomToast("已新增貼文！");
+  const updatePostNotify = () => CustomToast("已更新貼文！");
+  const deletePostNotify = () => CustomToast("已刪除貼文！");
+  const addCommentNotify = () => CustomToast("已新增留言！");
+  const updateCommentNotify = () => CustomToast("已更新留言！");
+  const deleteCommentNotify = () => CustomToast("已刪除留言！");
 
   return (
     <>
@@ -478,6 +492,7 @@ function Posts() {
             </div>
           </div>
         )}
+        <Toaster />
       </div>
       <Modal isOpen={isPostModalOpen} onRequestClose={() => setIsPostModalOpen(false)}>
         <PostModal

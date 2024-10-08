@@ -20,6 +20,7 @@ import DetailModal from "../components/DetailModal";
 import EditModal from "../components/EditModal";
 import { habitIcons, habitAddIcon } from "../assets/icons";
 import HabitList from "../components/HabitList";
+import { CustomToast, Toaster } from "../components/CustomToast";
 
 function Home() {
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
@@ -229,6 +230,7 @@ function Home() {
         status: [],
         type: "",
       });
+      addHabitNotify();
     } else {
       console.error("User not authenticated");
     }
@@ -260,6 +262,7 @@ function Home() {
       fetchHabits();
       setIsEditModalOpen(false);
       setIsDetailModalOpen(false);
+      updateHabitNotify();
     } else {
       console.error("User not authenticated or habit not selected");
     }
@@ -285,6 +288,7 @@ function Home() {
       fetchHabits();
       setIsEditModalOpen(false);
       setIsDetailModalOpen(false);
+      deleteHabitNotify();
     } else {
       console.error("User not authenticated or habit not selected");
     }
@@ -341,8 +345,10 @@ function Home() {
             const newCompletedStatus = !status.completed;
             if (newCompletedStatus) {
               updateUserLevelPoints(user.uid, habit.amount);
+              checkHabitNotify();
             } else {
               updateUserLevelPoints(user.uid, -habit.amount);
+              unCheckHabitNotify();
             }
             return { ...status, completed: newCompletedStatus };
           }
@@ -392,6 +398,12 @@ function Home() {
     }
   };
 
+  const addHabitNotify = () => CustomToast("從今天開始培養習慣吧！");
+  const updateHabitNotify = () => CustomToast("人要時時刻刻做好準備！");
+  const deleteHabitNotify = () => CustomToast("人都會忘記初心的嗎？");
+  const checkHabitNotify = () => CustomToast("你好棒！繼續保持！");
+  const unCheckHabitNotify = () => CustomToast("要記得回來完成喔！");
+
   return (
     <div className="md:pb-6">
       <WeekCalendar date={selectedDate} onSelect={handleSelectDate} onWeekChange={setWeekDates} />
@@ -402,6 +414,7 @@ function Home() {
       >
         <habitAddIcon.TbPlus className="w-8 h-8 md:w-10 md:h-10 text-black-0" />
       </div>
+      <Toaster />
       <Modal isOpen={isHabitModalOpen}>
         <HabitModal
           habitData={habitData}

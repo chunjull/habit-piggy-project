@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { registerUser } from "../services/api";
+import { registerUser, getEmailByAccount } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import { Navigate } from "react-router-dom";
 import { modalIcons } from "../assets/icons";
@@ -85,7 +85,15 @@ function Login() {
     const { loginEmail, loginPassword } = data;
     const auth = getAuth();
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+      // 先根據 account 查詢對應的 email
+      const email = await getEmailByAccount(loginEmail);
+      if (!email) {
+        setLoginError("帳號或密碼錯誤");
+        return;
+      }
+
+      // 使用查詢到的 email 和 password 進行登入
+      const userCredential = await signInWithEmailAndPassword(auth, email, loginPassword);
       setUser(userCredential.user);
       setIsLoading(true);
       setTimeout(() => {

@@ -266,9 +266,9 @@ function Posts() {
     const g = parseInt(rgb[1], 10);
     const b = parseInt(rgb[2], 10);
 
-    const brightness = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    const brightness = (r * 299 + g * 587 + b * 114) / 10;
 
-    return brightness > 0.5 ? "black" : "white";
+    return brightness > 186 ? "black" : "white";
   };
 
   const handleClick = () => {
@@ -338,7 +338,7 @@ function Posts() {
                 {backgrounds.map((url, index) => (
                   <button
                     key={index}
-                    className="rounded w-6 h-6 flex-shrink-0 flex-grow-0"
+                    className="rounded w-6 h-6 flex-shrink-0 flex-grow-0 border border-black-500"
                     style={{ backgroundImage: `url(${url})`, backgroundSize: "cover", backgroundPosition: "center" }}
                     onClick={() => setPostBackground(url)}
                   ></button>

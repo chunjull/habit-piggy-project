@@ -50,7 +50,7 @@ const PostModal = ({ postContent, setPostContent, postBackground, setPostBackgro
           {backgrounds.map((url, index) => (
             <button
               key={index}
-              className="rounded w-6 h-6 flex-shrink-0 flex-grow-0"
+              className="rounded w-6 h-6 flex-shrink-0 flex-grow-0 border border-black-500"
               style={{ backgroundImage: `url(${url})`, backgroundSize: "cover", backgroundPosition: "center" }}
               onClick={() => setPostBackground(url)}
             ></button>

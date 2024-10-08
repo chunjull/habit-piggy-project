@@ -76,7 +76,7 @@ function Posts() {
 
   const handleAddComment = async (postID) => {
     if (!commentContent.trim()) {
-      alert("請輸入留言內容");
+      alertNotify();
       return;
     }
     const userProfile = await getUserProfile(user.uid);
@@ -129,7 +129,7 @@ function Posts() {
     if (commentID) {
       const updatedContent = editingComment[commentID];
       if (!updatedContent.trim()) {
-        alert("請輸入留言內容");
+        alertNotify();
         return;
       }
       await updateComment(postID, commentID, { content: updatedContent });
@@ -212,6 +212,7 @@ function Posts() {
 
   const handleAddPost = async () => {
     if (!postContent.trim()) {
+      alertNotify();
       return;
     }
 
@@ -299,12 +300,24 @@ function Posts() {
     });
   };
 
+  const AlertToast = (message) => {
+    toast.error(message, {
+      style: {
+        borderRadius: "16px",
+        background: "#212121",
+        color: "#fff",
+      },
+      duration: 3000,
+    });
+  };
+
   const addPostNotify = () => CustomToast("已新增貼文！");
   const updatePostNotify = () => CustomToast("已更新貼文！");
   const deletePostNotify = () => CustomToast("已刪除貼文！");
   const addCommentNotify = () => CustomToast("已新增留言！");
   const updateCommentNotify = () => CustomToast("已更新留言！");
   const deleteCommentNotify = () => CustomToast("已刪除留言！");
+  const alertNotify = () => AlertToast("沒有內容不能發布喔！");
 
   return (
     <>

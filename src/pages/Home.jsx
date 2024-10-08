@@ -210,7 +210,7 @@ function Home() {
       const end = new Date(habitData.endDate);
 
       if (end <= start) {
-        alert("結束日期必須晚於開始日期");
+        dateErrorNotify();
         return;
       }
 
@@ -243,7 +243,7 @@ function Home() {
       const end = new Date(habitData.endDate);
 
       if (end <= start) {
-        alert("結束日期必須晚於開始日期");
+        dateErrorNotify();
         return;
       }
 
@@ -411,11 +411,23 @@ function Home() {
     });
   };
 
+  const AlertToast = (message) => {
+    toast.error(message, {
+      style: {
+        borderRadius: "16px",
+        background: "#212121",
+        color: "#fff",
+      },
+      duration: 3000,
+    });
+  };
+
   const addHabitNotify = () => CustomToast("從今天開始培養習慣吧！");
   const updateHabitNotify = () => CustomToast("人要時時刻刻做好準備！");
   const deleteHabitNotify = () => CustomToast("人都會忘記初心的嗎？");
   const checkHabitNotify = () => CustomToast("你好棒！繼續保持！");
   const unCheckHabitNotify = () => CustomToast("要記得回來完成喔！");
+  const dateErrorNotify = () => AlertToast("結束日期必須晚於開始日期喔！");
 
   return (
     <div className="md:pb-6">

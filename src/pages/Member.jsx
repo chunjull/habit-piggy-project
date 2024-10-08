@@ -283,7 +283,7 @@ function Member() {
       const end = new Date(habitData.endDate);
 
       if (end <= start) {
-        alert("結束日期必須晚於開始日期");
+        dateErrorNotify();
         return;
       }
 
@@ -450,9 +450,21 @@ function Member() {
     });
   };
 
+  const AlertToast = (message) => {
+    toast.error(message, {
+      style: {
+        borderRadius: "16px",
+        background: "#212121",
+        color: "#fff",
+      },
+      duration: 3000,
+    });
+  };
+
   const updateUserProfileNotify = () => CustomToast("個人資料已更新");
   const updateHabitNotify = () => CustomToast("人要時時刻刻做好準備！");
   const deleteHabitNotify = () => CustomToast("人都會忘記初心的嗎？");
+  const dateErrorNotify = () => AlertToast("結束日期必須晚於開始日期喔！");
 
   return (
     <>

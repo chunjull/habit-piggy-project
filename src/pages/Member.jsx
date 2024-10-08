@@ -109,7 +109,7 @@ function Member() {
     };
 
     fetchUserProfile();
-  });
+  }, [user]);
 
   useEffect(() => {
     const today = new Date();

@@ -64,7 +64,7 @@ function Home() {
     if (user) {
       fetchHabits();
     }
-  });
+  }, [user]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -209,7 +209,7 @@ function Home() {
       const end = new Date(habitData.endDate);
 
       if (end <= start) {
-        dateErrorNotify();
+        alert("結束日期必須晚於開始日期");
         return;
       }
 

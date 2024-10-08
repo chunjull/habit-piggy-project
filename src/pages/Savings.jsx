@@ -141,7 +141,7 @@ function Savings() {
       存款金額: periodData[key],
     }));
 
-    chartData.sort((a, b) => {
+    [...chartData].sort((a, b) => {
       if (filter === "week") {
         const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
         return daysOfWeek.indexOf(a.name) - daysOfWeek.indexOf(b.name);
@@ -216,7 +216,7 @@ function Savings() {
       });
     });
 
-    uncompletedHabits.sort((a, b) => new Date(b.date) - new Date(a.date));
+    [...uncompletedHabits].sort((a, b) => new Date(b.date) - new Date(a.date));
 
     return uncompletedHabits.slice(0, 50).map((habit, index) => (
       <li key={habit.id + habit.date} className="py-2 px-4 grid grid-cols-5 bg-black-50 dark:bg-black-800 rounded-lg font-normal text-sm leading-5 hover:bg-black-0 dark:hover:bg-black-600">

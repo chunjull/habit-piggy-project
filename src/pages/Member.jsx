@@ -302,6 +302,7 @@ function Member() {
       fetchHabits();
       setIsEditModalOpen(false);
       setIsDetailModalOpen(false);
+      updateHabitNotify();
     } else {
       console.error("User not authenticated or habit not selected");
     }
@@ -327,6 +328,7 @@ function Member() {
       fetchHabits();
       setIsEditModalOpen(false);
       setIsDetailModalOpen(false);
+      deleteHabitNotify();
     } else {
       console.error("User not authenticated or habit not selected");
     }
@@ -436,6 +438,8 @@ function Member() {
   }, []);
 
   const updateUserProfileNotify = () => CustomToast("個人資料已更新");
+  const updateHabitNotify = () => CustomToast("人要時時刻刻做好準備！");
+  const deleteHabitNotify = () => CustomToast("人都會忘記初心的嗎？");
 
   return (
     <>

@@ -149,7 +149,7 @@ function Rank() {
           <img src={currentUserData.avatar} alt="user's avatar" className="w-12 h-12 rounded-full outline dark:outline-primary-dark outline-primary" />
           <div>
             <p className="font-normal text-lg leading-7 text-white dark:text-black">{currentUserData.name}</p>
-            <p className="font-normal text-sm leading-5 text-black-700">Lv.{level}</p>
+            <p className="font-normal text-sm leading-5 text-black-200 dark:text-black-700">Lv.{level}</p>
           </div>
         </div>
         <div className="flex flex-col items-end text-black-0 dark:text-black">

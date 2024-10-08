@@ -54,7 +54,7 @@ function Login() {
         clearInterval(interval);
         setIsDialogComplete(true);
       }
-    }, 2000);
+    }, 3000);
 
     return () => clearInterval(interval);
   });

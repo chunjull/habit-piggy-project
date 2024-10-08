@@ -30,7 +30,8 @@ import AchievementModal from "../components/AchievementModal";
 import BadgeModal from "../components/BadgeModal";
 import habitPiggyLoading1 from "../assets/images/habit-piggy-loading-1.svg";
 import habitPiggyLoading2 from "../assets/images/habit-piggy-loading-2.svg";
-import { CustomToast, Toaster } from "../components/CustomToast";
+import toast from "react-hot-toast";
+import habitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
 
 function Member() {
   const { user } = useContext(AuthContext);
@@ -437,6 +438,18 @@ function Member() {
     return () => clearInterval(interval);
   }, []);
 
+  const CustomToast = (message) => {
+    toast(message, {
+      icon: <img src={habitPiggyLogo} alt="Habit Piggy Logo" style={{ width: "40px", height: "40px" }} />,
+      style: {
+        borderRadius: "16px",
+        background: "#212121",
+        color: "#fff",
+      },
+      duration: 3000,
+    });
+  };
+
   const updateUserProfileNotify = () => CustomToast("個人資料已更新");
   const updateHabitNotify = () => CustomToast("人要時時刻刻做好準備！");
   const deleteHabitNotify = () => CustomToast("人都會忘記初心的嗎？");
@@ -495,7 +508,6 @@ function Member() {
           <HabitList habits={filteredHabits} habitCategories={habitCategories} handleDetailClick={handleDetailClick} />
         )}
       </div>
-      <Toaster />
       <Modal isOpen={isSettingModalOpen} onClose={handleSettingModal}>
         <SettingModal profileData={profileData} handleChange={handleChange} handleSaveAndClose={handleSaveAndClose} handleSettingModal={handleSettingModal} />
       </Modal>

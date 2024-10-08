@@ -5,6 +5,7 @@ import Modal from "./Modal";
 import { useContext, useState, useEffect } from "react";
 import { logoutUser } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
+import { Toaster } from "react-hot-toast";
 
 function Layout({ children, isModalOpen, modalContent }) {
   const location = useLocation();
@@ -179,6 +180,7 @@ function Layout({ children, isModalOpen, modalContent }) {
         <div className="mt-0 mb-[86px] md:mb-0 w-full p-0 relative">{children}</div>
       </div>
       {isModalOpen && <Modal isOpen={isModalOpen}>{modalContent}</Modal>}
+      <Toaster />
     </div>
   );
 }

@@ -6,7 +6,8 @@ import CustomSelect from "../components/CustomSelect";
 import PostSelect from "../components/PostSelect";
 import Modal from "../components/Modal";
 import PostModal from "../components/PostModal";
-import { CustomToast, Toaster } from "../components/CustomToast";
+import toast from "react-hot-toast";
+import habitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
@@ -286,6 +287,18 @@ function Posts() {
     };
   }, []);
 
+  const CustomToast = (message) => {
+    toast(message, {
+      icon: <img src={habitPiggyLogo} alt="Habit Piggy Logo" style={{ width: "40px", height: "40px" }} />,
+      style: {
+        borderRadius: "16px",
+        background: "#212121",
+        color: "#fff",
+      },
+      duration: 3000,
+    });
+  };
+
   const addPostNotify = () => CustomToast("已新增貼文！");
   const updatePostNotify = () => CustomToast("已更新貼文！");
   const deletePostNotify = () => CustomToast("已刪除貼文！");
@@ -492,7 +505,6 @@ function Posts() {
             </div>
           </div>
         )}
-        <Toaster />
       </div>
       <Modal isOpen={isPostModalOpen} onRequestClose={() => setIsPostModalOpen(false)}>
         <PostModal

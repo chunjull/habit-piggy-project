@@ -20,7 +20,8 @@ import DetailModal from "../components/DetailModal";
 import EditModal from "../components/EditModal";
 import { habitIcons, habitAddIcon } from "../assets/icons";
 import HabitList from "../components/HabitList";
-import { CustomToast, Toaster } from "../components/CustomToast";
+import habitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
+import toast from "react-hot-toast";
 
 function Home() {
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
@@ -398,6 +399,18 @@ function Home() {
     }
   };
 
+  const CustomToast = (message) => {
+    toast(message, {
+      icon: <img src={habitPiggyLogo} alt="Habit Piggy Logo" style={{ width: "40px", height: "40px" }} />,
+      style: {
+        borderRadius: "16px",
+        background: "#212121",
+        color: "#fff",
+      },
+      duration: 3000,
+    });
+  };
+
   const addHabitNotify = () => CustomToast("從今天開始培養習慣吧！");
   const updateHabitNotify = () => CustomToast("人要時時刻刻做好準備！");
   const deleteHabitNotify = () => CustomToast("人都會忘記初心的嗎？");
@@ -414,7 +427,6 @@ function Home() {
       >
         <habitAddIcon.TbPlus className="w-8 h-8 md:w-10 md:h-10 text-black-0" />
       </div>
-      <Toaster />
       <Modal isOpen={isHabitModalOpen}>
         <HabitModal
           habitData={habitData}

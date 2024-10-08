@@ -75,14 +75,14 @@ const PostModal = ({ postContent, setPostContent, postBackground, setPostBackgro
         />
       </div>
       <div className="flex gap-4">
-        <button className="py-1 w-full bg-primary rounded-lg font-medium text-sm leading-5 hover:bg-primary-dark" onClick={isEditMode ? handleUpdatePost : handleAddPost}>
-          {isEditMode ? "確認修改" : "發佈貼文"}
-        </button>
         {isEditMode && (
           <button className="py-1 w-full bg-black-100 rounded-lg font-medium text-sm leading-5 hover:bg-black-300" onClick={handlePostModal}>
             取消修改
           </button>
         )}
+        <button className="py-1 w-full bg-primary rounded-lg font-medium text-sm leading-5 hover:bg-primary-dark" onClick={isEditMode ? handleUpdatePost : handleAddPost}>
+          {isEditMode ? "確認修改" : "發佈貼文"}
+        </button>
       </div>
     </div>
   );

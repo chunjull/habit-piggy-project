@@ -25,6 +25,8 @@ function Posts() {
   const [isHighlighted, setIsHighlighted] = useState(false);
   const { user } = useContext(AuthContext);
   const [userData, setUserData] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmAction, setConfirmAction] = useState(null);
 
   const postRef = useRef(null);
 
@@ -92,15 +94,21 @@ function Posts() {
     setEditingComment((prev) => ({ ...prev, [commentID]: "" }));
   };
 
-  const handleDeleteComment = async (postID, commentID) => {
-    await deleteComment(postID, commentID);
-    const renderComments = await getComments(postID);
-    setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
+  const handleDeleteComment = (postID, commentID) => {
+    setConfirmAction(() => async () => {
+      await deleteComment(postID, commentID);
+      const renderComments = await getComments(postID);
+      setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
+    });
+    setShowConfirmModal(true);
   };
 
   const handleDeletePost = async (postID) => {
-    await deletePost(postID);
-    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postID));
+    setConfirmAction(() => async () => {
+      await deletePost(postID);
+      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postID));
+    });
+    setShowConfirmModal(true);
   };
 
   const handleEdit = (post, commentID = null) => {
@@ -400,16 +408,16 @@ function Posts() {
                                 />
                                 <div className="flex gap-x-2">
                                   <button
-                                    className="w-fit text-nowrap font-medium text-sm leading-5 bg-primary py-1 md:py-1.5 px-2 rounded hover:bg-primary-dark"
-                                    onClick={() => handleUpdate(post.id, null, comment.id)}
-                                  >
-                                    確認修改
-                                  </button>
-                                  <button
                                     className="w-fit text-nowrap font-medium text-sm leading-5 bg-black-100 py-1 md:py-1.5 px-2 rounded hover:bg-black-300"
                                     onClick={() => handleCancelEdit(comment.id)}
                                   >
                                     取消修改
+                                  </button>
+                                  <button
+                                    className="w-fit text-nowrap font-medium text-sm leading-5 bg-primary py-1 md:py-1.5 px-2 rounded hover:bg-primary-dark"
+                                    onClick={() => handleUpdate(post.id, null, comment.id)}
+                                  >
+                                    確認修改
                                   </button>
                                 </div>
                               </div>
@@ -449,6 +457,27 @@ function Posts() {
             );
           })}
         </ul>
+        {showConfirmModal && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-white dark:bg-black-800 p-4 rounded-xl shadow-lg">
+              <p className="text-black dark:text-white mb-4">你確定要執行這個操作嗎？</p>
+              <div className="flex justify-end gap-2">
+                <button className="py-1 px-3 bg-gray-300 rounded-lg" onClick={() => setShowConfirmModal(false)}>
+                  取消
+                </button>
+                <button
+                  className="py-1 px-3 bg-primary rounded-lg text-black"
+                  onClick={() => {
+                    confirmAction();
+                    setShowConfirmModal(false);
+                  }}
+                >
+                  確認
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       <Modal isOpen={isPostModalOpen} onRequestClose={() => setIsPostModalOpen(false)}>
         <PostModal

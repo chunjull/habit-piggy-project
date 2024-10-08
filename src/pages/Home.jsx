@@ -1,6 +1,18 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { AuthContext } from "../utils/AuthContext";
-import { getHabits, updateHabit, addHabit, deleteHabit, calculateTaskValue, checkAndAwardAchievements, calculateBadges, checkAndAwardBadges, removeBadge } from "../services/api";
+import {
+  getHabits,
+  updateHabit,
+  addHabit,
+  deleteHabit,
+  calculateTaskValue,
+  checkAndAwardAchievements,
+  calculateBadges,
+  checkAndAwardBadges,
+  removeBadge,
+  getUserProfile,
+  updateUserProfile,
+} from "../services/api";
 import WeekCalendar from "../components/WeekCalendar";
 import Modal from "../components/Modal";
 import HabitModal from "../components/HabitModal";
@@ -309,12 +321,30 @@ function Home() {
     setShowMonthCalendar(true);
   };
 
+  const updateUserLevelPoints = async (userId, points) => {
+    try {
+      const userDoc = await getUserProfile(userId);
+      const currentLevelPoints = Number(userDoc.levelPoints);
+      const pointsToAdd = Number(points);
+      const newLevelPoints = currentLevelPoints + pointsToAdd;
+      await updateUserProfile(userId, { levelPoints: newLevelPoints });
+    } catch (error) {
+      console.error("Error getting user profile: ", error);
+    }
+  };
+
   const handleCheck = async (habitId, date) => {
     const updatedHabits = habits.map((habit) => {
       if (habit.id === habitId) {
         const updatedStatus = habit.status.map((status) => {
           if (new Date(status.date).toDateString() === new Date(date).toDateString()) {
-            return { ...status, completed: !status.completed };
+            const newCompletedStatus = !status.completed;
+            if (newCompletedStatus) {
+              updateUserLevelPoints(user.uid, habit.amount);
+            } else {
+              updateUserLevelPoints(user.uid, -habit.amount);
+            }
+            return { ...status, completed: newCompletedStatus };
           }
           return status;
         });

@@ -450,6 +450,14 @@ function Member() {
 
   const sortedBadges = sortBadges(badges, userBadges);
 
+  const calculateLevelAndPoints = (levelPoints) => {
+    const level = Math.floor(levelPoints / 100);
+    const points = levelPoints % 100;
+    return { level, points };
+  };
+
+  const { level, points } = calculateLevelAndPoints(profileData.levelPoints);
+
   return (
     <>
       <div className="p-4 md:py-10 space-y-4">
@@ -485,12 +493,12 @@ function Member() {
                   <img src={profileData.avatar} alt="user's avatar" className="w-12 h-12 rounded-full outline outline-primary-dark dark:outline-primary" />
                   <div className="flex flex-col">
                     <h3 className="font-bold text-base leading-6 text-black dark:text-black-0">{profileData.name}</h3>
-                    <p className="font-normal text-sm leading-5 text-black dark:text-black-0">Lv.{profileData.levelPoints}</p>
+                    <p className="font-normal text-sm leading-5 text-black dark:text-black-0">Lv.{level}</p>
                   </div>
                 </div>
               </div>
               <p className="font-normal text-base leading-6 text-black dark:text-black-0">{profileData.introduction}</p>
-              <div className="w-full bg-light dark:bg-black-950 text-center rounded-2xl text-black dark:text-black-0">{profileData.levelPoints}%</div>
+              <div className="w-full bg-light dark:bg-black-950 text-center rounded-2xl text-black dark:text-black-0">{points}%</div>
             </div>
             <AchievementList sortedAchievements={sortedAchievements} userAchievements={userAchievements} handleAchievementModal={handleAchievementModal} />
             <BadgeList sortedBadges={sortedBadges} userBadges={userBadges} handleBadgeModal={handleBadgeModal} />

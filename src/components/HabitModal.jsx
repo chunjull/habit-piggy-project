@@ -3,6 +3,7 @@ import MonthCalendar from "./MonthCalendar";
 import PropTypes from "prop-types";
 import CategorySelect from "./CategorySelect";
 import { modalIcons, checkIcon } from "../assets/icons";
+import { toast } from "react-hot-toast";
 
 const HabitModal = ({
   habitData,
@@ -63,9 +64,11 @@ const HabitModal = ({
   };
 
   const handleSubmit = () => {
-    if (validateForm()) {
-      handleAddHabit();
+    if (!validateForm()) {
+      addHabitErrorNotify();
+      return;
     }
+    handleAddHabit();
   };
 
   const handleInputChange = (e) => {
@@ -78,6 +81,17 @@ const HabitModal = ({
         delete newErrors[name];
       }
       return newErrors;
+    });
+  };
+
+  const addHabitErrorNotify = () => {
+    toast.error("沒有完整填寫資料的話，沒辦法送出喔！", {
+      style: {
+        borderRadius: "16px",
+        background: "#212121",
+        color: "#fff",
+      },
+      duration: 3000,
     });
   };
 
@@ -285,14 +299,6 @@ const HabitModal = ({
         )}
       </div>
       <div className="space-y-2">
-        {errors.title && <p className="text-alert text-sm leading-5">{errors.title}</p>}
-        {errors.category && <p className="text-alert text-sm leading-5">{errors.category}</p>}
-        {errors.frequency && <p className="text-alert text-sm leading-5">{errors.frequency}</p>}
-        {errors.days && <p className="text-alert text-sm leading-5">{errors.days}</p>}
-        {errors.type && <p className="text-alert text-sm leading-5">{errors.type}</p>}
-        {errors.amount && <p className="text-alert text-sm leading-5">{errors.amount}</p>}
-        {errors.startDate && <p className="text-alert text-sm leading-5">{errors.startDate}</p>}
-        {errors.endDate && <p className="text-alert text-sm leading-5">{errors.endDate}</p>}
         <button className="w-full rounded-lg bg-primary font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleSubmit}>
           養成習慣
         </button>

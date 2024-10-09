@@ -82,17 +82,15 @@ function Login() {
   };
 
   const handleLogin = async (data) => {
-    const { loginEmail, loginPassword } = data;
+    const { loginAccount, loginPassword } = data;
     const auth = getAuth();
     try {
-      // 先根據 account 查詢對應的 email
-      const email = await getEmailByAccount(loginEmail);
+      const email = await getEmailByAccount(loginAccount);
       if (!email) {
         setLoginError("帳號或密碼錯誤");
         return;
       }
 
-      // 使用查詢到的 email 和 password 進行登入
       const userCredential = await signInWithEmailAndPassword(auth, email, loginPassword);
       setUser(userCredential.user);
       setIsLoading(true);
@@ -132,20 +130,20 @@ function Login() {
       {isLogin ? (
         <div className="relative min-h-screen">
           <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col">
-            <label htmlFor="loginEmail" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
+            <label htmlFor="loginAccount" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
               帳號
             </label>
             <input
               type="text"
-              name="loginEmail"
-              id="loginEmail"
-              placeholder="請輸入帳號或 Email"
+              name="loginAccount"
+              id="loginAccount"
+              placeholder="請輸入帳號"
               className={`py-2 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-base leading-6 dark:bg-black-100 placeholder-black ${
-                errors.loginEmail ? "" : "mb-4"
+                errors.loginAccount ? "" : "mb-4"
               }`}
-              {...register("loginEmail", { required: "Email 是必填項目" })}
+              {...register("loginAccount", { required: "Email 是必填項目" })}
             />
-            {errors.loginEmail && <p className="text-alert pl-4 mt-1 mb-3">{errors.loginEmail.message}</p>}
+            {errors.loginAccount && <p className="text-alert pl-4 mt-1 mb-3">{errors.loginAccount.message}</p>}
 
             <label htmlFor="loginPassword" className="font-bold text-base leading-6 mb-2 text-black dark:text-black-0">
               密碼

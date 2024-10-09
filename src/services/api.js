@@ -11,6 +11,8 @@ async function registerUser(email, password, account, name) {
     const user = userCredential.user;
     console.log("User created: ", user);
 
+    const defaultAvatarURL = await getDefaultAvatar("Piggy.png");
+
     const userDocRef = doc(db, "users", user.uid);
     await setDoc(userDocRef, {
       uid: user.uid,
@@ -18,7 +20,7 @@ async function registerUser(email, password, account, name) {
       account: account,
       name: name,
       introduction: "我要養成好習慣！",
-      avatar: "https://firebasestorage.googleapis.com/v0/b/habit-piggy-project.appspot.com/o/default_avatars%2FPiggy.png?alt=media&token=abb71b06-4b8d-41ce-b087-f3aa0d3e86f9",
+      avatar: defaultAvatarURL,
       createdTime: Timestamp.now(),
       levelPoints: 0,
       isAcceptReminder: false,
@@ -64,6 +66,16 @@ async function logoutUser() {
 async function updateUserProfile(uid, profileData) {
   try {
     const userDocRef = doc(db, "users", uid);
+
+    if (profileData.avatarFile) {
+      const avatarFile = profileData.avatarFile;
+      const storageRef = ref(storage, `avatars/${uid}`);
+      const snapshot = await uploadBytes(storageRef, avatarFile);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      profileData.avatar = downloadURL;
+      delete profileData.avatarFile;
+    }
+
     await setDoc(userDocRef, profileData, { merge: true });
     console.log("User profile updated with ID: ", uid);
   } catch (error) {

@@ -27,11 +27,21 @@ const HabitModal = ({
   }, [habitData.frequency.days]);
 
   const handleDayButtonClick = (day) => {
-    const newSelectedDays = selectedDays.includes(day) ? selectedDays.filter((d) => d !== day) : [...selectedDays, day];
+    const dayIndex = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(day);
+    const newSelectedDays = selectedDays.includes(dayIndex) ? selectedDays.filter((d) => d !== dayIndex) : [...selectedDays, dayIndex];
     setSelectedDays(newSelectedDays);
     setHabitData((prevData) => ({
       ...prevData,
       frequency: { ...prevData.frequency, days: newSelectedDays },
+    }));
+  };
+
+  const handleWeeklyDayButtonClick = (day) => {
+    const dayIndex = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(day);
+    setSelectedDays([dayIndex]);
+    setHabitData((prevData) => ({
+      ...prevData,
+      frequency: { ...prevData.frequency, day: dayIndex },
     }));
   };
 
@@ -68,6 +78,27 @@ const HabitModal = ({
       }
       return newErrors;
     });
+
+    if (name === "frequency") {
+      if (value === "weekly") {
+        setSelectedDays([]);
+        setHabitData((prevData) => ({
+          ...prevData,
+          frequency: { type: value, day: null },
+        }));
+      } else if (value === "specificDays") {
+        setSelectedDays([]);
+        setHabitData((prevData) => ({
+          ...prevData,
+          frequency: { type: value, days: [] },
+        }));
+      } else {
+        setHabitData((prevData) => ({
+          ...prevData,
+          frequency: { type: value },
+        }));
+      }
+    }
   };
 
   const addHabitErrorNotify = () => {
@@ -162,19 +193,40 @@ const HabitModal = ({
           </div>
         </div>
       </div>
+      {habitData.frequency.type === "weekly" && (
+        <div>
+          <p className="font-normal text-sm text-black-500 mb-1">選擇一天作為「是否完成習慣」的確認時間吧！</p>
+          <div className="grid grid-cols-7 gap-2 md:gap-4">
+            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
+              <div key={index} className="text-center flex flex-col justify-center items-center gap-1 text-black dark:text-black-0">
+                {day}
+                <checkIcon.TbCheck
+                  className={`w-10 h-10 rounded-full p-1 border border-black-500 dark:border-black-300 cursor-pointer ${
+                    selectedDays.includes(index) ? "bg-primary text-white border-primary dark:border-primary" : "text-black dark:text-black-0 hover:bg-primary-light"
+                  }`}
+                  onClick={() => handleWeeklyDayButtonClick(day)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       {habitData.frequency.type === "specificDays" && (
-        <div className="grid grid-cols-7 gap-2 md:gap-4">
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
-            <div key={index} className="text-center flex flex-col justify-center items-center gap-1 text-black dark:text-black-0">
-              {day}
-              <checkIcon.TbCheck
-                className={`w-10 h-10 rounded-full p-1 border border-black-500 dark:border-black-300 cursor-pointer ${
-                  selectedDays.includes(day) ? "bg-primary text-white border-primary dark:border-primary" : "text-black dark:text-black-0 hover:bg-primary-light"
-                }`}
-                onClick={() => handleDayButtonClick(day)}
-              />
-            </div>
-          ))}
+        <div>
+          <p className="font-normal text-sm text-black-500 mb-1">選擇想要培養習慣的時間吧！</p>
+          <div className="grid grid-cols-7 gap-2 md:gap-4">
+            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
+              <div key={index} className="text-center flex flex-col justify-center items-center gap-1 text-black dark:text-black-0">
+                {day}
+                <checkIcon.TbCheck
+                  className={`w-10 h-10 rounded-full p-1 border border-black-500 dark:border-black-300 cursor-pointer ${
+                    selectedDays.includes(index) ? "bg-primary text-white border-primary dark:border-primary" : "text-black dark:text-black-0 hover:bg-primary-light"
+                  }`}
+                  onClick={() => handleDayButtonClick(day)}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       )}
       <div className="flex justify-between gap-4">

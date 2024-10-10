@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import MonthCalendar from "./MonthCalendar";
+import PropTypes from "prop-types";
 import CategorySelect from "./CategorySelect";
 import { modalIcons, checkIcon } from "../assets/icons";
+import { toast } from "react-hot-toast";
 import AmountCounter from "./AmountCounter";
 
 const EditModal = ({
@@ -25,47 +26,30 @@ const EditModal = ({
   const [confirmAction, setConfirmAction] = useState(null);
 
   useEffect(() => {
-    setSelectedDays(habitData.frequency.days || []);
-  }, [habitData.frequency.days]);
+    if (habitData.frequency.type === "weekly") {
+      setSelectedDays([habitData.frequency.day]);
+    } else {
+      setSelectedDays(habitData.frequency.days || []);
+    }
+  }, [habitData.frequency]);
 
   const handleDayButtonClick = (day) => {
-    const newSelectedDays = selectedDays.includes(day) ? selectedDays.filter((d) => d !== day) : [...selectedDays, day];
+    const dayIndex = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(day);
+    const newSelectedDays = selectedDays.includes(dayIndex) ? selectedDays.filter((d) => d !== dayIndex) : [...selectedDays, dayIndex];
     setSelectedDays(newSelectedDays);
-    setHabitData((prevData) => {
-      const newFrequency = { ...prevData.frequency, days: newSelectedDays };
-      const newStatus = generateStatusArray(prevData.startDate, prevData.endDate, newFrequency);
-      return {
-        ...prevData,
-        frequency: newFrequency,
-        status: newStatus,
-      };
-    });
+    setHabitData((prevData) => ({
+      ...prevData,
+      frequency: { ...prevData.frequency, days: newSelectedDays },
+    }));
   };
 
-  const generateStatusArray = (startDate, endDate, frequency) => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const statusArray = [];
-
-    if (frequency.type === "daily") {
-      for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
-        statusArray.push({ date: new Date(d).toDateString(), completed: false });
-      }
-    } else if (frequency.type === "weekly") {
-      for (let d = start; d <= end; d.setDate(d.getDate() + 7)) {
-        statusArray.push({ date: new Date(d).toDateString(), completed: false });
-      }
-    } else if (frequency.type === "specificDays") {
-      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-      const selectedDays = frequency.days || [];
-      for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
-        if (selectedDays.includes(daysOfWeek[d.getDay()])) {
-          statusArray.push({ date: new Date(d).toDateString(), completed: false });
-        }
-      }
-    }
-
-    return statusArray;
+  const handleWeeklyDayButtonClick = (day) => {
+    const dayIndex = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(day);
+    setSelectedDays([dayIndex]);
+    setHabitData((prevData) => ({
+      ...prevData,
+      frequency: { ...prevData.frequency, day: dayIndex },
+    }));
   };
 
   const validateForm = () => {
@@ -83,9 +67,11 @@ const EditModal = ({
   };
 
   const handleUpdateSubmit = () => {
-    if (validateForm()) {
-      handleUpdateHabit();
+    if (!validateForm()) {
+      addHabitErrorNotify();
+      return;
     }
+    handleUpdateHabit();
   };
 
   const handleInputChange = (e) => {
@@ -99,6 +85,38 @@ const EditModal = ({
       }
       return newErrors;
     });
+
+    if (name === "frequency") {
+      if (value === "weekly") {
+        setSelectedDays([]);
+        setHabitData((prevData) => ({
+          ...prevData,
+          frequency: { type: value, day: null },
+        }));
+      } else if (value === "specificDays") {
+        setSelectedDays([]);
+        setHabitData((prevData) => ({
+          ...prevData,
+          frequency: { type: value, days: [] },
+        }));
+      } else {
+        setHabitData((prevData) => ({
+          ...prevData,
+          frequency: { type: value },
+        }));
+      }
+    }
+  };
+
+  const addHabitErrorNotify = () => {
+    toast.error("沒有完整填寫資料的話，沒辦法送出喔！", {
+      style: {
+        borderRadius: "16px",
+        background: "#212121",
+        color: "#fff",
+      },
+      duration: 3000,
+    });
   };
 
   return (
@@ -109,7 +127,7 @@ const EditModal = ({
             type="text"
             name="title"
             placeholder="輸入習慣名稱"
-            className="py-1.5 px-4 w-full rounded-xl border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-sm leading-5 dark:bg-black-100 dark:placeholder-black"
+            className="py-1.5 px-4 w-full rounded-xl border caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-sm leading-5 dark:bg-black-100 placeholder-black"
             value={habitData.title}
             onChange={handleInputChange}
           />
@@ -126,7 +144,7 @@ const EditModal = ({
           </label>
           <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200" />
         </div>
-        <CategorySelect options={habitCategories} value={habitData.category} onChange={(value) => handleHabitChange({ target: { name: "category", value } })} />
+        <CategorySelect options={habitCategories} value={habitData.category} onChange={(value) => handleInputChange({ target: { name: "category", value } })} />
       </div>
       <div className="flex justify-between gap-4">
         <div className="relative flex items-center gap-1 group">
@@ -182,19 +200,40 @@ const EditModal = ({
           </div>
         </div>
       </div>
+      {habitData.frequency.type === "weekly" && (
+        <div>
+          <p className="font-normal text-sm text-black-500 mb-1">選擇一天作為「是否完成習慣」的確認時間吧！</p>
+          <div className="grid grid-cols-7 gap-2 md:gap-4">
+            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
+              <div key={index} className="text-center flex flex-col justify-center items-center gap-1 text-black dark:text-black-0">
+                {day}
+                <checkIcon.TbCheck
+                  className={`w-10 h-10 rounded-full p-1 border border-black-500 dark:border-black-300 cursor-pointer ${
+                    selectedDays.includes(index) ? "bg-primary text-white border-primary dark:border-primary" : "text-black dark:text-black-0 hover:bg-primary-light"
+                  }`}
+                  onClick={() => handleWeeklyDayButtonClick(day)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       {habitData.frequency.type === "specificDays" && (
-        <div className="grid grid-cols-7 gap-2 md:gap-4">
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
-            <div key={index} className="text-center flex flex-col justify-center items-center gap-1 text-black dark:text-black-0">
-              {day}
-              <checkIcon.TbCheck
-                className={`w-10 h-10 rounded-full p-1 border border-black-500 cursor-pointer ${
-                  selectedDays.includes(day) ? "bg-primary text-white border-primary" : "text-black dark:text-black-0 hover:bg-primary-light"
-                }`}
-                onClick={() => handleDayButtonClick(day)}
-              />
-            </div>
-          ))}
+        <div>
+          <p className="font-normal text-sm text-black-500 mb-1">選擇想要培養習慣的時間吧！</p>
+          <div className="grid grid-cols-7 gap-2 md:gap-4">
+            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
+              <div key={index} className="text-center flex flex-col justify-center items-center gap-1 text-black dark:text-black-0">
+                {day}
+                <checkIcon.TbCheck
+                  className={`w-10 h-10 rounded-full p-1 border border-black-500 dark:border-black-300 cursor-pointer ${
+                    selectedDays.includes(index) ? "bg-primary text-white border-primary dark:border-primary" : "text-black dark:text-black-0 hover:bg-primary-light"
+                  }`}
+                  onClick={() => handleDayButtonClick(day)}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       )}
       <div className="flex justify-between gap-4">
@@ -242,7 +281,7 @@ const EditModal = ({
           </label>
           <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200" />
         </div>
-        <AmountCounter value={habitData.amount} onChange={handleHabitChange} />
+        <AmountCounter value={habitData.amount} onChange={handleInputChange} />
       </div>
       <div className="flex justify-between gap-4 w-full">
         <div className="relative flex items-center gap-1 group">
@@ -338,6 +377,7 @@ EditModal.propTypes = {
   handleMonthCalendarSelectDate: PropTypes.func.isRequired,
   setCalendarTarget: PropTypes.func.isRequired,
   setShowMonthCalendar: PropTypes.func.isRequired,
+  generateStatusArray: PropTypes.func.isRequired,
 };
 
 export default EditModal;

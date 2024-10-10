@@ -146,7 +146,9 @@ function Home() {
     if (name === "frequency") {
       let newFrequency;
       if (value === "specificDays") {
-        newFrequency = { type: value, days: habitData.frequency.days || [] };
+        newFrequency = { type: value, days: habitData.frequency.days || [] }; // 將 days 設置為數字陣列
+      } else if (value === "weekly") {
+        newFrequency = { type: value, day: habitData.frequency.day || 0 }; // 將 day 設置為數字
       } else {
         newFrequency = { type: value };
       }
@@ -182,18 +184,16 @@ function Home() {
         statusArray.push({ date: new Date(d).toDateString(), completed: false });
       }
     } else if (frequency.type === "weekly") {
-      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 7)) {
-        const saturday = new Date(d);
-        saturday.setDate(saturday.getDate() + (6 - saturday.getDay()));
-        if (saturday <= end) {
-          statusArray.push({ date: saturday.toDateString(), completed: false });
+      const selectedDay = frequency.day;
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        if (d.getDay() === selectedDay) {
+          statusArray.push({ date: new Date(d).toDateString(), completed: false });
         }
       }
     } else if (frequency.type === "specificDays") {
-      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-      const selectedDays = Object.values(frequency.days) || [];
-      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-        if (selectedDays.includes(daysOfWeek[d.getDay()])) {
+      const days = Object.values(frequency.days);
+      for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+        if (days.includes(d.getDay())) {
           statusArray.push({ date: new Date(d).toDateString(), completed: false });
         }
       }
@@ -421,19 +421,22 @@ function Home() {
         <habitAddIcon.TbPlus className="w-8 h-8 md:w-10 md:h-10 text-black-0" />
       </div>
       <Modal isOpen={isHabitModalOpen}>
-        <HabitModal
-          habitData={habitData}
-          handleHabitChange={handleHabitChange}
-          handleAddHabit={handleAddHabit}
-          showMonthCalendar={showMonthCalendar}
-          calendarRef={calendarRef}
-          handleHabitModal={handleHabitModal}
-          habitCategories={habitCategories}
-          setHabitData={setHabitData}
-          monthCalendarDate={monthCalendarDate}
-          handleMonthCalendarSelectDate={handleMonthCalendarSelectDate}
-          setShowMonthCalendar={setShowMonthCalendar}
-        />
+        <Modal isOpen={isHabitModalOpen}>
+          <HabitModal
+            habitData={habitData}
+            handleHabitChange={handleHabitChange}
+            handleAddHabit={handleAddHabit}
+            showMonthCalendar={showMonthCalendar}
+            calendarRef={calendarRef}
+            handleHabitModal={handleHabitModal}
+            habitCategories={habitCategories}
+            setHabitData={setHabitData}
+            monthCalendarDate={monthCalendarDate}
+            handleMonthCalendarSelectDate={handleMonthCalendarSelectDate}
+            setShowMonthCalendar={setShowMonthCalendar}
+            generateStatusArray={generateStatusArray}
+          />
+        </Modal>
       </Modal>
       <Modal isOpen={isDetailModalOpen} onClose={handleDetailModal}>
         <DetailModal selectedHabit={selectedHabit} handleDetailModal={handleDetailModal} uncompletedFine={uncompletedFine} handleEditModal={handleEditModal} habitCategories={habitCategories} />
@@ -452,6 +455,7 @@ function Home() {
           monthCalendarDate={monthCalendarDate}
           handleMonthCalendarSelectDate={handleMonthCalendarSelectDate}
           setShowMonthCalendar={setShowMonthCalendar}
+          generateStatusArray={generateStatusArray}
         />
       </Modal>
     </div>

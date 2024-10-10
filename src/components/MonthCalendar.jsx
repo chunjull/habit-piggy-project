@@ -63,9 +63,20 @@ const MonthCalendar = ({ date, onSelect }) => {
   const headerText = `${monthNames[displayDate.month]} ${displayDate.year}`;
 
   const selectDate = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const selectedDate = new Date(date.year, date.month, date.value);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) return;
+
     if (!selectedRange.start || (selectedRange.start && selectedRange.end)) {
       setSelectedRange({ start: date, end: null });
     } else {
+      const startDate = new Date(selectedRange.start.year, selectedRange.start.month, selectedRange.start.value);
+      startDate.setHours(0, 0, 0, 0);
+      if (startDate.getTime() === selectedDate.getTime()) return;
+
       setSelectedRange((prev) => ({
         start: prev.start,
         end: date,
@@ -85,7 +96,9 @@ const MonthCalendar = ({ date, onSelect }) => {
   const isPastDate = (day) => {
     if (!day) return false;
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const date = new Date(day.year, day.month, day.value);
+    date.setHours(0, 0, 0, 0);
     return date < today;
   };
 
@@ -126,7 +139,9 @@ const MonthCalendar = ({ date, onSelect }) => {
           <div
             key={index}
             className={`rounded-full aspect-square flex items-center justify-center cursor-pointer ${
-              isPastDate(day)
+              !day
+                ? "invisible"
+                : isPastDate(day)
                 ? "bg-black-200 cursor-not-allowed"
                 : isSelected(day)
                 ? "bg-primary"
@@ -136,8 +151,8 @@ const MonthCalendar = ({ date, onSelect }) => {
                 ? "bg-primary-dark text-black-0"
                 : "bg-white hover:bg-primary-light hover:outline hover:outline-2 hover:outline-primary-dark"
             }`}
-            onClick={() => !isPastDate(day) && selectDate(day)}
-            onMouseEnter={() => setHoverDate(day)}
+            onClick={() => day && !isPastDate(day) && selectDate(day)}
+            onMouseEnter={() => day && setHoverDate(day)}
             onMouseLeave={() => setHoverDate(null)}
           >
             {day ? day.value : ""}

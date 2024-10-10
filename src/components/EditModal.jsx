@@ -158,7 +158,7 @@ const EditModal = ({
             <input type="radio" name="frequency" id="daily" value="daily" className="appearance-none hidden" checked={habitData.frequency.type === "daily"} onChange={handleInputChange} />
             <label
               htmlFor="daily"
-              className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
+              className={`font-normal text-sm leading-5 block text-center py-px rounded border cursor-pointer ${
                 habitData.frequency.type === "daily" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light dark:bg-black-100"
               }`}
             >
@@ -169,7 +169,7 @@ const EditModal = ({
             <input type="radio" name="frequency" id="weekly" value="weekly" className="appearance-none hidden" checked={habitData.frequency.type === "weekly"} onChange={handleInputChange} />
             <label
               htmlFor="weekly"
-              className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
+              className={`font-normal text-sm leading-5 block text-center py-px rounded border cursor-pointer ${
                 habitData.frequency.type === "weekly" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light dark:bg-black-100"
               }`}
             >
@@ -188,7 +188,7 @@ const EditModal = ({
             />
             <label
               htmlFor="specificDays"
-              className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
+              className={`font-normal text-sm leading-5 block text-center py-px rounded border cursor-pointer ${
                 habitData.frequency.type === "specificDays" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light dark:bg-black-100"
               }`}
             >
@@ -203,7 +203,7 @@ const EditModal = ({
             <div key={index} className="text-center flex flex-col justify-center items-center gap-1 text-black dark:text-black-0">
               {day}
               <checkIcon.TbCheck
-                className={`w-10 h-10 rounded-full p-1 border border-black-500 ${
+                className={`w-10 h-10 rounded-full p-1 border border-black-500 cursor-pointer ${
                   selectedDays.includes(day) ? "bg-primary text-white border-primary" : "text-black dark:text-black-0 hover:bg-primary-light"
                 }`}
                 onClick={() => handleDayButtonClick(day)}
@@ -227,7 +227,7 @@ const EditModal = ({
             <input type="radio" name="type" id="to-do" value="to-do" className="appearance-none hidden" checked={habitData.type === "to-do"} onChange={handleInputChange} />
             <label
               htmlFor="to-do"
-              className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
+              className={`font-normal text-sm leading-5 block text-center py-px rounded border cursor-pointer ${
                 habitData.type === "to-do" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light dark:bg-black-100"
               }`}
             >
@@ -238,7 +238,7 @@ const EditModal = ({
             <input type="radio" name="type" id="not-to-do" value="not-to-do" className="appearance-none hidden" checked={habitData.type === "not-to-do"} onChange={handleInputChange} />
             <label
               htmlFor="not-to-do"
-              className={`font-normal text-sm leading-5 block text-center py-px rounded border ${
+              className={`font-normal text-sm leading-5 block text-center py-px rounded border cursor-pointer ${
                 habitData.type === "not-to-do" ? "bg-primary border-primary" : "bg-black-0 border-black-300 hover:bg-primary-light dark:bg-black-100"
               }`}
             >

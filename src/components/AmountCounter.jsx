@@ -30,7 +30,7 @@ const AmountCounter = ({ value, onChange, min = 10, max = 100, step = 10 }) => {
         type="number"
         name="amount"
         id="amount"
-        className="px-4 text-center w-full h-6  font-normal text-sm leading-5 no-spinner dark:bg-black-100 dark:placeholder-black-400"
+        className="px-4 text-center w-full h-6 font-normal text-sm leading-5 no-spinner dark:bg-black-100 dark:placeholder-black-400 focus:outline-none focus:border-none"
         value={amount}
         readOnly
       />

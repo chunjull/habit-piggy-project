@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import MonthCalendar from "./MonthCalendar";
 import CategorySelect from "./CategorySelect";
@@ -10,7 +10,6 @@ const EditModal = ({
   handleHabitChange,
   handleUpdateHabit,
   handleDeleteHabit,
-  handleFocus,
   showMonthCalendar,
   calendarRef,
   handleEditModal,
@@ -18,7 +17,6 @@ const EditModal = ({
   setHabitData,
   monthCalendarDate,
   handleMonthCalendarSelectDate,
-  setCalendarTarget,
   setShowMonthCalendar,
 }) => {
   const [selectedDays, setSelectedDays] = useState(habitData.frequency.days || []);
@@ -68,19 +66,6 @@ const EditModal = ({
     }
 
     return statusArray;
-  };
-
-  const startDateRef = useRef(null);
-  const endDateRef = useRef(null);
-
-  const handleStartDateClick = () => {
-    setCalendarTarget("startDate");
-    setShowMonthCalendar(true);
-  };
-
-  const handleEndDateClick = () => {
-    setCalendarTarget("endDate");
-    setShowMonthCalendar(true);
   };
 
   const validateForm = () => {
@@ -270,36 +255,10 @@ const EditModal = ({
           <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200" />
         </div>
         <div className="border border-black-300 w-full rounded py-0.5 px-4 flex justify-between items-center bg-black-0 dark:bg-black-100 relative">
-          <button className={`text-center w-1/2 font-normal text-sm leading-5 text-black`} onClick={handleStartDateClick}>
-            {habitData.startDate || "開始日期"}
-          </button>
-          <p className="px-2 text-black font-normal text-sm leading-5">-</p>
-          <button className={`text-center w-1/2 font-normal text-sm leading-5 text-black`} onClick={handleEndDateClick}>
-            {habitData.endDate || "結束日期"}
+          <button className={`text-center w-full font-normal text-sm leading-5 text-black`} onClick={() => setShowMonthCalendar(!showMonthCalendar)}>
+            {habitData.startDate && habitData.endDate ? `${habitData.startDate} - ${habitData.endDate}` : "選擇日期範圍"}
           </button>
         </div>
-        <input
-          type="text"
-          name="startDate"
-          id="startDate"
-          className="hidden"
-          ref={startDateRef}
-          placeholder="開始日期"
-          value={habitData.startDate}
-          onFocus={() => handleFocus("startDate")}
-          onChange={handleInputChange}
-        />
-        <input
-          type="text"
-          name="endDate"
-          id="endDate"
-          className="hidden"
-          ref={endDateRef}
-          placeholder="結束日期"
-          value={habitData.endDate}
-          onFocus={() => handleFocus("endDate")}
-          onChange={handleInputChange}
-        />
         {showMonthCalendar && (
           <div ref={calendarRef} className="w-3/5 md:w-1/6 absolute bottom-0 md:-bottom-12 2xl:-bottom-16 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
             <MonthCalendar date={monthCalendarDate} onSelect={handleMonthCalendarSelectDate} />

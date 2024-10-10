@@ -40,7 +40,6 @@ function Home() {
   const [habits, setHabits] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [showMonthCalendar, setShowMonthCalendar] = useState(false);
-  const [calendarTarget, setCalendarTarget] = useState("");
   const [selectedHabit, setSelectedHabit] = useState(null);
   const [weekDates, setWeekDates] = useState([]);
   const [uncompletedFine, setUncompletedFine] = useState(0);
@@ -209,7 +208,7 @@ function Home() {
       const end = new Date(habitData.endDate);
 
       if (end <= start) {
-        alert("結束日期必須晚於開始日期");
+        dateErrorNotify();
         return;
       }
 
@@ -297,32 +296,15 @@ function Home() {
   const handleSelectDate = async (date) => {
     setSelectedDate(date);
     await fetchHabits(date);
-    if (calendarTarget) {
-      setHabitData((prev) => ({
-        ...prev,
-        [calendarTarget]: `${date.year}-${String(date.month + 1).padStart(2, "0")}-${String(date.day).padStart(2, "0")}`,
-      }));
-      setShowMonthCalendar(false);
-      setCalendarTarget("");
-    }
   };
 
-  const handleMonthCalendarSelectDate = (date) => {
-    setMonthCalendarDate(date);
-    if (calendarTarget) {
-      const formattedDate = `${date.year}-${String(date.month + 1).padStart(2, "0")}-${String(date.day).padStart(2, "0")}`;
-      setHabitData((prev) => ({
-        ...prev,
-        [calendarTarget]: formattedDate,
-      }));
-      setShowMonthCalendar(false);
-      setCalendarTarget("");
-    }
-  };
-
-  const handleFocus = (target) => {
-    setCalendarTarget(target);
-    setShowMonthCalendar(true);
+  const handleMonthCalendarSelectDate = (range) => {
+    setHabitData((prevData) => ({
+      ...prevData,
+      startDate: `${range.start.year}-${range.start.month + 1}-${range.start.value}`,
+      endDate: `${range.end.year}-${range.end.month + 1}-${range.end.value}`,
+    }));
+    setShowMonthCalendar(false);
   };
 
   const updateUserLevelPoints = async (userId, points) => {
@@ -443,7 +425,6 @@ function Home() {
           habitData={habitData}
           handleHabitChange={handleHabitChange}
           handleAddHabit={handleAddHabit}
-          handleFocus={handleFocus}
           showMonthCalendar={showMonthCalendar}
           calendarRef={calendarRef}
           handleHabitModal={handleHabitModal}
@@ -451,7 +432,6 @@ function Home() {
           setHabitData={setHabitData}
           monthCalendarDate={monthCalendarDate}
           handleMonthCalendarSelectDate={handleMonthCalendarSelectDate}
-          setCalendarTarget={setCalendarTarget}
           setShowMonthCalendar={setShowMonthCalendar}
         />
       </Modal>
@@ -463,9 +443,7 @@ function Home() {
           habitData={habitData}
           handleHabitChange={handleHabitChange}
           handleUpdateHabit={handleUpdateHabit}
-          handleFocus={handleFocus}
           showMonthCalendar={showMonthCalendar}
-          calendarTarget={calendarTarget}
           calendarRef={calendarRef}
           handleEditModal={handleEditModal}
           handleDeleteHabit={handleDeleteHabit}
@@ -473,7 +451,6 @@ function Home() {
           setHabitData={setHabitData}
           monthCalendarDate={monthCalendarDate}
           handleMonthCalendarSelectDate={handleMonthCalendarSelectDate}
-          setCalendarTarget={setCalendarTarget}
           setShowMonthCalendar={setShowMonthCalendar}
         />
       </Modal>

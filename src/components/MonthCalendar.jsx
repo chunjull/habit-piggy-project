@@ -6,15 +6,11 @@ const MonthCalendar = ({ date, onSelect }) => {
   const [weekNames] = useState(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
   const [monthNames] = useState(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]);
   const [displayDate, setDisplayDate] = useState(null);
-  const [currentDate, setCurrentDate] = useState(null);
+  const [selectedRange, setSelectedRange] = useState({ start: null, end: null });
+  const [hoverDate, setHoverDate] = useState(null);
 
   useEffect(() => {
     const now = new Date();
-    setCurrentDate({
-      year: now.getFullYear(),
-      month: now.getMonth(),
-      day: now.getDate(),
-    });
     setDisplayDate(
       date
         ? { ...date }
@@ -62,18 +58,52 @@ const MonthCalendar = ({ date, onSelect }) => {
     });
   };
 
-  const selectDate = (date) => {
-    const newDate = { ...displayDate, day: date.value, month: date.month, year: date.year };
-    onSelect(newDate);
-  };
-
-  const checkCurrentDate = (date) => {
-    return date && date.value === currentDate.day && currentDate.year === date.year && currentDate.month === date.month;
-  };
-
   if (!displayDate) return null;
 
   const headerText = `${monthNames[displayDate.month]} ${displayDate.year}`;
+
+  const selectDate = (date) => {
+    if (!selectedRange.start || (selectedRange.start && selectedRange.end)) {
+      setSelectedRange({ start: date, end: null });
+    } else {
+      setSelectedRange((prev) => ({
+        start: prev.start,
+        end: date,
+      }));
+      onSelect({ start: selectedRange.start, end: date });
+    }
+  };
+
+  const isInRange = (day) => {
+    if (!day || !selectedRange.start || !selectedRange.end) return false;
+    const date = new Date(day.year, day.month, day.value);
+    const start = new Date(selectedRange.start.year, selectedRange.start.month, selectedRange.start.value);
+    const end = new Date(selectedRange.end.year, selectedRange.end.month, selectedRange.end.value);
+    return date >= start && date <= end;
+  };
+
+  const isPastDate = (day) => {
+    if (!day) return false;
+    const today = new Date();
+    const date = new Date(day.year, day.month, day.value);
+    return date < today;
+  };
+
+  const isSelected = (day) => {
+    if (!day) return false;
+    const date = new Date(day.year, day.month, day.value);
+    const start = selectedRange.start ? new Date(selectedRange.start.year, selectedRange.start.month, selectedRange.start.value) : null;
+    const end = selectedRange.end ? new Date(selectedRange.end.year, selectedRange.end.month, selectedRange.end.value) : null;
+    return (start && date.getTime() === start.getTime()) || (end && date.getTime() === end.getTime());
+  };
+
+  const isInHoverRange = (day) => {
+    if (!day || !selectedRange.start || !hoverDate) return false;
+    const date = new Date(day.year, day.month, day.value);
+    const start = new Date(selectedRange.start.year, selectedRange.start.month, selectedRange.start.value);
+    const end = new Date(hoverDate.year, hoverDate.month, hoverDate.value);
+    return date > start && date < end;
+  };
 
   return (
     <div className="p-4 bg-light dark:bg-black-800 rounded-2xl">
@@ -95,8 +125,20 @@ const MonthCalendar = ({ date, onSelect }) => {
         {daysInMonth().map((day, index) => (
           <div
             key={index}
-            className={`rounded-full aspect-square flex items-center justify-center cursor-pointer ${checkCurrentDate(day) ? "bg-primary" : "bg-white hover:bg-primary-light"}`}
-            onClick={() => day && selectDate(day)}
+            className={`rounded-full aspect-square flex items-center justify-center cursor-pointer ${
+              isPastDate(day)
+                ? "bg-black-200 cursor-not-allowed"
+                : isSelected(day)
+                ? "bg-primary"
+                : isInHoverRange(day)
+                ? "bg-primary-light"
+                : isInRange(day)
+                ? "bg-primary-dark text-black-0"
+                : "bg-white hover:bg-primary-light hover:outline hover:outline-2 hover:outline-primary-dark"
+            }`}
+            onClick={() => !isPastDate(day) && selectDate(day)}
+            onMouseEnter={() => setHoverDate(day)}
+            onMouseLeave={() => setHoverDate(null)}
           >
             {day ? day.value : ""}
           </div>

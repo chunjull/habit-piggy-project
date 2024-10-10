@@ -17,6 +17,7 @@ import {
   TbChevronRight,
   TbCalendarSmile,
   TbPlus,
+  TbMinus,
   TbX,
   TbInfoCircle,
   TbAlertCircle,
@@ -69,6 +70,7 @@ export const habitDetailIcon = {
 
 export const habitAddIcon = {
   TbPlus,
+  TbMinus,
 };
 
 export const modalIcons = {

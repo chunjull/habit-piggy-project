@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import CategorySelect from "./CategorySelect";
 import { modalIcons, checkIcon } from "../assets/icons";
 import { toast } from "react-hot-toast";
+import AmountCounter from "./AmountCounter";
 
 const HabitModal = ({
   habitData,
@@ -236,20 +237,7 @@ const HabitModal = ({
           </label>
           <modalIcons.TbInfoCircle className="w-4 h-4 text-black-500 dark:text-black-200" />
         </div>
-        <div className="flex gap-2 w-full">
-          <p className="font-normal text-base leading-6 text-black dark:text-black-0">NT$</p>
-          <input
-            type="number"
-            name="amount"
-            id="amount"
-            className="px-4 text-end w-full rounded border border-black-300 caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark font-normal text-sm leading-5 no-spinner dark:bg-black-100 dark:placeholder-black-400"
-            placeholder="請輸入未完成習慣的罰款"
-            value={habitData.amount}
-            onChange={handleInputChange}
-            min={0}
-            onKeyDown={(e) => e.key === "-" && e.preventDefault()}
-          />
-        </div>
+        <AmountCounter value={habitData.amount} onChange={handleInputChange} />
       </div>
       <div className="flex justify-between gap-4 w-full">
         <div className="relative flex items-center gap-1 group">

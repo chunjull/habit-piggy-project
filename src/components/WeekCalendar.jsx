@@ -117,7 +117,7 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
           <div
             key={index}
             className={`py-1 px-1 flex flex-col items-center gap-1 rounded-lg cursor-pointer ${
-              checkCurrentDate(day) ? "bg-primary" : checkSelectedDate(day) ? "bg-primary-light" : "bg-transparent hover:bg-primary-light"
+              checkCurrentDate(day) ? "bg-primary" : checkSelectedDate(day) ? "outline outline-primary-dark bg-primary-light" : "bg-transparent hover:bg-primary-light"
             }`}
             onClick={() => selectDate(day)}
           >

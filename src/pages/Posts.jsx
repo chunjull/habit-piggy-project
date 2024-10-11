@@ -98,6 +98,12 @@ function Posts() {
   };
 
   const handleDeleteComment = (postID, commentID) => {
+    const post = posts.find((post) => post.id === postID);
+    const comment = post.comments.find((comment) => comment.id === commentID);
+    if (comment.userID !== user.uid) {
+      authorAlertNotify();
+      return;
+    }
     setConfirmAction(() => async () => {
       await deleteComment(postID, commentID);
       const renderComments = await getComments(postID);
@@ -108,6 +114,11 @@ function Posts() {
   };
 
   const handleDeletePost = async (postID) => {
+    const post = posts.find((post) => post.id === postID);
+    if (post.userID !== user.uid) {
+      authorAlertNotify();
+      return;
+    }
     setConfirmAction(() => async () => {
       await deletePost(postID);
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postID));
@@ -118,8 +129,17 @@ function Posts() {
 
   const handleEdit = (post, commentID = null) => {
     if (commentID) {
-      setEditingComment((prev) => ({ ...prev, [commentID]: post.comments.find((comment) => comment.id === commentID).content }));
+      const comment = post.comments.find((comment) => comment.id === commentID);
+      if (comment.userID !== user.uid) {
+        authorAlertNotify();
+        return;
+      }
+      setEditingComment((prev) => ({ ...prev, [commentID]: comment.content }));
     } else {
+      if (post.userID !== user.uid) {
+        authorAlertNotify();
+        return;
+      }
       setCurrentPost(post);
       setIsPostModalOpen(true);
     }
@@ -318,6 +338,7 @@ function Posts() {
   const updateCommentNotify = () => CustomToast("已更新留言！");
   const deleteCommentNotify = () => CustomToast("已刪除留言！");
   const alertNotify = () => AlertToast("沒有內容不能發布喔！");
+  const authorAlertNotify = () => AlertToast("你沒有權限執行這個行為！");
 
   return (
     <>

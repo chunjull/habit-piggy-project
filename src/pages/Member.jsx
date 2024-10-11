@@ -105,12 +105,7 @@ function Member() {
         fetchUserAchievements(user.uid);
         fetchBadges();
         fetchUserBadges(user.uid);
-        // const habitTaskValue = await calculateTaskValue(user.uid, "habit");
-        // console.log("Habit Task Value: ", habitTaskValue);
-        // const savingsTaskValue = await calculateTaskValue(user.uid, "savings");
-        // console.log("Savings Task Value: ", savingsTaskValue);
-        const levelTaskValue = await calculateTaskValue(user.uid, "level");
-        await checkAndAwardAchievements(user.uid, "level", levelTaskValue);
+        await checkAndAwardAllAchievements(user.uid);
       }
     };
 
@@ -125,6 +120,14 @@ function Member() {
       day: today.getDate(),
     });
   }, []);
+
+  const checkAndAwardAllAchievements = async (uid) => {
+    const taskTypes = ["habit", "savings", "level"];
+    for (const type of taskTypes) {
+      const taskValue = await calculateTaskValue(uid, type);
+      await checkAndAwardAchievements(uid, type, taskValue);
+    }
+  };
 
   const fetchAchievements = async () => {
     const achievementsList = await getAchievements();
@@ -323,10 +326,6 @@ function Member() {
       await updateHabit(user.uid, selectedHabit.id, updatedHabitData);
       await calculateBadges(user.uid);
       await checkAndAwardBadges(user.uid);
-      const habitTaskValue = await calculateTaskValue(user.uid, "habit");
-      await checkAndAwardAchievements(user.uid, "habit", habitTaskValue);
-      const savingsTaskValue = await calculateTaskValue(user.uid, "savings");
-      await checkAndAwardAchievements(user.uid, "savings", savingsTaskValue);
       fetchHabits();
       setIsEditModalOpen(false);
       setIsDetailModalOpen(false);
@@ -341,11 +340,6 @@ function Member() {
       await deleteHabit(user.uid, selectedHabit.id);
       await calculateBadges(user.uid);
       await checkAndAwardBadges(user.uid);
-
-      const habitTaskValue = await calculateTaskValue(user.uid, "habit");
-      await checkAndAwardAchievements(user.uid, "habit", habitTaskValue);
-      const savingsTaskValue = await calculateTaskValue(user.uid, "savings");
-      await checkAndAwardAchievements(user.uid, "savings", savingsTaskValue);
 
       const updatedHabits = await getHabits(user.uid);
       setHabits(updatedHabits);

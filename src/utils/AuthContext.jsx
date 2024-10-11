@@ -8,6 +8,7 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [loading, setLoading] = useState(true);
   const auth = getAuth();
 
   useEffect(() => {
@@ -20,6 +21,7 @@ const AuthProvider = ({ children }) => {
         setUser(null);
         setIsDarkMode(false);
       }
+      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -33,7 +35,7 @@ const AuthProvider = ({ children }) => {
     }
   }, [isDarkMode]);
 
-  return <AuthContext.Provider value={{ user, setUser, isDarkMode, setIsDarkMode }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, setUser, isDarkMode, setIsDarkMode, loading }}>{children}</AuthContext.Provider>;
 };
 
 export { AuthContext, AuthProvider };

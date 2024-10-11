@@ -4,7 +4,11 @@ import { AuthContext } from "./AuthContext";
 import PropTypes from "prop-types";
 
 const PrivateRoute = ({ children }) => {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
+
+  if (loading) {
+    return;
+  }
 
   if (!user) {
     return <Navigate to="/" />;

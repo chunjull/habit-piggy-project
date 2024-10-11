@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef, useContext, useCallback } from "react";
 import { AuthContext } from "../utils/AuthContext";
 import {
   getHabits,
@@ -300,6 +300,13 @@ function Home() {
     await fetchHabits(date);
   };
 
+  const handleWeekChange = useCallback(
+    (weekDates) => {
+      setWeekDates(weekDates);
+    },
+    [setWeekDates]
+  );
+
   const handleMonthCalendarSelectDate = (range) => {
     setHabitData((prevData) => ({
       ...prevData,
@@ -322,10 +329,20 @@ function Home() {
   };
 
   const handleCheck = async (habitId, date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const targetDate = new Date(date);
+    targetDate.setHours(0, 0, 0, 0);
+
+    if (targetDate > today) {
+      checkErrorNotify();
+      return;
+    }
+
     const updatedHabits = habits.map((habit) => {
       if (habit.id === habitId) {
         const updatedStatus = habit.status.map((status) => {
-          if (new Date(status.date).toDateString() === new Date(date).toDateString()) {
+          if (new Date(status.date).toDateString() === targetDate.toDateString()) {
             const newCompletedStatus = !status.completed;
             if (newCompletedStatus) {
               updateUserLevelPoints(user.uid, habit.amount);
@@ -411,10 +428,11 @@ function Home() {
   const checkHabitNotify = () => CustomToast("給你一個乖寶寶印章");
   const unCheckHabitNotify = () => CustomToast("要記得回來完成喔！");
   const dateErrorNotify = () => AlertToast("結束日期必須晚於開始日期喔！");
+  const checkErrorNotify = () => AlertToast("只能在今天之前打卡喔！");
 
   return (
     <div className="md:pb-6">
-      <WeekCalendar date={selectedDate} onSelect={handleSelectDate} onWeekChange={setWeekDates} />
+      <WeekCalendar date={selectedDate} onSelect={handleSelectDate} onWeekChange={handleWeekChange} />
       <HabitList habits={habits} habitCategories={habitCategories} handleDetailClick={handleDetailClick} weekDates={weekDates} handleCheck={handleCheck} />
       <div
         className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center fixed right-4 bottom-20 md:bottom-10 bg-primary hover:bg-primary-dark cursor-pointer"

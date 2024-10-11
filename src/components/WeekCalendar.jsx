@@ -42,7 +42,7 @@ const WeekCalendar = ({ date, onSelect, onWeekChange }) => {
       }
       onWeekChange(weekDates);
     }
-  }, [displayDate, onWeekChange]);
+  }, [displayDate]);
 
   const daysInWeek = () => {
     if (!displayDate) return [];

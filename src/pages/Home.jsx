@@ -146,9 +146,9 @@ function Home() {
     if (name === "frequency") {
       let newFrequency;
       if (value === "specificDays") {
-        newFrequency = { type: value, days: habitData.frequency.days || [] }; // 將 days 設置為數字陣列
+        newFrequency = { type: value, days: habitData.frequency.days || [] };
       } else if (value === "weekly") {
-        newFrequency = { type: value, day: habitData.frequency.day || 0 }; // 將 day 設置為數字
+        newFrequency = { type: value, day: habitData.frequency.day || 0 };
       } else {
         newFrequency = { type: value };
       }
@@ -170,6 +170,7 @@ function Home() {
       setHabitData((prevData) => ({
         ...prevData,
         [name]: value,
+        status: generateStatusArray(habitData.startDate, habitData.endDate, habitData.frequency),
       }));
     }
   };
@@ -251,6 +252,7 @@ function Home() {
         ...originalHabitData,
         ...habitData,
         id: selectedHabit.id,
+        status: generateStatusArray(habitData.startDate, habitData.endDate, habitData.frequency),
       };
 
       await updateHabit(user.uid, selectedHabit.id, updatedHabitData);

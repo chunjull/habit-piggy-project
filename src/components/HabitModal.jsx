@@ -298,6 +298,14 @@ const HabitModal = ({
         )}
       </div>
       <div className="space-y-2">
+        {errors.title && <p className="text-alert text-sm leading-5">{errors.title}</p>}
+        {errors.category && <p className="text-alert text-sm leading-5">{errors.category}</p>}
+        {errors.frequency && <p className="text-alert text-sm leading-5">{errors.frequency}</p>}
+        {errors.days && <p className="text-alert text-sm leading-5">{errors.days}</p>}
+        {errors.type && <p className="text-alert text-sm leading-5">{errors.type}</p>}
+        {errors.amount && <p className="text-alert text-sm leading-5">{errors.amount}</p>}
+        {errors.startDate && <p className="text-alert text-sm leading-5">{errors.startDate}</p>}
+        {errors.endDate && <p className="text-alert text-sm leading-5">{errors.endDate}</p>}
         <button className="w-full rounded-lg bg-primary font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleSubmit}>
           養成習慣
         </button>

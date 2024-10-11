@@ -19,6 +19,7 @@ const EditModal = ({
   monthCalendarDate,
   handleMonthCalendarSelectDate,
   setShowMonthCalendar,
+  generateStatusArray,
 }) => {
   const [selectedDays, setSelectedDays] = useState(habitData.frequency.days || []);
   const [errors, setErrors] = useState({});
@@ -71,6 +72,11 @@ const EditModal = ({
       addHabitErrorNotify();
       return;
     }
+    const newStatus = generateStatusArray(habitData.startDate, habitData.endDate, habitData.frequency);
+    setHabitData((prevData) => ({
+      ...prevData,
+      status: newStatus,
+    }));
     handleUpdateHabit();
   };
 

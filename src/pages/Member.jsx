@@ -220,17 +220,33 @@ function Member() {
   const handleHabitChange = (e) => {
     const { name, value } = e.target;
     if (name === "frequency") {
-      const newFrequency = { type: value };
+      let newFrequency;
+      if (value === "specificDays") {
+        newFrequency = { type: value, days: habitData.frequency.days || [] };
+      } else if (value === "weekly") {
+        newFrequency = { type: value, day: habitData.frequency.day || 0 };
+      } else {
+        newFrequency = { type: value };
+      }
       const newStatus = generateStatusArray(habitData.startDate, habitData.endDate, newFrequency);
       setHabitData((prevData) => ({
         ...prevData,
         frequency: newFrequency,
         status: newStatus,
       }));
+    } else if (name === "startDate" || name === "endDate") {
+      const newHabitData = { ...habitData, [name]: value };
+      const newStatus = generateStatusArray(newHabitData.startDate, newHabitData.endDate, newHabitData.frequency);
+      setHabitData((prevData) => ({
+        ...prevData,
+        [name]: value,
+        status: newStatus,
+      }));
     } else {
       setHabitData((prevData) => ({
         ...prevData,
         [name]: value,
+        status: generateStatusArray(habitData.startDate, habitData.endDate, habitData.frequency),
       }));
     }
   };
@@ -245,14 +261,16 @@ function Member() {
         statusArray.push({ date: new Date(d).toDateString(), completed: false });
       }
     } else if (frequency.type === "weekly") {
-      for (let d = start; d <= end; d.setDate(d.getDate() + 7)) {
-        statusArray.push({ date: new Date(d).toDateString(), completed: false });
+      const selectedDay = frequency.day;
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        if (d.getDay() === selectedDay) {
+          statusArray.push({ date: new Date(d).toDateString(), completed: false });
+        }
       }
     } else if (frequency.type === "specificDays") {
-      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-      const selectedDays = frequency.days || [];
+      const days = Object.values(frequency.days);
       for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
-        if (selectedDays.includes(daysOfWeek[d.getDay()])) {
+        if (days.includes(d.getDay())) {
           statusArray.push({ date: new Date(d).toDateString(), completed: false });
         }
       }
@@ -293,6 +311,7 @@ function Member() {
         ...originalHabitData,
         ...habitData,
         id: selectedHabit.id,
+        status: generateStatusArray(habitData.startDate, habitData.endDate, habitData.frequency),
       };
 
       await updateHabit(user.uid, selectedHabit.id, updatedHabitData);
@@ -543,6 +562,7 @@ function Member() {
           handleMonthCalendarSelectDate={handleMonthCalendarSelectDate}
           setCalendarTarget={setCalendarTarget}
           setShowMonthCalendar={setShowMonthCalendar}
+          generateStatusArray={generateStatusArray}
         />
       </Modal>
       <Modal isOpen={isAchievementModalOpen} onClose={handleAchievementModal}>

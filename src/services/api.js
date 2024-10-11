@@ -419,15 +419,6 @@ async function calculateTaskValue(uid, taskType) {
         }, 0);
         break;
 
-      case "streak":
-        taskValue =
-          habitsList.reduce((total, habit) => {
-            const completedCount = habit.status.filter((status) => status.completed && new Date(status.date) < todayMidnight).length;
-            const totalCount = habit.status.filter((status) => new Date(status.date) < todayMidnight).length;
-            return total + (totalCount > 0 ? completedCount / totalCount : 0);
-          }, 0) / habitsList.length;
-        break;
-
       default:
         throw new Error("Invalid task type");
     }
@@ -450,21 +441,12 @@ async function checkAndAwardAchievements(uid, taskType, taskValue) {
       const achievement = doc.data();
       const condition = achievement.condition;
 
-      let achieved = false;
-      if (condition.type === taskType) {
-        if (taskType === "habit" && taskValue >= condition.count) {
-          achieved = true;
-        } else if (taskType === "savings" && taskValue >= condition.amount) {
-          achieved = true;
-        } else if (taskType === "streak" && taskValue >= condition.count) {
-          achieved = true;
+      if (condition.type === taskType && taskValue >= condition.amount) {
+        if (!userAchievements.includes(doc.id)) {
+          userAchievements.push(doc.id);
+          await updateDoc(userDocRef, { achievements: userAchievements });
+          console.log(`Achievement ${achievement.name} awarded to user ${uid}`);
         }
-      }
-
-      if (achieved && !userAchievements.includes(doc.id)) {
-        userAchievements.push(doc.id);
-        await updateDoc(userDocRef, { achievements: userAchievements });
-        console.log(`Achievement ${achievement.name} awarded to user ID: ${uid}`);
       }
     });
   } catch (error) {

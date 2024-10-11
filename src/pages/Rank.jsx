@@ -77,7 +77,10 @@ function Rank() {
   };
 
   const calculateLevelAndPoints = (levelPoints) => {
-    const level = Math.floor(levelPoints / 100);
+    let level = Math.floor(levelPoints / 100);
+    if (level > 99) {
+      level = 99;
+    }
     return { level };
   };
 

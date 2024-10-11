@@ -396,6 +396,8 @@ async function getUserAchievements(uid) {
 async function calculateTaskValue(uid, taskType) {
   try {
     const userDocRef = doc(db, "users", uid);
+    const userSnapshot = await getDoc(userDocRef);
+    const userData = userSnapshot.data();
     const habitsCollectionRef = collection(userDocRef, "habits");
     const habitsSnapshot = await getDocs(habitsCollectionRef);
     const habitsList = habitsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -417,6 +419,10 @@ async function calculateTaskValue(uid, taskType) {
           const incompleteCount = habit.status.filter((status) => !status.completed && new Date(status.date) < todayMidnight).length;
           return total + habit.amount * incompleteCount;
         }, 0);
+        break;
+
+      case "level":
+        taskValue = Math.floor(userData.levelPoints / 100);
         break;
 
       default:

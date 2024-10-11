@@ -109,6 +109,8 @@ function Member() {
         // console.log("Habit Task Value: ", habitTaskValue);
         // const savingsTaskValue = await calculateTaskValue(user.uid, "savings");
         // console.log("Savings Task Value: ", savingsTaskValue);
+        const levelTaskValue = await calculateTaskValue(user.uid, "level");
+        await checkAndAwardAchievements(user.uid, "level", levelTaskValue);
       }
     };
 

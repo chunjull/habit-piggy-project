@@ -354,7 +354,7 @@ function Posts() {
               }}
             >
               <textarea
-                className="w-full h-fit bg-transparent border-none overflow-hidden resize-none outline-none text-center placeholder-black font-normal text-base leading-6 md:text-xl md:leading-7 xl:text-2xl xl:leading-8"
+                className="w-full h-fit bg-transparent border-none overflow-hidden resize-none outline-none text-center placeholder-black font-normal text-base leading-6 md:text-xl md:leading-7 xl:text-2xl xl:leading-8 break-words whitespace-pre-wrap"
                 placeholder="輸入貼文內容..."
                 value={postContent}
                 onChange={(e) => {
@@ -402,8 +402,15 @@ function Posts() {
                   }`}
                   style={
                     post.background
-                      ? { backgroundImage: `url(${post.background})`, backgroundSize: "cover", backgroundPosition: "center", color: calculateTextColor(post.background) }
-                      : { color: calculateTextColor(post.background) }
+                      ? {
+                          backgroundImage: `url(${post.background})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                          color: calculateTextColor(post.background),
+                          wordBreak: "break-word",
+                          whiteSpace: "pre-wrap",
+                        }
+                      : { color: calculateTextColor(post.background), wordBreak: "break-word", whiteSpace: "pre-wrap" }
                   }
                 >
                   <p className="text-center">{post.content}</p>

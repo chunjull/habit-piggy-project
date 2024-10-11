@@ -232,13 +232,13 @@ function Savings() {
     <div className="p-4 md:py-10 space-y-4">
       <ul className="grid grid-cols-2 w-full">
         <li
-          className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center ${isActiveTab === "overview" ? "bg-primary" : "bg-black-50"}`}
+          className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center cursor-pointer ${isActiveTab === "overview" ? "bg-primary" : "bg-black-50"}`}
           onClick={() => setIsActiveTab("overview")}
         >
           存款總覽
         </li>
         <li
-          className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center ${isActiveTab === "category" ? "bg-primary" : "bg-black-50"}`}
+          className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center cursor-pointer ${isActiveTab === "category" ? "bg-primary" : "bg-black-50"}`}
           onClick={() => setIsActiveTab("category")}
         >
           習慣養成總覽
@@ -250,7 +250,7 @@ function Savings() {
             <div className="flex justify-between items-center">
               <div className="relative group flex items-center flex-grow">
                 <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">存款總覽</h2>
-                <modalIcons.TbInfoCircle className="w-6 h-6 text-black-500 dark:text-black-200 ml-2 inline-block" />
+                <modalIcons.TbInfoCircle className="w-6 h-6 text-black-500 dark:text-black-200 ml-2 inline-block cursor-help" />
                 <span className="absolute top-0 left-32 transform -translate-x-0 w-fit p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:top-7 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark whitespace-normal break-words">
                   結算時間為每日 23:59:59，存款金額為當日未完成的習慣存款金額總和
                 </span>
@@ -288,7 +288,7 @@ function Savings() {
             <div className="flex justify-between items-center">
               <div className="relative group flex items-center flex-grow">
                 <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">類別總覽</h2>
-                <modalIcons.TbInfoCircle className="w-6 h-6 text-black-500 dark:text-black-200 ml-2 inline-block" />
+                <modalIcons.TbInfoCircle className="w-6 h-6 text-black-500 dark:text-black-200 ml-2 inline-block cursor-help" />
                 <span className="absolute top-0 left-[168px] transform -translate-x-0 w-fit p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:top-7 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark whitespace-normal break-words">
                   來看看你的習慣類別分布吧！哪些類別的習慣讓你累積最多存款呢？
                 </span>
@@ -327,7 +327,7 @@ function Savings() {
             <div className="flex justify-between items-center">
               <div className="relative group flex items-center flex-grow">
                 <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">類型總覽</h2>
-                <modalIcons.TbInfoCircle className="w-6 h-6 text-black-500 dark:text-black-200 ml-2 inline-block" />
+                <modalIcons.TbInfoCircle className="w-6 h-6 text-black-500 dark:text-black-200 ml-2 inline-block cursor-help" />
                 <span className="absolute top-0 left-[168px] transform -translate-x-0 w-fit p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:top-7 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark whitespace-normal break-words">
                   來看看你的習慣類型分布吧！你比較擅長養成還是戒除習慣呢？
                 </span>

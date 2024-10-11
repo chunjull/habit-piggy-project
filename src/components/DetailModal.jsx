@@ -42,7 +42,7 @@ const DetailModal = ({ selectedHabit, handleDetailModal, uncompletedFine, handle
           <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">{HabitIcon && <HabitIcon className="w-8 h-8" />}</div>
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <h3 className="font-bold text-lg leading-6 text-black dark:text-black-0">{selectedHabit.title}</h3>
+              <h3 className="font-bold text-lg leading-6 text-black dark:text-black-0 line-clamp-1">{selectedHabit.title}</h3>
             </div>
           </div>
         </div>

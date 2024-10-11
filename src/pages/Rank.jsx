@@ -99,7 +99,7 @@ function Rank() {
                     <div className="absolute before:content-[''] before:absolute before:bottom-[30px] before:left-5 before:w-0 before:h-0 before:border-l-0 before:border-r-[3px] before:border-b-[4px] before:border-l-transparent before:border-r-transparent before:border-b-primary-dark before:z-20"></div>
                   </div>
                 </div>
-                <img src={user.avatar} alt="user's avatar" className="w-12 h-12 rounded-full ml-14 outline outline-primary-dark dark:outline-primary" />
+                <img src={user.avatar} alt="user's avatar" className="w-12 h-12 rounded-full ml-14 object-cover outline outline-primary-dark dark:outline-primary" />
                 <div>
                   <p className="font-normal text-lg leading-7 text-black dark:text-black-0">{user.name}</p>
                   <p className="font-normal text-sm leading-5 text-black-700 dark:text-black-200">Lv.{level}</p>
@@ -108,7 +108,7 @@ function Rank() {
             ) : (
               <div className="flex items-center gap-3">
                 <p className="w-10 h-auto font-normal text-center text-3xl leading-9 font-lobster text-black dark:text-black-0">{index + 1}</p>
-                <img src={user.avatar} alt="user's avatar" className="w-12 h-12 rounded-full outline outline-primary-dark dark:outline-primary" />
+                <img src={user.avatar} alt="user's avatar" className="w-12 h-12 rounded-full object-cover outline outline-primary-dark dark:outline-primary" />
                 <div>
                   <p className="font-normal text-lg leading-7 text-black dark:text-black-0">{user.name}</p>
                   <p className="font-normal text-sm leading-5 text-black-700 dark:text-black-200">Lv.{level}</p>
@@ -146,7 +146,7 @@ function Rank() {
       <div className="flex justify-between py-2 px-4 bg-black-500 dark:bg-black-50 rounded-2xl">
         <div className="flex items-center gap-3 text-black-0 dark:text-black">
           <p className="w-10 h-auto font-normal text-center text-3xl leading-9 font-lobster text-black-0 dark:text-black">{rank}</p>
-          <img src={currentUserData.avatar} alt="user's avatar" className="w-12 h-12 rounded-full outline dark:outline-primary-dark outline-primary" />
+          <img src={currentUserData.avatar} alt="user's avatar" className="w-12 h-12 rounded-full object-cover outline dark:outline-primary-dark outline-primary" />
           <div>
             <p className="font-normal text-lg leading-7 text-white dark:text-black">{currentUserData.name}</p>
             <p className="font-normal text-sm leading-5 text-black-200 dark:text-black-700">Lv.{level}</p>

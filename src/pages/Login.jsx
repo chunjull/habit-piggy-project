@@ -110,7 +110,7 @@ function Login() {
   if (isLoading) {
     return (
       <div className="flex flex-col justify-center items-center h-screen gap-4">
-        <img src={currentImage} alt="loading" className="w-40 h-40" />
+        <img src={currentImage} alt="loading" className="w-40 h-40 object-cover" />
         <p className="font-normal text-base text-black dark:text-black-0">準備好培養習慣了嗎？</p>
       </div>
     );
@@ -172,7 +172,7 @@ function Login() {
                 <p className="text-black font-lobster font-normal text-2xl leading-8 md:text-4xl md:leading-tight py-4 px-8">{dialog[dialogIndex]}</p>
                 <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-20 before:w-0 before:h-0 before:border-l-0 before:border-r-[20px] before:border-t-[20px] before:border-l-transparent before:border-r-transparent before:border-t-black-50 before:z-20"></div>
               </div>
-              <img src={habitPiggyLogo} alt="Habit Piggy" className="w-60 h-60 md:w-80 md:h-80" onClick={handleLogoClick} />
+              <img src={habitPiggyLogo} alt="Habit Piggy" className="w-60 h-60 md:w-80 md:h-80 object-cover" onClick={handleLogoClick} />
             </div>
           </div>
         </div>

@@ -91,7 +91,7 @@ const SettingModal = ({ profileData, handleSettingModal, handleSaveAndClose }) =
       <div>
         <p className="mb-1 font-normal text-base leading-6 text-black dark:text-black-0">會員頭像</p>
         <div className="flex items-center gap-3">
-          <img src={localProfileData.avatar} alt="user's avatar" className="w-12 h-12 rounded-full outline outline-primary-dark dark:outline-primary" />
+          <img src={localProfileData.avatar} alt="user's avatar" className="w-12 h-12 rounded-full object-cover outline outline-primary-dark dark:outline-primary" />
           <div className="space-y-1">
             <div className="relative inline-block">
               <input

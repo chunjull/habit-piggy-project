@@ -429,7 +429,7 @@ function Posts() {
                   {post.comments &&
                     post.comments.map((comment) => (
                       <li key={comment.id} className="flex justify-between items-center gap-3">
-                        <img src={comment.userAvatar} alt="user's avatar" className="w-12 h-12 rounded-full" />
+                        <img src={comment.userAvatar} alt="user's avatar" className="w-12 h-12 rounded-full object-cover" />
                         <div className="bg-black-200 rounded-xl px-4 py-2 w-full flex justify-between items-center">
                           <div className="w-full md:w-4/5">
                             <div className="flex gap-2">

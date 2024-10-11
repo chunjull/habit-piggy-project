@@ -4,11 +4,13 @@ import { useForm } from "react-hook-form";
 import { modalIcons, settingIcons } from "../assets/icons";
 import CustomSelect from "./CustomSelect";
 import { AuthContext } from "../utils/AuthContext";
-import { updateUserProfile, uploadAvatar } from "../services/api";
+import { updateUserProfile, uploadAvatar, logoutUser } from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 const SettingModal = ({ profileData, handleSettingModal, handleSaveAndClose }) => {
   const { setIsDarkMode, user } = useContext(AuthContext);
   const [localProfileData, setLocalProfileData] = useState(profileData);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLocalProfileData(profileData);
@@ -25,6 +27,12 @@ const SettingModal = ({ profileData, handleSettingModal, handleSaveAndClose }) =
       introduction: localProfileData.introduction || "",
     },
   });
+
+  const handleLogout = async () => {
+    await logoutUser();
+    user(null);
+    navigate("/");
+  };
 
   const nameValue = watch("name");
 
@@ -168,6 +176,13 @@ const SettingModal = ({ profileData, handleSettingModal, handleSaveAndClose }) =
       </div>
       <button type="submit" className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark">
         儲存
+      </button>
+      <button
+        type="button"
+        onClick={handleLogout}
+        className="md:hidden text-center w-full bg-black-700 dark:bg-black-200 rounded-xl font-medium text-sm leading-5 py-1 text-black-0 dark:text-black hover:bg-alert hover:dark:bg-alert"
+      >
+        登出
       </button>
     </form>
   );

@@ -215,10 +215,17 @@ async function updatePost(postID, postData) {
 async function deletePost(postID) {
   try {
     const postDocRef = doc(db, "posts", postID);
+    const commentsCollectionRef = collection(postDocRef, "comments");
+
+    const commentsSnapshot = await getDocs(commentsCollectionRef);
+
+    const deleteCommentsPromises = commentsSnapshot.docs.map((commentDoc) => deleteDoc(commentDoc.ref));
+    await Promise.all(deleteCommentsPromises);
+
     await deleteDoc(postDocRef);
-    console.log("Post deleted with ID: ", postID);
+    console.log("Post and its comments deleted with ID: ", postID);
   } catch (error) {
-    console.error("Error deleting post: ", error.code, error.message);
+    console.error("Error deleting post and its comments: ", error.code, error.message);
   }
 }
 

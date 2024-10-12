@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { AuthContext } from "../utils/AuthContext";
 import { getHabits } from "../services/api";
 import SavingsChart from "../components/SavingsChart";
@@ -23,6 +23,7 @@ function Savings() {
   const [typeData, setTypeData] = useState({});
   const [habits, setHabits] = useState([]);
   const { user } = useContext(AuthContext);
+  const customSelectRef = useRef(null);
 
   const habitCategories = [
     { id: 0, name: "生產力", color: "#FF6961" },
@@ -57,6 +58,19 @@ function Savings() {
     };
     fetchData();
   }, [user, filter]);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (customSelectRef.current && !customSelectRef.current.contains(e.target)) {
+        customSelectRef.current.closeMenu();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const getStartAndEndOfPeriod = (filter) => {
     const today = new Date();
@@ -255,7 +269,7 @@ function Savings() {
                   結算時間為每日 23:59:59，存款金額為當日未完成的習慣存款金額總和
                 </span>
               </div>
-              <div className="relative">
+              <div className="relative" ref={customSelectRef}>
                 <CustomSelect options={options} value={filter} onChange={setFilter} />
               </div>
             </div>
@@ -293,7 +307,7 @@ function Savings() {
                   來看看你的習慣類別分布吧！哪些類別的習慣讓你累積最多存款呢？
                 </span>
               </div>
-              <div className="relative">
+              <div className="relative" ref={customSelectRef}>
                 <CustomSelect options={options} value={filter} onChange={setFilter} />
               </div>
             </div>
@@ -332,7 +346,7 @@ function Savings() {
                   來看看你的習慣類型分布吧！你比較擅長養成還是戒除習慣呢？
                 </span>
               </div>
-              <div className="relative">
+              <div className="relative" ref={customSelectRef}>
                 <CustomSelect options={options} value={filter} onChange={setFilter} />
               </div>
             </div>

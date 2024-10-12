@@ -31,6 +31,7 @@ function Posts() {
   const [confirmAction, setConfirmAction] = useState(null);
 
   const postRef = useRef(null);
+  const customSelectRef = useRef(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -67,6 +68,19 @@ function Posts() {
 
     fetchUserData();
   }, [user]);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (customSelectRef.current && !customSelectRef.current.contains(e.target)) {
+        customSelectRef.current.closeMenu();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const filteredPosts = filter === "personal" ? posts.filter((post) => post.userID === user.uid) : posts;
 
@@ -345,7 +359,7 @@ function Posts() {
       <div className="p-4 md:py-10 space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">貼文總覽</h2>
-          <div className="relative">
+          <div className="relative" ref={customSelectRef}>
             <CustomSelect options={options} value={filter} onChange={setFilter} />
           </div>
         </div>
@@ -409,6 +423,7 @@ function Posts() {
                     </div>
                   </div>
                   <PostSelect
+                    ref={customSelectRef}
                     options={[
                       { value: "edit", label: "編輯貼文" },
                       { value: "delete", label: "刪除貼文" },
@@ -496,6 +511,7 @@ function Posts() {
                           {editingComment[comment.id] ? null : (
                             <div className="flex flex-col">
                               <PostSelect
+                                ref={customSelectRef}
                                 options={[
                                   { value: "edit", label: "編輯留言" },
                                   { value: "delete", label: "刪除留言" },

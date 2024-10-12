@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { postIcons } from "../assets/icons";
 import PropTypes from "prop-types";
 
@@ -10,8 +10,21 @@ const CustomSelect = ({ options, onChange, theme }) => {
     setIsOpen(false);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (e.target.closest(".custom-select") === null) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block custom-select">
       <postIcons.TbDots className={`w-6 h-6 text-black ${theme === "dark" ? "dark:text-black-0" : ""} cursor-pointer hover:text-alert`} onClick={() => setIsOpen(!isOpen)} />
       {isOpen && (
         <ul className="absolute z-10 mt-1 w-fit -right-4 bg-white border border-black-500 rounded-2xl shadow-lg text-center text-nowrap overflow-hidden">

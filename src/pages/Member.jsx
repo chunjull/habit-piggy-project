@@ -93,6 +93,8 @@ function Member() {
     { id: 7, name: "環境生活", icon: habitIcons.TbPlant },
   ];
 
+  const customSelectRef = useRef(null);
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (user) {
@@ -119,6 +121,19 @@ function Member() {
       month: today.getMonth(),
       day: today.getDate(),
     });
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (customSelectRef.current && !customSelectRef.current.contains(e.target)) {
+        customSelectRef.current.closeMenu();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const checkAndAwardAllAchievements = async (uid) => {
@@ -517,7 +532,7 @@ function Member() {
         ) : (
           <div className="flex justify-between items-center">
             <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">歷史習慣</h2>
-            <div className="relative">
+            <div className="relative" ref={customSelectRef}>
               <CustomSelect options={options} value={filter} onChange={setFilter} />
             </div>
           </div>

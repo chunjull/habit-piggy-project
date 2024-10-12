@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { dropdownIcon } from "../assets/icons";
 import PropTypes from "prop-types";
 
@@ -12,8 +12,21 @@ const CustomSelect = ({ options, value, onChange }) => {
 
   const selectedOption = options.find((option) => option.value === value) || options[0];
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (e.target.closest(".custom-select") === null) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="relative inline-block w-full">
+    <div className="relative inline-block w-full custom-select">
       <div className="border border-black-500 rounded-2xl px-4 py-0.5 bg-white cursor-pointer flex justify-between items-center" onClick={() => setIsOpen(!isOpen)}>
         <span>{selectedOption.label}</span>
         <dropdownIcon.TbChevronDown className="w-6 h-6 text-black" />

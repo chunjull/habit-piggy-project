@@ -174,7 +174,7 @@ function Rank() {
   };
 
   return (
-    <div className="p-4 md:py-10 space-y-4">
+    <div className="p-4 md:pt-10 mb:pb-6 space-y-4">
       <ul className="grid grid-cols-2 w-full pb-3">
         <li
           className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center cursor-pointer ${isActiveTab === "habit" ? "bg-primary" : "bg-black-50"}`}
@@ -206,10 +206,8 @@ function Rank() {
             <rankIcons.TbCircleCheckFilled className="w-8 h-8" />
             <rankIcons.TbCircleCheck className="w-8 h-8" />
           </div>
-          <ul className="space-y-4 pb-20">{renderTopTenUsers(userHabitCounts, "habit")}</ul>
-          <div className="fixed bottom-0 left-0 md:left-auto w-full max-w-full md:max-w-[1128px] mx-auto p-4 pb-[88px] bg-light dark:bg-black-950 md:p-0 md:py-4">
-            {renderCurrentUser(userHabitCounts, user, "habit")}
-          </div>
+          <ul className="space-y-4">{renderTopTenUsers(userHabitCounts, "habit")}</ul>
+          <div className="sticky bottom-0 left-0 w-full pb-[88px] mb-[88px] md:pb-4 bg-light dark:bg-black-950">{renderCurrentUser(userHabitCounts, user, "habit")}</div>
         </div>
       )}
       {isActiveTab === "savings" && (
@@ -229,10 +227,8 @@ function Rank() {
             <rankIcons.TbCoinFilled className="w-8 h-8" />
             <rankIcons.TbCoin className="w-8 h-8" />
           </div>
-          <ul className="space-y-4 pb-20">{renderTopTenUsers(userSavingsCounts, "savings")}</ul>
-          <div className="fixed bottom-0 left-0 md:left-auto w-full max-w-full md:max-w-[1128px] mx-auto p-4 pb-[88px] bg-light dark:bg-black-950 md:p-0 md:py-4">
-            {renderCurrentUser(userSavingsCounts, user, "savings")}
-          </div>
+          <ul className="space-y-4">{renderTopTenUsers(userSavingsCounts, "savings")}</ul>
+          <div className="sticky bottom-0 left-0 w-full mb-[88px] md:pb-4 bg-light dark:bg-black-950">{renderCurrentUser(userSavingsCounts, user, "savings")}</div>
         </div>
       )}
     </div>

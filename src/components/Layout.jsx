@@ -177,7 +177,7 @@ function Layout({ children, isModalOpen, modalContent }) {
         </nav>
       ) : null}
       <div
-        className={`w-full md:max-w-screen-lg xl:max-w-[1160px] md:pl-20 lg:px-20 my-0 mx-auto flex flex-col md:flex-row min-h-screen relative ${
+        className={`w-full md:max-w-screen-lg xl:max-w-[1160px] md:pl-20 lg:px-20 xl:px-0 my-0 mx-auto flex flex-col md:flex-row min-h-screen relative ${
           isSidebarExpanded && window.innerWidth < 1536 ? "blur-sm" : ""
         }`}
       >

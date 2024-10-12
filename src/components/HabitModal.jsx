@@ -59,7 +59,14 @@ const HabitModal = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (!habitData.title.trim()) {
+      habitTitleErrorNotify();
+      return;
+    }
+
     if (!validateForm()) {
       addHabitErrorNotify();
       return;
@@ -101,8 +108,8 @@ const HabitModal = ({
     }
   };
 
-  const addHabitErrorNotify = () => {
-    toast.error("沒有完整填寫資料的話，沒辦法送出喔！", {
+  const AlertToast = (message) => {
+    toast.error(message, {
       style: {
         borderRadius: "16px",
         background: "#212121",
@@ -111,6 +118,9 @@ const HabitModal = ({
       duration: 3000,
     });
   };
+
+  const habitTitleErrorNotify = () => AlertToast("習慣名稱不能為空或僅包含空格！");
+  const addHabitErrorNotify = () => AlertToast("沒有完整填寫資料的話，沒辦法送出喔！");
 
   return (
     <div className="space-y-4">

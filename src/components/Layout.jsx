@@ -24,7 +24,7 @@ function Layout({ children, isModalOpen, modalContent }) {
   };
 
   const handleResize = () => {
-    if (window.innerWidth >= 1536) {
+    if (window.innerWidth >= 1720) {
       setIsSidebarExpanded(true);
     } else {
       setIsSidebarExpanded(false);
@@ -32,7 +32,7 @@ function Layout({ children, isModalOpen, modalContent }) {
   };
 
   const toggleSidebarInSmallScreen = () => {
-    if (window.innerWidth < 1536 && isSidebarExpanded) {
+    if (window.innerWidth < 1720 && isSidebarExpanded) {
       setIsSidebarExpanded(!isSidebarExpanded);
     }
   };
@@ -176,7 +176,11 @@ function Layout({ children, isModalOpen, modalContent }) {
           </Link>
         </nav>
       ) : null}
-      <div className={`md:max-w-screen-md xl:max-w-[1160px] my-0 mx-auto flex flex-col md:flex-row min-h-screen relative ${isSidebarExpanded && window.innerWidth < 1536 ? "blur-sm" : ""}`}>
+      <div
+        className={`w-full md:max-w-screen-lg xl:max-w-[1160px] md:pl-20 lg:px-20 my-0 mx-auto flex flex-col md:flex-row min-h-screen relative ${
+          isSidebarExpanded && window.innerWidth < 1536 ? "blur-sm" : ""
+        }`}
+      >
         <div className="mt-0 mb-[86px] md:mb-0 w-full p-0 relative">{children}</div>
       </div>
       {isModalOpen && <Modal isOpen={isModalOpen}>{modalContent}</Modal>}

@@ -2,10 +2,10 @@ import { useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { modalIcons, settingIcons } from "../assets/icons";
-import CustomSelect from "./CustomSelect";
 import { AuthContext } from "../utils/AuthContext";
 import { updateUserProfile, uploadAvatar, logoutUser } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import SwitchButton from "./SwitchButton";
 
 const SettingModal = ({ profileData, handleSettingModal, handleSaveAndClose }) => {
   const { setIsDarkMode, user } = useContext(AuthContext);
@@ -36,25 +36,14 @@ const SettingModal = ({ profileData, handleSettingModal, handleSaveAndClose }) =
 
   const nameValue = watch("name");
 
-  const isDarkMode = localProfileData.isDarkMode ? "true" : "false";
-  const isAcceptReminder = localProfileData.isAcceptReminder ? "true" : "false";
+  const isDarkMode = localProfileData.isDarkMode;
 
-  const themeOptions = [
-    { value: "false", label: "淺色" },
-    { value: "true", label: "深色" },
-  ];
-
-  const reminderOptions = [
-    { value: "false", label: "否" },
-    { value: "true", label: "是" },
-  ];
-
-  const handleThemeChange = (value) => {
+  const handleThemeChange = () => {
     setLocalProfileData((prevData) => ({
       ...prevData,
-      isDarkMode: value === "true",
+      isDarkMode: !prevData.isDarkMode,
     }));
-    setIsDarkMode(value === "true");
+    setIsDarkMode(!localProfileData.isDarkMode);
   };
 
   const handleLocalChange = (e) => {
@@ -163,15 +152,9 @@ const SettingModal = ({ profileData, handleSettingModal, handleSaveAndClose }) =
       </div>
       <div className="border"></div>
       <div className="flex justify-between items-center">
-        <p className="font-normal text-base leading-6 text-black dark:text-black-0">主題色彩</p>
+        <p className="font-normal text-base leading-6 text-black dark:text-black-0">深色模式</p>
         <div className="relative w-fit text-nowrap">
-          <CustomSelect options={themeOptions} value={isDarkMode} onChange={handleThemeChange} />
-        </div>
-      </div>
-      <div className="flex justify-between items-center">
-        <p className="font-normal text-base leading-6 text-black dark:text-black-0">接收 Email 提醒</p>
-        <div className="relative w-fit">
-          <CustomSelect options={reminderOptions} value={isAcceptReminder} onChange={(value) => setLocalProfileData((prevData) => ({ ...prevData, isAcceptReminder: value === "true" }))} />
+          <SwitchButton isOn={isDarkMode} handleToggle={handleThemeChange} />
         </div>
       </div>
       <button type="submit" className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark">

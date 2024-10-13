@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../utils/AuthContext";
 import { getAllUsers, getHabits } from "../services/api";
 import { rankIcons } from "../assets/icons";
+import TabNavigation from "../components/Rank/TabNavigation";
 
 function Rank() {
   const [isActiveTab, setIsActiveTab] = useState("habit");
@@ -175,20 +176,7 @@ function Rank() {
 
   return (
     <div className="p-4 md:pt-10 mb:pb-6 space-y-4">
-      <ul className="grid grid-cols-2 w-full pb-3">
-        <li
-          className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center cursor-pointer ${isActiveTab === "habit" ? "bg-primary" : "bg-black-50"}`}
-          onClick={() => setIsActiveTab("habit")}
-        >
-          習慣排行
-        </li>
-        <li
-          className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center cursor-pointer ${isActiveTab === "savings" ? "bg-primary" : "bg-black-50"}`}
-          onClick={() => setIsActiveTab("savings")}
-        >
-          存款排行
-        </li>
-      </ul>
+      <TabNavigation isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
       {isActiveTab === "habit" && (
         <div className="relative space-y-4">
           <div className="p-4 mt-4 bg-black-50 dark:bg-black-800 rounded-lg flex flex-col items-center">

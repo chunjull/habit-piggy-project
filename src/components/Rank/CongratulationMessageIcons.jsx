@@ -1,7 +1,7 @@
-import { rankIcons } from "../assets/icons";
+import { rankIcons } from "../../assets/icons";
 import PropTypes from "prop-types";
 
-const CoinIcons = ({ type }) => (
+const RankIcons = ({ type }) => (
   <div className="absolute -top-8 inset-x-0 text-primary flex items-center justify-center">
     {type === "habits" ? (
       <>
@@ -19,8 +19,8 @@ const CoinIcons = ({ type }) => (
   </div>
 );
 
-export default CoinIcons;
+export default RankIcons;
 
-CoinIcons.propTypes = {
+RankIcons.propTypes = {
   type: PropTypes.string.isRequired,
 };

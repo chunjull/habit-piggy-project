@@ -1,12 +1,12 @@
 import { useState, useContext, useEffect, useRef } from "react";
 import { AuthContext } from "../utils/AuthContext";
 import { getHabits } from "../services/api";
-import SavingsChart from "../components/SavingsChart";
 import CategoryChart from "../components/CategoryChart";
 import TypeChart from "../components/TypeChart";
 import CustomSelect from "../components/CustomSelect";
 import { modalIcons } from "../assets/icons";
 import TabNavigation from "../components/Savings/TabNavigation";
+import OverviewSection from "../components/Savings/OverviewSection";
 
 function Savings() {
   const [isActiveTab, setIsActiveTab] = useState("overview");
@@ -185,104 +185,22 @@ function Savings() {
     }
   };
 
-  const renderStatistics = ({ completed, savings, total }) => (
-    <div className="flex justify-between items-center">
-      <div>
-        <div className="flex justify-end items-center gap-1">
-          <p className="font-bold text-base leading-6 text-black dark:text-black-0">{completed}</p>
-          <p className="font-normal text-sm leading-5 text-black dark:text-black-0">次</p>
-        </div>
-        <p className="font-normal text-xs leading-4 md:text-sm md:leading-5 text-black dark:text-black-0">完成習慣次數</p>
-      </div>
-      <div>
-        <div className="flex justify-end items-center gap-1">
-          <p className="font-bold text-base leading-6 text-black dark:text-black-0">{savings}</p>
-          <p className="font-normal text-sm leading-5 text-black dark:text-black-0">次</p>
-        </div>
-        <p className="font-normal text-xs leading-4 md:text-sm md:leading-5 text-black dark:text-black-0">存款次數</p>
-      </div>
-      <div>
-        <div className="flex justify-end items-center gap-1">
-          <p className="font-normal text-sm leading-5 text-black dark:text-black-0">NT$</p>
-          <p className="font-bold text-base leading-6 text-black dark:text-black-0">{total}</p>
-        </div>
-        <p className="font-normal text-xs leading-4 md:text-sm md:leading-5 text-black dark:text-black-0">存款金額</p>
-      </div>
-    </div>
-  );
-
-  const renderUncompletedHabits = (habits, startOfPeriod, endOfPeriod) => {
-    const uncompletedHabits = [];
-
-    habits.forEach((habit) => {
-      habit.status.forEach((status) => {
-        const statusDate = new Date(status.date);
-        statusDate.setHours(0, 0, 0, 0);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        if (statusDate < today && !status.completed && statusDate >= startOfPeriod && statusDate <= endOfPeriod) {
-          uncompletedHabits.push({
-            id: habit.id,
-            title: habit.title,
-            date: status.date,
-            amount: habit.amount,
-          });
-        }
-      });
-    });
-
-    [...uncompletedHabits].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-    return uncompletedHabits.slice(0, 50).map((habit, index) => (
-      <li key={habit.id + habit.date} className="py-2 px-4 grid grid-cols-5 bg-black-50 dark:bg-black-800 rounded-lg font-normal text-sm leading-5 hover:bg-black-0 dark:hover:bg-black-600">
-        <p className="text-black dark:text-black-0">{String(index + 1).padStart(2, "0")}</p>
-        <p className="text-center text-black dark:text-black-0 overflow-scroll">{new Date(habit.date).toLocaleDateString()}</p>
-        <p className="text-center col-span-2 text-black dark:text-black-0 truncate">{habit.title}</p>
-        <p className="text-center text-black dark:text-black-0 overflow-scroll">NT${habit.amount}</p>
-      </li>
-    ));
-  };
-
   return (
     <div className="p-4 md:py-10 space-y-4">
       <TabNavigation isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
       {isActiveTab === "overview" && (
-        <div>
-          <div className="p-4 bg-black-50 dark:bg-black-800 rounded-xl space-y-4">
-            <div className="flex justify-between items-center">
-              <div className="relative group flex items-center flex-grow">
-                <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">存款總覽</h2>
-                <modalIcons.TbInfoCircle className="w-6 h-6 text-black-500 dark:text-black-200 ml-2 inline-block cursor-help" />
-                <span className="absolute top-0 left-32 transform -translate-x-0 w-fit p-2 bg-primary-dark text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-50 before:content-[''] before:absolute before:top-7 before:-left-4 before:transform before:-translate-y-full before:border-8 before:border-transparent before:border-r-primary-dark whitespace-normal break-words">
-                  結算時間為每日 23:59:59，存款金額為當日未完成的習慣存款金額總和
-                </span>
-              </div>
-              <div className="relative" ref={customSelectRef}>
-                <CustomSelect options={options} value={filter} onChange={setFilter} />
-              </div>
-            </div>
-            {renderStatistics({ completed: completedCount, savings: savingsCount, total: totalSavings })}
-            <div className="w-full h-52">
-              <SavingsChart data={chartData} />
-            </div>
-          </div>
-          <ul className="space-y-2 mt-4">
-            <li className="py-2 px-4 grid grid-cols-5 border border-black-500 rounded-lg font-normal text-sm leading-5">
-              <p className="text-black dark:text-black-0">編號</p>
-              <p className="text-center text-black dark:text-black-0">日期</p>
-              <p className="text-center col-span-2 text-black dark:text-black-0">習慣名稱</p>
-              <p className="text-center text-black dark:text-black-0">習慣存款</p>
-            </li>
-            {renderUncompletedHabits(habits, getStartAndEndOfPeriod(filter).startOfPeriod, getStartAndEndOfPeriod(filter).endOfPeriod)}
-          </ul>
-          {savingsCount === 0 && (
-            <>
-              <p className="text-center mt-2 font-normal text-xs leading-4 md:text-base md:leading-6 text-black dark:text-black-0">找不到相關的存款資料</p>
-              <p className="text-center mt-2 font-normal text-xs leading-4 md:text-base md:leading-6 text-black dark:text-black-0">要不要試著培養一些習慣呢？</p>
-            </>
-          )}
-          {savingsCount >= 50 && <p className="text-center mt-2 font-normal text-xs leading-4 md:text-base md:leading-6 text-black dark:text-black-0">僅顯示最新的 50 筆存款記錄</p>}
-        </div>
+        <OverviewSection
+          completedCount={completedCount}
+          savingsCount={savingsCount}
+          totalSavings={totalSavings}
+          filter={filter}
+          setFilter={setFilter}
+          options={options}
+          chartData={chartData}
+          habits={habits}
+          getStartAndEndOfPeriod={getStartAndEndOfPeriod}
+          customSelectRef={customSelectRef}
+        />
       )}
       {isActiveTab === "category" && (
         <div className="space-y-4">

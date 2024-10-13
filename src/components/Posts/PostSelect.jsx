@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { postIcons } from "../assets/icons";
+import { postIcons } from "../../assets/icons";
 import PropTypes from "prop-types";
 
 const CustomSelect = ({ options, onChange, theme }) => {

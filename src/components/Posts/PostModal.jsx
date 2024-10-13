@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { getPostBackgrounds, getUserProfile } from "../services/api";
+import { getPostBackgrounds, getUserProfile } from "../../services/api";
 import BackgroundSelect from "./BackgroundSelect";
-import { modalIcons } from "../assets/icons";
+import { modalIcons } from "../../assets/icons";
 
 const PostModal = ({ postContent, setPostContent, postBackground, setPostBackground, handleAddPost, handlePostModal, user, isEditMode, handleUpdatePost, calculateTextColor }) => {
   const [backgrounds, setBackgrounds] = useState([]);

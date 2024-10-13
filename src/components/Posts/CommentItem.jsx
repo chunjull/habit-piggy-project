@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import PostSelect from "../PostSelect";
+import PostSelect from "./PostSelect";
 
 const CommentItem = ({ comment, post, editingComment, setEditingComment, handleCancelEdit, handleUpdate, customSelectRef, getTimeDifference, handleSelectChange }) => {
   return (

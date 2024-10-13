@@ -3,7 +3,7 @@ import { addPost, getAllPosts, getUserProfile, addComment, getComments, updateCo
 import { AuthContext } from "../utils/AuthContext";
 import CustomSelect from "../components/CustomSelect";
 import Modal from "../components/Modal";
-import PostModal from "../components/PostModal";
+import PostModal from "../components/Posts/PostModal";
 import toast from "react-hot-toast";
 import habitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
 import PostForm from "../components/Posts/PostForm";

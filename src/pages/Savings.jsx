@@ -6,6 +6,7 @@ import CategoryChart from "../components/CategoryChart";
 import TypeChart from "../components/TypeChart";
 import CustomSelect from "../components/CustomSelect";
 import { modalIcons } from "../assets/icons";
+import TabNavigation from "../components/Savings/TabNavigation";
 
 function Savings() {
   const [isActiveTab, setIsActiveTab] = useState("overview");
@@ -244,20 +245,7 @@ function Savings() {
 
   return (
     <div className="p-4 md:py-10 space-y-4">
-      <ul className="grid grid-cols-2 w-full">
-        <li
-          className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center cursor-pointer ${isActiveTab === "overview" ? "bg-primary" : "bg-black-50"}`}
-          onClick={() => setIsActiveTab("overview")}
-        >
-          存款總覽
-        </li>
-        <li
-          className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center cursor-pointer ${isActiveTab === "category" ? "bg-primary" : "bg-black-50"}`}
-          onClick={() => setIsActiveTab("category")}
-        >
-          習慣養成總覽
-        </li>
-      </ul>
+      <TabNavigation isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
       {isActiveTab === "overview" && (
         <div>
           <div className="p-4 bg-black-50 dark:bg-black-800 rounded-xl space-y-4">

@@ -4,6 +4,7 @@ import { getAllUsers, getHabits } from "../services/api";
 import { rankIcons } from "../assets/icons";
 import TabNavigation from "../components/Rank/TabNavigation";
 import DateRange from "../components/Rank/DateRange";
+import CongratulationMessage from "../components/Rank/CongratulationMessage";
 
 function Rank() {
   const [isActiveTab, setIsActiveTab] = useState("habit");
@@ -182,11 +183,7 @@ function Rank() {
         <div className="relative space-y-4">
           <div className="p-4 mt-4 bg-black-50 dark:bg-black-800 rounded-lg flex flex-col items-center">
             <DateRange getStartAndEndOfWeek={getStartAndEndOfWeek} />
-            <div className="flex justify-center items-center gap-x-1 flex-wrap">
-              <p className="font-normal text-base leading-6 text-black dark:text-black-0">恭喜</p>
-              <p className="font-bold text-xl leading-7 text-black dark:text-black-0">{userHabitCounts[0]?.name || "No.1"}</p>
-              <p className="font-normal text-base leading-6 text-black dark:text-black-0">成為累積最多次習慣的玩家</p>
-            </div>
+            <CongratulationMessage userCounts={userHabitCounts} type="habit" />
           </div>
           <div className="absolute -top-8 inset-x-0 text-primary flex items-center justify-center">
             <rankIcons.TbCircleCheck className="w-8 h-8" />
@@ -201,11 +198,7 @@ function Rank() {
         <div className="relative space-y-4">
           <div className="p-4 mt-4 bg-black-50 dark:bg-black-800 rounded-lg flex flex-col items-center">
             <DateRange getStartAndEndOfWeek={getStartAndEndOfWeek} />
-            <div className="flex justify-center items-center gap-x-1 flex-wrap">
-              <p className="font-normal text-base leading-6 text-black dark:text-black-0">恭喜</p>
-              <p className="font-bold text-xl leading-7 text-black dark:text-black-0">{userSavingsCounts[0]?.name || "No.1"}</p>
-              <p className="font-normal text-base leading-6 text-black dark:text-black-0">成為累積最多存款的玩家</p>
-            </div>
+            <CongratulationMessage userCounts={userHabitCounts} type="savings" />
           </div>
           <div className="absolute -top-8 inset-x-0 text-primary flex items-center justify-center">
             <rankIcons.TbCoin className="w-8 h-8" />

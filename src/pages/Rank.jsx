@@ -1,10 +1,10 @@
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../utils/AuthContext";
 import { getAllUsers, getHabits } from "../services/api";
-import { rankIcons } from "../assets/icons";
 import TabNavigation from "../components/Rank/TabNavigation";
 import DateRange from "../components/Rank/DateRange";
 import CongratulationMessage from "../components/Rank/CongratulationMessage";
+import CongratulationMessageIcons from "../components/Rank/CongratulationMessageIcons";
 import TopTenUsersList from "../components/Rank/TopTenUserList";
 import CurrentUser from "../components/Rank/CurrentUser";
 
@@ -98,11 +98,7 @@ function Rank() {
             <DateRange getStartAndEndOfWeek={getStartAndEndOfWeek} />
             <CongratulationMessage userCounts={userHabitCounts} type="habit" />
           </div>
-          <div className="absolute -top-8 inset-x-0 text-primary flex items-center justify-center">
-            <rankIcons.TbCircleCheck className="w-8 h-8" />
-            <rankIcons.TbCircleCheckFilled className="w-8 h-8" />
-            <rankIcons.TbCircleCheck className="w-8 h-8" />
-          </div>
+          <CongratulationMessageIcons type="habits" />
           <TopTenUsersList userCounts={userHabitCounts} calculateLevelAndPoints={calculateLevelAndPoints} type="habit" />
           <div className="sticky bottom-0 left-0 w-full pb-[88px] mb-[88px] md:pb-4 bg-light dark:bg-black-950">
             <CurrentUser userCounts={userHabitCounts} currentUser={user} calculateLevelAndPoints={calculateLevelAndPoints} type="habit" />
@@ -115,11 +111,7 @@ function Rank() {
             <DateRange getStartAndEndOfWeek={getStartAndEndOfWeek} />
             <CongratulationMessage userCounts={userHabitCounts} type="savings" />
           </div>
-          <div className="absolute -top-8 inset-x-0 text-primary flex items-center justify-center">
-            <rankIcons.TbCoin className="w-8 h-8" />
-            <rankIcons.TbCoinFilled className="w-8 h-8" />
-            <rankIcons.TbCoin className="w-8 h-8" />
-          </div>
+          <CongratulationMessageIcons type="savings" />
           <TopTenUsersList userCounts={userSavingsCounts} calculateLevelAndPoints={calculateLevelAndPoints} type="savings" />
           <div className="sticky bottom-0 left-0 w-full mb-[88px] md:pb-4 bg-light dark:bg-black-950">
             <CurrentUser userCounts={userSavingsCounts} currentUser={user} calculateLevelAndPoints={calculateLevelAndPoints} type="savings" />

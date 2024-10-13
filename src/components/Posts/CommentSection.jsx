@@ -1,5 +1,5 @@
 import CommentItem from "./CommentItem";
-import { postIcons } from "../assets/icons";
+import { postIcons } from "../../assets/icons";
 import PropTypes from "prop-types";
 
 const CommentSection = ({

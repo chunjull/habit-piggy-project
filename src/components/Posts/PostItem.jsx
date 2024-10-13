@@ -1,6 +1,6 @@
-import PostSelect from "../components/PostSelect";
+import PostSelect from "../PostSelect";
 import CommentSection from "./CommentSection";
-import { postIcons } from "../assets/icons";
+import { postIcons } from "../../assets/icons";
 import PropTypes from "prop-types";
 
 const PostItem = ({

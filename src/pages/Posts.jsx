@@ -1,14 +1,13 @@
 import { useEffect, useState, useContext, useRef } from "react";
 import { addPost, getAllPosts, getUserProfile, addComment, getComments, updateComment, deleteComment, updatePost, deletePost, addLike, removeLike, getPostBackgrounds } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
-import { postIcons } from "../assets/icons";
 import CustomSelect from "../components/CustomSelect";
-import PostSelect from "../components/PostSelect";
 import Modal from "../components/Modal";
 import PostModal from "../components/PostModal";
 import toast from "react-hot-toast";
 import habitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
 import PostForm from "../components/Posts/PostForm";
+import PostList from "../components/Posts/PostList";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
@@ -359,139 +358,27 @@ function Posts() {
           calculateTextColor={calculateTextColor}
           userData={userData}
         />
-        <ul className="space-y-4">
-          {filteredPosts.map((post) => {
-            return (
-              <li key={post.id} className="p-4 bg-black-50 dark:bg-black-800 rounded-2xl space-y-3 w-full">
-                <div className="flex justify-between items-center w-full">
-                  <div className="flex gap-3 items-center">
-                    <div className="w-12 h-12">
-                      {post.user && <img src={post.user.avatar} alt="avatar" className="w-full h-full object-cover rounded-full outline outline-primary-dark dark:outline-primary" />}
-                    </div>
-                    <div className="flex flex-col">
-                      <h3 className="font-bold text-lg leading-6 text-black dark:text-black-0">{post.user ? post.user.name : "Unknown"}</h3>
-                      <p className="font-normal text-sm leading-5 text-black dark:text-black-0">{getTimeDifference(post.createdTime.seconds)}</p>
-                    </div>
-                  </div>
-                  <PostSelect
-                    ref={customSelectRef}
-                    options={[
-                      { value: "edit", label: "編輯貼文" },
-                      { value: "delete", label: "刪除貼文" },
-                    ]}
-                    onChange={(value) => handleSelectChange(post, null, value)}
-                    theme="dark"
-                  />
-                </div>
-                <div
-                  className={`w-full min-h-52 h-fit flex justify-center items-center p-4 rounded-xl font-normal text-base leading-6 md:text-xl md:leading-7 xl:text-2xl xl:leading-8 ${
-                    !post.background ? "bg-slate-100" : ""
-                  }`}
-                  style={
-                    post.background
-                      ? {
-                          backgroundImage: `url(${post.background})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                          color: calculateTextColor(post.background),
-                          wordBreak: "break-word",
-                          whiteSpace: "pre-wrap",
-                        }
-                      : { color: calculateTextColor(post.background), wordBreak: "break-word", whiteSpace: "pre-wrap" }
-                  }
-                >
-                  <p className="text-center">{post.content}</p>
-                </div>
-                <div className="flex gap-3">
-                  <div className="flex gap-1">
-                    {post.likes && post.likes.includes(user.uid) ? (
-                      <postIcons.TbHeartFilled className="w-6 h-6 cursor-pointer text-alert" onClick={() => handleUnlike(post.id)} />
-                    ) : (
-                      <postIcons.TbHeart className="w-6 h-6 cursor-pointer text-black dark:text-black-0 hover:text-alert" onClick={() => handleLike(post.id)} />
-                    )}
-                    <p className="text-black dark:text-black-0 font-normal text-base leading-6">{post.likes ? post.likes.length : 0}</p>
-                  </div>
-                  <div className="flex gap-1">
-                    <postIcons.TbMessageChatbot
-                      className="w-6 h-6 cursor-pointer text-black dark:text-black-0 hover:text-black dark:hover:text-black-200"
-                      onClick={() => handleCommentSection(post.id)}
-                    />
-                    <p className="text-black dark:text-black-0 font-normal text-base leading-6">{post.comments ? post.comments.length : 0}</p>
-                  </div>
-                </div>
-                <ul className={`space-y-3 ${commentSection[post.id] ? "block" : "hidden"}`}>
-                  {post.comments &&
-                    post.comments.map((comment) => (
-                      <li key={comment.id} className="flex justify-between items-center gap-3">
-                        <img src={comment.userAvatar} alt="user's avatar" className="w-12 h-12 rounded-full object-cover" />
-                        <div className="bg-black-200 rounded-xl px-4 py-2 w-full flex justify-between items-center">
-                          <div className="w-full md:w-4/5">
-                            <div className="flex gap-2">
-                              <h3 className="font-medium text-sm leading-5 line-clamp-1">{comment.userName}</h3>
-                              <p className="font-normal text-sm leading-5 text-black dark:text-black-0-700">
-                                {getTimeDifference(comment.updatedTime ? comment.updatedTime.seconds : comment.createdTime.seconds)}
-                              </p>
-                            </div>
-                            {editingComment[comment.id] ? (
-                              <div className="grid grid-cols-1 gap-x-2 md:flex md:items-center md:gap-2">
-                                <input
-                                  type="text"
-                                  value={editingComment[comment.id]}
-                                  onChange={(e) => setEditingComment({ ...editingComment, [comment.id]: e.target.value })}
-                                  className="font-normal text-base leading-6 rounded px-2 py-1 w-full bg-black-0 text-black caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark my-1"
-                                />
-                                <div className="flex gap-x-2">
-                                  <button
-                                    className="w-fit text-nowrap font-medium text-sm leading-5 bg-black-100 py-1 md:py-1.5 px-2 rounded hover:bg-black-300"
-                                    onClick={() => handleCancelEdit(comment.id)}
-                                  >
-                                    取消修改
-                                  </button>
-                                  <button
-                                    className="w-fit text-nowrap font-medium text-sm leading-5 bg-primary py-1 md:py-1.5 px-2 rounded hover:bg-primary-dark"
-                                    onClick={() => handleUpdate(post.id, null, comment.id)}
-                                  >
-                                    確認修改
-                                  </button>
-                                </div>
-                              </div>
-                            ) : (
-                              <p className="font-normal text-base leading-6">{comment.content}</p>
-                            )}
-                          </div>
-                          {editingComment[comment.id] ? null : (
-                            <div className="flex flex-col">
-                              <PostSelect
-                                ref={customSelectRef}
-                                options={[
-                                  { value: "edit", label: "編輯留言" },
-                                  { value: "delete", label: "刪除留言" },
-                                ]}
-                                onChange={(value) => handleSelectChange(post, comment.id, value)}
-                                theme="light"
-                              />
-                            </div>
-                          )}
-                        </div>
-                      </li>
-                    ))}
-                  <li className="flex justify-between items-center gap-2">
-                    <input
-                      type="text"
-                      placeholder="請輸入留言"
-                      className="bg-black-100 text-black py-2 px-4 w-full rounded-2xl placeholder:text-black dark:text-black-0-500  caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark focus:bg-black-0"
-                      value={commentContent}
-                      onChange={(e) => setCommentContent(e.target.value)}
-                    />
-                    <div className="w-10 h-10 bg-primary flex justify-center items-center rounded-full aspect-square cursor-pointer hover:bg-primary-dark" onClick={() => handleAddComment(post.id)}>
-                      <postIcons.TbSend2 className="w-6 h-6 text-black" />
-                    </div>
-                  </li>
-                </ul>
-              </li>
-            );
-          })}
-        </ul>
+        <PostList
+          posts={filteredPosts}
+          user={user}
+          handleCommentSection={handleCommentSection}
+          commentSection={commentSection}
+          handleAddComment={handleAddComment}
+          commentContent={commentContent}
+          setCommentContent={setCommentContent}
+          editingComment={editingComment}
+          setEditingComment={setEditingComment}
+          handleCancelEdit={handleCancelEdit}
+          handleUpdate={handleUpdate}
+          handleDeleteComment={handleDeleteComment}
+          handleDeletePost={handleDeletePost}
+          handleSelectChange={handleSelectChange}
+          handleLike={handleLike}
+          handleUnlike={handleUnlike}
+          getTimeDifference={getTimeDifference}
+          customSelectRef={customSelectRef}
+          calculateTextColor={calculateTextColor}
+        />
         {showConfirmModal && (
           <div className="fixed inset-0 flex items-center justify-center z-50">
             <div className="bg-white dark:bg-black-800 p-4 rounded-xl shadow-lg">

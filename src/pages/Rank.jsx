@@ -3,6 +3,7 @@ import { AuthContext } from "../utils/AuthContext";
 import { getAllUsers, getHabits } from "../services/api";
 import { rankIcons } from "../assets/icons";
 import TabNavigation from "../components/Rank/TabNavigation";
+import DateRange from "../components/Rank/DateRange";
 
 function Rank() {
   const [isActiveTab, setIsActiveTab] = useState("habit");
@@ -180,9 +181,7 @@ function Rank() {
       {isActiveTab === "habit" && (
         <div className="relative space-y-4">
           <div className="p-4 mt-4 bg-black-50 dark:bg-black-800 rounded-lg flex flex-col items-center">
-            <p className="text-center font-normal text-base leading-6 text-black dark:text-black-0">
-              在 {getStartAndEndOfWeek().startOfWeek.toLocaleDateString()}～{getStartAndEndOfWeek().endOfWeek.toLocaleDateString()} 期間
-            </p>
+            <DateRange getStartAndEndOfWeek={getStartAndEndOfWeek} />
             <div className="flex justify-center items-center gap-x-1 flex-wrap">
               <p className="font-normal text-base leading-6 text-black dark:text-black-0">恭喜</p>
               <p className="font-bold text-xl leading-7 text-black dark:text-black-0">{userHabitCounts[0]?.name || "No.1"}</p>
@@ -201,9 +200,7 @@ function Rank() {
       {isActiveTab === "savings" && (
         <div className="relative space-y-4">
           <div className="p-4 mt-4 bg-black-50 dark:bg-black-800 rounded-lg flex flex-col items-center">
-            <p className="text-center font-normal text-base leading-6 text-black dark:text-black-0">
-              在 {getStartAndEndOfWeek().startOfWeek.toLocaleDateString()}～{getStartAndEndOfWeek().endOfWeek.toLocaleDateString()} 期間
-            </p>
+            <DateRange getStartAndEndOfWeek={getStartAndEndOfWeek} />
             <div className="flex justify-center items-center gap-x-1 flex-wrap">
               <p className="font-normal text-base leading-6 text-black dark:text-black-0">恭喜</p>
               <p className="font-bold text-xl leading-7 text-black dark:text-black-0">{userSavingsCounts[0]?.name || "No.1"}</p>

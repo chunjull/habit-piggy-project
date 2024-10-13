@@ -1,14 +1,14 @@
 import { useEffect, useState, useContext, useRef } from "react";
 import { addPost, getAllPosts, getUserProfile, addComment, getComments, updateComment, deleteComment, updatePost, deletePost, addLike, removeLike, getPostBackgrounds } from "../services/api";
-import { AuthContext } from "../utils/AuthContext";
-import CustomSelect from "../components/CustomSelect";
-import Modal from "../components/Modal";
-import PostModal from "../components/Posts/PostModal";
-import toast from "react-hot-toast";
-import habitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
 import PostForm from "../components/Posts/PostForm";
 import PostList from "../components/Posts/PostList";
 import ConfirmModal from "../components/Posts/ConfirmModal";
+import PostModal from "../components/Posts/PostModal";
+import Modal from "../components/Modal";
+import CustomSelect from "../components/CustomSelect";
+import { AuthContext } from "../utils/AuthContext";
+import { toast } from "react-hot-toast";
+import habitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
@@ -343,7 +343,7 @@ function Posts() {
         <div className="flex justify-between items-center">
           <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">貼文總覽</h2>
           <div className="relative" ref={customSelectRef}>
-            <CustomSelect options={options} value={filter} onChange={setFilter} />
+            <CustomSelect options={options} value={filter || "all"} onChange={setFilter} />
           </div>
         </div>
         <PostForm

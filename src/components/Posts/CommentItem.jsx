@@ -44,7 +44,6 @@ const CommentItem = ({ comment, post, editingComment, setEditingComment, handleC
                 { value: "delete", label: "刪除留言" },
               ]}
               onChange={(value) => handleSelectChange(post, comment.id, value)}
-              theme="light"
             />
           </div>
         )}

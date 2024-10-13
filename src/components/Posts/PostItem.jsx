@@ -41,7 +41,6 @@ const PostItem = ({
             { value: "delete", label: "刪除貼文" },
           ]}
           onChange={(value) => handleSelectChange(post, null, value)}
-          theme="dark"
         />
       </div>
       <div

@@ -371,8 +371,6 @@ function Posts() {
           setEditingComment={setEditingComment}
           handleCancelEdit={handleCancelEdit}
           handleUpdate={handleUpdate}
-          handleDeleteComment={handleDeleteComment}
-          handleDeletePost={handleDeletePost}
           handleSelectChange={handleSelectChange}
           handleLike={handleLike}
           handleUnlike={handleUnlike}
@@ -380,7 +378,7 @@ function Posts() {
           customSelectRef={customSelectRef}
           calculateTextColor={calculateTextColor}
         />
-        {showConfirmModal && <ConfirmModal setShowConfirmModal={setShowConfirmModal} confirmAction={confirmAction} />}
+        {showConfirmModal && <ConfirmModal showConfirmModal={showConfirmModal} setShowConfirmModal={setShowConfirmModal} confirmAction={confirmAction} />}
       </div>
       <Modal isOpen={isPostModalOpen} onRequestClose={() => setIsPostModalOpen(false)}>
         <PostModal

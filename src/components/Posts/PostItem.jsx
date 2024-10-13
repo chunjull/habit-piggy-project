@@ -89,6 +89,7 @@ const PostItem = ({
         handleUpdate={handleUpdate}
         customSelectRef={customSelectRef}
         getTimeDifference={getTimeDifference}
+        handleSelectChange={handleSelectChange}
       />
     </li>
   );

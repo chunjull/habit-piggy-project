@@ -14,6 +14,7 @@ const CommentSection = ({
   handleUpdate,
   customSelectRef,
   getTimeDifference,
+  handleSelectChange,
 }) => {
   return (
     <ul className={`space-y-3 ${commentSection[post.id] ? "block" : "hidden"}`}>
@@ -29,6 +30,7 @@ const CommentSection = ({
             handleUpdate={handleUpdate}
             customSelectRef={customSelectRef}
             getTimeDifference={getTimeDifference}
+            handleSelectChange={handleSelectChange}
           />
         ))}
       <li className="flex justify-between items-center gap-2">
@@ -61,4 +63,5 @@ CommentSection.propTypes = {
   handleUpdate: PropTypes.func.isRequired,
   customSelectRef: PropTypes.object.isRequired,
   getTimeDifference: PropTypes.func.isRequired,
+  handleSelectChange: PropTypes.func.isRequired,
 };

@@ -8,6 +8,7 @@ import Modal from "../components/Modal";
 import PostModal from "../components/PostModal";
 import toast from "react-hot-toast";
 import habitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
+import UserDetails from "../components/Posts/UserDetails";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
@@ -274,24 +275,6 @@ function Posts() {
     }
   };
 
-  const renderUserDetails = () => {
-    if (!userData) {
-      return (
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-black-500 rounded-full"></div>
-          <p className="font-bold text-lg leading-6 text-black dark:text-black-0">Unknown</p>
-        </div>
-      );
-    }
-
-    return (
-      <div className="flex items-center gap-3">
-        <img src={userData.avatar} alt="avatar" className="w-12 h-12 object-cover rounded-full outline outline-primary-dark dark:outline-primary" />
-        <p className="font-bold text-lg leading-6 text-black dark:text-black-0">{userData.name}</p>
-      </div>
-    );
-  };
-
   const calculateTextColor = (background) => {
     if (!background) return "black";
 
@@ -366,7 +349,7 @@ function Posts() {
         <div className="relative">
           <div ref={postRef} className="relative bg-black-50 dark:bg-black-800 p-4 rounded-xl space-y-2 md:space-y-3 z-0" onClick={handleClick}>
             <div className={`absolute inset-0 rounded-xl -z-10 ${isHighlighted ? "block" : "hidden"}`} style={{ boxShadow: "0 0 8px 1px rgba(250, 173, 20, 1)" }}></div>
-            {renderUserDetails()}
+            <UserDetails userData={userData} />
             <div className="flex items-center gap-4">
               <p className="font-normal text-base leading-6 text-black dark:text-black-0 text-nowrap">選擇背景顏色</p>
               <div className="flex gap-4 overflow-scroll">

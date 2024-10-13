@@ -7,6 +7,7 @@ import { Navigate } from "react-router-dom";
 import { modalIcons } from "../assets/icons";
 import habitPiggyLoading1 from "../assets/images/habit-piggy-loading-1.svg";
 import habitPiggyLoading2 from "../assets/images/habit-piggy-loading-2.svg";
+import TabNavigation from "../components/Login/TabNavigation";
 
 function Login() {
   const {
@@ -85,20 +86,7 @@ function Login() {
 
   return (
     <div className="p-4 md:py-10 space-y-4">
-      <ul className="grid grid-cols-2 w-full">
-        <li
-          className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center cursor-pointer ${isLogin ? "bg-primary" : "bg-black-50"}`}
-          onClick={() => setIsLogin(true)}
-        >
-          登入帳號
-        </li>
-        <li
-          className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center cursor-pointer ${!isLogin ? "bg-primary" : "bg-black-50"}`}
-          onClick={() => setIsLogin(false)}
-        >
-          註冊帳號
-        </li>
-      </ul>
+      <TabNavigation isLogin={isLogin} setIsLogin={setIsLogin} />
 
       {isLogin ? (
         <div className="relative min-h-screen">

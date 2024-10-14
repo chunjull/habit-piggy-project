@@ -399,11 +399,11 @@ function Home() {
   };
 
   return (
-    <div className="md:pb-6">
+    <div className="md:pb-6 relative h-full md:h-screen">
       <WeekCalendar date={selectedDate} onSelect={handleSelectDate} onWeekChange={handleWeekChange} />
       <HabitList habits={habits} habitCategories={habitCategories} handleDetailClick={handleDetailClick} weekDates={weekDates} handleCheck={handleCheck} />
       <div
-        className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center fixed right-4 bottom-20 md:bottom-10 bg-primary hover:bg-primary-dark cursor-pointer"
+        className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center absolute right-4 -bottom-12 md:right-0 md:bottom-10 bg-primary hover:bg-primary-dark cursor-pointer"
         onClick={handleHabitModal}
       >
         <habitAddIcon.TbPlus className="w-8 h-8 md:w-10 md:h-10 text-black-0" />

@@ -20,8 +20,8 @@ import DetailModal from "../components/home/DetailModal";
 import EditModal from "../components/home/EditModal";
 import { habitIcons, habitAddIcon } from "../assets/icons";
 import HabitList from "../components/home/HabitList";
-import habitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
-import toast from "react-hot-toast";
+import { SuccessNotify } from "../components/home/ToastNotify";
+import { AlertNotify } from "../components/home/ToastNotify";
 
 function Home() {
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
@@ -209,7 +209,7 @@ function Home() {
       const end = new Date(habitData.endDate);
 
       if (end <= start) {
-        dateErrorNotify();
+        AlertNotify.dateErrorNotify();
         return;
       }
 
@@ -230,7 +230,7 @@ function Home() {
         status: [],
         type: "",
       });
-      addHabitNotify();
+      SuccessNotify.addHabitNotify();
     } else {
       console.error("User not authenticated");
     }
@@ -242,7 +242,7 @@ function Home() {
       const end = new Date(habitData.endDate);
 
       if (end <= start) {
-        dateErrorNotify();
+        AlertNotify.dateErrorNotify();
         return;
       }
 
@@ -263,7 +263,7 @@ function Home() {
       fetchHabits();
       setIsEditModalOpen(false);
       setIsDetailModalOpen(false);
-      updateHabitNotify();
+      SuccessNotify.updateHabitNotify();
     } else {
       console.error("User not authenticated or habit not selected");
     }
@@ -289,7 +289,7 @@ function Home() {
       fetchHabits();
       setIsEditModalOpen(false);
       setIsDetailModalOpen(false);
-      deleteHabitNotify();
+      SuccessNotify.deleteHabitNotify();
     } else {
       console.error("User not authenticated or habit not selected");
     }
@@ -335,7 +335,7 @@ function Home() {
     targetDate.setHours(0, 0, 0, 0);
 
     if (targetDate > today) {
-      checkErrorNotify();
+      SuccessNotify.checkErrorNotify();
       return;
     }
 
@@ -346,10 +346,10 @@ function Home() {
             const newCompletedStatus = !status.completed;
             if (newCompletedStatus) {
               updateUserLevelPoints(user.uid, habit.amount);
-              checkHabitNotify();
+              SuccessNotify.checkHabitNotify();
             } else {
               updateUserLevelPoints(user.uid, -habit.amount);
-              unCheckHabitNotify();
+              SuccessNotify.unCheckHabitNotify();
             }
             return { ...status, completed: newCompletedStatus };
           }
@@ -398,37 +398,6 @@ function Home() {
       console.error("Error handling achievements: ", error);
     }
   };
-
-  const CustomToast = (message) => {
-    toast(message, {
-      icon: <img src={habitPiggyLogo} alt="Habit Piggy Logo" style={{ width: "40px", height: "40px" }} />,
-      style: {
-        borderRadius: "16px",
-        background: "#212121",
-        color: "#fff",
-      },
-      duration: 3000,
-    });
-  };
-
-  const AlertToast = (message) => {
-    toast.error(message, {
-      style: {
-        borderRadius: "16px",
-        background: "#212121",
-        color: "#fff",
-      },
-      duration: 3000,
-    });
-  };
-
-  const addHabitNotify = () => CustomToast("從今天開始培養習慣吧！");
-  const updateHabitNotify = () => CustomToast("人要時時刻刻做好準備！");
-  const deleteHabitNotify = () => CustomToast("這段感情只有我在付出🥲");
-  const checkHabitNotify = () => CustomToast("給你一個乖寶寶印章");
-  const unCheckHabitNotify = () => CustomToast("要記得回來完成喔！");
-  const dateErrorNotify = () => AlertToast("結束日期必須晚於開始日期喔！");
-  const checkErrorNotify = () => AlertToast("只能在今天之前打卡喔！");
 
   return (
     <div className="md:pb-6">

@@ -1,5 +1,5 @@
 import { toast } from "react-hot-toast";
-import habitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
+import habitPiggyLogo from "../../assets/images/habit-piggy-logo.svg";
 
 const SuccessToast = (message) => {
   toast(message, {

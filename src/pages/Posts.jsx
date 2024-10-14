@@ -1,34 +1,19 @@
-import { useEffect, useState, useContext, useRef } from "react";
+import { useEffect, useState, useContext, useRef, useReducer } from "react";
 import { addPost, getAllPosts, getUserProfile, addComment, getComments, updateComment, deleteComment, updatePost, deletePost, addLike, removeLike, getPostBackgrounds } from "../services/api";
 import PostForm from "../components/Posts/PostForm";
 import PostList from "../components/Posts/PostList";
 import ConfirmModal from "../components/Posts/ConfirmModal";
 import PostModal from "../components/Posts/PostModal";
+import { SuccessNotify, AlertNotify } from "../components/Posts/ToastNotify";
 import Modal from "../components/Modal";
 import CustomSelect from "../components/CustomSelect";
 import { AuthContext } from "../utils/AuthContext";
-import { SuccessNotify, AlertNotify } from "../components/Posts/ToastNotify";
+import { initialState, reducer, actionTypes } from "../utils/PostReducer";
 
 function Posts() {
-  const [posts, setPosts] = useState([]);
-  const [filter, setFilter] = useState("all");
-  const [options] = useState([
-    { label: "全部貼文", value: "all" },
-    { label: "僅限自己", value: "personal" },
-  ]);
-  const [commentSection, setCommentSection] = useState({});
-  const [commentContent, setCommentContent] = useState("");
-  const [editingComment, setEditingComment] = useState({});
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
-  const [currentPost, setCurrentPost] = useState(null);
-  const [postContent, setPostContent] = useState("");
-  const [postBackground, setPostBackground] = useState("");
-  const [backgrounds, setBackgrounds] = useState([]);
-  const [isHighlighted, setIsHighlighted] = useState(false);
   const { user } = useContext(AuthContext);
-  const [userData, setUserData] = useState(null);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [confirmAction, setConfirmAction] = useState(null);
 
   const postRef = useRef(null);
   const customSelectRef = useRef(null);
@@ -43,7 +28,7 @@ function Posts() {
           return { ...post, user: userProfile, comments: comments };
         })
       );
-      setPosts(postsWithUserDetails);
+      dispatch({ type: actionTypes.SET_POST, payload: postsWithUserDetails });
     };
 
     fetchPosts();
@@ -52,7 +37,7 @@ function Posts() {
   useEffect(() => {
     const fetchBackgrounds = async () => {
       const urls = await getPostBackgrounds();
-      setBackgrounds(urls);
+      dispatch({ type: actionTypes.SET_BACKGROUNDS, payload: urls });
     };
 
     fetchBackgrounds();
@@ -62,7 +47,7 @@ function Posts() {
     const fetchUserData = async () => {
       if (user && user.uid) {
         const data = await getUserProfile(user.uid);
-        setUserData(data);
+        dispatch({ type: actionTypes.SET_USER_DATA, payload: data });
       }
     };
 
@@ -82,63 +67,69 @@ function Posts() {
     };
   }, []);
 
-  const filteredPosts = filter === "personal" ? posts.filter((post) => post.userID === user.uid) : posts;
+  const filteredPosts = state.filter === "personal" ? state.posts.filter((post) => post.userID === user.uid) : state.posts;
 
   const handleCommentSection = (postID) => {
-    setCommentSection((prev) => ({ ...prev, [postID]: !prev[postID] }));
+    dispatch({ type: actionTypes.SET_COMMENT_SECTION, payload: { ...state.commentSection, [postID]: !state.commentSection[postID] } });
   };
 
   const handleAddComment = async (postID) => {
-    if (!commentContent.trim()) {
+    if (!state.commentContent.trim()) {
       AlertNotify.contentAlertNotify();
       return;
     }
     const userProfile = await getUserProfile(user.uid);
     const commentData = {
-      content: commentContent,
+      content: state.commentContent,
       userID: user.uid,
       userName: userProfile.name,
       userAvatar: userProfile.avatar,
     };
     await addComment(postID, commentData);
-    setCommentContent("");
+    dispatch({ type: actionTypes.SET_COMMENT_CONTENT, payload: "" });
     const renderComments = await getComments(postID);
-    setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
+    dispatch({ type: actionTypes.SET_POST, payload: state.posts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)) });
     SuccessNotify.addCommentNotify();
   };
 
   const handleCancelEdit = (commentID) => {
-    setEditingComment((prev) => ({ ...prev, [commentID]: "" }));
+    dispatch({ type: actionTypes.SET_EDITING_COMMENT, payload: { ...state.editingComment, [commentID]: "" } });
   };
 
   const handleDeleteComment = (postID, commentID) => {
-    const post = posts.find((post) => post.id === postID);
+    const post = state.posts.find((post) => post.id === postID);
     const comment = post.comments.find((comment) => comment.id === commentID);
     if (comment.userID !== user.uid) {
       AlertNotify.authorAlertNotify();
       return;
     }
-    setConfirmAction(() => async () => {
-      await deleteComment(postID, commentID);
-      const renderComments = await getComments(postID);
-      setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
-      SuccessNotify.deleteCommentNotify();
+    dispatch({
+      type: actionTypes.SET_CONFIRM_ACTION,
+      payload: async () => {
+        await deleteComment(postID, commentID);
+        const renderComments = await getComments(postID);
+        dispatch({ type: actionTypes.SET_POST, payload: state.posts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)) });
+        SuccessNotify.deleteCommentNotify();
+      },
     });
-    setShowConfirmModal(true);
+    dispatch({ type: actionTypes.SET_SHOW_CONFIRM_MODAL, payload: true });
   };
 
   const handleDeletePost = async (postID) => {
-    const post = posts.find((post) => post.id === postID);
+    const post = state.posts.find((post) => post.id === postID);
     if (post.userID !== user.uid) {
       AlertNotify.authorAlertNotify();
       return;
     }
-    setConfirmAction(() => async () => {
-      await deletePost(postID);
-      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postID));
-      SuccessNotify.deletePostNotify();
+    dispatch({
+      type: actionTypes.SET_CONFIRM_ACTION,
+      payload: async () => {
+        await deletePost(postID);
+        dispatch({ type: actionTypes.SET_POST, payload: state.posts.filter((post) => post.id !== postID) });
+        SuccessNotify.deletePostNotify();
+      },
     });
-    setShowConfirmModal(true);
+    dispatch({ type: actionTypes.SET_SHOW_CONFIRM_MODAL, payload: true });
   };
 
   const handleEdit = (post, commentID = null) => {
@@ -148,33 +139,33 @@ function Posts() {
         AlertNotify.authorAlertNotify();
         return;
       }
-      setEditingComment((prev) => ({ ...prev, [commentID]: comment.content }));
+      dispatch({ type: actionTypes.SET_EDITING_COMMENT, payload: { ...state.editingComment, [commentID]: comment.content } });
     } else {
       if (post.userID !== user.uid) {
         AlertNotify.authorAlertNotify();
         return;
       }
-      setCurrentPost(post);
+      dispatch({ type: actionTypes.SET_CURRENT_POST, payload: post });
       setIsPostModalOpen(true);
     }
   };
 
   const handleUpdate = async (postID, postData, commentID = null) => {
     if (commentID) {
-      const updatedContent = editingComment[commentID];
+      const updatedContent = state.editingComment[commentID];
       if (!updatedContent.trim()) {
         AlertNotify.contentAlertNotify();
         return;
       }
       await updateComment(postID, commentID, { content: updatedContent });
       const renderComments = await getComments(postID);
-      setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
-      setEditingComment((prev) => ({ ...prev, [commentID]: "" }));
+      dispatch({ type: actionTypes.SET_POST, payload: state.posts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)) });
+      dispatch({ type: actionTypes.SET_EDITING_COMMENT, payload: { ...state.editingComment, [commentID]: "" } });
       SuccessNotify.updateCommentNotify();
     } else {
       await updatePost(postID, postData);
       const updatedPosts = await getAllPosts();
-      setPosts(updatedPosts);
+      dispatch({ type: actionTypes.SET_POST, payload: updatedPosts });
       setIsPostModalOpen(false);
       SuccessNotify.updatePostNotify();
     }
@@ -203,7 +194,7 @@ function Posts() {
           return { ...post, user: userProfile, comments: comments };
         })
       );
-      setPosts(postsWithUserDetails);
+      dispatch({ type: actionTypes.SET_POST, payload: postsWithUserDetails });
     } catch (error) {
       console.error(error);
     }
@@ -220,7 +211,7 @@ function Posts() {
           return { ...post, user: userProfile, comments: comments };
         })
       );
-      setPosts(postsWithUserDetails);
+      dispatch({ type: actionTypes.SET_POST, payload: postsWithUserDetails });
     } catch (error) {
       console.error(error);
     }
@@ -245,7 +236,7 @@ function Posts() {
   };
 
   const handleAddPost = async () => {
-    if (!postContent.trim()) {
+    if (!state.postContent.trim()) {
       AlertNotify.contentAlertNotify();
       return;
     }
@@ -253,8 +244,8 @@ function Posts() {
     if (user) {
       const userProfile = await getUserProfile(user.uid);
       const postData = {
-        content: postContent,
-        background: postBackground,
+        content: state.postContent,
+        background: state.postBackground,
         userID: user.uid,
         user: userProfile,
         createdTime: { seconds: Math.floor(Date.now() / 1000) },
@@ -262,9 +253,10 @@ function Posts() {
         comments: [],
       };
       await addPost(user.uid, postData);
-      setPosts((prevPosts) => [postData, ...prevPosts]);
-      setPostContent("");
-      setPostBackground("");
+      const updatedPosts = await getAllPosts();
+      dispatch({ type: actionTypes.SET_POST, payload: updatedPosts });
+      dispatch({ type: actionTypes.SET_POST_CONTENT, payload: "" });
+      dispatch({ type: actionTypes.SET_POST_BACKGROUND, payload: "" });
       SuccessNotify.addPostNotify();
 
       const textarea = document.querySelector("textarea");
@@ -288,12 +280,12 @@ function Posts() {
   };
 
   const handleClick = () => {
-    setIsHighlighted(true);
+    dispatch({ type: actionTypes.SET_IS_HIGHLIGHTED, payload: true });
   };
 
   const handleClickOutside = (event) => {
     if (postRef.current && !postRef.current.contains(event.target)) {
-      setIsHighlighted(false);
+      dispatch({ type: actionTypes.SET_IS_HIGHLIGHTED, payload: false });
     }
   };
 
@@ -310,32 +302,32 @@ function Posts() {
         <div className="flex justify-between items-center">
           <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">貼文總覽</h2>
           <div className="relative" ref={customSelectRef}>
-            <CustomSelect options={options} value={filter || "all"} onChange={setFilter} />
+            <CustomSelect options={state.options} value={state.filter || "all"} onChange={(value) => dispatch({ type: actionTypes.SET_FILTER, payload: value })} />
           </div>
         </div>
         <PostForm
           postRef={postRef}
-          isHighlighted={isHighlighted}
+          isHighlighted={state.isHighlighted}
           handleClick={handleClick}
-          backgrounds={backgrounds}
-          setPostBackground={setPostBackground}
-          postBackground={postBackground}
-          postContent={postContent}
-          setPostContent={setPostContent}
+          backgrounds={state.backgrounds}
+          setPostBackground={(value) => dispatch({ type: actionTypes.SET_POST_BACKGROUND, payload: value })}
+          postBackground={state.postBackground}
+          postContent={state.postContent}
+          setPostContent={(value) => dispatch({ type: actionTypes.SET_POST_CONTENT, payload: value })}
           handleAddPost={handleAddPost}
           calculateTextColor={calculateTextColor}
-          userData={userData}
+          userData={state.userData}
         />
         <PostList
           posts={filteredPosts}
           user={user}
           handleCommentSection={handleCommentSection}
-          commentSection={commentSection}
+          commentSection={state.commentSection}
           handleAddComment={handleAddComment}
-          commentContent={commentContent}
-          setCommentContent={setCommentContent}
-          editingComment={editingComment}
-          setEditingComment={setEditingComment}
+          commentContent={state.commentContent}
+          setCommentContent={(value) => dispatch({ type: actionTypes.SET_COMMENT_CONTENT, payload: value })}
+          editingComment={state.editingComment}
+          setEditingComment={(value) => dispatch({ type: actionTypes.SET_EDITING_COMMENT, payload: value })}
           handleCancelEdit={handleCancelEdit}
           handleUpdate={handleUpdate}
           handleSelectChange={handleSelectChange}
@@ -345,18 +337,24 @@ function Posts() {
           customSelectRef={customSelectRef}
           calculateTextColor={calculateTextColor}
         />
-        {showConfirmModal && <ConfirmModal showConfirmModal={showConfirmModal} setShowConfirmModal={setShowConfirmModal} confirmAction={confirmAction} />}
+        {state.showConfirmModal && (
+          <ConfirmModal
+            showConfirmModal={state.showConfirmModal}
+            setShowConfirmModal={(value) => dispatch({ type: actionTypes.SET_SHOW_CONFIRM_MODAL, payload: value })}
+            confirmAction={state.confirmAction}
+          />
+        )}
       </div>
       <Modal isOpen={isPostModalOpen} onRequestClose={() => setIsPostModalOpen(false)}>
         <PostModal
-          postContent={currentPost ? currentPost.content : ""}
-          setPostContent={(content) => setCurrentPost((prev) => ({ ...prev, content }))}
-          postBackground={currentPost ? currentPost.background : ""}
-          setPostBackground={(background) => setCurrentPost((prev) => ({ ...prev, background }))}
+          postContent={state.currentPost ? state.currentPost.content : ""}
+          setPostContent={(content) => dispatch({ type: actionTypes.SET_CURRENT_POST, payload: { ...state.currentPost, content } })}
+          postBackground={state.currentPost ? state.currentPost.background : ""}
+          setPostBackground={(background) => dispatch({ type: actionTypes.SET_CURRENT_POST, payload: { ...state.currentPost, background } })}
           handlePostModal={() => setIsPostModalOpen(false)}
           user={user}
           isEditMode={true}
-          handleUpdatePost={() => handleUpdate(currentPost.id, currentPost)}
+          handleUpdatePost={() => handleUpdate(state.currentPost.id, state.currentPost)}
           calculateTextColor={calculateTextColor}
         />
       </Modal>

@@ -30,10 +30,10 @@ import AchievementModal from "../components/Member/AchievementModal";
 import BadgeModal from "../components/Member/BadgeModal";
 import habitPiggyLoading1 from "../assets/images/habit-piggy-loading-1.svg";
 import habitPiggyLoading2 from "../assets/images/habit-piggy-loading-2.svg";
-import toast from "react-hot-toast";
-import habitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
 import TabNavigation from "../components/Member/TabNavigation";
 import MemberInformation from "../components/Member/MemberInformation";
+import { SuccessNotify, AlertNotify } from "../components/home/ToastNotify";
+import { UpdateNotify } from "../components/Member/ToastNotify";
 
 function Member() {
   const { user } = useContext(AuthContext);
@@ -202,8 +202,9 @@ function Member() {
       try {
         await updateUserProfile(user.uid, updatedProfileData);
         setProfileData(updatedProfileData);
-        updateUserProfileNotify();
+        UpdateNotify.updateUserProfileNotify();
       } catch (error) {
+        UpdateNotify.updateUserProfileErrorNotify();
         console.error("更新資料失敗", error);
       }
     }
@@ -327,7 +328,7 @@ function Member() {
       const end = new Date(habitData.endDate);
 
       if (end <= start) {
-        dateErrorNotify();
+        AlertNotify.dateErrorNotify();
         return;
       }
 
@@ -346,7 +347,7 @@ function Member() {
       fetchHabits();
       setIsEditModalOpen(false);
       setIsDetailModalOpen(false);
-      updateHabitNotify();
+      SuccessNotify.updateHabitNotify();
     } else {
       console.error("User not authenticated or habit not selected");
     }
@@ -369,7 +370,7 @@ function Member() {
       fetchHabits();
       setIsEditModalOpen(false);
       setIsDetailModalOpen(false);
-      deleteHabitNotify();
+      SuccessNotify.deleteHabitNotify();
     } else {
       console.error("User not authenticated or habit not selected");
     }
@@ -480,34 +481,6 @@ function Member() {
 
     return () => clearInterval(interval);
   }, []);
-
-  const CustomToast = (message) => {
-    toast(message, {
-      icon: <img src={habitPiggyLogo} alt="Habit Piggy Logo" style={{ width: "40px", height: "40px" }} />,
-      style: {
-        borderRadius: "16px",
-        background: "#212121",
-        color: "#fff",
-      },
-      duration: 3000,
-    });
-  };
-
-  const AlertToast = (message) => {
-    toast.error(message, {
-      style: {
-        borderRadius: "16px",
-        background: "#212121",
-        color: "#fff",
-      },
-      duration: 3000,
-    });
-  };
-
-  const updateUserProfileNotify = () => CustomToast("你知道嗎？每個人都有兩顆腎臟");
-  const updateHabitNotify = () => CustomToast("人要時時刻刻做好準備！");
-  const deleteHabitNotify = () => CustomToast("這段感情只有我在付出🥲");
-  const dateErrorNotify = () => AlertToast("結束日期必須晚於開始日期喔！");
 
   return (
     <>

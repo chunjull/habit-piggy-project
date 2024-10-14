@@ -1,5 +1,5 @@
 import CustomSelect from "../CustomSelect";
-import SavingsChart from "../SavingsChart";
+import SavingsChart from "./SavingsChart";
 import Statistics from "./Statistics";
 import UncompletedHabitsList from "./UncompletedHabitsList";
 import { modalIcons } from "../../assets/icons";

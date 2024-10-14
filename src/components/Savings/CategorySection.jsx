@@ -1,5 +1,5 @@
 import CustomSelect from "../CustomSelect";
-import CategoryChart from "../CategoryChart";
+import CategoryChart from "./CategoryChart";
 import { modalIcons } from "../../assets/icons";
 import PropTypes from "prop-types";
 

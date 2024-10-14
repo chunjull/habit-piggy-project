@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext, useCallback } from "react";
+import { useState, useEffect, useRef, useContext, useCallback, useReducer } from "react";
 import { AuthContext } from "../utils/AuthContext";
 import {
   getHabits,
@@ -21,8 +21,10 @@ import EditModal from "../components/home/EditModal";
 import { habitIcons, habitAddIcon } from "../assets/icons";
 import HabitList from "../components/home/HabitList";
 import { SuccessNotify, AlertNotify } from "../components/home/ToastNotify";
+import { initialState, reducer, actionTypes } from "../utils/AuthReducer";
 
 function Home() {
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);

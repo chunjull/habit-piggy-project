@@ -7,8 +7,7 @@ import PostModal from "../components/Posts/PostModal";
 import Modal from "../components/Modal";
 import CustomSelect from "../components/CustomSelect";
 import { AuthContext } from "../utils/AuthContext";
-import { toast } from "react-hot-toast";
-import habitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
+import { SuccessNotify, AlertNotify } from "../components/Posts/ToastNotify";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
@@ -91,7 +90,7 @@ function Posts() {
 
   const handleAddComment = async (postID) => {
     if (!commentContent.trim()) {
-      alertNotify();
+      AlertNotify.contentAlertNotify();
       return;
     }
     const userProfile = await getUserProfile(user.uid);
@@ -105,7 +104,7 @@ function Posts() {
     setCommentContent("");
     const renderComments = await getComments(postID);
     setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
-    addCommentNotify();
+    SuccessNotify.addCommentNotify();
   };
 
   const handleCancelEdit = (commentID) => {
@@ -116,14 +115,14 @@ function Posts() {
     const post = posts.find((post) => post.id === postID);
     const comment = post.comments.find((comment) => comment.id === commentID);
     if (comment.userID !== user.uid) {
-      authorAlertNotify();
+      AlertNotify.authorAlertNotify();
       return;
     }
     setConfirmAction(() => async () => {
       await deleteComment(postID, commentID);
       const renderComments = await getComments(postID);
       setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
-      deleteCommentNotify();
+      SuccessNotify.deleteCommentNotify();
     });
     setShowConfirmModal(true);
   };
@@ -131,13 +130,13 @@ function Posts() {
   const handleDeletePost = async (postID) => {
     const post = posts.find((post) => post.id === postID);
     if (post.userID !== user.uid) {
-      authorAlertNotify();
+      AlertNotify.authorAlertNotify();
       return;
     }
     setConfirmAction(() => async () => {
       await deletePost(postID);
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postID));
-      deletePostNotify();
+      SuccessNotify.deletePostNotify();
     });
     setShowConfirmModal(true);
   };
@@ -146,13 +145,13 @@ function Posts() {
     if (commentID) {
       const comment = post.comments.find((comment) => comment.id === commentID);
       if (comment.userID !== user.uid) {
-        authorAlertNotify();
+        AlertNotify.authorAlertNotify();
         return;
       }
       setEditingComment((prev) => ({ ...prev, [commentID]: comment.content }));
     } else {
       if (post.userID !== user.uid) {
-        authorAlertNotify();
+        AlertNotify.authorAlertNotify();
         return;
       }
       setCurrentPost(post);
@@ -164,20 +163,20 @@ function Posts() {
     if (commentID) {
       const updatedContent = editingComment[commentID];
       if (!updatedContent.trim()) {
-        alertNotify();
+        AlertNotify.contentAlertNotify();
         return;
       }
       await updateComment(postID, commentID, { content: updatedContent });
       const renderComments = await getComments(postID);
       setPosts((prevPosts) => prevPosts.map((post) => (post.id === postID ? { ...post, comments: renderComments } : post)));
       setEditingComment((prev) => ({ ...prev, [commentID]: "" }));
-      updateCommentNotify();
+      SuccessNotify.updateCommentNotify();
     } else {
       await updatePost(postID, postData);
       const updatedPosts = await getAllPosts();
       setPosts(updatedPosts);
       setIsPostModalOpen(false);
-      updatePostNotify();
+      SuccessNotify.updatePostNotify();
     }
   };
 
@@ -247,7 +246,7 @@ function Posts() {
 
   const handleAddPost = async () => {
     if (!postContent.trim()) {
-      alertNotify();
+      AlertNotify.contentAlertNotify();
       return;
     }
 
@@ -266,7 +265,7 @@ function Posts() {
       setPosts((prevPosts) => [postData, ...prevPosts]);
       setPostContent("");
       setPostBackground("");
-      addPostNotify();
+      SuccessNotify.addPostNotify();
 
       const textarea = document.querySelector("textarea");
       if (textarea) {
@@ -304,38 +303,6 @@ function Posts() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  const CustomToast = (message) => {
-    toast(message, {
-      icon: <img src={habitPiggyLogo} alt="Habit Piggy Logo" style={{ width: "40px", height: "40px" }} />,
-      style: {
-        borderRadius: "16px",
-        background: "#212121",
-        color: "#fff",
-      },
-      duration: 3000,
-    });
-  };
-
-  const AlertToast = (message) => {
-    toast.error(message, {
-      style: {
-        borderRadius: "16px",
-        background: "#212121",
-        color: "#fff",
-      },
-      duration: 3000,
-    });
-  };
-
-  const addPostNotify = () => CustomToast("今天也是快樂的貓咪日");
-  const updatePostNotify = () => CustomToast("已更新貼文！");
-  const deletePostNotify = () => CustomToast("已刪除貼文！");
-  const addCommentNotify = () => CustomToast("已新增留言！");
-  const updateCommentNotify = () => CustomToast("已更新留言！");
-  const deleteCommentNotify = () => CustomToast("已刪除留言！");
-  const alertNotify = () => AlertToast("沒有內容不能發布喔！");
-  const authorAlertNotify = () => AlertToast("你沒有權限執行這個行為！");
 
   return (
     <>

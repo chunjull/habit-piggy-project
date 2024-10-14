@@ -20,8 +20,7 @@ import DetailModal from "../components/home/DetailModal";
 import EditModal from "../components/home/EditModal";
 import { habitIcons, habitAddIcon } from "../assets/icons";
 import HabitList from "../components/home/HabitList";
-import { SuccessNotify } from "../components/home/ToastNotify";
-import { AlertNotify } from "../components/home/ToastNotify";
+import { SuccessNotify, AlertNotify } from "../components/home/ToastNotify";
 
 function Home() {
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);

@@ -513,7 +513,7 @@ function Member() {
     <>
       <div className="p-4 md:py-10 space-y-4">
         <TabNavigation isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
-        {isActiveTab === "member" ? (
+        {isActiveTab === "member" && (
           <>
             <div className="flex justify-between items-center">
               <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">會員管理</h2>
@@ -525,7 +525,8 @@ function Member() {
               <BadgeList sortedBadges={sortedBadges} userBadges={userBadges} handleBadgeModal={handleBadgeModal} />
             </div>
           </>
-        ) : (
+        )}
+        {isActiveTab === "history" && (
           <>
             <div className="flex justify-between items-center">
               <h2 className="font-bold text-xl leading-7 text-black dark:text-black-0">歷史習慣</h2>

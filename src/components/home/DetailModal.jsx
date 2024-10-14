@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { modalIcons } from "../assets/icons";
+import { modalIcons } from "../../assets/icons";
 
 const DetailModal = ({ selectedHabit, handleDetailModal, uncompletedFine, handleEditModal, habitCategories }) => {
   const habitCategory = habitCategories.find((category) => category.id === selectedHabit.category);

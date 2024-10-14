@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { weekCalendarIcons } from "../assets/icons";
+import { weekCalendarIcons } from "../../assets/icons";
 
 const MonthCalendar = ({ date, onSelect }) => {
   const [weekNames] = useState(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);

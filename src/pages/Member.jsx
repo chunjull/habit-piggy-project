@@ -19,10 +19,10 @@ import {
 import { AuthContext } from "../utils/AuthContext";
 import Modal from "../components/Modal";
 import SettingModal from "../components/Member/SettingModal";
-import DetailModal from "../components/DetailModal";
-import EditModal from "../components/EditModal";
+import DetailModal from "../components/home/DetailModal";
+import EditModal from "../components/home/EditModal";
 import { habitIcons, settingIcons } from "../assets/icons";
-import HabitList from "../components/HabitList";
+import HabitList from "../components/home/HabitList";
 import AchievementList from "../components/Member/AchievementList";
 import BadgeList from "../components/Member/BadgeList";
 import CustomSelect from "../components/CustomSelect";

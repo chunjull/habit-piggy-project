@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import SettingModal from "./SettingModal";
+import SettingModal from "../components/Member/SettingModal";
 
 const Modal = ({ isOpen, children }) => {
   if (!isOpen) return null;

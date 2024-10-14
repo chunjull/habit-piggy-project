@@ -13,13 +13,13 @@ import {
   getUserProfile,
   updateUserProfile,
 } from "../services/api";
-import WeekCalendar from "../components/WeekCalendar";
+import WeekCalendar from "../components/home/WeekCalendar";
 import Modal from "../components/Modal";
-import HabitModal from "../components/HabitModal";
-import DetailModal from "../components/DetailModal";
-import EditModal from "../components/EditModal";
+import HabitModal from "../components/home/HabitModal";
+import DetailModal from "../components/home/DetailModal";
+import EditModal from "../components/home/EditModal";
 import { habitIcons, habitAddIcon } from "../assets/icons";
-import HabitList from "../components/HabitList";
+import HabitList from "../components/home/HabitList";
 import habitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
 import toast from "react-hot-toast";
 

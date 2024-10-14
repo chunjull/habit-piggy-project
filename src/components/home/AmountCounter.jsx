@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { habitAddIcon } from "../assets/icons";
+import { habitAddIcon } from "../../assets/icons";
 import PropTypes from "prop-types";
 
 const AmountCounter = ({ value, onChange, min = 10, max = 100, step = 10 }) => {

@@ -2,29 +2,37 @@ import { useState, useEffect } from "react";
 import MonthCalendar from "./MonthCalendar";
 import PropTypes from "prop-types";
 import CategorySelect from "./CategorySelect";
-import { modalIcons, checkIcon } from "../assets/icons";
+import { modalIcons, checkIcon } from "../../assets/icons";
 import { toast } from "react-hot-toast";
 import AmountCounter from "./AmountCounter";
 
-const HabitModal = ({
+const EditModal = ({
   habitData,
   handleHabitChange,
-  handleAddHabit,
+  handleUpdateHabit,
+  handleDeleteHabit,
   showMonthCalendar,
   calendarRef,
-  handleHabitModal,
+  handleEditModal,
   habitCategories,
   setHabitData,
   monthCalendarDate,
   handleMonthCalendarSelectDate,
   setShowMonthCalendar,
+  generateStatusArray,
 }) => {
   const [selectedDays, setSelectedDays] = useState(habitData.frequency.days || []);
   const [errors, setErrors] = useState({});
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmAction, setConfirmAction] = useState(null);
 
   useEffect(() => {
-    setSelectedDays(habitData.frequency.days || []);
-  }, [habitData.frequency.days]);
+    if (habitData.frequency.type === "weekly") {
+      setSelectedDays([habitData.frequency.day]);
+    } else {
+      setSelectedDays(habitData.frequency.days || []);
+    }
+  }, [habitData.frequency]);
 
   const handleDayButtonClick = (day) => {
     const dayIndex = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(day);
@@ -59,7 +67,7 @@ const HabitModal = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (event) => {
+  const handleUpdateSubmit = (event) => {
     event.preventDefault();
 
     if (!habitData.title.trim()) {
@@ -71,7 +79,12 @@ const HabitModal = ({
       addHabitErrorNotify();
       return;
     }
-    handleAddHabit();
+    const newStatus = generateStatusArray(habitData.startDate, habitData.endDate, habitData.frequency);
+    setHabitData((prevData) => ({
+      ...prevData,
+      status: newStatus,
+    }));
+    handleUpdateHabit();
   };
 
   const handleInputChange = (e) => {
@@ -135,7 +148,7 @@ const HabitModal = ({
             onChange={handleInputChange}
           />
         </div>
-        <modalIcons.TbX className="w-6 h-6 hover:text-alert cursor-pointer text-black dark:text-black-0" onClick={handleHabitModal} />
+        <modalIcons.TbX className="w-6 h-6 hover:text-alert cursor-pointer text-black dark:text-black-0" onClick={handleEditModal} />
       </div>
       <div className="flex justify-between items-start gap-4">
         <div className="relative flex items-center gap-1 group">
@@ -316,31 +329,71 @@ const HabitModal = ({
         {errors.amount && <p className="text-alert text-sm leading-5">{errors.amount}</p>}
         {errors.startDate && <p className="text-alert text-sm leading-5">{errors.startDate}</p>}
         {errors.endDate && <p className="text-alert text-sm leading-5">{errors.endDate}</p>}
-        <button className="w-full rounded-lg bg-primary font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleSubmit}>
-          養成習慣
-        </button>
+        <div className="grid grid-cols-2 gap-4">
+          <button
+            className="w-full py-1 font-normal text-sm leading-5 bg-alert text-white rounded-lg"
+            onClick={() => {
+              setConfirmAction(() => handleDeleteHabit);
+              setShowConfirmModal(true);
+            }}
+          >
+            刪除習慣
+          </button>
+          <button
+            className="w-full py-1 font-normal text-sm leading-5 bg-primary rounded-lg hover:bg-primary-dark"
+            onClick={() => {
+              setConfirmAction(() => handleUpdateSubmit);
+              setShowConfirmModal(true);
+            }}
+          >
+            更新習慣
+          </button>
+          {showConfirmModal && (
+            <div className="fixed inset-0 flex items-center justify-center z-50">
+              <div className="bg-white dark:bg-black-800 p-4 rounded-xl shadow-lg">
+                <p className="text-black dark:text-white mb-4">你確定要執行這個操作嗎？</p>
+                <div className="flex justify-end gap-2">
+                  <button className="py-1 px-3 bg-gray-300 rounded-lg" onClick={() => setShowConfirmModal(false)}>
+                    取消
+                  </button>
+                  <button
+                    className="py-1 px-3 bg-primary rounded-lg text-black"
+                    onClick={() => {
+                      confirmAction();
+                      setShowConfirmModal(false);
+                    }}
+                  >
+                    確認
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-HabitModal.propTypes = {
+EditModal.propTypes = {
   habitData: PropTypes.object.isRequired,
   handleHabitChange: PropTypes.func.isRequired,
-  handleAddHabit: PropTypes.func.isRequired,
+  handleUpdateHabit: PropTypes.func.isRequired,
+  handleDeleteHabit: PropTypes.func.isRequired,
   handleFocus: PropTypes.func.isRequired,
   showMonthCalendar: PropTypes.bool.isRequired,
   calendarTarget: PropTypes.string.isRequired,
   selectedDate: PropTypes.object.isRequired,
   handleSelectDate: PropTypes.func.isRequired,
   calendarRef: PropTypes.object.isRequired,
-  handleHabitModal: PropTypes.func.isRequired,
+  handleEditModal: PropTypes.func.isRequired,
   habitCategories: PropTypes.array.isRequired,
   setHabitData: PropTypes.func.isRequired,
   monthCalendarDate: PropTypes.object.isRequired,
   handleMonthCalendarSelectDate: PropTypes.func.isRequired,
   setCalendarTarget: PropTypes.func.isRequired,
   setShowMonthCalendar: PropTypes.func.isRequired,
+  generateStatusArray: PropTypes.func.isRequired,
 };
 
-export default HabitModal;
+export default EditModal;

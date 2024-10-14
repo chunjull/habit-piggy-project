@@ -1,4 +1,4 @@
-import { modalIcons } from "../assets/icons";
+import { modalIcons } from "../../assets/icons";
 import PropTypes from "prop-types";
 
 const AchievementModal = ({ handleAchievementModal, userAchievements, sortedAchievements }) => {

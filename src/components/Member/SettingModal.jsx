@@ -1,9 +1,9 @@
 import { useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
-import { modalIcons, settingIcons } from "../assets/icons";
-import { AuthContext } from "../utils/AuthContext";
-import { updateUserProfile, uploadAvatar, logoutUser } from "../services/api";
+import { modalIcons, settingIcons } from "../../assets/icons";
+import { AuthContext } from "../../utils/AuthContext";
+import { updateUserProfile, uploadAvatar, logoutUser } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import SwitchButton from "./SwitchButton";
 

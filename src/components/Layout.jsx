@@ -45,10 +45,10 @@ function Layout({ children, isModalOpen, modalContent }) {
 
   return (
     <div className={`font-huninn bg-light dark:bg-black-950 relative min-h-screen ${isDarkMode ? "dark" : ""}`}>
-      <div className="md:flex">
+      <div className="flex flex-col-reverse md:flex-row">
         {location.pathname !== "/" ? (
           <nav
-            className={`pt-2 pb-3 px-4 bg-black-50 dark:bg-black-800 fixed md:static inset-x-0 bottom-0 flex gap-x-4 z-50 border-t border-primary md:p-4 md:flex-col md:justify-between md:border-t-0 md:border-r md:h-svh transition-all duration-200 ease-in-out ${
+            className={`pt-2 pb-3 px-4 bg-black-50 dark:bg-black-800 sticky bottom-0 md:top-0 md:bottom-auto flex gap-x-4 z-50 border-t border-primary md:p-4 md:flex-col md:justify-between md:border-t-0 md:border-r md:h-svh transition-all duration-200 ease-in-out ${
               isSidebarExpanded ? "md:w-[240px]" : "md:w-20"
             }`}
           >

@@ -10,6 +10,7 @@ import RegisterForm from "../components/Login/RegisterForm";
 import LoadingScreen from "../components/Login/LoadingScreen";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import LoginBanner from "../components/Login/LoginBanner";
 
 function Login() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -63,13 +64,12 @@ function Login() {
         <LoadingScreen isLoading={state.isLoading} />
       ) : (
         <div className="flex flex-col justify-between h-full">
-          <div>
-            <Header />
-            <div className="p-4 md:py-8 space-y-4 w-full md:w-1/2 h-fit md:bg-black-50 md:mx-auto rounded-2xl">
-              <TabNavigation isLogin={state.isLogin} setIsLogin={(value) => dispatch({ type: actionTypes.SET_IS_LOGIN, payload: value })} />
-              {state.isLogin ? <LoginForm handleLogin={handleLogin} loginError={state.loginError} /> : <RegisterForm handleRegister={handleRegister} />}
-            </div>
+          <Header />
+          <div className="p-4 md:py-8 space-y-4 w-full md:w-1/2 h-fit md:bg-black-50 md:mx-auto rounded-2xl">
+            <TabNavigation isLogin={state.isLogin} setIsLogin={(value) => dispatch({ type: actionTypes.SET_IS_LOGIN, payload: value })} />
+            {state.isLogin ? <LoginForm handleLogin={handleLogin} loginError={state.loginError} /> : <RegisterForm handleRegister={handleRegister} />}
           </div>
+          {state.isLogin && <LoginBanner />}
           <Footer />
         </div>
       )}

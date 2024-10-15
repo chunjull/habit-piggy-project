@@ -32,6 +32,9 @@ export default {
         lobster: ["Lobster", "sans-serif"],
         huninn: ["FakePearl-Regular", "Noto Sans TC", "sans-serif"],
       },
+      gridTemplateColumns: {
+        32: "repeat(32, minmax(0, 1fr))",
+      },
     },
   },
   plugins: [],

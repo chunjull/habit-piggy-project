@@ -8,8 +8,8 @@ import TabNavigation from "../components/Login/TabNavigation";
 import LoginForm from "../components/Login/LoginForm";
 import RegisterForm from "../components/Login/RegisterForm";
 import LoadingScreen from "../components/Login/LoadingScreen";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "../Layout/Header";
+import Footer from "../Layout/Footer";
 import LoginBanner from "../components/Login/LoginBanner";
 
 function Login() {

@@ -6,7 +6,7 @@ import Rank from "./pages/Rank";
 import Posts from "./pages/Posts";
 import Member from "./pages/Member";
 import Error from "./pages/Error";
-import Layout from "./components/Layout";
+import Layout from "./Layout/Layout";
 import { AuthProvider } from "./utils/AuthContext";
 import PrivateRoute from "./utils/PrivateRoute";
 

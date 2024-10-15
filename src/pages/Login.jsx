@@ -62,14 +62,16 @@ function Login() {
       {state.isLoading ? (
         <LoadingScreen isLoading={state.isLoading} />
       ) : (
-        <>
-          <Header />
-          <div className="p-4 md:py-8 space-y-4 w-full md:w-1/2 h-fit md:bg-black-50 md:mx-auto rounded-2xl">
-            <TabNavigation isLogin={state.isLogin} setIsLogin={(value) => dispatch({ type: actionTypes.SET_IS_LOGIN, payload: value })} />
-            {state.isLogin ? <LoginForm handleLogin={handleLogin} loginError={state.loginError} /> : <RegisterForm handleRegister={handleRegister} />}
+        <div className="flex flex-col justify-between h-full">
+          <div>
+            <Header />
+            <div className="p-4 md:py-8 space-y-4 w-full md:w-1/2 h-fit md:bg-black-50 md:mx-auto rounded-2xl">
+              <TabNavigation isLogin={state.isLogin} setIsLogin={(value) => dispatch({ type: actionTypes.SET_IS_LOGIN, payload: value })} />
+              {state.isLogin ? <LoginForm handleLogin={handleLogin} loginError={state.loginError} /> : <RegisterForm handleRegister={handleRegister} />}
+            </div>
           </div>
           <Footer />
-        </>
+        </div>
       )}
     </>
   );

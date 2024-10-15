@@ -68,7 +68,7 @@ const EditModal = ({
   };
 
   const handleUpdateSubmit = (event) => {
-    event.preventDefault();
+    if (event) event.preventDefault();
 
     if (!habitData.title.trim()) {
       AlertNotify.habitTitleErrorNotify();
@@ -327,8 +327,8 @@ const EditModal = ({
           </button>
           <button
             className="w-full py-1 font-normal text-sm leading-5 bg-primary rounded-lg hover:bg-primary-dark"
-            onClick={() => {
-              setConfirmAction(() => handleUpdateSubmit);
+            onClick={(event) => {
+              setConfirmAction(() => () => handleUpdateSubmit(event));
               setShowConfirmModal(true);
             }}
           >

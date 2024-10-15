@@ -19,6 +19,8 @@ export const initialState = {
   selectedHabit: null,
   uncompletedFine: 0,
   monthCalendarDate: null,
+  habits: [],
+  weekDates: [],
 };
 
 export const actionTypes = {
@@ -28,6 +30,8 @@ export const actionTypes = {
   SET_SELECTED_HABIT: "SET_SELECTED_HABIT",
   SET_UNCOMPLETED_FINE: "SET_UNCOMPLETED_FINE",
   SET_MONTH_CALENDAR_DATE: "SET_MONTH_CALENDAR_DATE",
+  SET_HABITS: "SET_HABITS",
+  SET_WEEK_DATES: "SET_WEEK_DATES",
 };
 
 export function reducer(state, action) {
@@ -44,6 +48,10 @@ export function reducer(state, action) {
       return { ...state, uncompletedFine: action.payload };
     case actionTypes.SET_MONTH_CALENDAR_DATE:
       return { ...state, monthCalendarDate: action.payload };
+    case actionTypes.SET_HABITS:
+      return { ...state, habits: action.payload };
+    case actionTypes.SET_WEEK_DATES:
+      return { ...state, weekDates: action.payload };
     default:
       return state;
   }

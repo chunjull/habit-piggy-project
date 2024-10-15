@@ -321,6 +321,7 @@ HabitModal.propTypes = {
   setHabitData: PropTypes.func.isRequired,
   monthCalendarDate: PropTypes.object.isRequired,
   handleMonthCalendarSelectDate: PropTypes.func.isRequired,
+  setCalendarTarget: PropTypes.func.isRequired,
   setShowMonthCalendar: PropTypes.func.isRequired,
 };
 

@@ -16,6 +16,7 @@ export const initialState = {
   userData: null,
   showConfirmModal: false,
   confirmAction: null,
+  isLoading: false,
 };
 
 export const actionTypes = {
@@ -32,6 +33,7 @@ export const actionTypes = {
   SET_USER_DATA: "SET_USER_DATA",
   SET_SHOW_CONFIRM_MODAL: "SET_SHOW_CONFIRM_MODAL",
   SET_CONFIRM_ACTION: "SET_CONFIRM_ACTION",
+  SET_IS_LOADING: "SET_IS_LOADING",
 };
 
 export function reducer(state, action) {
@@ -62,6 +64,8 @@ export function reducer(state, action) {
       return { ...state, showConfirmModal: action.payload };
     case actionTypes.SET_CONFIRM_ACTION:
       return { ...state, confirmAction: action.payload };
+    case actionTypes.SET_IS_LOADING:
+      return { ...state, isLoading: action.payload };
     default:
       return state;
   }

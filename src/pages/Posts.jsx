@@ -20,6 +20,7 @@ function Posts() {
 
   useEffect(() => {
     const fetchPosts = async () => {
+      dispatch({ type: actionTypes.SET_IS_LOADING, payload: true });
       const postsList = await getAllPosts();
       const postsWithUserDetails = await Promise.all(
         postsList.map(async (post) => {
@@ -29,6 +30,7 @@ function Posts() {
         })
       );
       dispatch({ type: actionTypes.SET_POST, payload: postsWithUserDetails });
+      dispatch({ type: actionTypes.SET_IS_LOADING, payload: false });
     };
 
     fetchPosts();
@@ -317,6 +319,7 @@ function Posts() {
           handleAddPost={handleAddPost}
           calculateTextColor={calculateTextColor}
           userData={state.userData}
+          isLoading={state.isLoading}
         />
         <PostList
           posts={filteredPosts}
@@ -336,6 +339,7 @@ function Posts() {
           getTimeDifference={getTimeDifference}
           customSelectRef={customSelectRef}
           calculateTextColor={calculateTextColor}
+          isLoading={state.isLoading}
         />
         {state.showConfirmModal && (
           <ConfirmModal

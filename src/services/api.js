@@ -9,7 +9,6 @@ async function registerUser(email, password, account, name) {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    console.log("User created: ", user);
 
     const defaultAvatarURL = await getDefaultAvatar("Piggy.png");
 
@@ -28,10 +27,8 @@ async function registerUser(email, password, account, name) {
       achievements: [],
       badges: [],
     });
-    console.log("User data created with ID: ", user.uid);
 
     collection(userDocRef, "habits");
-    console.log("Empty habits sub-collection created for user ID: ", user.uid);
   } catch (error) {
     console.error("Error creating user: ", error.code, error.message);
   }
@@ -57,7 +54,6 @@ async function getEmailByAccount(account) {
 async function logoutUser() {
   try {
     await signOut(auth);
-    console.log("User signed out");
   } catch (error) {
     console.error("Error signing out: ", error.code, error.message);
   }
@@ -77,7 +73,6 @@ async function updateUserProfile(uid, profileData) {
     }
 
     await setDoc(userDocRef, profileData, { merge: true });
-    console.log("User profile updated with ID: ", uid);
   } catch (error) {
     console.error("Error updating user profile: ", error.code, error.message);
   }
@@ -90,7 +85,6 @@ async function getUserProfile(uid) {
     if (userSnapshot.exists()) {
       return userSnapshot.data();
     } else {
-      console.log("No such document!");
       const defaultAvatarURL = await getDefaultAvatar("Piggy.png");
       return { name: "Unknown", levelPoints: 0, avatar: defaultAvatarURL };
     }
@@ -122,7 +116,6 @@ async function addHabit(uid, habitData) {
       createdTime: Timestamp.now(),
       updatedTime: Timestamp.now(),
     });
-    console.log("Habit added for user ID: ", uid);
   } catch (error) {
     console.error("Error adding habit: ", error.code, error.message);
   }
@@ -151,7 +144,6 @@ async function updateHabit(uid, habitId, habitData) {
       ...habitData,
       updatedTime: Timestamp.now(),
     });
-    // console.log("Habit updated with ID: ", habitId);
   } catch (error) {
     console.error("Error updating habit: ", error.code, error.message);
   }
@@ -161,7 +153,6 @@ async function deleteHabit(uid, habitId) {
   try {
     const habitDocRef = doc(db, "users", uid, "habits", habitId);
     await deleteDoc(habitDocRef);
-    console.log("Habit deleted with ID: ", habitId);
   } catch (error) {
     console.error("Error deleting habit: ", error.code, error.message);
   }
@@ -176,7 +167,6 @@ async function addPost(userID, postData) {
       createdTime: Timestamp.now(),
       updatedTime: Timestamp.now(),
     });
-    console.log("Post added with ID: ", newPostRef.id);
     return newPostRef.id;
   } catch (error) {
     console.error("Error adding post: ", error.code, error.message);
@@ -190,7 +180,6 @@ async function getPost(postID) {
     if (postSnapshot.exists()) {
       return { id: postSnapshot.id, ...postSnapshot.data() };
     } else {
-      console.log("No such document!");
       return null;
     }
   } catch (error) {
@@ -206,7 +195,6 @@ async function updatePost(postID, postData) {
       ...postData,
       updatedTime: Timestamp.now(),
     });
-    console.log("Post updated with ID: ", postID);
   } catch (error) {
     console.error("Error updating post: ", error.code, error.message);
   }
@@ -223,7 +211,6 @@ async function deletePost(postID) {
     await Promise.all(deleteCommentsPromises);
 
     await deleteDoc(postDocRef);
-    console.log("Post and its comments deleted with ID: ", postID);
   } catch (error) {
     console.error("Error deleting post and its comments: ", error.code, error.message);
   }
@@ -247,7 +234,6 @@ async function uploadAvatar(uid, file) {
     const storageRef = ref(storage, `avatars/${uid}`);
     const snapshot = await uploadBytes(storageRef, file);
     const downloadURL = await getDownloadURL(snapshot.ref);
-    console.log("Avatar uploaded: ", downloadURL);
     return downloadURL;
   } catch (error) {
     console.error("Error uploading avatar: ", error.code, error.message);
@@ -259,7 +245,6 @@ async function getDefaultAvatar(fileName) {
   try {
     const storageRef = ref(storage, `default_avatars/${fileName}`);
     const downloadURL = await getDownloadURL(storageRef);
-    console.log("Default avatar URL: ", downloadURL);
     return downloadURL;
   } catch (error) {
     console.error("Error getting default avatar: ", error.code, error.message);
@@ -275,7 +260,6 @@ async function addComment(postID, commentData) {
       ...commentData,
       createdTime: Timestamp.now(),
     });
-    console.log("Comment added to post ID: ", postID);
   } catch (error) {
     console.error("Error adding comment: ", error.code, error.message);
   }
@@ -301,7 +285,6 @@ async function updateComment(postID, commentID, commentData) {
       ...commentData,
       updatedTime: Timestamp.now(),
     });
-    console.log("Comment updated with ID: ", commentID);
   } catch (error) {
     console.error("Error updating comment: ", error.code, error.message);
   }
@@ -311,7 +294,6 @@ async function deleteComment(postID, commentID) {
   try {
     const commentDocRef = doc(db, "posts", postID, "comments", commentID);
     await deleteDoc(commentDocRef);
-    console.log("Comment deleted with ID: ", commentID);
   } catch (error) {
     console.error("Error deleting comment: ", error.code, error.message);
   }
@@ -340,7 +322,6 @@ async function addLike(postID, userID) {
       if (!likes.includes(userID)) {
         likes.push(userID);
         await updateDoc(postDocRef, { likes });
-        console.log("Like added to post ID: ", postID);
       }
     }
   } catch (error) {
@@ -359,11 +340,9 @@ async function removeLike(postID, userID) {
       if (index > -1) {
         likes.splice(index, 1);
         await updateDoc(postDocRef, { likes });
-        console.log("Like removed from post ID: ", postID);
 
         const likeDocRef = doc(db, "posts", postID, "likes", userID);
         await deleteDoc(likeDocRef);
-        console.log("Like document removed for user ID: ", userID);
       }
     }
   } catch (error) {
@@ -391,7 +370,6 @@ async function getUserAchievements(uid) {
       const achievements = userData.achievements || [];
       return achievements;
     } else {
-      console.log("No such document!");
       return [];
     }
   } catch (error) {
@@ -458,7 +436,6 @@ async function checkAndAwardAchievements(uid, taskType, taskValue) {
         if (!userAchievements.includes(doc.id)) {
           userAchievements.push(doc.id);
           await updateDoc(userDocRef, { achievements: userAchievements });
-          console.log(`Achievement ${achievement.name} awarded to user ${uid}`);
         }
       }
     });
@@ -488,7 +465,6 @@ async function getUserBadges(uid) {
       const badges = userData.badges || [];
       return badges;
     } else {
-      console.log("No such document!");
       return [];
     }
   } catch (error) {
@@ -541,7 +517,6 @@ async function checkAndAwardBadges(uid) {
       if (achieved && !userBadges.includes(doc.id)) {
         userBadges.push(doc.id);
         await updateDoc(userDocRef, { badges: userBadges });
-        console.log(`Badge ${badge.description} awarded to user ID: ${uid}`);
       }
     });
   } catch (error) {
@@ -557,7 +532,6 @@ async function removeBadge(uid, category) {
       const userData = userSnapshot.data();
       const updatedBadges = userData.badges.filter((badge) => badge.category !== category);
       await updateDoc(userDocRef, { badges: updatedBadges });
-      console.log(`Badge for category ${category} removed for user ID: ${uid}`);
     }
   } catch (error) {
     console.error("Error removing badge: ", error.code, error.message);

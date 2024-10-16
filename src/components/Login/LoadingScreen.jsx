@@ -20,8 +20,8 @@ const LoadingScreen = ({ isLoading }) => {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen gap-4">
-      <img src={currentImage} alt="loading" className="w-40 h-40 object-cover" />
-      <p className="font-normal text-base text-black dark:text-black-0">準備好培養習慣了嗎？</p>
+      <img src={currentImage} alt="loading" className="w-60 h-60 object-cover" />
+      <p className="font-normal text-lg leading-6 text-black dark:text-black-0">準備好培養習慣了嗎？</p>
     </div>
   );
 };

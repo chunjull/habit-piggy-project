@@ -1,12 +1,12 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Home from "./pages/Home";
-import Savings from "./pages/Savings";
-import Rank from "./pages/Rank";
-import Posts from "./pages/Posts";
-import Member from "./pages/Member";
-import Error from "./pages/Error";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Layout from "./Layout/Layout";
+import Error from "./pages/Error";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Member from "./pages/Member";
+import Posts from "./pages/Posts";
+import Rank from "./pages/Rank";
+import Savings from "./pages/Savings";
 import { AuthProvider } from "./utils/AuthContext";
 import PrivateRoute from "./utils/PrivateRoute";
 

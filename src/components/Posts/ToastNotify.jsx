@@ -1,5 +1,5 @@
-import SuccessToast from "../Toasts/SuccessToast";
 import AlertToast from "../Toasts/AlertToast";
+import SuccessToast from "../Toasts/SuccessToast";
 
 const addPostNotify = () => SuccessToast("今天也是快樂的貓咪日");
 const updatePostNotify = () => SuccessToast("已更新貼文！");

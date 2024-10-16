@@ -1,7 +1,7 @@
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import habitPiggyLoading1 from "../../assets/images/habit-piggy-loading-1.svg";
 import habitPiggyLoading2 from "../../assets/images/habit-piggy-loading-2.svg";
-import PropTypes from "prop-types";
 
 const LoadingScreen = ({ isLoading }) => {
   const [currentImage, setCurrentImage] = useState(habitPiggyLoading1);

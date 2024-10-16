@@ -1,26 +1,26 @@
-import { useState, useEffect, useRef, useContext, useCallback } from "react";
-import { AuthContext } from "../utils/AuthContext";
-import {
-  getHabits,
-  updateHabit,
-  addHabit,
-  deleteHabit,
-  calculateTaskValue,
-  checkAndAwardAchievements,
-  calculateBadges,
-  checkAndAwardBadges,
-  removeBadge,
-  getUserProfile,
-  updateUserProfile,
-} from "../services/api";
-import WeekCalendar from "../components/home/WeekCalendar";
-import Modal from "../components/Modal";
-import HabitModal from "../components/home/HabitModal";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { habitAddIcon, habitIcons } from "../assets/icons";
 import DetailModal from "../components/home/DetailModal";
 import EditModal from "../components/home/EditModal";
-import { habitIcons, habitAddIcon } from "../assets/icons";
 import HabitList from "../components/home/HabitList";
-import { SuccessNotify, AlertNotify } from "../components/home/ToastNotify";
+import HabitModal from "../components/home/HabitModal";
+import { AlertNotify, SuccessNotify } from "../components/home/ToastNotify";
+import WeekCalendar from "../components/home/WeekCalendar";
+import Modal from "../components/Modal";
+import {
+  addHabit,
+  calculateBadges,
+  calculateTaskValue,
+  checkAndAwardAchievements,
+  checkAndAwardBadges,
+  deleteHabit,
+  getHabits,
+  getUserProfile,
+  removeBadge,
+  updateHabit,
+  updateUserProfile,
+} from "../services/api";
+import { AuthContext } from "../utils/AuthContext";
 
 function Home() {
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);

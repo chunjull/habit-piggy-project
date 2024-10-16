@@ -1,10 +1,10 @@
-import { useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { modalIcons, settingIcons } from "../../assets/icons";
-import { AuthContext } from "../../utils/AuthContext";
-import { updateUserProfile, uploadAvatar, logoutUser } from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import { modalIcons, settingIcons } from "../../assets/icons";
+import { logoutUser, updateUserProfile, uploadAvatar } from "../../services/api";
+import { AuthContext } from "../../utils/AuthContext";
 import SwitchButton from "./SwitchButton";
 
 const SettingModal = ({ profileData, handleSettingModal, handleSaveAndClose }) => {

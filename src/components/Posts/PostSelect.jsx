@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { postIcons } from "../../assets/icons";
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { postIcons } from "../../assets/icons";
 
 const CustomSelect = ({ options, onChange, theme }) => {
   const [isOpen, setIsOpen] = useState(false);

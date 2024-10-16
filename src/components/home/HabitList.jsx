@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
-import { checkIcon, habitDetailIcon, modalIcons } from "../../assets/icons";
 import { useLocation } from "react-router-dom";
+import { checkIcon, habitDetailIcon, modalIcons } from "../../assets/icons";
 
 const HabitList = ({ habits, habitCategories, handleDetailClick, weekDates, handleCheck }) => {
   const location = useLocation();

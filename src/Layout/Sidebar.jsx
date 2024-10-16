@@ -1,6 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
-import { layoutIcons, generalIcons } from "../assets/icons";
 import PropTypes from "prop-types";
+import { Link, useLocation } from "react-router-dom";
+import { generalIcons, layoutIcons } from "../assets/icons";
 
 const Sidebar = ({ isSidebarExpanded, toggleSidebar, toggleSidebarInSmallScreen, handleLogout }) => {
   const location = useLocation();

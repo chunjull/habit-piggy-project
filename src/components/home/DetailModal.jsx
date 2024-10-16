@@ -1,8 +1,8 @@
-import { useState } from "react";
 import PropTypes from "prop-types";
-import { modalIcons } from "../../assets/icons";
+import { useState } from "react";
 import Lottie from "react-lottie";
 import animationData from "../../assets/animation/stamp-animation.json";
+import { modalIcons } from "../../assets/icons";
 
 const DetailModal = ({ selectedHabit, handleDetailModal, uncompletedFine, handleEditModal, habitCategories }) => {
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);

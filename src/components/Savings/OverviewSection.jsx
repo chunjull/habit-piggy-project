@@ -1,9 +1,9 @@
+import PropTypes from "prop-types";
+import { modalIcons } from "../../assets/icons";
 import CustomSelect from "../CustomSelect";
 import SavingsChart from "./SavingsChart";
 import Statistics from "./Statistics";
 import UncompletedHabitsList from "./UncompletedHabitsList";
-import { modalIcons } from "../../assets/icons";
-import PropTypes from "prop-types";
 
 const OverviewSection = ({ filter, setFilter, options, completedCount, savingsCount, totalSavings, chartData, habits, getStartAndEndOfPeriod, customSelectRef }) => {
   return (

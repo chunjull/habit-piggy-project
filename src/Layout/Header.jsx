@@ -1,5 +1,5 @@
-import HabitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
 import { Link } from "react-router-dom";
+import HabitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
 
 const Header = () => {
   return (

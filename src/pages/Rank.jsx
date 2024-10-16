@@ -1,13 +1,13 @@
-import { useState, useContext, useEffect, useReducer } from "react";
-import { AuthContext } from "../utils/AuthContext";
-import { getAllUsers, getHabits } from "../services/api";
-import TabNavigation from "../components/Rank/TabNavigation";
-import DateRange from "../components/Rank/DateRange";
+import { useContext, useEffect, useReducer, useState } from "react";
 import CongratulationMessage from "../components/Rank/CongratulationMessage";
 import CongratulationMessageIcons from "../components/Rank/CongratulationMessageIcons";
-import TopTenUsersList from "../components/Rank/TopTenUserList";
 import CurrentUser from "../components/Rank/CurrentUser";
-import { initialState, actionTypes, reducer } from "../utils/HabitReducer";
+import DateRange from "../components/Rank/DateRange";
+import TabNavigation from "../components/Rank/TabNavigation";
+import TopTenUsersList from "../components/Rank/TopTenUserList";
+import { getAllUsers, getHabits } from "../services/api";
+import { AuthContext } from "../utils/AuthContext";
+import { actionTypes, initialState, reducer } from "../utils/HabitReducer";
 
 function Rank() {
   const [state, dispatch] = useReducer(reducer, initialState);

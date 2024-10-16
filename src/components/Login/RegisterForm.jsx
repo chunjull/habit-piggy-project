@@ -1,6 +1,6 @@
+import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { modalIcons } from "../../assets/icons";
-import PropTypes from "prop-types";
 
 const RegisterForm = ({ handleRegister }) => {
   const {

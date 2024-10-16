@@ -1,16 +1,16 @@
-import { useContext, useReducer } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { registerUser, getEmailByAccount } from "../services/api";
-import { AuthContext } from "../utils/AuthContext";
-import { initialState, reducer, actionTypes } from "../utils/AuthReducer";
+import { useContext, useReducer } from "react";
 import { Navigate } from "react-router-dom";
-import TabNavigation from "../components/Login/TabNavigation";
+import LoadingScreen from "../components/Login/LoadingScreen";
+import LoginBanner from "../components/Login/LoginBanner";
 import LoginForm from "../components/Login/LoginForm";
 import RegisterForm from "../components/Login/RegisterForm";
-import LoadingScreen from "../components/Login/LoadingScreen";
-import Header from "../Layout/Header";
+import TabNavigation from "../components/Login/TabNavigation";
 import Footer from "../Layout/Footer";
-import LoginBanner from "../components/Login/LoginBanner";
+import Header from "../Layout/Header";
+import { getEmailByAccount, registerUser } from "../services/api";
+import { AuthContext } from "../utils/AuthContext";
+import { actionTypes, initialState, reducer } from "../utils/AuthReducer";
 
 function Login() {
   const [state, dispatch] = useReducer(reducer, initialState);

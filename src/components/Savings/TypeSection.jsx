@@ -1,7 +1,7 @@
+import PropTypes from "prop-types";
+import { modalIcons } from "../../assets/icons";
 import CustomSelect from "../CustomSelect";
 import TypeChart from "./TypeChart";
-import { modalIcons } from "../../assets/icons";
-import PropTypes from "prop-types";
 
 const TypeSection = ({ filter, setFilter, options, savingsCount, typeData, habitType, customSelectRef }) => {
   return (

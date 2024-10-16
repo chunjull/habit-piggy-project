@@ -1,40 +1,40 @@
-import { useState, useContext, useEffect, useRef, useReducer } from "react";
-import {
-  updateUserProfile,
-  getUserProfile,
-  uploadAvatar,
-  getHabits,
-  updateHabit,
-  deleteHabit,
-  getAchievements,
-  getUserAchievements,
-  calculateTaskValue,
-  checkAndAwardAchievements,
-  getBadges,
-  getUserBadges,
-  calculateBadges,
-  checkAndAwardBadges,
-  removeBadge,
-} from "../services/api";
-import { AuthContext } from "../utils/AuthContext";
-import Modal from "../components/Modal";
-import SettingModal from "../components/Member/SettingModal";
-import DetailModal from "../components/home/DetailModal";
-import EditModal from "../components/home/EditModal";
+import { useContext, useEffect, useReducer, useRef, useState } from "react";
 import { habitIcons, settingIcons } from "../assets/icons";
-import HabitList from "../components/home/HabitList";
-import AchievementList from "../components/Member/AchievementList";
-import BadgeList from "../components/Member/BadgeList";
-import CustomSelect from "../components/CustomSelect";
-import AchievementModal from "../components/Member/AchievementModal";
-import BadgeModal from "../components/Member/BadgeModal";
 import habitPiggyLoading1 from "../assets/images/habit-piggy-loading-1.svg";
 import habitPiggyLoading2 from "../assets/images/habit-piggy-loading-2.svg";
-import TabNavigation from "../components/Member/TabNavigation";
+import CustomSelect from "../components/CustomSelect";
+import DetailModal from "../components/home/DetailModal";
+import EditModal from "../components/home/EditModal";
+import HabitList from "../components/home/HabitList";
+import { AlertNotify, SuccessNotify } from "../components/home/ToastNotify";
+import AchievementList from "../components/Member/AchievementList";
+import AchievementModal from "../components/Member/AchievementModal";
+import BadgeList from "../components/Member/BadgeList";
+import BadgeModal from "../components/Member/BadgeModal";
 import MemberInformation from "../components/Member/MemberInformation";
-import { SuccessNotify, AlertNotify } from "../components/home/ToastNotify";
+import SettingModal from "../components/Member/SettingModal";
+import TabNavigation from "../components/Member/TabNavigation";
 import { UpdateNotify } from "../components/Member/ToastNotify";
-import { initialState, actionTypes, reducer } from "../utils/HabitReducer";
+import Modal from "../components/Modal";
+import {
+  calculateBadges,
+  calculateTaskValue,
+  checkAndAwardAchievements,
+  checkAndAwardBadges,
+  deleteHabit,
+  getAchievements,
+  getBadges,
+  getHabits,
+  getUserAchievements,
+  getUserBadges,
+  getUserProfile,
+  removeBadge,
+  updateHabit,
+  updateUserProfile,
+  uploadAvatar,
+} from "../services/api";
+import { AuthContext } from "../utils/AuthContext";
+import { actionTypes, initialState, reducer } from "../utils/HabitReducer";
 
 function Member() {
   const { user } = useContext(AuthContext);

@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { dropdownIcon } from "../assets/icons";
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { dropdownIcon } from "../assets/icons";
 
 const CustomSelect = ({ options, value, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);

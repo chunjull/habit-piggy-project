@@ -1,14 +1,14 @@
-import { useEffect, useState, useContext, useRef, useReducer } from "react";
-import { addPost, getAllPosts, getUserProfile, addComment, getComments, updateComment, deleteComment, updatePost, deletePost, addLike, removeLike, getPostBackgrounds } from "../services/api";
+import { useContext, useEffect, useReducer, useRef, useState } from "react";
+import CustomSelect from "../components/CustomSelect";
+import Modal from "../components/Modal";
+import ConfirmModal from "../components/Posts/ConfirmModal";
 import PostForm from "../components/Posts/PostForm";
 import PostList from "../components/Posts/PostList";
-import ConfirmModal from "../components/Posts/ConfirmModal";
 import PostModal from "../components/Posts/PostModal";
-import { SuccessNotify, AlertNotify } from "../components/Posts/ToastNotify";
-import Modal from "../components/Modal";
-import CustomSelect from "../components/CustomSelect";
+import { AlertNotify, SuccessNotify } from "../components/Posts/ToastNotify";
+import { addComment, addLike, addPost, deleteComment, deletePost, getAllPosts, getComments, getPostBackgrounds, getUserProfile, removeLike, updateComment, updatePost } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
-import { initialState, reducer, actionTypes } from "../utils/PostReducer";
+import { actionTypes, initialState, reducer } from "../utils/PostReducer";
 
 function Posts() {
   const [state, dispatch] = useReducer(reducer, initialState);

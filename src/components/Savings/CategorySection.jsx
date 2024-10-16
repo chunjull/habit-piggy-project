@@ -1,7 +1,7 @@
+import PropTypes from "prop-types";
+import { modalIcons } from "../../assets/icons";
 import CustomSelect from "../CustomSelect";
 import CategoryChart from "./CategoryChart";
-import { modalIcons } from "../../assets/icons";
-import PropTypes from "prop-types";
 
 const CategorySection = ({ filter, setFilter, options, savingsCount, categoryData, habitCategories, customSelectRef }) => {
   return (

@@ -1,5 +1,5 @@
-import { rankIcons } from "../../assets/icons";
 import PropTypes from "prop-types";
+import { rankIcons } from "../../assets/icons";
 
 const RankIcons = ({ type }) => (
   <div className="absolute -top-8 inset-x-0 text-primary flex items-center justify-center">

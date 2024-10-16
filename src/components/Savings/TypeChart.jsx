@@ -1,5 +1,5 @@
-import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import PropTypes from "prop-types";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 const TypeChart = ({ typeData, habitType }) => {
   const data = Object.keys(typeData)

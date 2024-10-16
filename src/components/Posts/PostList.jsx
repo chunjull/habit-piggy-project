@@ -1,5 +1,5 @@
-import PostItem from "./PostItem";
 import PropTypes from "prop-types";
+import PostItem from "./PostItem";
 
 const PostList = ({
   posts,

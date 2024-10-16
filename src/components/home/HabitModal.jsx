@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import MonthCalendar from "./MonthCalendar";
 import PropTypes from "prop-types";
-import CategorySelect from "./CategorySelect";
-import { modalIcons, checkIcon } from "../../assets/icons";
-import { AlertNotify } from "./ToastNotify";
+import { useEffect, useState } from "react";
+import { checkIcon, modalIcons } from "../../assets/icons";
 import AmountCounter from "./AmountCounter";
+import CategorySelect from "./CategorySelect";
+import MonthCalendar from "./MonthCalendar";
+import { AlertNotify } from "./ToastNotify";
 
 const HabitModal = ({
   habitData,

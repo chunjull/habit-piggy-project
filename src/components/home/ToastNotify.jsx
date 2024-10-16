@@ -1,5 +1,5 @@
-import SuccessToast from "../Toasts/SuccessToast";
 import AlertToast from "../Toasts/AlertToast";
+import SuccessToast from "../Toasts/SuccessToast";
 
 const addHabitNotify = () => SuccessToast("從今天開始培養習慣吧！");
 const updateHabitNotify = () => SuccessToast("人要時時刻刻做好準備！");

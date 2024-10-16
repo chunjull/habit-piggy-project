@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import { useContext, useEffect, useState } from "react";
+import { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
-import { useContext, useState, useEffect } from "react";
 import { logoutUser } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
-import { Toaster } from "react-hot-toast";
 import Sidebar from "./Sidebar";
 
 function Layout({ children, isModalOpen, modalContent }) {

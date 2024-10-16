@@ -1,10 +1,10 @@
-import { useState, useContext, useEffect, useRef } from "react";
-import { AuthContext } from "../utils/AuthContext";
-import { getHabits } from "../services/api";
-import TabNavigation from "../components/Savings/TabNavigation";
-import OverviewSection from "../components/Savings/OverviewSection";
+import { useContext, useEffect, useRef, useState } from "react";
 import CategorySection from "../components/Savings/CategorySection";
+import OverviewSection from "../components/Savings/OverviewSection";
+import TabNavigation from "../components/Savings/TabNavigation";
 import TypeSection from "../components/Savings/TypeSection";
+import { getHabits } from "../services/api";
+import { AuthContext } from "../utils/AuthContext";
 
 function Savings() {
   const [isActiveTab, setIsActiveTab] = useState("overview");

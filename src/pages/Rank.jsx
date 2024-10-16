@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useReducer } from "react";
 import { AuthContext } from "../utils/AuthContext";
 import { getAllUsers, getHabits } from "../services/api";
 import TabNavigation from "../components/Rank/TabNavigation";
@@ -7,14 +7,17 @@ import CongratulationMessage from "../components/Rank/CongratulationMessage";
 import CongratulationMessageIcons from "../components/Rank/CongratulationMessageIcons";
 import TopTenUsersList from "../components/Rank/TopTenUserList";
 import CurrentUser from "../components/Rank/CurrentUser";
+import { initialState, actionTypes, reducer } from "../utils/HabitReducer";
 
 function Rank() {
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [isActiveTab, setIsActiveTab] = useState("habit");
   const [userHabitCounts, setUserHabitCounts] = useState([]);
   const [userSavingsCounts, setUserSavingsCounts] = useState([]);
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
+    dispatch({ type: actionTypes.SET_IS_LOADING, payload: true });
     const fetchData = async () => {
       const { startOfWeek, endOfWeek } = getStartAndEndOfWeek();
       if (isActiveTab === "habit") {
@@ -28,6 +31,7 @@ function Rank() {
       }
     };
     fetchData();
+    dispatch({ type: actionTypes.SET_IS_LOADING, payload: false });
   }, [isActiveTab]);
 
   const getStartAndEndOfWeek = () => {
@@ -99,7 +103,7 @@ function Rank() {
             <CongratulationMessage userCounts={userHabitCounts} type="habit" />
           </div>
           <CongratulationMessageIcons type="habits" />
-          <TopTenUsersList userCounts={userHabitCounts} calculateLevelAndPoints={calculateLevelAndPoints} type="habit" />
+          <TopTenUsersList userCounts={userHabitCounts} calculateLevelAndPoints={calculateLevelAndPoints} isLoading={state.isLoading} type="habit" />
           <div className="sticky bottom-0 left-0 w-full pb-[88px] mb-[88px] md:pb-4 bg-light dark:bg-black-950">
             <CurrentUser userCounts={userHabitCounts} currentUser={user} calculateLevelAndPoints={calculateLevelAndPoints} type="habit" />
           </div>

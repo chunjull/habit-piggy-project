@@ -1,12 +1,14 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useReducer, useRef, useState } from "react";
 import CategorySection from "../components/Savings/CategorySection";
 import OverviewSection from "../components/Savings/OverviewSection";
 import TabNavigation from "../components/Savings/TabNavigation";
 import TypeSection from "../components/Savings/TypeSection";
 import { getHabits } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
+import { actionTypes, initialState, reducer } from "../utils/HabitReducer";
 
 function Savings() {
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [isActiveTab, setIsActiveTab] = useState("overview");
   const [filter, setFilter] = useState("week");
   const [options] = useState([
@@ -14,13 +16,6 @@ function Savings() {
     { value: "month", label: "本月" },
     { value: "year", label: "本年" },
   ]);
-  const [completedCount, setCompletedCount] = useState(0);
-  const [savingsCount, setSavingsCount] = useState(0);
-  const [totalSavings, setTotalSavings] = useState(0);
-  const [chartData, setChartData] = useState([]);
-  const [categoryData, setCategoryData] = useState({});
-  const [typeData, setTypeData] = useState({});
-  const [habits, setHabits] = useState([]);
   const { user } = useContext(AuthContext);
   const customSelectRef = useRef(null);
 
@@ -44,15 +39,15 @@ function Savings() {
     const fetchData = async () => {
       if (user && user.uid) {
         const habitsList = await getHabits(user.uid);
-        setHabits(habitsList);
+        dispatch({ type: actionTypes.SET_HABITS, payload: habitsList });
         const { startOfPeriod, endOfPeriod } = getStartAndEndOfPeriod(filter);
         const { completed, savings, total, chartData, categoryData, typeData } = calculateStatistics(habitsList, startOfPeriod, endOfPeriod, filter);
-        setCompletedCount(completed);
-        setSavingsCount(savings);
-        setTotalSavings(total);
-        setChartData(chartData);
-        setCategoryData(categoryData);
-        setTypeData(typeData);
+        dispatch({ type: actionTypes.SET_COMPLETED_COUNT, payload: completed });
+        dispatch({ type: actionTypes.SET_SAVINGS_COUNT, payload: savings });
+        dispatch({ type: actionTypes.SET_TOTAL_SAVINGS, payload: total });
+        dispatch({ type: actionTypes.SET_CHART_DATA, payload: chartData });
+        dispatch({ type: actionTypes.SET_CATEGORY_DATA, payload: categoryData });
+        dispatch({ type: actionTypes.SET_TYPE_DATA, payload: typeData });
       }
     };
     fetchData();
@@ -188,14 +183,14 @@ function Savings() {
       <TabNavigation isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
       {isActiveTab === "overview" && (
         <OverviewSection
-          completedCount={completedCount}
-          savingsCount={savingsCount}
-          totalSavings={totalSavings}
+          completedCount={state.completedCount}
+          savingsCount={state.savingsCount}
+          totalSavings={state.totalSavings}
           filter={filter}
           setFilter={setFilter}
           options={options}
-          chartData={chartData}
-          habits={habits}
+          chartData={state.chartData}
+          habits={state.habits}
           getStartAndEndOfPeriod={getStartAndEndOfPeriod}
           customSelectRef={customSelectRef}
         />
@@ -206,12 +201,12 @@ function Savings() {
             filter={filter}
             setFilter={setFilter}
             options={options}
-            savingsCount={savingsCount}
-            categoryData={categoryData}
+            savingsCount={state.savingsCount}
+            categoryData={state.categoryData}
             habitCategories={habitCategories}
             customSelectRef={customSelectRef}
           />
-          <TypeSection filter={filter} setFilter={setFilter} options={options} savingsCount={savingsCount} typeData={typeData} habitType={habitType} customSelectRef={customSelectRef} />
+          <TypeSection filter={filter} setFilter={setFilter} options={options} savingsCount={state.savingsCount} typeData={state.typeData} habitType={habitType} customSelectRef={customSelectRef} />
         </div>
       )}
     </div>

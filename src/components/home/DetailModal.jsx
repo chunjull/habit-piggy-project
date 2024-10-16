@@ -115,7 +115,7 @@ const DetailModal = ({ selectedHabit, handleDetailModal, uncompletedFine, handle
 };
 
 DetailModal.propTypes = {
-  selectedHabit: PropTypes.object.isRequired,
+  selectedHabit: PropTypes.object,
   handleDetailModal: PropTypes.func.isRequired,
   uncompletedFine: PropTypes.number.isRequired,
   handleEditModal: PropTypes.func.isRequired,

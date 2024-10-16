@@ -93,7 +93,7 @@ PostModal.propTypes = {
   setPostContent: PropTypes.func.isRequired,
   postBackground: PropTypes.string.isRequired,
   setPostBackground: PropTypes.func.isRequired,
-  handleAddPost: PropTypes.func.isRequired,
+  handleAddPost: PropTypes.func,
   handlePostModal: PropTypes.func.isRequired,
   user: PropTypes.object,
   isEditMode: PropTypes.bool,

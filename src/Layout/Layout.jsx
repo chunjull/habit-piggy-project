@@ -62,7 +62,7 @@ function Layout({ children, isModalOpen, modalContent }) {
 
 Layout.propTypes = {
   children: PropTypes.node,
-  isModalOpen: PropTypes.bool.isRequired,
+  isModalOpen: PropTypes.bool,
   modalContent: PropTypes.node,
 };
 

@@ -38,7 +38,7 @@ const AchievementModal = ({ handleAchievementModal, userAchievements, sortedAchi
 
 AchievementModal.propTypes = {
   handleAchievementModal: PropTypes.func.isRequired,
-  achievements: PropTypes.array.isRequired,
+  achievements: PropTypes.array,
   userAchievements: PropTypes.array.isRequired,
   sortedAchievements: PropTypes.array.isRequired,
 };

@@ -318,11 +318,11 @@ HabitModal.propTypes = {
   calendarRef: PropTypes.object.isRequired,
   handleHabitModal: PropTypes.func.isRequired,
   habitCategories: PropTypes.array.isRequired,
-  setHabitData: PropTypes.func.isRequired,
-  monthCalendarDate: PropTypes.object.isRequired,
+  setHabitData: PropTypes.func,
+  monthCalendarDate: PropTypes.object,
   handleMonthCalendarSelectDate: PropTypes.func.isRequired,
-  setCalendarTarget: PropTypes.func.isRequired,
-  setShowMonthCalendar: PropTypes.func.isRequired,
+  setCalendarTarget: PropTypes.func,
+  setShowMonthCalendar: PropTypes.func,
 };
 
 export default HabitModal;

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const CategorySelect = ({ options, value, onChange }) => {
+const CategorySelect = ({ options, value = null, onChange }) => {
   const handleSelect = (option) => {
     onChange(option);
   };
@@ -27,10 +27,6 @@ CategorySelect.propTypes = {
   options: PropTypes.array.isRequired,
   value: PropTypes.any,
   onChange: PropTypes.func.isRequired,
-};
-
-CategorySelect.defaultProps = {
-  value: null,
 };
 
 export default CategorySelect;

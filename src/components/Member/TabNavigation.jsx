@@ -20,6 +20,6 @@ const TabNavigation = ({ isActiveTab, setIsActiveTab }) => (
 export default TabNavigation;
 
 TabNavigation.propTypes = {
-  isActiveTab: PropTypes.bool.isRequired,
+  isActiveTab: PropTypes.string.isRequired,
   setIsActiveTab: PropTypes.func.isRequired,
 };

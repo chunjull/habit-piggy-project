@@ -73,7 +73,7 @@ export default PostList;
 
 PostList.propTypes = {
   posts: PropTypes.array.isRequired,
-  filter: PropTypes.string.isRequired,
+  filter: PropTypes.string,
   user: PropTypes.object.isRequired,
   handleSelectChange: PropTypes.func.isRequired,
   handleCommentSection: PropTypes.func.isRequired,

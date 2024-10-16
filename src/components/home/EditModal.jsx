@@ -371,7 +371,7 @@ EditModal.propTypes = {
   handleEditModal: PropTypes.func.isRequired,
   habitCategories: PropTypes.array.isRequired,
   setHabitData: PropTypes.func.isRequired,
-  monthCalendarDate: PropTypes.object.isRequired,
+  monthCalendarDate: PropTypes.object,
   handleMonthCalendarSelectDate: PropTypes.func.isRequired,
   setShowMonthCalendar: PropTypes.func.isRequired,
   generateStatusArray: PropTypes.func.isRequired,

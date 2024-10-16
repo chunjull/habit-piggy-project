@@ -45,9 +45,9 @@ const CustomSelect = ({ options, value, onChange }) => {
 };
 
 CustomSelect.propTypes = {
-  options: PropTypes.array.isRequired,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  options: PropTypes.array,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 export default CustomSelect;

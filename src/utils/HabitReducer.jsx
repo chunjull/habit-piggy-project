@@ -21,6 +21,7 @@ export const initialState = {
   monthCalendarDate: null,
   habits: [],
   weekDates: [],
+  isLoading: false,
 };
 
 export const actionTypes = {
@@ -32,6 +33,7 @@ export const actionTypes = {
   SET_MONTH_CALENDAR_DATE: "SET_MONTH_CALENDAR_DATE",
   SET_HABITS: "SET_HABITS",
   SET_WEEK_DATES: "SET_WEEK_DATES",
+  SET_IS_LOADING: "SET_IS_LOADING",
 };
 
 export function reducer(state, action) {
@@ -52,6 +54,8 @@ export function reducer(state, action) {
       return { ...state, habits: action.payload };
     case actionTypes.SET_WEEK_DATES:
       return { ...state, weekDates: action.payload };
+    case actionTypes.SET_IS_LOADING:
+      return { ...state, isLoading: action.payload };
     default:
       return state;
   }

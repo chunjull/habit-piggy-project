@@ -1,28 +1,46 @@
 import PropTypes from "prop-types";
 
-const AchievementList = ({ sortedAchievements, userAchievements, handleAchievementModal }) => {
+const AchievementList = ({ sortedAchievements, userAchievements, handleAchievementModal, isLoading }) => {
   return (
     <div className="pt-9 pb-4 px-4 bg-black-50 dark:bg-black-800 space-y-4 rounded-2xl relative">
-      <ul className="grid grid-cols-2 gap-4 md:grid-cols-3">
-        {sortedAchievements.slice(0, 6).map((achievement) => {
-          const isAchieved = userAchievements.includes(achievement.id);
-          return (
-            <li
-              key={achievement.id}
-              className={`py-1 w-full flex justify-center items-center rounded-lg border-2 cursor-default ${
-                isAchieved ? "opacity-100 border-primary-dark bg-light" : "opacity-50 border-black-500 bg-black-100 dark:border-black-300"
-              }`}
-            >
-              <p className={`font-normal text-base leading-6 md:text-xl md:leading-7 stroke-text ${isAchieved ? "text-primary z-0" : "text-black"}`} data-stroke={isAchieved ? achievement.name : ""}>
-                {achievement.name}
-              </p>
-            </li>
-          );
-        })}
-      </ul>
-      <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleAchievementModal}>
-        更多成就
-      </button>
+      {isLoading ? (
+        <div className="animate-pulse space-y-4">
+          <div className="grid grid-cols-3 gap-4">
+            <div className="w-full h-8 bg-black-200 rounded-lg"></div>
+            <div className="w-full h-8 bg-black-200 rounded-lg"></div>
+            <div className="w-full h-8 bg-black-200 rounded-lg"></div>
+            <div className="w-full h-8 bg-black-200 rounded-lg"></div>
+            <div className="w-full h-8 bg-black-200 rounded-lg"></div>
+            <div className="w-full h-8 bg-black-200 rounded-lg"></div>
+          </div>
+        </div>
+      ) : (
+        <>
+          <ul className="grid grid-cols-2 gap-4 md:grid-cols-3">
+            {sortedAchievements.slice(0, 6).map((achievement) => {
+              const isAchieved = userAchievements.includes(achievement.id);
+              return (
+                <li
+                  key={achievement.id}
+                  className={`py-1 w-full flex justify-center items-center rounded-lg border-2 cursor-default ${
+                    isAchieved ? "opacity-100 border-primary-dark bg-light" : "opacity-50 border-black-500 bg-black-100 dark:border-black-300"
+                  }`}
+                >
+                  <p
+                    className={`font-normal text-base leading-6 md:text-xl md:leading-7 stroke-text ${isAchieved ? "text-primary z-0" : "text-black"}`}
+                    data-stroke={isAchieved ? achievement.name : ""}
+                  >
+                    {achievement.name}
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+          <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleAchievementModal}>
+            更多成就
+          </button>
+        </>
+      )}
       <div className="bg-primary py-1 px-4 w-fit absolute -top-12 left-1/2 transform -translate-x-1/2">
         <p className="font-lobster font-normal text-2xl leading-8 text-alert">Achievement</p>
         <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[-16px] before:w-0 before:h-0 before:border-l-[20px] before:border-r-0 before:border-t-[12px] before:border-l-primary before:border-r-transparent before:border-t-primary-dark before:z-20"></div>
@@ -44,4 +62,5 @@ AchievementList.propTypes = {
   sortedAchievements: PropTypes.array.isRequired,
   userAchievements: PropTypes.array.isRequired,
   handleAchievementModal: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool,
 };

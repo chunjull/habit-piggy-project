@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext, useEffect, useRef, useReducer } from "react";
 import {
   updateUserProfile,
   getUserProfile,
@@ -34,9 +34,11 @@ import TabNavigation from "../components/Member/TabNavigation";
 import MemberInformation from "../components/Member/MemberInformation";
 import { SuccessNotify, AlertNotify } from "../components/home/ToastNotify";
 import { UpdateNotify } from "../components/Member/ToastNotify";
+import { initialState, actionTypes, reducer } from "../utils/HabitReducer";
 
 function Member() {
   const { user } = useContext(AuthContext);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -99,6 +101,7 @@ function Member() {
 
   useEffect(() => {
     const fetchUserProfile = async () => {
+      dispatch({ type: actionTypes.SET_IS_LOADING, payload: true });
       if (user) {
         const userProfile = await getUserProfile(user.uid);
         if (userProfile) {
@@ -114,6 +117,7 @@ function Member() {
     };
 
     fetchUserProfile();
+    dispatch({ type: actionTypes.SET_IS_LOADING, payload: false });
   }, [user]);
 
   useEffect(() => {
@@ -493,9 +497,9 @@ function Member() {
               <settingIcons.TbSettings className="w-8 h-8 cursor-pointer hover:text-alert text-black dark:text-black-0" onClick={handleSettingModal} />
             </div>
             <div className="space-y-14">
-              <MemberInformation profileData={profileData} currentImage={currentImage} level={level} points={points} />
-              <AchievementList sortedAchievements={sortedAchievements} userAchievements={userAchievements} handleAchievementModal={handleAchievementModal} />
-              <BadgeList sortedBadges={sortedBadges} userBadges={userBadges} handleBadgeModal={handleBadgeModal} />
+              <MemberInformation profileData={profileData} currentImage={currentImage} level={level} points={points} isLoading={state.isLoading} />
+              <AchievementList sortedAchievements={sortedAchievements} userAchievements={userAchievements} handleAchievementModal={handleAchievementModal} isLoading={state.isLoading} />
+              <BadgeList sortedBadges={sortedBadges} userBadges={userBadges} handleBadgeModal={handleBadgeModal} isLoading={state.isLoading} />
             </div>
           </>
         )}

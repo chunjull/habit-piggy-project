@@ -10,13 +10,29 @@ export const initialState = {
   uncompletedFine: 0,
   monthCalendarDate: null,
   isLoading: false,
-  // savings
   completedCount: 0,
   savingsCount: 0,
   totalSavings: 0,
   chartData: [],
   categoryData: {},
   typeData: {},
+  profileData: {
+    uid: "",
+    email: "",
+    name: "",
+    introduction: "",
+    avatar: "",
+    levelPoints: 0,
+    isAcceptReminder: false,
+    isDarkMode: false,
+    achievements: [],
+    badges: [],
+    habits: [],
+  },
+  achievements: [],
+  userAchievements: [],
+  badges: [],
+  userBadges: [],
 };
 
 export const actionTypes = {
@@ -33,6 +49,11 @@ export const actionTypes = {
   SET_CHART_DATA: "SET_CHART_DATA",
   SET_CATEGORY_DATA: "SET_CATEGORY_DATA",
   SET_TYPE_DATA: "SET_TYPE_DATA",
+  SET_PROFILE_DATA: "SET_PROFILE_DATA",
+  SET_ACHIEVEMENTS: "SET_ACHIEVEMENTS",
+  SET_USER_ACHIEVEMENTS: "SET_USER_ACHIEVEMENTS",
+  SET_BADGES: "SET_BADGES",
+  SET_USER_BADGES: "SET_USER_BADGES",
 };
 
 export function reducer(state, action) {
@@ -63,6 +84,16 @@ export function reducer(state, action) {
       return { ...state, categoryData: action.payload };
     case actionTypes.SET_TYPE_DATA:
       return { ...state, typeData: action.payload };
+    case actionTypes.SET_PROFILE_DATA:
+      return { ...state, profileData: action.payload };
+    case actionTypes.SET_ACHIEVEMENTS:
+      return { ...state, achievements: action.payload };
+    case actionTypes.SET_USER_ACHIEVEMENTS:
+      return { ...state, userAchievements: action.payload };
+    case actionTypes.SET_BADGES:
+      return { ...state, badges: action.payload };
+    case actionTypes.SET_USER_BADGES:
+      return { ...state, userBadges: action.payload };
     default:
       return state;
   }

@@ -45,21 +45,6 @@ function Member() {
   const [isAchievementModalOpen, setIsAchievementModalOpen] = useState(false);
   const [isBadgeModalOpen, setIsBadgeModalOpen] = useState(false);
   const [isActiveTab, setIsActiveTab] = useState("member");
-  const [profileData, setProfileData] = useState({
-    uid: "",
-    email: "",
-    name: "",
-    introduction: "",
-    avatar: "",
-    levelPoints: 0,
-    isAcceptReminder: false,
-    isDarkMode: false,
-    achievements: [],
-    badges: [],
-    habits: [],
-  });
-  const [habits, setHabits] = useState([]);
-  const [selectedHabit, setSelectedHabit] = useState(null);
   const [habitData, setHabitData] = useState({
     category: 0,
     title: "",
@@ -69,16 +54,11 @@ function Member() {
     endDate: "",
     status: [],
   });
-  const [uncompletedFine, setUncompletedFine] = useState(0);
   const [showMonthCalendar, setShowMonthCalendar] = useState(false);
   const [calendarTarget, setCalendarTarget] = useState("");
   const calendarRef = useRef(null);
   const [monthCalendarDate, setMonthCalendarDate] = useState(null);
   const [filter, setFilter] = useState("all");
-  const [achievements, setAchievements] = useState([]);
-  const [userAchievements, setUserAchievements] = useState([]);
-  const [badges, setBadges] = useState([]);
-  const [userBadges, setUserBadges] = useState([]);
   const [currentImage, setCurrentImage] = useState(habitPiggyLoading1);
   const [options] = useState([
     { label: "全部習慣", value: "all" },
@@ -105,7 +85,7 @@ function Member() {
       if (user) {
         const userProfile = await getUserProfile(user.uid);
         if (userProfile) {
-          setProfileData(userProfile);
+          dispatch({ type: actionTypes.SET_PROFILE_DATA, payload: userProfile });
         }
         fetchHabits();
         fetchAchievements();
@@ -152,22 +132,22 @@ function Member() {
 
   const fetchAchievements = async () => {
     const achievementsList = await getAchievements();
-    setAchievements(achievementsList);
+    dispatch({ type: actionTypes.SET_ACHIEVEMENTS, payload: achievementsList });
   };
 
   const fetchUserAchievements = async (uid) => {
     const userAchievementsList = await getUserAchievements(uid);
-    setUserAchievements(userAchievementsList);
+    dispatch({ type: actionTypes.SET_USER_ACHIEVEMENTS, payload: userAchievementsList });
   };
 
   const fetchBadges = async () => {
     const badgesList = await getBadges();
-    setBadges(badgesList);
+    dispatch({ type: actionTypes.SET_BADGES, payload: badgesList });
   };
 
   const fetchUserBadges = async (uid) => {
     const userBadgesList = await getUserBadges(uid);
-    setUserBadges(userBadgesList);
+    dispatch({ type: actionTypes.SET_USER_BADGES, payload: userBadgesList });
   };
 
   const handleSettingModal = () => {
@@ -205,7 +185,7 @@ function Member() {
     if (user && user.uid) {
       try {
         await updateUserProfile(user.uid, updatedProfileData);
-        setProfileData(updatedProfileData);
+        dispatch({ type: actionTypes.SET_PROFILE_DATA, payload: updatedProfileData });
         UpdateNotify.updateUserProfileNotify();
       } catch (error) {
         UpdateNotify.updateUserProfileErrorNotify();
@@ -228,23 +208,14 @@ function Member() {
       if (!allowedTypes.includes(file.type)) return;
       try {
         const avatarUrl = await uploadAvatar(user.uid, file);
-        setProfileData((prevData) => ({
-          ...prevData,
-          avatar: avatarUrl,
-        }));
+        dispatch({ type: actionTypes.SET_PROFILE_DATA, payload: { ...state.profileData, avatar: avatarUrl } });
       } catch (error) {
         console.error("上傳頭像失敗", error);
       }
     } else if (name === "isDarkMode" || name === "isAcceptReminder") {
-      setProfileData((prevData) => ({
-        ...prevData,
-        [name]: value === "true",
-      }));
+      dispatch({ type: actionTypes.SET_PROFILE_DATA, payload: { ...state.profileData, [name]: value === "true" } });
     } else {
-      setProfileData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
+      dispatch({ type: actionTypes.SET_PROFILE_DATA, payload: { ...state.profileData, [name]: value } });
     }
   };
 
@@ -314,7 +285,7 @@ function Member() {
     if (user) {
       try {
         const habitsList = await getHabits(user.uid);
-        setHabits(habitsList);
+        dispatch({ type: actionTypes.SET_HABITS, payload: habitsList });
       } catch (error) {
         console.error("Error fetching habits: ", error);
       }
@@ -327,7 +298,7 @@ function Member() {
   };
 
   const handleUpdateHabit = async () => {
-    if (user && selectedHabit) {
+    if (user && state.selectedHabit) {
       const start = new Date(habitData.startDate);
       const end = new Date(habitData.endDate);
 
@@ -336,16 +307,16 @@ function Member() {
         return;
       }
 
-      const originalHabitData = selectedHabit;
+      const originalHabitData = state.selectedHabit;
 
       const updatedHabitData = {
         ...originalHabitData,
         ...habitData,
-        id: selectedHabit.id,
+        id: state.selectedHabit.id,
         status: generateStatusArray(habitData.startDate, habitData.endDate, habitData.frequency),
       };
 
-      await updateHabit(user.uid, selectedHabit.id, updatedHabitData);
+      await updateHabit(user.uid, state.selectedHabit.id, updatedHabitData);
       await calculateBadges(user.uid);
       await checkAndAwardBadges(user.uid);
       fetchHabits();
@@ -358,17 +329,17 @@ function Member() {
   };
 
   const handleDeleteHabit = async () => {
-    if (user && selectedHabit) {
-      await deleteHabit(user.uid, selectedHabit.id);
+    if (user && state.selectedHabit) {
+      await deleteHabit(user.uid, state.selectedHabit.id);
       await calculateBadges(user.uid);
       await checkAndAwardBadges(user.uid);
 
       const updatedHabits = await getHabits(user.uid);
-      setHabits(updatedHabits);
+      dispatch({ type: actionTypes.SET_HABITS, payload: updatedHabits });
 
-      const categoryHabits = updatedHabits.filter((habit) => habit.category === selectedHabit.category);
+      const categoryHabits = updatedHabits.filter((habit) => habit.category === state.selectedHabit.category);
       if (categoryHabits.length === 0) {
-        await removeBadge(user.uid, selectedHabit.category);
+        await removeBadge(user.uid, state.selectedHabit.category);
       }
 
       fetchHabits();
@@ -405,13 +376,13 @@ function Member() {
   };
 
   const handleDetailClick = (habit) => {
-    setSelectedHabit(habit);
-    setUncompletedFine(calculateUncompletedFine(habit));
+    dispatch({ type: actionTypes.SET_SELECTED_HABIT, payload: habit });
+    dispatch({ type: actionTypes.SET_UNCOMPLETED_FINE, payload: calculateUncompletedFine(habit) });
     setIsDetailModalOpen(true);
   };
 
   const filteredHabits = [
-    ...habits.filter((habit) => {
+    ...state.habits.filter((habit) => {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const endDate = new Date(habit.endDate);
@@ -451,7 +422,7 @@ function Member() {
     });
   };
 
-  const sortedAchievements = sortAchievements(achievements, userAchievements);
+  const sortedAchievements = sortAchievements(state.achievements, state.userAchievements);
 
   const sortBadges = (badges, userBadges) => {
     return [...badges].sort((a, b) => {
@@ -465,7 +436,7 @@ function Member() {
     });
   };
 
-  const sortedBadges = sortBadges(badges, userBadges);
+  const sortedBadges = sortBadges(state.badges, state.userBadges);
 
   const calculateLevelAndPoints = (levelPoints) => {
     let level = Math.floor(levelPoints / 100);
@@ -476,7 +447,7 @@ function Member() {
     return { level, points };
   };
 
-  const { level, points } = calculateLevelAndPoints(profileData.levelPoints);
+  const { level, points } = calculateLevelAndPoints(state.profileData.levelPoints);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -497,9 +468,9 @@ function Member() {
               <settingIcons.TbSettings className="w-8 h-8 cursor-pointer hover:text-alert text-black dark:text-black-0" onClick={handleSettingModal} />
             </div>
             <div className="space-y-14">
-              <MemberInformation profileData={profileData} currentImage={currentImage} level={level} points={points} isLoading={state.isLoading} />
-              <AchievementList sortedAchievements={sortedAchievements} userAchievements={userAchievements} handleAchievementModal={handleAchievementModal} isLoading={state.isLoading} />
-              <BadgeList sortedBadges={sortedBadges} userBadges={userBadges} handleBadgeModal={handleBadgeModal} isLoading={state.isLoading} />
+              <MemberInformation profileData={state.profileData} currentImage={currentImage} level={level} points={points} isLoading={state.isLoading} />
+              <AchievementList sortedAchievements={sortedAchievements} userAchievements={state.userAchievements} handleAchievementModal={handleAchievementModal} isLoading={state.isLoading} />
+              <BadgeList sortedBadges={sortedBadges} userBadges={state.userBadges} handleBadgeModal={handleBadgeModal} isLoading={state.isLoading} />
             </div>
           </>
         )}
@@ -516,10 +487,16 @@ function Member() {
         )}
       </div>
       <Modal isOpen={isSettingModalOpen} onClose={handleSettingModal}>
-        <SettingModal profileData={profileData} handleChange={handleChange} handleSaveAndClose={handleSaveAndClose} handleSettingModal={handleSettingModal} />
+        <SettingModal profileData={state.profileData} handleChange={handleChange} handleSaveAndClose={handleSaveAndClose} handleSettingModal={handleSettingModal} />
       </Modal>
       <Modal isOpen={isDetailModalOpen} onClose={handleDetailModal}>
-        <DetailModal selectedHabit={selectedHabit} handleDetailModal={handleDetailModal} uncompletedFine={uncompletedFine} handleEditModal={handleEditModal} habitCategories={habitCategories} />
+        <DetailModal
+          selectedHabit={state.selectedHabit}
+          handleDetailModal={handleDetailModal}
+          uncompletedFine={state.uncompletedFine}
+          handleEditModal={handleEditModal}
+          habitCategories={habitCategories}
+        />
       </Modal>
       <Modal isOpen={isEditModalOpen} onClose={handleEditModal}>
         <EditModal
@@ -542,10 +519,10 @@ function Member() {
         />
       </Modal>
       <Modal isOpen={isAchievementModalOpen} onClose={handleAchievementModal}>
-        <AchievementModal handleAchievementModal={handleAchievementModal} userAchievements={userAchievements} sortedAchievements={sortedAchievements} />
+        <AchievementModal handleAchievementModal={handleAchievementModal} userAchievements={state.userAchievements} sortedAchievements={sortedAchievements} />
       </Modal>
       <Modal isOpen={isBadgeModalOpen} onClose={handleBadgeModal}>
-        <BadgeModal handleBadgeModal={handleBadgeModal} badges={badges} userBadges={userBadges} sortedBadges={sortedBadges} />
+        <BadgeModal handleBadgeModal={handleBadgeModal} badges={state.badges} userBadges={state.userBadges} sortedBadges={sortedBadges} />
       </Modal>
     </>
   );

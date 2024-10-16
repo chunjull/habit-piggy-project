@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useReducer, useRef, useState } from "react";
 import { habitAddIcon, habitIcons } from "../assets/icons";
 import DetailModal from "../components/home/DetailModal";
 import EditModal from "../components/home/EditModal";
@@ -21,28 +21,24 @@ import {
   updateUserProfile,
 } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
+import { actionTypes, initialState, reducer } from "../utils/HabitReducer";
 
 function Home() {
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [habitData, setHabitData] = useState({
     category: null,
     title: "",
-    frequency: { type: "daily" },
+    frequency: { type: "" },
     amount: 0,
     startDate: "",
     endDate: "",
     status: [],
     type: "",
   });
-  const [habits, setHabits] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
   const [showMonthCalendar, setShowMonthCalendar] = useState(false);
-  const [selectedHabit, setSelectedHabit] = useState(null);
-  const [weekDates, setWeekDates] = useState([]);
-  const [uncompletedFine, setUncompletedFine] = useState(0);
-  const [monthCalendarDate, setMonthCalendarDate] = useState(null);
   const calendarRef = useRef(null);
 
   const { user } = useContext(AuthContext);
@@ -78,16 +74,8 @@ function Home() {
 
   useEffect(() => {
     const today = new Date();
-    setSelectedDate({
-      year: today.getFullYear(),
-      month: today.getMonth(),
-      day: today.getDate(),
-    });
-    setMonthCalendarDate({
-      year: today.getFullYear(),
-      month: today.getMonth(),
-      day: today.getDate(),
-    });
+    dispatch({ type: actionTypes.SET_SELECTED_DATE, payload: { year: today.getFullYear(), month: today.getMonth(), day: today.getDate() } });
+    dispatch({ type: actionTypes.SET_MONTH_CALENDAR_DATE, payload: { year: today.getFullYear(), month: today.getMonth(), day: today.getDate() } });
   }, []);
 
   const isDateInRange = (date, startDate, endDate) => {
@@ -104,7 +92,7 @@ function Home() {
     const habitsList = await getHabits(user.uid);
     const today = selectedDate ? new Date(selectedDate.year, selectedDate.month, selectedDate.day) : new Date();
     const filteredHabits = habitsList.filter((habit) => isDateInRange(today, habit.startDate, habit.endDate));
-    setHabits(filteredHabits || []);
+    dispatch({ type: actionTypes.SET_HABITS, payload: filteredHabits || [] });
   };
 
   const handleHabitModal = () => {
@@ -222,7 +210,7 @@ function Home() {
       setHabitData({
         category: null,
         title: "",
-        frequency: { type: "daily" },
+        frequency: { type: "" },
         amount: 0,
         startDate: "",
         endDate: "",
@@ -236,7 +224,7 @@ function Home() {
   };
 
   const handleUpdateHabit = async () => {
-    if (user && selectedHabit) {
+    if (user && state.selectedHabit) {
       const start = new Date(habitData.startDate);
       const end = new Date(habitData.endDate);
 
@@ -245,16 +233,16 @@ function Home() {
         return;
       }
 
-      const originalHabitData = selectedHabit;
+      const originalHabitData = state.selectedHabit;
 
       const updatedHabitData = {
         ...originalHabitData,
         ...habitData,
-        id: selectedHabit.id,
+        id: state.selectedHabit.id,
         status: generateStatusArray(habitData.startDate, habitData.endDate, habitData.frequency),
       };
 
-      await updateHabit(user.uid, selectedHabit.id, updatedHabitData);
+      await updateHabit(user.uid, state.selectedHabit.id, updatedHabitData);
       await calculateBadges(user.uid);
       await checkAndAwardBadges(user.uid);
       const taskValue = await calculateTaskValue(user.uid, "habit");
@@ -269,8 +257,8 @@ function Home() {
   };
 
   const handleDeleteHabit = async () => {
-    if (user && selectedHabit) {
-      await deleteHabit(user.uid, selectedHabit.id);
+    if (user && state.selectedHabit) {
+      await deleteHabit(user.uid, state.selectedHabit.id);
       await calculateBadges(user.uid);
       await checkAndAwardBadges(user.uid);
 
@@ -278,11 +266,11 @@ function Home() {
       await checkAndAwardAchievements(user.uid, "habit", taskValue);
 
       const updatedHabits = await getHabits(user.uid);
-      setHabits(updatedHabits);
+      dispatch({ type: actionTypes.SET_HABITS, payload: updatedHabits });
 
-      const categoryHabits = updatedHabits.filter((habit) => habit.category === selectedHabit.category);
+      const categoryHabits = updatedHabits.filter((habit) => habit.category === state.selectedHabit.category);
       if (categoryHabits.length === 0) {
-        await removeBadge(user.uid, selectedHabit.category);
+        await removeBadge(user.uid, state.selectedHabit.category);
       }
 
       fetchHabits();
@@ -295,15 +283,15 @@ function Home() {
   };
 
   const handleSelectDate = async (date) => {
-    setSelectedDate(date);
+    dispatch({ type: actionTypes.SET_SELECTED_DATE, payload: date });
     await fetchHabits(date);
   };
 
   const handleWeekChange = useCallback(
     (weekDates) => {
-      setWeekDates(weekDates);
+      dispatch({ type: actionTypes.SET_WEEK_DATES, payload: weekDates });
     },
-    [setWeekDates]
+    [dispatch]
   );
 
   const handleMonthCalendarSelectDate = (range) => {
@@ -338,7 +326,7 @@ function Home() {
       return;
     }
 
-    const updatedHabits = habits.map((habit) => {
+    const updatedHabits = state.habits.map((habit) => {
       if (habit.id === habitId) {
         const updatedStatus = habit.status.map((status) => {
           if (new Date(status.date).toDateString() === targetDate.toDateString()) {
@@ -359,7 +347,7 @@ function Home() {
       return habit;
     });
 
-    setHabits(updatedHabits);
+    dispatch({ type: actionTypes.SET_HABITS, payload: updatedHabits });
 
     const habitToUpdate = updatedHabits.find((habit) => habit.id === habitId);
     try {
@@ -382,8 +370,8 @@ function Home() {
   };
 
   const handleDetailClick = (habit) => {
-    setSelectedHabit(habit);
-    setUncompletedFine(calculateUncompletedFine(habit));
+    dispatch({ type: actionTypes.SET_SELECTED_HABIT, payload: habit });
+    dispatch({ type: actionTypes.SET_UNCOMPLETED_FINE, payload: calculateUncompletedFine(habit) });
     setIsDetailModalOpen(true);
   };
 
@@ -400,8 +388,8 @@ function Home() {
 
   return (
     <div className="md:pb-6">
-      <WeekCalendar date={selectedDate} onSelect={handleSelectDate} onWeekChange={handleWeekChange} />
-      <HabitList habits={habits} habitCategories={habitCategories} handleDetailClick={handleDetailClick} weekDates={weekDates} handleCheck={handleCheck} />
+      <WeekCalendar date={state.selectedDate} onSelect={handleSelectDate} onWeekChange={handleWeekChange} />
+      <HabitList habits={state.habits} habitCategories={habitCategories} handleDetailClick={handleDetailClick} weekDates={state.weekDates} handleCheck={handleCheck} />
       <div
         className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center fixed bottom-20 right-4 md:bottom-4 2xl:right-40 bg-primary hover:bg-primary-dark cursor-pointer"
         onClick={handleHabitModal}
@@ -419,7 +407,7 @@ function Home() {
             handleHabitModal={handleHabitModal}
             habitCategories={habitCategories}
             setHabitData={setHabitData}
-            monthCalendarDate={monthCalendarDate}
+            monthCalendarDate={state.monthCalendarDate}
             handleMonthCalendarSelectDate={handleMonthCalendarSelectDate}
             setShowMonthCalendar={setShowMonthCalendar}
             generateStatusArray={generateStatusArray}
@@ -427,7 +415,13 @@ function Home() {
         </Modal>
       </Modal>
       <Modal isOpen={isDetailModalOpen} onClose={handleDetailModal}>
-        <DetailModal selectedHabit={selectedHabit} handleDetailModal={handleDetailModal} uncompletedFine={uncompletedFine} handleEditModal={handleEditModal} habitCategories={habitCategories} />
+        <DetailModal
+          selectedHabit={state.selectedHabit}
+          handleDetailModal={handleDetailModal}
+          uncompletedFine={state.uncompletedFine}
+          handleEditModal={handleEditModal}
+          habitCategories={habitCategories}
+        />
       </Modal>
       <Modal isOpen={isEditModalOpen} onClose={handleEditModal}>
         <EditModal
@@ -440,7 +434,7 @@ function Home() {
           handleDeleteHabit={handleDeleteHabit}
           habitCategories={habitCategories}
           setHabitData={setHabitData}
-          monthCalendarDate={monthCalendarDate}
+          monthCalendarDate={state.monthCalendarDate}
           handleMonthCalendarSelectDate={handleMonthCalendarSelectDate}
           setShowMonthCalendar={setShowMonthCalendar}
           generateStatusArray={generateStatusArray}

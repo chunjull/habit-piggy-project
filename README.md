@@ -1,8 +1,44 @@
-# React + Vite
+# Habit Piggy 習慣養成工具
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 專案目標
 
-Currently, two official plugins are available:
+為了養成良好的生活習慣，我參考「偶像存錢術」和書籍《零阻力改變》，設計出一款習慣養成工具。
+**讓使用者在培養習慣的同時，增加「沒有做到就要強迫存錢」的制約條件。**
+透過遊戲化的工具培養習慣，期許自己最終能夠獲得好習慣或大量積蓄。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 主要功能
+
+- 習慣管理：新增、編輯、刪除和追蹤習慣
+- 遊戲化設計：透過遊戲化元素增加使用者的參與感
+- 社群系統：與其他使用者互動和分享進展
+- 會員管理：管理使用者帳戶和資料
+
+## DEMO
+
+[Do Habit or FEED ME!](https://habit-piggy-project.web.app)
+
+## 測試帳戶
+
+```plain
+帳號：example
+密碼：examplepassword
+```
+
+請使用上述帳號進行測試。
+
+## 使用技術
+
+- **React.js**：作為前端框架，負責實現使用者介面和處理應用程式的整體功能。針對習慣與貼文的 CRUD 操作，利用 Hooks 來進行狀態管理與副作用處理，簡化程式碼結構並提高應用的可維護性。
+- **Tailwind CSS**：透過原子化設計的 CSS 類別，提升樣式的應用速度和開發效率，並保留高彈性，例如：使用 Tailwind 的 state 變化和深色模式變數，提供自定義主題切換及互動性。
+- **Firebase**：整合資料庫、雲端儲存、身份驗證和部署網頁等服務，在 Firestore Database 更新使用者的基本資料、習慣與貼文等資訊，於 Storage 儲存使用者頭像與預設貼文背景等圖片、Authentication 處理登入驗證，並在 Hosting 部署與託管網頁。
+- **React Hook Form**：處理使用者驗證與習慣操作等表單狀態和錯誤管理，減少重複渲染，並提升表單提交時的使用者體驗。
+- **React-Hot-Toast**：針對不同操作的結果客製化通知樣式與顯示時間，藉由即時回饋機制提升使用者體驗。
+- **Recharts**：用於渲染使用者存款與習慣數據的圖表，並根據使用者操作進行互動，強化資料的可讀性與理解度。
+
+## 聯絡方式
+
+我是 Juby，如果有任何問題或建議，請聯絡我：[chunjuchein0210@gmail.com](mailto:chunjuchein0210@gmail.com)
+
+---
+
+感謝你使用 Habit Piggy！希望這個工具能幫助你養成良好的生活習慣。

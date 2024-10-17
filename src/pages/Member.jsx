@@ -1,5 +1,5 @@
 import { useContext, useEffect, useReducer, useRef, useState } from "react";
-import { habitIcons, settingIcons } from "../assets/icons";
+import { settingIcons } from "../assets/icons";
 import habitPiggyLoading1 from "../assets/images/habit-piggy-loading-1.svg";
 import habitPiggyLoading2 from "../assets/images/habit-piggy-loading-2.svg";
 import CustomSelect from "../components/CustomSelect";
@@ -34,6 +34,7 @@ import {
   uploadAvatar,
 } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
+import { habitCategories } from "../utils/HabitCategories";
 import { actionTypes, initialState, reducer } from "../utils/HabitReducer";
 
 function Member() {
@@ -65,17 +66,6 @@ function Member() {
     { label: "進行中", value: "in-progress" },
     { label: "已結束", value: "finished" },
   ]);
-
-  const habitCategories = [
-    { id: 0, name: "生產力", icon: habitIcons.TbRocket },
-    { id: 1, name: "個人成長", icon: habitIcons.TbBook },
-    { id: 2, name: "運動健身", icon: habitIcons.TbWalk },
-    { id: 3, name: "飲食健康", icon: habitIcons.TbBowlChopsticks },
-    { id: 4, name: "心靈成長", icon: habitIcons.TbMoodHeart },
-    { id: 5, name: "手作興趣", icon: habitIcons.TbHandGrab },
-    { id: 6, name: "財務管理", icon: habitIcons.TbCash },
-    { id: 7, name: "環境生活", icon: habitIcons.TbPlant },
-  ];
 
   const customSelectRef = useRef(null);
 

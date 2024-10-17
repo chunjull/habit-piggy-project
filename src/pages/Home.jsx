@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useReducer, useRef, useState } from "react";
-import { habitAddIcon, habitIcons } from "../assets/icons";
+import { habitAddIcon } from "../assets/icons";
 import DetailModal from "../components/home/DetailModal";
 import EditModal from "../components/home/EditModal";
 import HabitList from "../components/home/HabitList";
@@ -21,6 +21,7 @@ import {
   updateUserProfile,
 } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
+import { habitCategories } from "../utils/HabitCategories";
 import { actionTypes, initialState, reducer } from "../utils/HabitReducer";
 
 function Home() {
@@ -42,17 +43,6 @@ function Home() {
   const calendarRef = useRef(null);
 
   const { user } = useContext(AuthContext);
-
-  const habitCategories = [
-    { id: 0, name: "生產力", icon: habitIcons.TbRocket },
-    { id: 1, name: "個人成長", icon: habitIcons.TbBook },
-    { id: 2, name: "運動健身", icon: habitIcons.TbWalk },
-    { id: 3, name: "飲食健康", icon: habitIcons.TbBowlChopsticks },
-    { id: 4, name: "心靈成長", icon: habitIcons.TbMoodHeart },
-    { id: 5, name: "手作興趣", icon: habitIcons.TbHandGrab },
-    { id: 6, name: "財務管理", icon: habitIcons.TbCash },
-    { id: 7, name: "環境生活", icon: habitIcons.TbPlant },
-  ];
 
   useEffect(() => {
     if (user) {

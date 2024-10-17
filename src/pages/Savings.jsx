@@ -19,11 +19,6 @@ function Savings() {
   const { user } = useContext(AuthContext);
   const customSelectRef = useRef(null);
 
-  const habitType = [
-    { id: "to-do", name: "養成", color: "#B2B814" },
-    { id: "not-to-do", name: "戒除", color: "#D14D28" },
-  ];
-
   useEffect(() => {
     const fetchData = async () => {
       if (user && user.uid) {
@@ -187,7 +182,7 @@ function Savings() {
       {isActiveTab === "category" && (
         <div className="space-y-4">
           <CategorySection filter={filter} setFilter={setFilter} options={options} savingsCount={state.savingsCount} categoryData={state.categoryData} customSelectRef={customSelectRef} />
-          <TypeSection filter={filter} setFilter={setFilter} options={options} savingsCount={state.savingsCount} typeData={state.typeData} habitType={habitType} customSelectRef={customSelectRef} />
+          <TypeSection filter={filter} setFilter={setFilter} options={options} savingsCount={state.savingsCount} typeData={state.typeData} customSelectRef={customSelectRef} />
         </div>
       )}
     </div>

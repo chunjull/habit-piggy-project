@@ -3,7 +3,12 @@ import { modalIcons } from "../../assets/icons";
 import CustomSelect from "../CustomSelect";
 import TypeChart from "./TypeChart";
 
-const TypeSection = ({ filter, setFilter, options, savingsCount, typeData, habitType, customSelectRef }) => {
+const TypeSection = ({ filter, setFilter, options, savingsCount, typeData, customSelectRef }) => {
+  const habitType = [
+    { id: "to-do", name: "養成", color: "#B2B814" },
+    { id: "not-to-do", name: "戒除", color: "#D14D28" },
+  ];
+
   return (
     <div className={`p-4 bg-black-50 dark:bg-black-800 rounded-xl space-y-4 ${savingsCount === 0 ? "min-h-screen" : "h-fit"}`}>
       <div className="flex justify-between items-center">
@@ -53,6 +58,5 @@ TypeSection.propTypes = {
   options: PropTypes.array.isRequired,
   savingsCount: PropTypes.number.isRequired,
   typeData: PropTypes.object.isRequired,
-  habitType: PropTypes.array.isRequired,
   customSelectRef: PropTypes.object.isRequired,
 };

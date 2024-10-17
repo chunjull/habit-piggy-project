@@ -19,17 +19,6 @@ function Savings() {
   const { user } = useContext(AuthContext);
   const customSelectRef = useRef(null);
 
-  const habitCategories = [
-    { id: 0, name: "生產力", color: "#FF6961" },
-    { id: 1, name: "個人成長", color: "#FFB480" },
-    { id: 2, name: "運動健身", color: "#FFE552" },
-    { id: 3, name: "飲食健康", color: "#42D6A4" },
-    { id: 4, name: "心靈成長", color: "#08CAD1" },
-    { id: 5, name: "手作興趣", color: "#59ADF6" },
-    { id: 6, name: "財務管理", color: "#9D94FF" },
-    { id: 7, name: "環境生活", color: "#C780E8" },
-  ];
-
   const habitType = [
     { id: "to-do", name: "養成", color: "#B2B814" },
     { id: "not-to-do", name: "戒除", color: "#D14D28" },
@@ -197,15 +186,7 @@ function Savings() {
       )}
       {isActiveTab === "category" && (
         <div className="space-y-4">
-          <CategorySection
-            filter={filter}
-            setFilter={setFilter}
-            options={options}
-            savingsCount={state.savingsCount}
-            categoryData={state.categoryData}
-            habitCategories={habitCategories}
-            customSelectRef={customSelectRef}
-          />
+          <CategorySection filter={filter} setFilter={setFilter} options={options} savingsCount={state.savingsCount} categoryData={state.categoryData} customSelectRef={customSelectRef} />
           <TypeSection filter={filter} setFilter={setFilter} options={options} savingsCount={state.savingsCount} typeData={state.typeData} habitType={habitType} customSelectRef={customSelectRef} />
         </div>
       )}

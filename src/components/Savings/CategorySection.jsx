@@ -3,7 +3,18 @@ import { modalIcons } from "../../assets/icons";
 import CustomSelect from "../CustomSelect";
 import CategoryChart from "./CategoryChart";
 
-const CategorySection = ({ filter, setFilter, options, savingsCount, categoryData, habitCategories, customSelectRef }) => {
+const CategorySection = ({ filter, setFilter, options, savingsCount, categoryData, customSelectRef }) => {
+  const habitCategories = [
+    { id: 0, name: "生產力", color: "#FF6961" },
+    { id: 1, name: "個人成長", color: "#FFB480" },
+    { id: 2, name: "運動健身", color: "#FFE552" },
+    { id: 3, name: "飲食健康", color: "#42D6A4" },
+    { id: 4, name: "心靈成長", color: "#08CAD1" },
+    { id: 5, name: "手作興趣", color: "#59ADF6" },
+    { id: 6, name: "財務管理", color: "#9D94FF" },
+    { id: 7, name: "環境生活", color: "#C780E8" },
+  ];
+
   return (
     <div className={`p-4 bg-black-50 dark:bg-black-800 rounded-xl space-y-4 ${savingsCount === 0 ? "min-h-screen" : "h-fit"}`}>
       <div className="flex justify-between items-center">
@@ -55,6 +66,5 @@ CategorySection.propTypes = {
   options: PropTypes.array.isRequired,
   savingsCount: PropTypes.number.isRequired,
   categoryData: PropTypes.object.isRequired,
-  habitCategories: PropTypes.array.isRequired,
   customSelectRef: PropTypes.object.isRequired,
 };

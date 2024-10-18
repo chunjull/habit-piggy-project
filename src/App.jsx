@@ -13,7 +13,6 @@ import PrivateRoute from "./utils/PrivateRoute";
 function App() {
   return (
     <AuthProvider>
-      {/* <AchievementProvider> */}
       <Router>
         <Layout>
           <Routes>

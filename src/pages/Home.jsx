@@ -28,7 +28,7 @@ import {
   updateUserProfile,
 } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
-import { habitCategories } from "../utils/HabitCategories";
+import habitCategories from "../utils/HabitCategories";
 import { actionTypes, initialState, reducer } from "../utils/HabitReducer";
 import {
   calculateUncompletedFine,

@@ -1,15 +1,15 @@
 import PropTypes from "prop-types";
 
 const TabNavigation = ({ isActiveTab, setIsActiveTab }) => (
-  <ul className="grid grid-cols-2 w-full">
+  <ul className="grid w-full grid-cols-2">
     <li
-      className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center cursor-pointer ${isActiveTab === "overview" ? "bg-primary" : "bg-black-50"}`}
+      className={`cursor-pointer rounded-s-full border border-black-500 py-1 text-center text-sm font-normal leading-5 ${isActiveTab === "overview" ? "bg-primary" : "bg-black-50"}`}
       onClick={() => setIsActiveTab("overview")}
     >
       存款總覽
     </li>
     <li
-      className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center cursor-pointer ${isActiveTab === "category" ? "bg-primary" : "bg-black-50"}`}
+      className={`cursor-pointer rounded-e-full border-y border-e border-black-500 py-1 text-center text-sm font-normal leading-5 ${isActiveTab === "category" ? "bg-primary" : "bg-black-50"}`}
       onClick={() => setIsActiveTab("category")}
     >
       習慣養成總覽

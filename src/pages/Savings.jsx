@@ -25,12 +25,16 @@ function Savings() {
         const habitsList = await getHabits(user.uid);
         dispatch({ type: actionTypes.SET_HABITS, payload: habitsList });
         const { startOfPeriod, endOfPeriod } = getStartAndEndOfPeriod(filter);
-        const { completed, savings, total, chartData, categoryData, typeData } = calculateStatistics(habitsList, startOfPeriod, endOfPeriod, filter);
+        const { completed, savings, total, chartData, categoryData, typeData } =
+          calculateStatistics(habitsList, startOfPeriod, endOfPeriod, filter);
         dispatch({ type: actionTypes.SET_COMPLETED_COUNT, payload: completed });
         dispatch({ type: actionTypes.SET_SAVINGS_COUNT, payload: savings });
         dispatch({ type: actionTypes.SET_TOTAL_SAVINGS, payload: total });
         dispatch({ type: actionTypes.SET_CHART_DATA, payload: chartData });
-        dispatch({ type: actionTypes.SET_CATEGORY_DATA, payload: categoryData });
+        dispatch({
+          type: actionTypes.SET_CATEGORY_DATA,
+          payload: categoryData,
+        });
         dispatch({ type: actionTypes.SET_TYPE_DATA, payload: typeData });
       }
     };
@@ -39,7 +43,10 @@ function Savings() {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (customSelectRef.current && !customSelectRef.current.contains(e.target)) {
+      if (
+        customSelectRef.current &&
+        !customSelectRef.current.contains(e.target)
+      ) {
         customSelectRef.current.closeMenu();
       }
     };
@@ -56,7 +63,9 @@ function Savings() {
 
     if (filter === "week") {
       startOfPeriod = new Date(today.setDate(today.getDate() - today.getDay()));
-      endOfPeriod = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+      endOfPeriod = new Date(
+        today.setDate(today.getDate() - today.getDay() + 6),
+      );
     } else if (filter === "month") {
       startOfPeriod = new Date(today.getFullYear(), today.getMonth(), 1);
       endOfPeriod = new Date(today.getFullYear(), today.getMonth() + 1, 0);
@@ -87,12 +96,27 @@ function Savings() {
         periodData[day] = 0;
       });
     } else if (filter === "month") {
-      const weeksInMonth = Math.ceil((endOfPeriod.getDate() - startOfPeriod.getDate() + 1) / 7);
+      const weeksInMonth = Math.ceil(
+        (endOfPeriod.getDate() - startOfPeriod.getDate() + 1) / 7,
+      );
       for (let i = 1; i <= weeksInMonth; i++) {
         periodData[`Week ${i}`] = 0;
       }
     } else {
-      const monthsOfYear = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const monthsOfYear = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
       monthsOfYear.forEach((month) => {
         periodData[month] = 0;
       });
@@ -105,7 +129,11 @@ function Savings() {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        if (statusDate < today && statusDate >= startOfPeriod && statusDate <= endOfPeriod) {
+        if (
+          statusDate < today &&
+          statusDate >= startOfPeriod &&
+          statusDate <= endOfPeriod
+        ) {
           const periodKey = getPeriodKey(statusDate, filter);
           if (!status.completed) {
             periodData[periodKey] += Number(habit.amount);
@@ -163,8 +191,11 @@ function Savings() {
   };
 
   return (
-    <div className="p-4 md:py-10 space-y-4">
-      <TabNavigation isActiveTab={isActiveTab} setIsActiveTab={setIsActiveTab} />
+    <div className="space-y-4 p-4 md:py-10">
+      <TabNavigation
+        isActiveTab={isActiveTab}
+        setIsActiveTab={setIsActiveTab}
+      />
       {isActiveTab === "overview" && (
         <OverviewSection
           completedCount={state.completedCount}
@@ -181,8 +212,22 @@ function Savings() {
       )}
       {isActiveTab === "category" && (
         <div className="space-y-4">
-          <CategorySection filter={filter} setFilter={setFilter} options={options} savingsCount={state.savingsCount} categoryData={state.categoryData} customSelectRef={customSelectRef} />
-          <TypeSection filter={filter} setFilter={setFilter} options={options} savingsCount={state.savingsCount} typeData={state.typeData} customSelectRef={customSelectRef} />
+          <CategorySection
+            filter={filter}
+            setFilter={setFilter}
+            options={options}
+            savingsCount={state.savingsCount}
+            categoryData={state.categoryData}
+            customSelectRef={customSelectRef}
+          />
+          <TypeSection
+            filter={filter}
+            setFilter={setFilter}
+            options={options}
+            savingsCount={state.savingsCount}
+            typeData={state.typeData}
+            customSelectRef={customSelectRef}
+          />
         </div>
       )}
     </div>

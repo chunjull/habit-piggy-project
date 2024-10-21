@@ -1,6 +1,14 @@
 import PropTypes from "prop-types";
 import { useContext } from "react";
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { AuthContext } from "../../utils/AuthContext";
 
 const SavingsChart = ({ data }) => {

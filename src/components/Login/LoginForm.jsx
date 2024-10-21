@@ -6,7 +6,12 @@ const LoginForm = ({ handleLogin, loginError }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      loginAccount: "example",
+      loginPassword: "examplepassword",
+    },
+  });
 
   return (
     <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col">

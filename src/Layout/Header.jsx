@@ -3,16 +3,28 @@ import HabitPiggyLogo from "../assets/images/habit-piggy-logo.svg";
 
 const Header = () => {
   return (
-    <header className="py-1 px-4 mt-4 flex justify-between items-center border border-black-950 rounded">
+    <header className="mt-4 flex items-center justify-between rounded border border-black-950 px-4 py-1">
       <div className="flex items-center gap-2">
-        <img src={HabitPiggyLogo} alt="Habit Piggy Logo" className="w-12 h-12 cursor-pointer" />
-        <h1 className="font-lobster text-2xl leading-8 cursor-pointer">Habit Piggy</h1>
+        <img
+          src={HabitPiggyLogo}
+          alt="Habit Piggy Logo"
+          className="h-12 w-12 cursor-pointer"
+        />
+        <h1 className="cursor-pointer font-lobster text-2xl leading-8">
+          Habit Piggy
+        </h1>
       </div>
       <nav className="flex gap-2">
-        <Link to="#" className="font-normal text-sm leading-5 py-2 px-4 cursor-pointer">
+        <Link
+          to="#"
+          className="cursor-pointer px-4 py-2 text-sm font-normal leading-5"
+        >
           How to Use?
         </Link>
-        <Link to="/" className="bg-primary font-normal text-sm leading-5 py-2 px-4 rounded hover:bg-primary-dark cursor-pointer">
+        <Link
+          to="/"
+          className="cursor-pointer rounded bg-primary px-4 py-2 text-sm font-normal leading-5 hover:bg-primary-dark"
+        >
           Login
         </Link>
       </nav>

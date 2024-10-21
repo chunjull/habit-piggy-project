@@ -11,14 +11,20 @@ export const generateStatusArray = (startDate, endDate, frequency) => {
     const selectedDay = frequency.day;
     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
       if (d.getDay() === selectedDay) {
-        statusArray.push({ date: new Date(d).toDateString(), completed: false });
+        statusArray.push({
+          date: new Date(d).toDateString(),
+          completed: false,
+        });
       }
     }
   } else if (frequency.type === "specificDays") {
     const days = Object.values(frequency.days);
     for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
       if (days.includes(d.getDay())) {
-        statusArray.push({ date: new Date(d).toDateString(), completed: false });
+        statusArray.push({
+          date: new Date(d).toDateString(),
+          completed: false,
+        });
       }
     }
   }

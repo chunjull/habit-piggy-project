@@ -10,7 +10,8 @@ const CustomSelect = ({ options, value, onChange }) => {
     setIsOpen(false);
   };
 
-  const selectedOption = options.find((option) => option.value === value) || options[0];
+  const selectedOption =
+    options.find((option) => option.value === value) || options[0];
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -26,15 +27,22 @@ const CustomSelect = ({ options, value, onChange }) => {
   }, []);
 
   return (
-    <div className="relative inline-block w-full custom-select">
-      <div className="border border-black-500 rounded-2xl px-4 py-0.5 bg-white cursor-pointer flex justify-between items-center" onClick={() => setIsOpen(!isOpen)}>
+    <div className="custom-select relative inline-block w-full">
+      <div
+        className="flex cursor-pointer items-center justify-between rounded-2xl border border-black-500 bg-white px-4 py-0.5"
+        onClick={() => setIsOpen(!isOpen)}
+      >
         <span>{selectedOption.label}</span>
-        <dropdownIcon.TbChevronDown className="w-6 h-6 text-black" />
+        <dropdownIcon.TbChevronDown className="h-6 w-6 text-black" />
       </div>
       {isOpen && (
-        <ul className="absolute right-0 z-10 mt-1 min-w-fit w-full bg-white border border-black-500 rounded-2xl shadow-lg text-center overflow-hidden">
+        <ul className="absolute right-0 z-10 mt-1 w-full min-w-fit overflow-hidden rounded-2xl border border-black-500 bg-white text-center shadow-lg">
           {options.map((option) => (
-            <li key={option.value} className="px-4 py-2 hover:bg-primary-light cursor-pointer" onClick={() => handleSelect(option.value)}>
+            <li
+              key={option.value}
+              className="cursor-pointer px-4 py-2 hover:bg-primary-light"
+              onClick={() => handleSelect(option.value)}
+            >
               {option.label}
             </li>
           ))}

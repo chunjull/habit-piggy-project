@@ -35,7 +35,13 @@ const AuthProvider = ({ children }) => {
     }
   }, [isDarkMode]);
 
-  return <AuthContext.Provider value={{ user, setUser, isDarkMode, setIsDarkMode, loading }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{ user, setUser, isDarkMode, setIsDarkMode, loading }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export { AuthContext, AuthProvider };

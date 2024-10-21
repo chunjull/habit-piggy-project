@@ -22,20 +22,30 @@ const AmountCounter = ({ value, onChange, min = 10, max = 100, step = 10 }) => {
   };
 
   return (
-    <div className="flex items-center w-full border border-black-300 rounded overflow-hidden">
-      <button type="button" className="py-1 px-4 bg-black-200 hover:bg-primary cursor-pointer" onClick={handleDecrement} disabled={amount <= min}>
-        <habitAddIcon.TbMinus className="w-4 h-4" />
+    <div className="flex w-full items-center overflow-hidden rounded border border-black-300">
+      <button
+        type="button"
+        className="cursor-pointer bg-black-200 px-4 py-1 hover:bg-primary"
+        onClick={handleDecrement}
+        disabled={amount <= min}
+      >
+        <habitAddIcon.TbMinus className="h-4 w-4" />
       </button>
       <input
         type="number"
         name="amount"
         id="amount"
-        className="px-4 text-center w-full h-6 font-normal text-sm leading-5 no-spinner dark:bg-black-100 dark:placeholder-black-400 focus:outline-none focus:border-none"
+        className="no-spinner h-6 w-full px-4 text-center text-sm font-normal leading-5 focus:border-none focus:outline-none dark:bg-black-100 dark:placeholder-black-400"
         value={amount}
         readOnly
       />
-      <button type="button" className="py-1 px-4 bg-black-200 hover:bg-primary cursor-pointer" onClick={handleIncrement} disabled={amount >= max}>
-        <habitAddIcon.TbPlus className="w-4 h-4" />
+      <button
+        type="button"
+        className="cursor-pointer bg-black-200 px-4 py-1 hover:bg-primary"
+        onClick={handleIncrement}
+        disabled={amount >= max}
+      >
+        <habitAddIcon.TbPlus className="h-4 w-4" />
       </button>
     </div>
   );

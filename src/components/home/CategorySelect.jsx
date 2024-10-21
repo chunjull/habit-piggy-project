@@ -11,9 +11,15 @@ const CategorySelect = ({ options, value = null, onChange }) => {
     <div className="w-full">
       <ul className="grid grid-cols-4 gap-2">
         {options.map((option) => (
-          <li key={option.id} className="w-16 h-fit cursor-pointer flex flex-col items-center gap-1 text-nowrap font-normal text-xs leading-4" onClick={() => handleSelect(option.id)}>
-            <div className={`w-10 h-10 rounded-full flex justify-center items-center ${selectedOption && selectedOption.id === option.id ? "bg-primary" : "bg-black-200 hover:bg-primary"}`}>
-              <option.icon className="w-8 h-8" />
+          <li
+            key={option.id}
+            className="flex h-fit w-16 cursor-pointer flex-col items-center gap-1 text-nowrap text-xs font-normal leading-4"
+            onClick={() => handleSelect(option.id)}
+          >
+            <div
+              className={`flex h-10 w-10 items-center justify-center rounded-full ${selectedOption && selectedOption.id === option.id ? "bg-primary" : "bg-black-200 hover:bg-primary"}`}
+            >
+              <option.icon className="h-8 w-8" />
             </div>
             <p className="text-black dark:text-black-0">{option.name}</p>
           </li>

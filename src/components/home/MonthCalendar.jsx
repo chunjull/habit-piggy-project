@@ -3,10 +3,34 @@ import { useEffect, useState } from "react";
 import { weekCalendarIcons } from "../../assets/icons";
 
 const MonthCalendar = ({ date, onSelect }) => {
-  const [weekNames] = useState(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
-  const [monthNames] = useState(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]);
+  const [weekNames] = useState([
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+  ]);
+  const [monthNames] = useState([
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ]);
   const [displayDate, setDisplayDate] = useState(null);
-  const [selectedRange, setSelectedRange] = useState({ start: null, end: null });
+  const [selectedRange, setSelectedRange] = useState({
+    start: null,
+    end: null,
+  });
   const [hoverDate, setHoverDate] = useState(null);
 
   useEffect(() => {
@@ -18,7 +42,7 @@ const MonthCalendar = ({ date, onSelect }) => {
             year: now.getFullYear(),
             month: now.getMonth(),
             day: now.getDate(),
-          }
+          },
     );
   }, [date]);
 
@@ -54,7 +78,11 @@ const MonthCalendar = ({ date, onSelect }) => {
   const changeMonth = (dir) => {
     setDisplayDate((prev) => {
       const newDate = new Date(prev.year, prev.month + (dir ? 1 : -1), 1);
-      return { year: newDate.getFullYear(), month: newDate.getMonth(), day: newDate.getDate() };
+      return {
+        year: newDate.getFullYear(),
+        month: newDate.getMonth(),
+        day: newDate.getDate(),
+      };
     });
   };
 
@@ -73,7 +101,11 @@ const MonthCalendar = ({ date, onSelect }) => {
     if (!selectedRange.start || (selectedRange.start && selectedRange.end)) {
       setSelectedRange({ start: date, end: null });
     } else {
-      const startDate = new Date(selectedRange.start.year, selectedRange.start.month, selectedRange.start.value);
+      const startDate = new Date(
+        selectedRange.start.year,
+        selectedRange.start.month,
+        selectedRange.start.value,
+      );
       startDate.setHours(0, 0, 0, 0);
       if (startDate.getTime() === selectedDate.getTime()) return;
 
@@ -88,8 +120,16 @@ const MonthCalendar = ({ date, onSelect }) => {
   const isInRange = (day) => {
     if (!day || !selectedRange.start || !selectedRange.end) return false;
     const date = new Date(day.year, day.month, day.value);
-    const start = new Date(selectedRange.start.year, selectedRange.start.month, selectedRange.start.value);
-    const end = new Date(selectedRange.end.year, selectedRange.end.month, selectedRange.end.value);
+    const start = new Date(
+      selectedRange.start.year,
+      selectedRange.start.month,
+      selectedRange.start.value,
+    );
+    const end = new Date(
+      selectedRange.end.year,
+      selectedRange.end.month,
+      selectedRange.end.value,
+    );
     return date >= start && date <= end;
   };
 
@@ -105,51 +145,75 @@ const MonthCalendar = ({ date, onSelect }) => {
   const isSelected = (day) => {
     if (!day) return false;
     const date = new Date(day.year, day.month, day.value);
-    const start = selectedRange.start ? new Date(selectedRange.start.year, selectedRange.start.month, selectedRange.start.value) : null;
-    const end = selectedRange.end ? new Date(selectedRange.end.year, selectedRange.end.month, selectedRange.end.value) : null;
-    return (start && date.getTime() === start.getTime()) || (end && date.getTime() === end.getTime());
+    const start = selectedRange.start
+      ? new Date(
+          selectedRange.start.year,
+          selectedRange.start.month,
+          selectedRange.start.value,
+        )
+      : null;
+    const end = selectedRange.end
+      ? new Date(
+          selectedRange.end.year,
+          selectedRange.end.month,
+          selectedRange.end.value,
+        )
+      : null;
+    return (
+      (start && date.getTime() === start.getTime()) ||
+      (end && date.getTime() === end.getTime())
+    );
   };
 
   const isInHoverRange = (day) => {
     if (!day || !selectedRange.start || !hoverDate) return false;
     const date = new Date(day.year, day.month, day.value);
-    const start = new Date(selectedRange.start.year, selectedRange.start.month, selectedRange.start.value);
+    const start = new Date(
+      selectedRange.start.year,
+      selectedRange.start.month,
+      selectedRange.start.value,
+    );
     const end = new Date(hoverDate.year, hoverDate.month, hoverDate.value);
     return date > start && date < end;
   };
 
   return (
-    <div className="p-4 bg-light dark:bg-black-800 rounded-2xl">
-      <div className="flex justify-between mb-3">
+    <div className="rounded-2xl bg-light p-4 dark:bg-black-800">
+      <div className="mb-3 flex justify-between">
         <button onClick={() => changePeriod(false)}>
-          <weekCalendarIcons.TbChevronLeft className="w-6 h-6 text-black dark:text-black-0 hover:text-alert" />
+          <weekCalendarIcons.TbChevronLeft className="h-6 w-6 text-black hover:text-alert dark:text-black-0" />
         </button>
-        <h1 className="font-bold text-base leading-6 text-black dark:text-black-0">{headerText}</h1>
+        <h1 className="text-base font-bold leading-6 text-black dark:text-black-0">
+          {headerText}
+        </h1>
         <button onClick={() => changePeriod(true)}>
-          <weekCalendarIcons.TbChevronRight className="w-6 h-6 text-black dark:text-black-0 hover:text-alert" />
+          <weekCalendarIcons.TbChevronRight className="h-6 w-6 text-black hover:text-alert dark:text-black-0" />
         </button>
       </div>
-      <div className="grid grid-cols-7 text-center gap-1">
+      <div className="grid grid-cols-7 gap-1 text-center">
         {weekNames.map((name, index) => (
-          <div key={index} className="font-medium text-sm leading-5 text-black dark:text-black-0">
+          <div
+            key={index}
+            className="text-sm font-medium leading-5 text-black dark:text-black-0"
+          >
             {name}
           </div>
         ))}
         {daysInMonth().map((day, index) => (
           <div
             key={index}
-            className={`rounded-full aspect-square flex items-center justify-center cursor-pointer ${
+            className={`flex aspect-square cursor-pointer items-center justify-center rounded-full ${
               !day
                 ? "invisible"
                 : isPastDate(day)
-                ? "bg-black-200 cursor-not-allowed"
-                : isSelected(day)
-                ? "bg-primary"
-                : isInHoverRange(day)
-                ? "bg-primary-light"
-                : isInRange(day)
-                ? "bg-primary-dark text-black-0"
-                : "bg-white hover:bg-primary-light hover:outline hover:outline-2 hover:outline-primary-dark"
+                  ? "cursor-not-allowed bg-black-200"
+                  : isSelected(day)
+                    ? "bg-primary"
+                    : isInHoverRange(day)
+                      ? "bg-primary-light"
+                      : isInRange(day)
+                        ? "bg-primary-dark text-black-0"
+                        : "bg-white hover:bg-primary-light hover:outline hover:outline-2 hover:outline-primary-dark"
             }`}
             onClick={() => day && !isPastDate(day) && selectDate(day)}
             onMouseEnter={() => day && setHoverDate(day)}

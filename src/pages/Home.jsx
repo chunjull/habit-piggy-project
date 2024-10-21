@@ -1,4 +1,11 @@
-import { useCallback, useContext, useEffect, useReducer, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { habitAddIcon } from "../assets/icons";
 import DetailModal from "../components/home/DetailModal";
 import EditModal from "../components/home/EditModal";
@@ -23,7 +30,10 @@ import {
 import { AuthContext } from "../utils/AuthContext";
 import { habitCategories } from "../utils/HabitCategories";
 import { actionTypes, initialState, reducer } from "../utils/HabitReducer";
-import { calculateUncompletedFine, generateStatusArray } from "../utils/HabitUtils";
+import {
+  calculateUncompletedFine,
+  generateStatusArray,
+} from "../utils/HabitUtils";
 
 function Home() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -65,8 +75,22 @@ function Home() {
 
   useEffect(() => {
     const today = new Date();
-    dispatch({ type: actionTypes.SET_SELECTED_DATE, payload: { year: today.getFullYear(), month: today.getMonth(), day: today.getDate() } });
-    dispatch({ type: actionTypes.SET_MONTH_CALENDAR_DATE, payload: { year: today.getFullYear(), month: today.getMonth(), day: today.getDate() } });
+    dispatch({
+      type: actionTypes.SET_SELECTED_DATE,
+      payload: {
+        year: today.getFullYear(),
+        month: today.getMonth(),
+        day: today.getDate(),
+      },
+    });
+    dispatch({
+      type: actionTypes.SET_MONTH_CALENDAR_DATE,
+      payload: {
+        year: today.getFullYear(),
+        month: today.getMonth(),
+        day: today.getDate(),
+      },
+    });
   }, []);
 
   const isDateInRange = (date, startDate, endDate) => {
@@ -81,8 +105,12 @@ function Home() {
 
   const fetchHabits = async (selectedDate = null) => {
     const habitsList = await getHabits(user.uid);
-    const today = selectedDate ? new Date(selectedDate.year, selectedDate.month, selectedDate.day) : new Date();
-    const filteredHabits = habitsList.filter((habit) => isDateInRange(today, habit.startDate, habit.endDate));
+    const today = selectedDate
+      ? new Date(selectedDate.year, selectedDate.month, selectedDate.day)
+      : new Date();
+    const filteredHabits = habitsList.filter((habit) =>
+      isDateInRange(today, habit.startDate, habit.endDate),
+    );
     dispatch({ type: actionTypes.SET_HABITS, payload: filteredHabits || [] });
   };
 
@@ -130,7 +158,11 @@ function Home() {
       } else {
         newFrequency = { type: value };
       }
-      const newStatus = generateStatusArray(habitData.startDate, habitData.endDate, newFrequency);
+      const newStatus = generateStatusArray(
+        habitData.startDate,
+        habitData.endDate,
+        newFrequency,
+      );
       setHabitData((prevData) => ({
         ...prevData,
         frequency: newFrequency,
@@ -138,7 +170,11 @@ function Home() {
       }));
     } else if (name === "startDate" || name === "endDate") {
       const newHabitData = { ...habitData, [name]: value };
-      const newStatus = generateStatusArray(newHabitData.startDate, newHabitData.endDate, newHabitData.frequency);
+      const newStatus = generateStatusArray(
+        newHabitData.startDate,
+        newHabitData.endDate,
+        newHabitData.frequency,
+      );
       setHabitData((prevData) => ({
         ...prevData,
         [name]: value,
@@ -148,7 +184,11 @@ function Home() {
       setHabitData((prevData) => ({
         ...prevData,
         [name]: value,
-        status: generateStatusArray(habitData.startDate, habitData.endDate, habitData.frequency),
+        status: generateStatusArray(
+          habitData.startDate,
+          habitData.endDate,
+          habitData.frequency,
+        ),
       }));
     }
   };
@@ -163,7 +203,11 @@ function Home() {
         return;
       }
 
-      const statusArray = generateStatusArray(habitData.startDate, habitData.endDate, habitData.frequency);
+      const statusArray = generateStatusArray(
+        habitData.startDate,
+        habitData.endDate,
+        habitData.frequency,
+      );
       const newHabitData = { ...habitData, status: statusArray };
       await addHabit(user.uid, newHabitData);
       await calculateBadges(user.uid);
@@ -202,7 +246,11 @@ function Home() {
         ...originalHabitData,
         ...habitData,
         id: state.selectedHabit.id,
-        status: generateStatusArray(habitData.startDate, habitData.endDate, habitData.frequency),
+        status: generateStatusArray(
+          habitData.startDate,
+          habitData.endDate,
+          habitData.frequency,
+        ),
       };
 
       await updateHabit(user.uid, state.selectedHabit.id, updatedHabitData);
@@ -231,7 +279,9 @@ function Home() {
       const updatedHabits = await getHabits(user.uid);
       dispatch({ type: actionTypes.SET_HABITS, payload: updatedHabits });
 
-      const categoryHabits = updatedHabits.filter((habit) => habit.category === state.selectedHabit.category);
+      const categoryHabits = updatedHabits.filter(
+        (habit) => habit.category === state.selectedHabit.category,
+      );
       if (categoryHabits.length === 0) {
         await removeBadge(user.uid, state.selectedHabit.category);
       }
@@ -254,7 +304,7 @@ function Home() {
     (weekDates) => {
       dispatch({ type: actionTypes.SET_WEEK_DATES, payload: weekDates });
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleMonthCalendarSelectDate = (range) => {
@@ -292,7 +342,9 @@ function Home() {
     const updatedHabits = state.habits.map((habit) => {
       if (habit.id === habitId) {
         const updatedStatus = habit.status.map((status) => {
-          if (new Date(status.date).toDateString() === targetDate.toDateString()) {
+          if (
+            new Date(status.date).toDateString() === targetDate.toDateString()
+          ) {
             const newCompletedStatus = !status.completed;
             if (newCompletedStatus) {
               updateUserLevelPoints(user.uid, habit.amount);
@@ -323,7 +375,10 @@ function Home() {
 
   const handleDetailClick = (habit) => {
     dispatch({ type: actionTypes.SET_SELECTED_HABIT, payload: habit });
-    dispatch({ type: actionTypes.SET_UNCOMPLETED_FINE, payload: calculateUncompletedFine(habit) });
+    dispatch({
+      type: actionTypes.SET_UNCOMPLETED_FINE,
+      payload: calculateUncompletedFine(habit),
+    });
     setIsDetailModalOpen(true);
   };
 
@@ -340,13 +395,23 @@ function Home() {
 
   return (
     <div className="md:pb-6">
-      <WeekCalendar date={state.selectedDate} onSelect={handleSelectDate} onWeekChange={handleWeekChange} />
-      <HabitList habits={state.habits} habitCategories={habitCategories} handleDetailClick={handleDetailClick} weekDates={state.weekDates} handleCheck={handleCheck} />
+      <WeekCalendar
+        date={state.selectedDate}
+        onSelect={handleSelectDate}
+        onWeekChange={handleWeekChange}
+      />
+      <HabitList
+        habits={state.habits}
+        habitCategories={habitCategories}
+        handleDetailClick={handleDetailClick}
+        weekDates={state.weekDates}
+        handleCheck={handleCheck}
+      />
       <div
-        className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center fixed bottom-20 right-4 md:bottom-4 2xl:right-40 bg-primary hover:bg-primary-dark cursor-pointer"
+        className="fixed bottom-20 right-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-primary hover:bg-primary-dark md:bottom-4 md:h-12 md:w-12 2xl:right-40"
         onClick={handleHabitModal}
       >
-        <habitAddIcon.TbPlus className="w-8 h-8 md:w-10 md:h-10 text-black-0" />
+        <habitAddIcon.TbPlus className="h-8 w-8 text-black-0 md:h-10 md:w-10" />
       </div>
       <Modal isOpen={isHabitModalOpen}>
         <Modal isOpen={isHabitModalOpen}>

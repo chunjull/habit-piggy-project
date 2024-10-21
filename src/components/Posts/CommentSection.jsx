@@ -33,16 +33,19 @@ const CommentSection = ({
             handleSelectChange={handleSelectChange}
           />
         ))}
-      <li className="flex justify-between items-center gap-2">
+      <li className="flex items-center justify-between gap-2">
         <input
           type="text"
           placeholder="請輸入留言"
-          className="bg-black-100 text-black py-2 px-4 w-full rounded-2xl placeholder:text-black dark:text-black-0-500  caret-primary-dark focus:border-primary-dark focus:outline focus:outline-primary-dark focus:bg-black-0"
+          className="dark:text-black-0-500 w-full rounded-2xl bg-black-100 px-4 py-2 text-black caret-primary-dark placeholder:text-black focus:border-primary-dark focus:bg-black-0 focus:outline focus:outline-primary-dark"
           value={commentContent}
           onChange={(e) => setCommentContent(e.target.value)}
         />
-        <div className="w-10 h-10 bg-primary flex justify-center items-center rounded-full aspect-square cursor-pointer hover:bg-primary-dark" onClick={() => handleAddComment(post.id)}>
-          <postIcons.TbSend2 className="w-6 h-6 text-black" />
+        <div
+          className="flex aspect-square h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-primary hover:bg-primary-dark"
+          onClick={() => handleAddComment(post.id)}
+        >
+          <postIcons.TbSend2 className="h-6 w-6 text-black" />
         </div>
       </li>
     </ul>

@@ -23,15 +23,25 @@ const PostItem = ({
   getTimeDifference,
 }) => {
   return (
-    <li className="p-4 bg-black-50 dark:bg-black-800 rounded-2xl space-y-3 w-full">
-      <div className="flex justify-between items-center w-full">
-        <div className="flex gap-3 items-center">
-          <div className="w-12 h-12">
-            {post.user && <img src={post.user.avatar} alt="avatar" className="w-full h-full object-cover rounded-full outline outline-primary-dark dark:outline-primary" />}
+    <li className="w-full space-y-3 rounded-2xl bg-black-50 p-4 dark:bg-black-800">
+      <div className="flex w-full items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="h-12 w-12">
+            {post.user && (
+              <img
+                src={post.user.avatar}
+                alt="avatar"
+                className="h-full w-full rounded-full object-cover outline outline-primary-dark dark:outline-primary"
+              />
+            )}
           </div>
           <div className="flex flex-col">
-            <h3 className="font-bold text-lg leading-6 text-black dark:text-black-0">{post.user ? post.user.name : "Unknown"}</h3>
-            <p className="font-normal text-sm leading-5 text-black dark:text-black-0">{getTimeDifference(post.createdTime.seconds)}</p>
+            <h3 className="text-lg font-bold leading-6 text-black dark:text-black-0">
+              {post.user ? post.user.name : "Unknown"}
+            </h3>
+            <p className="text-sm font-normal leading-5 text-black dark:text-black-0">
+              {getTimeDifference(post.createdTime.seconds)}
+            </p>
           </div>
         </div>
         <PostSelect
@@ -44,7 +54,7 @@ const PostItem = ({
         />
       </div>
       <div
-        className={`w-full min-h-52 h-fit flex justify-center items-center p-4 rounded-xl font-normal text-base leading-6 md:text-xl md:leading-7 xl:text-2xl xl:leading-8 ${
+        className={`flex h-fit min-h-52 w-full items-center justify-center rounded-xl p-4 text-base font-normal leading-6 md:text-xl md:leading-7 xl:text-2xl xl:leading-8 ${
           !post.background ? "bg-slate-100" : ""
         }`}
         style={
@@ -57,7 +67,11 @@ const PostItem = ({
                 wordBreak: "break-word",
                 whiteSpace: "pre-wrap",
               }
-            : { color: calculateTextColor(post.background), wordBreak: "break-word", whiteSpace: "pre-wrap" }
+            : {
+                color: calculateTextColor(post.background),
+                wordBreak: "break-word",
+                whiteSpace: "pre-wrap",
+              }
         }
       >
         <p className="text-center">{post.content}</p>
@@ -65,15 +79,28 @@ const PostItem = ({
       <div className="flex gap-3">
         <div className="flex gap-1">
           {post.likes && post.likes.includes(user.uid) ? (
-            <postIcons.TbHeartFilled className="w-6 h-6 cursor-pointer text-alert" onClick={() => handleUnlike(post.id)} />
+            <postIcons.TbHeartFilled
+              className="h-6 w-6 cursor-pointer text-alert"
+              onClick={() => handleUnlike(post.id)}
+            />
           ) : (
-            <postIcons.TbHeart className="w-6 h-6 cursor-pointer text-black dark:text-black-0 hover:text-alert" onClick={() => handleLike(post.id)} />
+            <postIcons.TbHeart
+              className="h-6 w-6 cursor-pointer text-black hover:text-alert dark:text-black-0"
+              onClick={() => handleLike(post.id)}
+            />
           )}
-          <p className="text-black dark:text-black-0 font-normal text-base leading-6">{post.likes ? post.likes.length : 0}</p>
+          <p className="text-base font-normal leading-6 text-black dark:text-black-0">
+            {post.likes ? post.likes.length : 0}
+          </p>
         </div>
         <div className="flex gap-1">
-          <postIcons.TbMessageChatbot className="w-6 h-6 cursor-pointer text-black dark:text-black-0 hover:text-black dark:hover:text-black-200" onClick={() => handleCommentSection(post.id)} />
-          <p className="text-black dark:text-black-0 font-normal text-base leading-6">{post.comments ? post.comments.length : 0}</p>
+          <postIcons.TbMessageChatbot
+            className="h-6 w-6 cursor-pointer text-black hover:text-black dark:text-black-0 dark:hover:text-black-200"
+            onClick={() => handleCommentSection(post.id)}
+          />
+          <p className="text-base font-normal leading-6 text-black dark:text-black-0">
+            {post.comments ? post.comments.length : 0}
+          </p>
         </div>
       </div>
       <CommentSection

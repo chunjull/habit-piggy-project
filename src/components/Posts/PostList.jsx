@@ -22,22 +22,28 @@ const PostList = ({
   getTimeDifference,
   isLoading,
 }) => {
-  const filteredPosts = filter === "personal" ? posts.filter((post) => post.userID === user.uid) : posts;
+  const filteredPosts =
+    filter === "personal"
+      ? posts.filter((post) => post.userID === user.uid)
+      : posts;
 
   return (
     <ul className="space-y-4">
       {isLoading &&
         Array.from({ length: filteredPosts.length }).map((_, index) => (
-          <li key={index} className="p-4 bg-black-50 dark:bg-black-800 rounded-2xl space-y-3 w-full">
+          <li
+            key={index}
+            className="w-full space-y-3 rounded-2xl bg-black-50 p-4 dark:bg-black-800"
+          >
             <div className="animate-pulse space-y-4">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-black-200 rounded-full aspect-square"></div>
-                <div className="flex flex-col gap-1 w-full">
-                  <div className="w-1/4 h-6 bg-black-200 rounded-lg"></div>
-                  <div className="w-1/6 h-5 bg-black-200 rounded-lg"></div>
+                <div className="aspect-square h-12 w-12 rounded-full bg-black-200"></div>
+                <div className="flex w-full flex-col gap-1">
+                  <div className="h-6 w-1/4 rounded-lg bg-black-200"></div>
+                  <div className="h-5 w-1/6 rounded-lg bg-black-200"></div>
                 </div>
               </div>
-              <div className="w-full min-h-40 h-fit rounded-xl bg-black-200"></div>
+              <div className="h-fit min-h-40 w-full rounded-xl bg-black-200"></div>
             </div>
           </li>
         ))}

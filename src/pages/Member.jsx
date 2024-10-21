@@ -13,7 +13,7 @@ import BadgeList from "../components/Member/BadgeList";
 import BadgeModal from "../components/Member/BadgeModal";
 import MemberInformation from "../components/Member/MemberInformation";
 import SettingModal from "../components/Member/SettingModal";
-import TabNavigation from "../components/Member/TabNavigation";
+import TabNavigation from "../components/TabNavigation";
 import { UpdateNotify } from "../components/Member/ToastNotify";
 import Modal from "../components/Modal";
 import {
@@ -70,8 +70,12 @@ function Member() {
     { label: "進行中", value: "in-progress" },
     { label: "已結束", value: "finished" },
   ]);
-
   const customSelectRef = useRef(null);
+
+  const tabs = [
+    { key: "member", label: "會員管理" },
+    { key: "history", label: "歷史習慣" },
+  ];
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -475,6 +479,7 @@ function Member() {
     <>
       <div className="space-y-4 p-4 md:py-10">
         <TabNavigation
+          tabs={tabs}
           isActiveTab={isActiveTab}
           setIsActiveTab={setIsActiveTab}
         />

@@ -5,7 +5,7 @@ import LoadingScreen from "../components/Login/LoadingScreen";
 import LoginBanner from "../components/Login/LoginBanner";
 import LoginForm from "../components/Login/LoginForm";
 import RegisterForm from "../components/Login/RegisterForm";
-import TabNavigation from "../components/Login/TabNavigation";
+import TabNavigation from "../components/TabNavigation";
 import Footer from "../Layout/Footer";
 import Header from "../Layout/Header";
 import { getEmailByAccount, registerUser } from "../services/api";
@@ -15,6 +15,11 @@ import { actionTypes, initialState, reducer } from "../utils/AuthReducer";
 function Login() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { setUser } = useContext(AuthContext);
+
+  const tabs = [
+    { key: "login", label: "登入帳號" },
+    { key: "register", label: "註冊帳號" },
+  ];
 
   const handleRegister = async (data) => {
     const { email, registerPassword, account, name } = data;
@@ -81,9 +86,13 @@ function Login() {
           <Header />
           <div className="h-fit w-full space-y-4 rounded-2xl p-4 md:mx-auto md:w-1/2 md:bg-black-50 md:py-8">
             <TabNavigation
-              isLogin={state.isLogin}
-              setIsLogin={(value) =>
-                dispatch({ type: actionTypes.SET_IS_LOGIN, payload: value })
+              tabs={tabs}
+              isActiveTab={state.isLogin ? "login" : "register"}
+              setIsActiveTab={(value) =>
+                dispatch({
+                  type: actionTypes.SET_IS_LOGIN,
+                  payload: value === "login",
+                })
               }
             />
             {state.isLogin ? (

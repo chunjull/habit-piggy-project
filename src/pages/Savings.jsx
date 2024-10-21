@@ -1,8 +1,8 @@
 import { useContext, useEffect, useReducer, useRef, useState } from "react";
 import CategorySection from "../components/Savings/CategorySection";
 import OverviewSection from "../components/Savings/OverviewSection";
-import TabNavigation from "../components/Savings/TabNavigation";
 import TypeSection from "../components/Savings/TypeSection";
+import TabNavigation from "../components/TabNavigation";
 import { getHabits } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import { actionTypes, initialState, reducer } from "../utils/HabitReducer";
@@ -18,6 +18,11 @@ function Savings() {
   ]);
   const { user } = useContext(AuthContext);
   const customSelectRef = useRef(null);
+
+  const tabs = [
+    { key: "overview", label: "存款總覽" },
+    { key: "category", label: "類別總覽" },
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -193,6 +198,7 @@ function Savings() {
   return (
     <div className="space-y-4 p-4 md:py-10">
       <TabNavigation
+        tabs={tabs}
         isActiveTab={isActiveTab}
         setIsActiveTab={setIsActiveTab}
       />

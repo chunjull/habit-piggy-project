@@ -3,8 +3,8 @@ import CongratulationMessage from "../components/Rank/CongratulationMessage";
 import CongratulationMessageIcons from "../components/Rank/CongratulationMessageIcons";
 import CurrentUser from "../components/Rank/CurrentUser";
 import DateRange from "../components/Rank/DateRange";
-import TabNavigation from "../components/Rank/TabNavigation";
 import TopTenUsersList from "../components/Rank/TopTenUserList";
+import TabNavigation from "../components/TabNavigation";
 import { getAllUsers, getHabits } from "../services/api";
 import { AuthContext } from "../utils/AuthContext";
 import { actionTypes, initialState, reducer } from "../utils/HabitReducer";
@@ -15,6 +15,11 @@ function Rank() {
   const [userHabitCounts, setUserHabitCounts] = useState([]);
   const [userSavingsCounts, setUserSavingsCounts] = useState([]);
   const { user } = useContext(AuthContext);
+
+  const tabs = [
+    { key: "habit", label: "習慣排行" },
+    { key: "savings", label: "存款排行" },
+  ];
 
   useEffect(() => {
     dispatch({ type: actionTypes.SET_IS_LOADING, payload: true });
@@ -119,6 +124,7 @@ function Rank() {
   return (
     <div className="mb:pb-6 space-y-4 p-4 md:pt-10">
       <TabNavigation
+        tabs={tabs}
         isActiveTab={isActiveTab}
         setIsActiveTab={setIsActiveTab}
       />

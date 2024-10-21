@@ -1,12 +1,15 @@
 import PropTypes from "prop-types";
 
 const TabNavigation = ({ isLogin, setIsLogin }) => (
-  <ul className="grid grid-cols-2 w-full">
-    <li className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center cursor-pointer ${isLogin ? "bg-primary" : "bg-black-50"}`} onClick={() => setIsLogin(true)}>
+  <ul className="grid w-full grid-cols-2">
+    <li
+      className={`cursor-pointer rounded-s-full border border-black-500 py-1 text-center text-sm font-normal leading-5 ${isLogin ? "bg-primary" : "bg-black-50"}`}
+      onClick={() => setIsLogin(true)}
+    >
       登入帳號
     </li>
     <li
-      className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center cursor-pointer ${!isLogin ? "bg-primary" : "bg-black-50"}`}
+      className={`cursor-pointer rounded-e-full border-y border-e border-black-500 py-1 text-center text-sm font-normal leading-5 ${!isLogin ? "bg-primary" : "bg-black-50"}`}
       onClick={() => setIsLogin(false)}
     >
       註冊帳號

@@ -77,15 +77,15 @@ const LoginBanner = () => {
   };
 
   return (
-    <div className="hidden md:block mx-2 md:mx-0 relative">
+    <div className="relative mx-2 hidden md:mx-0 md:block">
       <div className="grid grid-cols-32 md:gap-1">
         {pixelData.map((row, rowIndex) =>
           row.map((pixel, colIndex) => (
             <div
               key={`${rowIndex}-${colIndex}`}
-              className={`w-4 h-4 md:w-7 md:h-7 rounded ${pixel ? `${getRandomColorClass()} border border-black-400 hover:animate-ping` : "border border-black-200"}`}
+              className={`h-4 w-4 rounded md:h-7 md:w-7 ${pixel ? `${getRandomColorClass()} border border-black-400 hover:animate-ping` : "border border-black-200"}`}
             ></div>
-          ))
+          )),
         )}
       </div>
     </div>

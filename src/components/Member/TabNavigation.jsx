@@ -1,15 +1,15 @@
 import PropTypes from "prop-types";
 
 const TabNavigation = ({ isActiveTab, setIsActiveTab }) => (
-  <ul className="grid grid-cols-2 w-full">
+  <ul className="grid w-full grid-cols-2">
     <li
-      className={`border border-black-500 rounded-s-full py-1 font-normal text-sm leading-5 text-center cursor-pointer ${isActiveTab === "member" ? "bg-primary" : "bg-black-50"}`}
+      className={`cursor-pointer rounded-s-full border border-black-500 py-1 text-center text-sm font-normal leading-5 ${isActiveTab === "member" ? "bg-primary" : "bg-black-50"}`}
       onClick={() => setIsActiveTab("member")}
     >
       會員管理
     </li>
     <li
-      className={`border-e border-y border-black-500 rounded-e-full py-1 font-normal text-sm leading-5 text-center cursor-pointer ${isActiveTab === "history" ? "bg-primary" : "bg-black-50"}`}
+      className={`cursor-pointer rounded-e-full border-y border-e border-black-500 py-1 text-center text-sm font-normal leading-5 ${isActiveTab === "history" ? "bg-primary" : "bg-black-50"}`}
       onClick={() => setIsActiveTab("history")}
     >
       歷史習慣

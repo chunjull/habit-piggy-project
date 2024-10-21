@@ -1,17 +1,22 @@
 import PropTypes from "prop-types";
 
-const AchievementList = ({ sortedAchievements, userAchievements, handleAchievementModal, isLoading }) => {
+const AchievementList = ({
+  sortedAchievements,
+  userAchievements,
+  handleAchievementModal,
+  isLoading,
+}) => {
   return (
-    <div className="pt-9 pb-4 px-4 bg-black-50 dark:bg-black-800 space-y-4 rounded-2xl relative">
+    <div className="relative space-y-4 rounded-2xl bg-black-50 px-4 pb-4 pt-9 dark:bg-black-800">
       {isLoading ? (
         <div className="animate-pulse space-y-4">
           <div className="grid grid-cols-3 gap-4">
-            <div className="w-full h-8 bg-black-200 rounded-lg"></div>
-            <div className="w-full h-8 bg-black-200 rounded-lg"></div>
-            <div className="w-full h-8 bg-black-200 rounded-lg"></div>
-            <div className="w-full h-8 bg-black-200 rounded-lg"></div>
-            <div className="w-full h-8 bg-black-200 rounded-lg"></div>
-            <div className="w-full h-8 bg-black-200 rounded-lg"></div>
+            <div className="h-8 w-full rounded-lg bg-black-200"></div>
+            <div className="h-8 w-full rounded-lg bg-black-200"></div>
+            <div className="h-8 w-full rounded-lg bg-black-200"></div>
+            <div className="h-8 w-full rounded-lg bg-black-200"></div>
+            <div className="h-8 w-full rounded-lg bg-black-200"></div>
+            <div className="h-8 w-full rounded-lg bg-black-200"></div>
           </div>
         </div>
       ) : (
@@ -22,12 +27,14 @@ const AchievementList = ({ sortedAchievements, userAchievements, handleAchieveme
               return (
                 <li
                   key={achievement.id}
-                  className={`py-1 w-full flex justify-center items-center rounded-lg border-2 cursor-default ${
-                    isAchieved ? "opacity-100 border-primary-dark bg-light" : "opacity-50 border-black-500 bg-black-100 dark:border-black-300"
+                  className={`flex w-full cursor-default items-center justify-center rounded-lg border-2 py-1 ${
+                    isAchieved
+                      ? "border-primary-dark bg-light opacity-100"
+                      : "border-black-500 bg-black-100 opacity-50 dark:border-black-300"
                   }`}
                 >
                   <p
-                    className={`font-normal text-base leading-6 md:text-xl md:leading-7 stroke-text ${isAchieved ? "text-primary z-0" : "text-black"}`}
+                    className={`stroke-text text-base font-normal leading-6 md:text-xl md:leading-7 ${isAchieved ? "z-0 text-primary" : "text-black"}`}
                     data-stroke={isAchieved ? achievement.name : ""}
                   >
                     {achievement.name}
@@ -36,21 +43,26 @@ const AchievementList = ({ sortedAchievements, userAchievements, handleAchieveme
               );
             })}
           </ul>
-          <button className="text-center w-full bg-primary rounded-xl font-medium text-sm leading-5 py-1 hover:bg-primary-dark" onClick={handleAchievementModal}>
+          <button
+            className="w-full rounded-xl bg-primary py-1 text-center text-sm font-medium leading-5 hover:bg-primary-dark"
+            onClick={handleAchievementModal}
+          >
             更多成就
           </button>
         </>
       )}
-      <div className="bg-primary py-1 px-4 w-fit absolute -top-12 left-1/2 transform -translate-x-1/2">
-        <p className="font-lobster font-normal text-2xl leading-8 text-alert">Achievement</p>
-        <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[-16px] before:w-0 before:h-0 before:border-l-[20px] before:border-r-0 before:border-t-[12px] before:border-l-primary before:border-r-transparent before:border-t-primary-dark before:z-20"></div>
-        <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[114px] before:w-0 before:h-0 before:border-r-[20px] before:border-l-0 before:border-t-[12px] before:border-r-primary before:border-l-transparent before:border-t-primary-dark before:z-20"></div>
-        <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[-46px] before:w-8 before:h-10 before:bg-primary"></div>
-        <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[134px] before:w-8 before:h-10 before:bg-primary"></div>
-        <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[166px] before:w-0 before:h-0 before:border-l-0 before:border-r-[20px] before:border-b-[20px] before:border-l-transparent before:border-r-transparent before:border-b-primary before:z-20"></div>
-        <div className="absolute before:content-[''] before:absolute before:bottom-1 before:left-[166px] before:w-0 before:h-0 before:border-l-0 before:border-r-[20px] before:border-t-[20px] before:border-l-transparent before:border-r-transparent before:border-t-primary before:z-20"></div>
-        <div className="absolute before:content-[''] before:absolute before:bottom-[-16px] before:left-[-66px] before:w-0 before:h-0 before:border-l-[20px] before:border-r-0 before:border-b-[20px] before:border-l-transparent before:border-r-transparent before:border-b-primary before:z-20"></div>
-        <div className="absolute before:content-[''] before:absolute before:bottom-1 before:left-[-66px] before:w-0 before:h-0 before:border-l-[20px] before:border-r-0 before:border-t-[20px] before:border-l-transparent before:border-r-transparent before:border-t-primary before:z-20"></div>
+      <div className="absolute -top-12 left-1/2 w-fit -translate-x-1/2 transform bg-primary px-4 py-1">
+        <p className="font-lobster text-2xl font-normal leading-8 text-alert">
+          Achievement
+        </p>
+        <div className="absolute before:absolute before:bottom-[-16px] before:left-[-16px] before:z-20 before:h-0 before:w-0 before:border-l-[20px] before:border-r-0 before:border-t-[12px] before:border-l-primary before:border-r-transparent before:border-t-primary-dark before:content-['']"></div>
+        <div className="absolute before:absolute before:bottom-[-16px] before:left-[114px] before:z-20 before:h-0 before:w-0 before:border-l-0 before:border-r-[20px] before:border-t-[12px] before:border-l-transparent before:border-r-primary before:border-t-primary-dark before:content-['']"></div>
+        <div className="absolute before:absolute before:bottom-[-16px] before:left-[-46px] before:h-10 before:w-8 before:bg-primary before:content-['']"></div>
+        <div className="absolute before:absolute before:bottom-[-16px] before:left-[134px] before:h-10 before:w-8 before:bg-primary before:content-['']"></div>
+        <div className="absolute before:absolute before:bottom-[-16px] before:left-[166px] before:z-20 before:h-0 before:w-0 before:border-b-[20px] before:border-l-0 before:border-r-[20px] before:border-b-primary before:border-l-transparent before:border-r-transparent before:content-['']"></div>
+        <div className="absolute before:absolute before:bottom-1 before:left-[166px] before:z-20 before:h-0 before:w-0 before:border-l-0 before:border-r-[20px] before:border-t-[20px] before:border-l-transparent before:border-r-transparent before:border-t-primary before:content-['']"></div>
+        <div className="absolute before:absolute before:bottom-[-16px] before:left-[-66px] before:z-20 before:h-0 before:w-0 before:border-b-[20px] before:border-l-[20px] before:border-r-0 before:border-b-primary before:border-l-transparent before:border-r-transparent before:content-['']"></div>
+        <div className="absolute before:absolute before:bottom-1 before:left-[-66px] before:z-20 before:h-0 before:w-0 before:border-l-[20px] before:border-r-0 before:border-t-[20px] before:border-l-transparent before:border-r-transparent before:border-t-primary before:content-['']"></div>
       </div>
     </div>
   );

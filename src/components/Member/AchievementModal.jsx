@@ -1,12 +1,21 @@
 import PropTypes from "prop-types";
 import { modalIcons } from "../../assets/icons";
 
-const AchievementModal = ({ handleAchievementModal, userAchievements, sortedAchievements }) => {
+const AchievementModal = ({
+  handleAchievementModal,
+  userAchievements,
+  sortedAchievements,
+}) => {
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h3 className="font-bold text-lg leading-7 text-black dark:text-black-0">你的成就</h3>
-        <modalIcons.TbX className="w-8 h-8 cursor-pointer hover:text-alert text-black dark:text-black-0" onClick={handleAchievementModal} />
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-bold leading-7 text-black dark:text-black-0">
+          你的成就
+        </h3>
+        <modalIcons.TbX
+          className="h-8 w-8 cursor-pointer text-black hover:text-alert dark:text-black-0"
+          onClick={handleAchievementModal}
+        />
       </div>
       <div className="max-h-56 overflow-scroll">
         <ul className="grid grid-cols-2 gap-4">
@@ -15,18 +24,22 @@ const AchievementModal = ({ handleAchievementModal, userAchievements, sortedAchi
             return (
               <li key={achievement.id}>
                 <div
-                  className={`py-1 w-full flex justify-center items-center rounded-lg border-2 cursor-default ${
-                    isAchieved ? "opacity-100 border-primary-dark bg-light" : "opacity-50 border-black-500 bg-black-100 text-black dark:border-black-300"
+                  className={`flex w-full cursor-default items-center justify-center rounded-lg border-2 py-1 ${
+                    isAchieved
+                      ? "border-primary-dark bg-light opacity-100"
+                      : "border-black-500 bg-black-100 text-black opacity-50 dark:border-black-300"
                   }`}
                 >
                   <p
-                    className={`font-normal text-base leading-6 md:text-xl md:leading-7 stroke-text ${isAchieved ? "text-primary z-0" : "text-black"}`}
+                    className={`stroke-text text-base font-normal leading-6 md:text-xl md:leading-7 ${isAchieved ? "z-0 text-primary" : "text-black"}`}
                     data-stroke={isAchieved ? achievement.name : ""}
                   >
                     {achievement.name}
                   </p>
                 </div>
-                <p className="mt-1 text-black dark:text-black-0 text-center font-normal text-xs leading-4 md:text-sm md:leading-5">{achievement.description}</p>
+                <p className="mt-1 text-center text-xs font-normal leading-4 text-black dark:text-black-0 md:text-sm md:leading-5">
+                  {achievement.description}
+                </p>
               </li>
             );
           })}

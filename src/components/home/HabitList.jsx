@@ -35,7 +35,7 @@ const HabitList = ({
         </div>
       ) : (
         <ul
-          className={`mt-2 space-y-4 ${location.pathname === "/home" ? "p-4" : ""}`}
+          className={`mt-2 space-y-4 ${location.pathname === "/Home" ? "p-4" : ""}`}
         >
           {Array.isArray(habits) &&
             habits.map((habit) => {

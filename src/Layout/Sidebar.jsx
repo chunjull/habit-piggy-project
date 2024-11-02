@@ -33,30 +33,30 @@ const Sidebar = ({
           </div>
           <ul className="grid w-full grid-cols-5 items-center transition-all duration-200 ease-in-out md:grid-cols-1 md:gap-4">
             <Link
-              to="/home"
+              to="/Home"
               className="block"
               onClick={toggleSidebarInSmallScreen}
             >
               <li
                 className={`flex flex-col items-center gap-1 md:px-2 md:py-1 ${isSidebarExpanded ? "md:flex-row md:rounded-full hover:md:bg-primary-light" : ""} ${
-                  location.pathname === "/home" && isSidebarExpanded
+                  location.pathname === "/Home" && isSidebarExpanded
                     ? "md:bg-primary"
                     : ""
                 }`}
               >
                 <div
                   className={`flex items-center justify-center rounded-xl px-4 py-1 md:aspect-square md:px-2 ${isSidebarExpanded ? "dark:bg-transparent md:bg-transparent" : ""} ${
-                    location.pathname === "/home"
+                    location.pathname === "/Home"
                       ? "bg-light dark:bg-black-950"
                       : "hover:bg-primary-light"
-                  } ${location.pathname === "/home" && isSidebarExpanded ? "hover:bg-primary-light md:bg-transparent hover:md:bg-transparent" : ""}`}
+                  } ${location.pathname === "/Home" && isSidebarExpanded ? "hover:bg-primary-light md:bg-transparent hover:md:bg-transparent" : ""}`}
                 >
                   <layoutIcons.TbHome2
                     className={`h-6 w-6 md:h-8 md:w-8 ${isSidebarExpanded ? "dark:text-black-0 md:text-black" : ""} ${
-                      location.pathname === "/home"
+                      location.pathname === "/Home"
                         ? "text-primary-dark"
                         : "text-black dark:text-black-0"
-                    } ${location.pathname === "/home" && isSidebarExpanded ? "" : "md:text-black"} ${location.pathname === "/home" && !isSidebarExpanded ? "md:text-primary-dark" : ""}`}
+                    } ${location.pathname === "/Home" && isSidebarExpanded ? "" : "md:text-black"} ${location.pathname === "/Home" && !isSidebarExpanded ? "md:text-primary-dark" : ""}`}
                   />
                 </div>
                 <p className="text-nowrap text-xs font-normal leading-4 text-black dark:text-black-0 md:text-base md:leading-6">

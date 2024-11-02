@@ -74,7 +74,7 @@ function Login() {
   };
 
   if (state.isLoggedIn) {
-    return <Navigate to="/home" />;
+    return <Navigate to="/Home" />;
   }
 
   return (

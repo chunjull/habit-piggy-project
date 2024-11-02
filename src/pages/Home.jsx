@@ -7,12 +7,12 @@ import {
   useState,
 } from "react";
 import { habitAddIcon } from "../assets/icons";
-import DetailModal from "../components/home/DetailModal";
-import EditModal from "../components/home/EditModal";
-import HabitList from "../components/home/HabitList";
-import HabitModal from "../components/home/HabitModal";
-import { AlertNotify, SuccessNotify } from "../components/home/ToastNotify";
-import WeekCalendar from "../components/home/WeekCalendar";
+import DetailModal from "../components/Home/DetailModal";
+import EditModal from "../components/Home/EditModal";
+import HabitList from "../components/Home/HabitList";
+import HabitModal from "../components/Home/HabitModal";
+import { AlertNotify, SuccessNotify } from "../components/Home/ToastNotify";
+import WeekCalendar from "../components/Home/WeekCalendar";
 import Modal from "../components/Modal";
 import {
   addHabit,

@@ -3,19 +3,19 @@ import { settingIcons } from "../assets/icons";
 import habitPiggyLoading1 from "../assets/images/habit-piggy-loading-1.svg";
 import habitPiggyLoading2 from "../assets/images/habit-piggy-loading-2.svg";
 import CustomSelect from "../components/CustomSelect";
-import DetailModal from "../components/home/DetailModal";
-import EditModal from "../components/home/EditModal";
-import HabitList from "../components/home/HabitList";
-import { AlertNotify, SuccessNotify } from "../components/home/ToastNotify";
+import DetailModal from "../components/Home/DetailModal";
+import EditModal from "../components/Home/EditModal";
+import HabitList from "../components/Home/HabitList";
+import { AlertNotify, SuccessNotify } from "../components/Home/ToastNotify";
 import AchievementList from "../components/Member/AchievementList";
 import AchievementModal from "../components/Member/AchievementModal";
 import BadgeList from "../components/Member/BadgeList";
 import BadgeModal from "../components/Member/BadgeModal";
 import MemberInformation from "../components/Member/MemberInformation";
 import SettingModal from "../components/Member/SettingModal";
-import TabNavigation from "../components/TabNavigation";
 import { UpdateNotify } from "../components/Member/ToastNotify";
 import Modal from "../components/Modal";
+import TabNavigation from "../components/TabNavigation";
 import {
   calculateBadges,
   calculateTaskValue,

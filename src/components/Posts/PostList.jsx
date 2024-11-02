@@ -37,13 +37,13 @@ const PostList = ({
           >
             <div className="animate-pulse space-y-4">
               <div className="flex items-center gap-4">
-                <div className="aspect-square h-12 w-12 rounded-full bg-black-200"></div>
+                <div className="aspect-square h-12 w-12 rounded-full bg-black-200" />
                 <div className="flex w-full flex-col gap-1">
-                  <div className="h-6 w-1/4 rounded-lg bg-black-200"></div>
-                  <div className="h-5 w-1/6 rounded-lg bg-black-200"></div>
+                  <div className="h-6 w-1/4 rounded-lg bg-black-200" />
+                  <div className="h-5 w-1/6 rounded-lg bg-black-200" />
                 </div>
               </div>
-              <div className="h-fit min-h-40 w-full rounded-xl bg-black-200"></div>
+              <div className="h-fit min-h-40 w-full rounded-xl bg-black-200" />
             </div>
           </li>
         ))}

@@ -11,12 +11,12 @@ const AchievementList = ({
       {isLoading ? (
         <div className="animate-pulse space-y-4">
           <div className="grid grid-cols-3 gap-4">
-            <div className="h-8 w-full rounded-lg bg-black-200"></div>
-            <div className="h-8 w-full rounded-lg bg-black-200"></div>
-            <div className="h-8 w-full rounded-lg bg-black-200"></div>
-            <div className="h-8 w-full rounded-lg bg-black-200"></div>
-            <div className="h-8 w-full rounded-lg bg-black-200"></div>
-            <div className="h-8 w-full rounded-lg bg-black-200"></div>
+            <div className="h-8 w-full rounded-lg bg-black-200" />
+            <div className="h-8 w-full rounded-lg bg-black-200" />
+            <div className="h-8 w-full rounded-lg bg-black-200" />
+            <div className="h-8 w-full rounded-lg bg-black-200" />
+            <div className="h-8 w-full rounded-lg bg-black-200" />
+            <div className="h-8 w-full rounded-lg bg-black-200" />
           </div>
         </div>
       ) : (
@@ -55,14 +55,14 @@ const AchievementList = ({
         <p className="font-lobster text-2xl font-normal leading-8 text-alert">
           Achievement
         </p>
-        <div className="absolute before:absolute before:bottom-[-16px] before:left-[-16px] before:z-20 before:h-0 before:w-0 before:border-l-[20px] before:border-r-0 before:border-t-[12px] before:border-l-primary before:border-r-transparent before:border-t-primary-dark before:content-['']"></div>
-        <div className="absolute before:absolute before:bottom-[-16px] before:left-[114px] before:z-20 before:h-0 before:w-0 before:border-l-0 before:border-r-[20px] before:border-t-[12px] before:border-l-transparent before:border-r-primary before:border-t-primary-dark before:content-['']"></div>
-        <div className="absolute before:absolute before:bottom-[-16px] before:left-[-46px] before:h-10 before:w-8 before:bg-primary before:content-['']"></div>
-        <div className="absolute before:absolute before:bottom-[-16px] before:left-[134px] before:h-10 before:w-8 before:bg-primary before:content-['']"></div>
-        <div className="absolute before:absolute before:bottom-[-16px] before:left-[166px] before:z-20 before:h-0 before:w-0 before:border-b-[20px] before:border-l-0 before:border-r-[20px] before:border-b-primary before:border-l-transparent before:border-r-transparent before:content-['']"></div>
-        <div className="absolute before:absolute before:bottom-1 before:left-[166px] before:z-20 before:h-0 before:w-0 before:border-l-0 before:border-r-[20px] before:border-t-[20px] before:border-l-transparent before:border-r-transparent before:border-t-primary before:content-['']"></div>
-        <div className="absolute before:absolute before:bottom-[-16px] before:left-[-66px] before:z-20 before:h-0 before:w-0 before:border-b-[20px] before:border-l-[20px] before:border-r-0 before:border-b-primary before:border-l-transparent before:border-r-transparent before:content-['']"></div>
-        <div className="absolute before:absolute before:bottom-1 before:left-[-66px] before:z-20 before:h-0 before:w-0 before:border-l-[20px] before:border-r-0 before:border-t-[20px] before:border-l-transparent before:border-r-transparent before:border-t-primary before:content-['']"></div>
+        <div className="absolute before:absolute before:bottom-[-16px] before:left-[-16px] before:z-20 before:h-0 before:w-0 before:border-l-[20px] before:border-r-0 before:border-t-[12px] before:border-l-primary before:border-r-transparent before:border-t-primary-dark before:content-['']" />
+        <div className="absolute before:absolute before:bottom-[-16px] before:left-[114px] before:z-20 before:h-0 before:w-0 before:border-l-0 before:border-r-[20px] before:border-t-[12px] before:border-l-transparent before:border-r-primary before:border-t-primary-dark before:content-['']" />
+        <div className="absolute before:absolute before:bottom-[-16px] before:left-[-46px] before:h-10 before:w-8 before:bg-primary before:content-['']" />
+        <div className="absolute before:absolute before:bottom-[-16px] before:left-[134px] before:h-10 before:w-8 before:bg-primary before:content-['']" />
+        <div className="absolute before:absolute before:bottom-[-16px] before:left-[166px] before:z-20 before:h-0 before:w-0 before:border-b-[20px] before:border-l-0 before:border-r-[20px] before:border-b-primary before:border-l-transparent before:border-r-transparent before:content-['']" />
+        <div className="absolute before:absolute before:bottom-1 before:left-[166px] before:z-20 before:h-0 before:w-0 before:border-l-0 before:border-r-[20px] before:border-t-[20px] before:border-l-transparent before:border-r-transparent before:border-t-primary before:content-['']" />
+        <div className="absolute before:absolute before:bottom-[-16px] before:left-[-66px] before:z-20 before:h-0 before:w-0 before:border-b-[20px] before:border-l-[20px] before:border-r-0 before:border-b-primary before:border-l-transparent before:border-r-transparent before:content-['']" />
+        <div className="absolute before:absolute before:bottom-1 before:left-[-66px] before:z-20 before:h-0 before:w-0 before:border-l-[20px] before:border-r-0 before:border-t-[20px] before:border-l-transparent before:border-r-transparent before:border-t-primary before:content-['']" />
       </div>
     </div>
   );

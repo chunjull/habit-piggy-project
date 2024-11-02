@@ -24,7 +24,7 @@ const BackgroundSelect = ({
               setPostBackground(url);
               setIsOpen(false);
             }}
-          ></button>
+          />
         ))}
       </div>
     </div>

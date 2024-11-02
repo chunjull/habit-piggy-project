@@ -25,15 +25,15 @@ const PostForm = ({
         <div
           className={`absolute inset-0 -z-10 rounded-xl ${isHighlighted ? "block" : "hidden"}`}
           style={{ boxShadow: "0 0 8px 1px rgba(250, 173, 20, 1)" }}
-        ></div>
+        />
         {isLoading ? (
           <div className="animate-pulse space-y-4">
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-full bg-black-200"></div>
-              <div className="h-6 w-1/4 rounded-lg bg-black-200"></div>
+              <div className="h-12 w-12 rounded-full bg-black-200" />
+              <div className="h-6 w-1/4 rounded-lg bg-black-200" />
             </div>
-            <div className="h-6 w-2/3 rounded-lg bg-black-200"></div>
-            <div className="h-fit min-h-40 w-full rounded-xl bg-black-200"></div>
+            <div className="h-6 w-2/3 rounded-lg bg-black-200" />
+            <div className="h-fit min-h-40 w-full rounded-xl bg-black-200" />
           </div>
         ) : (
           <>
@@ -53,7 +53,7 @@ const PostForm = ({
                       backgroundPosition: "center",
                     }}
                     onClick={() => setPostBackground(url)}
-                  ></button>
+                  />
                 ))}
               </div>
             </div>

@@ -81,7 +81,7 @@ const PostModal = ({
                 backgroundPosition: "center",
               }}
               onClick={() => setPostBackground(url)}
-            ></button>
+            />
           ))}
         </div>
       </div>

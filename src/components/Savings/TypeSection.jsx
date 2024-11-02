@@ -58,7 +58,7 @@ const TypeSection = ({
                   <div
                     className={`h-6 w-6 rounded-full`}
                     style={{ backgroundColor: type.color }}
-                  ></div>
+                  />
                   <p className="text-base font-normal leading-6 text-black dark:text-black-0">
                     {type.name}
                   </p>

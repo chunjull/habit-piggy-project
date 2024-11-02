@@ -84,7 +84,7 @@ const LoginBanner = () => {
             <div
               key={`${rowIndex}-${colIndex}`}
               className={`h-4 w-4 rounded md:h-7 md:w-7 ${pixel ? `${getRandomColorClass()} border border-black-400 hover:animate-ping` : "border border-black-200"}`}
-            ></div>
+            />
           )),
         )}
       </div>

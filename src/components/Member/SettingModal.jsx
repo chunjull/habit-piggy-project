@@ -192,7 +192,7 @@ const SettingModal = ({
           {...register("introduction")}
         />
       </div>
-      <div className="border"></div>
+      <div className="border" />
       <div className="flex items-center justify-between">
         <p className="text-base font-normal leading-6 text-black dark:text-black-0">
           深色模式

@@ -11,11 +11,11 @@ const MemberInformation = ({
     {isLoading ? (
       <div className="animate-pulse space-y-4">
         <div className="flex items-center gap-4">
-          <div className="h-12 w-12 rounded-full bg-black-200"></div>
-          <div className="h-6 w-1/4 rounded-lg bg-black-200"></div>
+          <div className="h-12 w-12 rounded-full bg-black-200" />
+          <div className="h-6 w-1/4 rounded-lg bg-black-200" />
         </div>
-        <div className="h-6 w-2/3 rounded-lg bg-black-200"></div>
-        <div className="h-6 w-full rounded-xl bg-black-200"></div>
+        <div className="h-6 w-2/3 rounded-lg bg-black-200" />
+        <div className="h-6 w-full rounded-xl bg-black-200" />
       </div>
     ) : (
       <>
